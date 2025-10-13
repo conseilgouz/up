@@ -1,0 +1,51 @@
+{up flexbox=5-2-5
+| class=fg-gap m-child-raz-1
+| bloc-style=border:1px red solid;text-align:center;padding:10px
+| css-head=#id .row-odd[background:lightYellow] #id .col-2[border:2px dashed blue] #id .bloc-5[background:orange;color:white]
+| class-2=bg-jaune}
+
+UN
+
+{========}
+
+DEUX
+
+{========}
+
+TROIS
+
+{========}
+
+QUATRE
+
+{========}
+
+CINQ
+
+{========}
+
+SIX
+
+{========}
+
+SEPT
+
+{========}
+
+HUIT
+
+{========}
+
+NEUF
+
+{========}
+
+DIX
+
+{========}
+
+ONZE
+
+{/up flexbox}
+
+

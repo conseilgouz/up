@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcategories_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcategories-list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des catégories descendantes</p>
+<p>la catégorie parente n'est pas affichée<br />syntaxe : <code><b>{</b>up jcategories-list=id<b>}</b></code><br />MOTS-CLES ITEM MENU:<br />##id## ##access## ##title-link## ##title## ##note## ##extension## ##language##</p>
+
+
+</div >
+<p><label for="jcategories_list" title="id cat&eacute;gorie ou vide pour toutes">jcategories-list</label>
+<input type = "text" id="jcategories_list"class="w10 important"  placeholder=""></p>
+<p><label for="component" title="nom de l&#039;extension pour laquelle r&eacute;cup&eacute;rer les cat&eacute;gories">component</label>
+<input type = "text" name="component" placeholder="Content"></p>
+<p><label for="level" title="nombre de niveaux. O = tous">level</label>
+<input type = "number" name="level"class="w5"  min="0" max="6" placeholder=""></p>
+<h4>Modèles de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. keywords + bbcode">template</label>
+<input type = "text" name="template" placeholder="##title-link##[small] (id:##id##) ##access## ##extension## ##language##[/small] ##note##"></p>
+<p><label for="model-note" title="pr&eacute;sentation pour ##note##">model-note</label>
+<input type = "text" name="model-note" placeholder="[i class=&quot;t-blue&quot;]%s[/i]"></p>
+<h4>Balise  et style du bloc principal</h4>
+<p><label for="main-tag" title="balise pour bloc parent">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="style" title="classes et styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<h4>Balise pour les lignes</h4>
+<p><label for="item-tag" title="balise pour blocs enfants (lignes)">item-tag</label>
+<input type = "text" name="item-tag" placeholder="li"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

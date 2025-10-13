@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcategories_by_tags - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcategories-by-tags" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of articles in one or more category</p>
+<p>syntax : <code><b>{</b>up articlecategory=idcategorie(s)<b>}</b></code><br>A very practical action to list the articles of the current category, just type <code><b>{</b>up article-category<b>}</b></code><br>TAGS : ##title## ##title-link## ##subtitle## ##link## ##intro## ##content## (HTML) ##intro-text## ##intro-text,100## (TEXT) ##image## ##image-link## ##image-src## ##image-alt## ##date-crea## ##date-modif## ##new## ##count## ##hits## ##tags-list##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-gap tc<b> | </b><b>template</b>=##image-link##&lt;br&gt;##title-link##
+</div >
+<p><label for="jcategories_by_tags" title="ID or tag name">jcategories-by-tags</label>
+<input type = "text" id="jcategories_by_tags"class="w30 important"  title="" placeholder="" list="combo_jcategories_by_tags"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcategories_by_tags">
+<option value=""></option>
+<option value="image-6colonnes">image-6colonnes</option>
+</datalist></p>
+<p><label for="maxi" title="Maximum number of items in the list">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="1" max="20" placeholder=""></p>
+<p><label for="no-published" title="1:for unpublished articles">no-published</label>
+<select name="no-published" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="content-plugin" title="support for content plugins for ##intro and ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="sort-by" title="title, rgt, created_time, modified_time, id, hits">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="rgt">rgt</option>
+<option value="created_time">created_time</option>
+<option value="modified_time">modified_time</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+</select></p>
+<p><label for="sort-order" title="sort order : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="no-content-html" title="return text if no category found">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="[p]aucune catégorie pour ce mot-clé[/p]"></p>
+<h4>Model for result display</h4>
+<p><label for="template" title="layout template. If empty the template is the content">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>Main block style</h4>
+<p><label for="main-tag" title="tag for the block around all items. 0 for none">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="main-style" title="inline classes and styles for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="class(es) for main block (obsolete)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Style of a result line</h4>
+<p><label for="item-tag" title="tag for the block around all items. 0 for none">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p><label for="item-style" title="inline classes and styles for one item">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="class(es) for one item (obsolete)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Parameters for images</h4>
+<p><label for="image-src" title="default image">image-src</label>
+<input type = "text" name="image-src" placeholder=""></p>
+<p><label for="image-alt" title="image, default alternative text">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Formats for keywords</h4>
+<p><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format"class="w10"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="location for dates">date-locale</label>
+<input type = "text" name="date-locale"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="number of days since the creation of the article">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-html" title="HTML code for NEW badge">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge-red&quot;]nouveau[/span]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="text before any other tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="class or style assigned to a span tag by keyword">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

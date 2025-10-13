@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>modal - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-modal" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays content in a modal window (popup)</p>
+<p>the allowed types are: inline, iframe, image, video, ajax<br>syntax 1 : <code><b>{</b>up modal=popup content | label=link text<b>}</b></code><br>syntax 2 : <code><b>{</b>up modal=empty,'html','images' or content | label=text link<b>}</b></code>content<code><b>{</b>/up popup<b>}</b></code><br>so empty or 'html': the content of the popup is the code between the shortcodes<br>so'img': each image of the code between the shortcodes will be a popup<br>otherwise the value of the parameter is analyzed to determine its type<br>- video vimeo, youtube or dailymotion <code><b>{</b>up popup=//youtu.be/H9fa9aWFbLM<b>}</b></code><br>- single image if <code><b>{</b>up popup=images/xx.jpg<b>}</b></code> or png, ...<br>- inline block if block id <code><b>{</b>up popup=#block<b>}</b></code><br>- iframe if url <code><b>{</b>up popup=//lomart.fr<b>}</b></code> or <code><b>{</b>up popup=doc/xx.pdf<b>}</b></code> or <code><b>{</b>up popup=?index/...<b>}</b></code><br>we can force the type by type=inline, iframe, image, video, ajax</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>overlayClose</b>=1<br><b><u>memo-up-css</u> : </b> <b>label</b>=&amp;#x1F199; La feuille de style de UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=26&amp;tmpl=component<br><b><u>memo-filter</u> : </b> <b>label</b>=&amp;#x1F199; Filter : liste des conditions<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=139&amp;catid=19&amp;tmpl=component<br><b><u>memo-css-head</u> : </b> <b>label</b>=&amp;#x1F199; L&#039;option CSS-HEAD<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=259&amp;catid=19&amp;tmpl=component<br><b><u>memo-custom</u> : </b> <b>label</b>=&amp;#x1F199; Comment personnaliser une action<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=140&amp;catid=19&amp;tmpl=component<br><b><u>memo-custom-options</u> : </b> <b>label</b>=&amp;#x1F199; fichier custom/prefs.ini<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=140&amp;catid=19&amp;tmpl=component#options<br><b><u>memo-custom-prefset</u> : </b> <b>label</b>=&amp;#x1F199; cr&eacute;er un jeu d&#039;options (prefset)<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=140&amp;catid=19&amp;tmpl=component#prefset<br><b><u>memo-custom-css</u> : </b> <b>label</b>=&amp;#x1F199; personnaliser le CSS de UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=140&amp;catid=19&amp;tmpl=component#css<br><b><u>memo-custom-traduction</u> : </b> <b>label</b>=&amp;#x1F199; Gestion traduction avec UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=140&amp;catid=19&amp;tmpl=component#traduction<br><b><u>memo-unicode-syntaxe</u> : </b> <b>label</b>=&amp;#x1F199; Comment utiliser les caract&egrave;res Unicode<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=152&amp;catid=15&amp;tmpl=component<br><b><u>memo-bbcode</u> : </b> <b>label</b>=&amp;#x1F199; BB-Code by UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=181&amp;catid=19&amp;tmpl=component<br><b><u>memo-surcharge</u> : </b> <b>label</b>=&amp;#x1F199; Comment surcharger les fichiers de UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=194&amp;catid=19&amp;tmpl=component<br><b><u>memo-shortcode</u> : </b> <b>label</b>=&amp;#x1F199; les shortcodes, mode d&#039;emploi<b> | </b><b>class</b>=btn btn-primary <b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=252&amp;catid=19&amp;tmpl=component<br><b><u>memo-shortcode-annexe</u> : </b> <b>label</b>=les shortcodes annexes<b> | </b><b>class</b>=btn btn-primary <b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=252&amp;catid=19&amp;tmpl=component#sc-annexes<br><b><u>memo-shortcode-traduction</u> : </b> <b>label</b>=&amp;#x1F199; saisir des arguments multilingues<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=252&amp;catid=19&amp;tmpl=component#traduction<br><b><u>up-treeview</u> : </b> <b>label</b>=&amp;#x1F199; L&#039;organisation des fichiers de UP<b> | </b><b>class</b>=btn btn-primary<b> | </b><b>modal</b>=index.php?option=com_content&amp;view=article&amp;id=254&amp;catid=15&amp;tmpl=component
+</div >
+<p><label for="modal" title="content or type of content">modal</label>
+<input type = "text" id="modal"class="important"  title="" placeholder="" list="combo_modal"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_modal">
+<option value=""></option>
+<option value="memo-up-css">memo-up-css</option>
+<option value="memo-filter">memo-filter</option>
+<option value="memo-css-head">memo-css-head</option>
+<option value="memo-custom">memo-custom</option>
+<option value="memo-custom-options">memo-custom-options</option>
+<option value="memo-custom-prefset">memo-custom-prefset</option>
+<option value="memo-custom-css">memo-custom-css</option>
+<option value="memo-custom-traduction">memo-custom-traduction</option>
+<option value="memo-unicode-syntaxe">memo-unicode-syntaxe</option>
+<option value="memo-bbcode">memo-bbcode</option>
+<option value="memo-surcharge">memo-surcharge</option>
+<option value="memo-shortcode">memo-shortcode</option>
+<option value="memo-shortcode-annexe">memo-shortcode-annexe</option>
+<option value="memo-shortcode-traduction">memo-shortcode-traduction</option>
+<option value="up-treeview">up-treeview</option>
+</datalist></p>
+<p><label for="type" title="to force the type: inline, iframe, image, video, ajax">type</label>
+<select name="type" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="" selected></option>
+<option value="inline">inline</option>
+<option value="iframe">iframe</option>
+<option value="image">image</option>
+<option value="video">video</option>
+<option value="ajax">ajax</option>
+</select></p>
+<p><label for="label" title="link text to display the popup">label</label>
+<input type = "text" name="label"class="important"  placeholder=""></p>
+<h4>various options</h4>
+<p><label for="filter" title="conditions. See doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter"class="w60"  placeholder=""></p>
+<p class="hr-top"><label for="close-left" title="closing cross at the top left. high right by default">close-left</label>
+<select name="close-left"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="zoom-suffix" title="suffix for thumbnail versions of images">zoom-suffix</label>
+<input type = "text" name="zoom-suffix"class="w10"  placeholder="-mini"></p>
+<p class="hr-top"><label for="base-js-params" title="JS rules defined by the webmaster (added in init JS)">base-js-params</label>
+<input type = "text" name="base-js-params"class="hr-top"  placeholder=""></p>
+<h4>CSS management</h4>
+<p><label for="id" title="identifiant. same for linking modals">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class(es) for label block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for label block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (add to the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Options for Javascript</h4>
+<p><label for="overlayClose" title="1 to close the modal window by clicking on the grey area around the content">overlayClose</label>
+<select name="overlayClose" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="videoAutoPlay" title="1 to start the video when the popup opens">videoAutoPlay</label>
+<select name="videoAutoPlay" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="gallery" title="0 to process the images individually">gallery</label>
+<select name="gallery" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="title" title="display the title">title</label>
+<select name="title" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="width" title="width with unit. Ex: 80%, 500px,...">width</label>
+<input type = "text" name="width"class="w10"  placeholder=""></p>
+<p><label for="height" title="height with unit. Ex: 80%, 500px,...">height</label>
+<input type = "text" name="height"class="w10"  placeholder=""></p>
+</body>
+</html >

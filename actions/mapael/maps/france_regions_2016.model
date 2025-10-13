@@ -1,0 +1,4 @@
+"%id%":{
+value:"%population%"
+,href:"%url%"
+,tooltip:{content:"<div class='tc'><img src='/images/flags-regions/%id%.png'><br><b>%nom%</b><br>(%id%)</div>Population__ : %population%<br>Superficie : %superficie%<br>%url%"}}

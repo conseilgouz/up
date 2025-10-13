@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_view - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-view" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Forces a file to load and display it in raw form</p>
+<p>syntax <code><b>{</b>up file-view=file path<b>}</b></code>
+Use : upload recurring content with multiple pages, see a CSV file or see HTML code</p>
+
+
+</div >
+<p><label for="file_view" title="path and file name">file-view</label>
+<input type = "text" id="file_view"class="important"  placeholder=""></p>
+<h4>block style</h4>
+<p><label for="main-tag" title="parent block tag">main-tag</label>
+<input type = "text" name="main-tag" placeholder="div"></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>File formatting</h4>
+<p><label for="HTML" title="0= no processing, 1= displays the code, or list of tags to keep (ex: img,a)">HTML</label>
+<input type = "text" name="HTML" placeholder="0"></p>
+<p><label for="EOL" title="force a line break">EOL</label>
+<select name="EOL" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules defined by the webmaster (added to the head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

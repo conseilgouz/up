@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_youtube - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-youtube" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a Youtube video that is registered at the maximum in its parent block</p>
+<p><code><b>{</b>up media-youtube=ID<b>}</b></code><br>ID : this is the code at the end of the video's URL.</p>
+
+
+</div >
+<p><label for="media_youtube" title="video code (at the end of the youtube url)">media-youtube</label>
+<input type = "text" id="media_youtube"class="w20 important"  placeholder=""></p>
+<p><label for="ratio" title="&gt;video ratio. eg: 16/9 or 1.77">ratio</label>
+<input type = "text" name="ratio" placeholder="16/9"></p>
+<p><label for="width" title="video width in px or % px">width (%)</label>
+<input type = "number" name="width"class="w10"  unit="%" placeholder=""></p>
+<p><label for="autoplay" title="automatic start">autoplay</label>
+<select name="autoplay" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="loop" title="loop on the video">loop</label>
+<select name="loop" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="muted" title="mute the sound">muted</label>
+<select name="muted" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="play-on-visible" title="start and stop the video according to its visibility on the screen">play-on-visible</label>
+<select name="play-on-visible" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class for external block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="free css code for external block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="rgpd" title="0 for not applying the rule for RGPD/GDPR">rgpd</label>
+<input type = "text" name="rgpd" placeholder="1"></p>
+<p><label for="facade" title="activer ou non le mode facade">facade</label>
+<select name="facade" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+</body>
+</html >

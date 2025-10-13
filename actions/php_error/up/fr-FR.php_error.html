@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>php_error - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-php-error" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Active les rapports d'erreurs PHP
+</p>
+<p>syntaxe <code><b>{</b>up php_error<b>}</b></code> // dev (defaut) ou 0, min, max<br />A METTRE A LA FIN DE L'ARTICLE (UP commence par la fin!)</p>
+
+
+</div >
+<p><label for="php_error" title="mode rapport d&#039;erreurs : none, 0, min, max, dev">php-error</label>
+<select id="php_error"class="important"  title="dev" placeholder="dev" value="dev">
+<option value=""></option>
+<option value="none">none (0)</option>
+<option value="min">min (E_ERROR-E_WARNING-E_PARSE)</option>
+<option value="max">max (E_ALL)</option>
+<option value="dev">dev (-1)</option>
+</select></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

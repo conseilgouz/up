@@ -1,0 +1,176 @@
+.billboard { 
+	position: relative;
+	overflow: hidden;
+	background: black;
+	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	display: inline-block;
+}
+
+.billboard img {
+	border: none;
+	display: inline-block;
+}
+
+.billboard > .aspect-ratio {
+	padding-top: 50%;
+}
+
+.billboard.billboard-fixedsize > .aspect-ratio {
+	display: none;
+}
+
+.billboard > ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+.billboard.billboard-autosize > ul {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;	
+}
+
+.billboard > ul > li {
+	position: absolute;
+	width: 100%;
+	height: 100%; 
+	text-align: center;
+	display: none;
+	float: left;
+}
+
+.billboard > ul > li:before {
+	content: "";
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+}
+
+.billboard > ul > li > .billboard-slide,
+.billboard-size-clone > .billboard-slide {
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.billboard > ul > li > .billboard-slide:before,
+.billboard-size-clone > .billboard-slide:before,
+.billboard > ul > li > .billboard-slide:after,
+.billboard-size-clone > .billboard-slide:after {
+	content: " ";
+	display: table;
+}
+
+.billboard > ul > li > .billboard-slide:after,
+.billboard-size-clone > .billboard-slide:after {
+	clear: both;
+}
+
+.billboard-size-clone {
+	display: inline-block;
+}
+
+.billboard-size-clone > .billboard-slide {
+	float: left;
+	overflow: hidden;
+}
+
+.billboard-size-clone > .billboard-slide > img,
+.billboard-size-clone > .billboard-slide > a > img {
+  display: block;
+}
+
+
+.billboard.billboard-stretch > ul > li > .billboard-slide > img,
+.billboard.billboard-stretch > ul > li > .billboard-slide > a > img {
+  width: 100%;
+  display: block;
+}
+
+.billboard.billboard-stretch > ul > li > .billboard-slide > a {
+	width: 100%;
+	height: 100%;
+}
+
+.billboard.billboard-stretch > ul > li.billboard-portrait > .billboard-slide,
+.billboard.billboard-stretch > ul > li.billboard-portrait > .billboard-slide > img,
+.billboard.billboard-stretch > ul > li.billboard-portrait > .billboard-slide > a > img {
+	margin: 0 auto;
+	width: auto;
+	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.billboard .billboard-footer {
+	position: absolute;
+	min-height: 2em;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: rgba(0,0,0, 0.5);
+	border-top: solid 1px rgba(55,55,55, 0.65);
+	z-index: 1000;
+}
+
+.billboard .billboard-footer .billboard-caption {
+	float: left;
+	color: #fff;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+	margin: 0;
+	padding: 0.5em;
+}
+
+.billboard .billboard-styled {
+	position: absolute;
+	padding: 0;
+	bottom: 0.5em;
+	right: 0.5em;
+	text-align: right;
+	overflow: hidden;
+}
+
+.billboard .billboard-styled a.dot,
+.billboard .billboard-styled a.control {
+	float: left;
+	background: #fff;
+	opacity: 0.25;
+	filter: alpha(opacity=25);
+	cursor: pointer;
+	display: inline-block;
+}
+
+.billboard .billboard-styled a.dot {
+	width: 0.7em;
+	height: 0.7em;
+	margin: 0.15em;
+	text-indent: -9999px;
+	text-align: left;
+	border-radius: 50%;
+}
+
+.billboard .billboard-styled a.control {
+	border-radius: 0.7em;	
+	margin: 0.3em 0 -0.1em 0.25em;
+	text-decoration: none;
+	color: black;
+	padding: 0 0.5em;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.billboard .billboard-styled a.dot.active,
+.billboard .billboard-styled a.control:hover {
+	opacity: 1;
+	filter: alpha(opacity=100);	
+}
+

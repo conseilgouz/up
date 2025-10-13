@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>date - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-date" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une date
+</p>
+<p>affiche une date définie ou calculée en tenant compte des nouvelles contraintes de PHP8<br />syntaxe <code><b>{</b>up action=option_principale<b>}</b></code></p>
+
+
+</div >
+<p><label for="date" title="date reconnue par la fonction php : strtotime">date</label>
+<input type = "text" id="date" placeholder=""></p>
+<p class="hr-top"><label for="format" title="format. ex: %A %e %B %Y">format</label>
+<input type = "text" name="format"class="w30 hr-top"  placeholder="%A %e %B %Y"></p>
+<p><label for="locale" title="le code pays (en_US) ou NULL=celui en cours">locale</label>
+<input type = "text" name="locale"class="w20"  placeholder=""></p>
+<p><label for="timezone" title="fuseau horaire. Ex: Europe/Paris ou Atlantic/Reykjavik. vide=celui du serveur">timezone</label>
+<input type = "text" name="timezone"class="w50"  title="" placeholder="" list="combo_timezone"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_timezone">
+<option value=""></option>
+<option value=""></option>
+<option value="Europe/Paris">Europe/Paris</option>
+<option value="Atlantic/Reykjavik">Atlantic/Reykjavik</option>
+</datalist></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w20 hr-top"  placeholder=""></p>
+<p><label for="tag" title="balise HTML pour le bloc principal">tag</label>
+<input type = "text" name="tag"class="w10"  placeholder="span"></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

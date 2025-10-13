@@ -1,0 +1,154 @@
+@charset "UTF-8";
+$prefix : 'upli-';
+:root, .upli-reset {
+    // ----- les contenus
+    --upli-content:"";
+    --upli-type:disc;
+    --upli-position:inside;
+    // ---- les compteurs
+    --upli-prefix: "";
+    --upli-suffix: ".";
+    // ---- espace autour de chaque ligne
+    --upli-margin-top:0;  // inter ligne
+    --upli-margin-bottom:0;  // inter ligne
+    --upli-margin-left:2rem;  //decalage gauche
+    --upli-margin-right:0;  // peu utile marge droite
+
+    --upli-gap: 0;	// position de la puce par rapport au texte
+    // ---- la police
+    --upli-font-size:1rem;
+    --upli-font-weight:normal;
+    --upli-font-family:inherit;
+    --upli-line-height:1;
+    --upli-vertical-align:initial;
+    // ---- les couleurs
+    --upli-color:#333;
+    // ===== Specifique avec background (:before)
+    --upli-text-align:center;
+    --upli-background:none;
+    --upli-background-size:cover;
+    --upli-border: none;  // 1px solid red;
+    --upli-border-radius: 0;
+    --upli-padding:0 2px;
+    --upli-width: auto;  // uniquement pour .upli-bg-outside
+    --upli-height: auto;  // uniquement pour .upli-bg-outside
+	// ==== ajout trait vertical sur bg-outside
+	--upli-line-border:none; // 1px solid red
+	--upli-line-top:10px;
+	--upli-line-bottom:8px;
+	--upli-line-left:15px;
+	--upli-line-right:100%;
+}
+
+// ==== UL
+.#{$prefix}type {
+    padding: 0;
+    list-style-type: var(--upli-type);
+    list-style-position: var(--upli-position);
+}
+.#{$prefix}bg-inside {
+    --upli-gap:0.3rem;
+
+    padding: 0;
+    display: grid;
+    counter-reset: upli;
+    list-style: none;
+}
+.#{$prefix}bg-outside {
+    --upli-gap:-1.5rem;
+    --upli-vertical-align:3px;
+
+    position:relative;
+    list-style:none;
+    margin:0;
+    padding:0;
+    counter-reset: upli;
+}
+
+// ==== LI
+.#{$prefix}type li,
+.#{$prefix}bg-inside li,
+.#{$prefix}bg-outside li {
+    margin-top: var(--upli-margin-top);
+    margin-right: var(--upli-margin-right);
+    margin-bottom: var(--upli-margin-bottom);
+    margin-left: var(--upli-margin-left);
+}
+
+.#{$prefix}bg-outside li {
+    position:relative;
+}
+
+// ==== WRAPPER / BEFORE
+.#{$prefix}type li::marker,
+.#{$prefix}bg-inside li::before,
+.#{$prefix}bg-outside li::before {
+    font-family:var(--upli-font-family);
+    font-size:var(--upli-font-size);
+    font-weight:var(--upli-font-weight);
+    color:var(--upli-color);
+}
+
+.#{$prefix}bg-inside li::before,
+.#{$prefix}bg-outside li::before {
+    content:  var(--upli-content);
+    line-height: var(--upli-line-height);
+    vertical-align: var(--upli-vertical-align);
+    text-align:var(--upli-text-align);
+    padding:var(--upli-padding);
+    width:var(--upli-width);
+    height:var(--upli-height);
+    background:var(--upli-background);
+    background-size:var(--upli-background-size);
+    border:var(--upli-border);
+    border-radius:var(--upli-border-radius);
+
+    counter-increment: upli;
+}
+.#{$prefix}bg-inside li::before{
+    display:inline flow-root list-item;
+    margin-right:var(--upli-gap);
+}
+.#{$prefix}bg-outside li::before {
+    display: inline-block;
+    position:absolute;
+    top:var(--upli-vertical-align);
+    z-index:10;
+    left:var(--upli-gap);
+}
+
+// ==== pour ligne verticale
+.#{$prefix}bg-outside::before {
+    content:"";
+    position:absolute;
+    top:var(--upli-line-top);
+    bottom:var(--upli-line-bottom);
+	left:var(--upli-line-left); 
+	right: var(--upli-line-right); 
+    border: var(--upli-line-border);
+    z-index:1;
+}
+
+// ==== les types personnalisés
+
+@counter-style rounded-alpha {
+    system: fixed;
+    symbols: "\1F150" "\1F151" "\1F152" "\1F153" "\1F154" "\1F155" "\1F156" "\1F157" "\1F158" "\1F159" "\1F15A" "\1F15B" "\1F15C" "\1F15D" "\1F15E" "\1F15F" "\1F160" "\1F161" "\1F162" "\1F163" "\1F164" "\1F165" "\1F166" "\1F167" "\1F168" "\1F169";
+    suffix: " ";
+}
+@counter-style squared-alpha {
+    system: fixed;
+    symbols: "\1F130" "\1F131" "\1F132" "\1F133" "\1F134" "\1F135" "\1F136" "\1F137" "\1F138" "\1F139" "\1F13A" "\1F13B" "\1F13C" "\1F13D" "\1F13E" "\1F13F" "\1F140" "\1F141" "\1F142" "\1F143" "\1F144" "\1F145" "\1F146" "\1F147" "\1F148" "\1F149";
+    suffix: " ";
+}
+
+@counter-style circled-decimal {
+    system: fixed;
+    symbols: "\2780" "\2781" "\2782" "\2783" "\2784" "\2785" "\2786" "\2787" "\2788" "\2789";
+    suffix: " ";
+}
+@counter-style rounded-decimal {
+    system: fixed;
+    symbols: "\278A" "\278B" "\278C" "\278D" "\278E" "\278F" "\2790" "\2791" "\2792" "\2793" "\24EB" "\24EC" "\24ED" "\24EE" "\24EF" "\24F0" "\24F1" "\24F2" "\24F3" "\24F4";
+    suffix: " ";
+}

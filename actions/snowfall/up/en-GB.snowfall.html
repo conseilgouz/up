@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>snowfall - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-snowfall" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Simulates snowfall or other events...</p>
+<p>syntax site : <code><b>{</b>up snowfall=image<b>}</b></code><br>syntax block : <code><b>{</b>up snowfall=image | selector=block<b>}</b></code></p>
+
+
+</div >
+<p><label for="snowfall" title="image or folder">snowfall</label>
+<input type = "text" id="snowfall"class="important"  placeholder="snow-01.png"></p>
+<p><label for="selector" title="target for snowfall">selector</label>
+<input type = "text" name="selector"class="w20"  placeholder="body"></p>
+<h4>Size, speed and number of images</h4>
+<p><label for="nb" title="number of images displayed at the same time">nb</label>
+<input type = "number" name="nb" min="1" max="100" placeholder="20"></p>
+<p><label for="size" title="minimum/maximum image size in px">size</label>
+<input type = "text" name="size"class="w10"  placeholder="20/40"></p>
+<p><label for="speed" title="minimum/maximum image speed">speed</label>
+<input type = "text" name="speed"class="w10"  placeholder="1/5"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="center" title="style and class for vertical centering of content between shortcodes">center</label>
+<input type = "text" name="center" placeholder=""></p>
+<p><label for="z-index" title="z-index of images">z-index</label>
+<input type = "number" name="z-index" min="0" max="100" placeholder="99"></p>
+<h4>miscellaneous</h4>
+<p><label for="filter" title="condition string. see documentation action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

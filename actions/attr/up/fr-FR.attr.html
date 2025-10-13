@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>attr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-attr" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Ajoute des attributs à la première balise interne
+ *
+</p>
+<p>syntaxe <code><b>{</b>up attr | class=bg-yellow<b>}</b></code>< p>texte< /p><code><b>{</b>/up attr<b>}</b></code><br />syntaxe <code><b>{</b>up attr | class=bg-yellow | tag=img<b>}</b></code><p>< img src="image.jpg" ></p><code><b>{</b>/up attr<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>red-dot</u> : </b> <b>class</b>=ombreMax rotate3 mt3 p3 tc b bg-lightYellow<b> | </b><b>style</b>=border:8px dotted red<br><b><u>img-red-circle</u> : </b> <b>class</b>=mcenter display-block rotate6 bd-rond ombreMax<b> | </b><b>style</b>=border:4px dotted red<b> | </b><b>tag</b>=img
+</div >
+<p><label for="attr" title="classe(s) et/ou style">attr</label>
+<input type = "text" id="attr" title="" placeholder="" list="combo_attr"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_attr">
+<option value=""></option>
+<option value="red-dot">red-dot</option>
+<option value="img-red-circle">img-red-circle</option>
+</datalist></p>
+<p><label for="tag" title="balise recherch&eacute;e, sinon la premi&egrave;re">tag</label>
+<input type = "text" name="tag"class="w20"  placeholder=""></p>
+<h4>Toutes les autres clés sont considérées comme des attributs</h4>
+<p><label for="xxx" title="couple attribut-valeur. ex: title=le titre, href=//google.fr">xxx</label>
+<input type = "text" name="xxx" placeholder="yyy"></p>
+<h4>options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc interne">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc interne">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

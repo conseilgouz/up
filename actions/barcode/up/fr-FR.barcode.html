@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>barcode - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-barcode" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Création de code à barres à partir de la librairie TCPDF.</p>
+<p>syntaxe : <code><b>{</b>up barcode=text | type=...|height=..|width=...|color=...<b>}</b></code></p>
+
+
+</div >
+<p><label for="barcode" title="valeur alphanum&eacute;rique du code code barre">barcode</label>
+<input type = "text" id="barcode"class="important w40"  minlength="6" size="25" placeholder="text"></p>
+<p><label for="type" title="type de code-barres : C39,C39+,C39E,C39E+,C93,S25,S25+,I25,C128,C128A,C128B,EAN2,EAN5,EAN8,EAN13,UCPA,UPCE,MSI,MSI+,POSTNET,PLANET,RMS4CC,KIX,IMB,IMBPRE,CODABOR,CODE11,PHARMA,PHARMA2">type</label>
+<select name="type"class="important"  title="EAN13" placeholder="EAN13" value="EAN13">
+<option value=""></option>
+<option value="EAN13" selected>EAN13</option>
+<option value="EAN2">EAN2</option>
+<option value="EAN5">EAN5</option>
+<option value="EAN8">EAN8</option>
+<option value="C39">C39</option>
+<option value="C39+">C39+</option>
+<option value="C39E">C39E</option>
+<option value="C39E+">C39E+</option>
+<option value="C93">C93</option>
+<option value="S25">S25</option>
+<option value="S25+">S25+</option>
+<option value="I25">I25</option>
+<option value="C128">C128</option>
+<option value="C128A">C128A</option>
+<option value="C128B">C128B</option>
+<option value="UCPA">UCPA</option>
+<option value="UPCE">UPCE</option>
+<option value="MSI">MSI</option>
+<option value="MSI+">MSI+</option>
+<option value="POSTNET">POSTNET</option>
+<option value="PLANET">PLANET</option>
+<option value="RMS4CC">RMS4CC</option>
+<option value="KIX">KIX</option>
+<option value="IMB">IMB</option>
+<option value="IMBPRE">IMBPRE</option>
+<option value="CODABOR">CODABOR</option>
+<option value="CODE11">CODE11</option>
+<option value="PHARMA">PHARMA</option>
+<option value="PHARMA2T">PHARMA2T</option>
+</select></p>
+<p><label for="format" title="format de sortie">format</label>
+<select name="format" title="html" placeholder="html" value="html">
+<option value=""></option>
+<option value="html" selected>html</option>
+<option value="svg">svg</option>
+<option value="png">png</option>
+</select></p>
+<p><label for="height" title="hauteur du code &agrave; barres">height</label>
+<input type = "number" name="height"class="w10"  placeholder="30"></p>
+<p><label for="width" title="espacement des barres">width (px)</label>
+<input type = "number" name="width"class="w10"  min="1" max="10" unit="px" placeholder="1"></p>
+<p><label for="color" title="Couleur du code-barre. En mode PNG, on attend des valeurs RGB s&eacute;par&eacute;es par des virgules, sinon la couleur en forme texte.">color</label>
+<input type = "color" name="color" title="#000000" value="#000000"></p>
+<p><label for="align" title="alignement code barres et texte (left, center, right)">align</label>
+<select name="align" title="center" placeholder="center" value="center">
+<option value=""></option>
+<option value="left">left</option>
+<option value="center" selected>center</option>
+<option value="right">right</option>
+</select></p>
+<p><label for="showtext" title="montrer le texte ayant permis de g&eacute;n&eacute;rer le code barres">showtext</label>
+<select name="showtext" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>styles</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="Class(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="Inline style pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="R&eacute;gles CSS d&eacute;finie par le webmaster (ajout&eacute;es dans head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

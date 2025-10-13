@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>field - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-field" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Returns the value of a custom field for the current content</p>
+<p>syntax <code><b>{</b>up field=id_field<b>}</b></code><br><code><b>{</b>up field=id_field<b>}</b></code>  // contenu brut du champ<br><code><b>{</b>up field=id_field | model=label : <b>[</b>b]%FIELD%<b>[</b>/b]<b>}</b></code>  // BBCODE model</p>
+
+
+</div >
+<p><label for="field" title="id or field name">field</label>
+<input type = "text" id="field" placeholder=""></p>
+<p><label for="model" title="BBCODE template with id or field name between % signs">model</label>
+<input type = "text" name="model" placeholder=""></p>
+<p><label for="separator" title="separates the elements of an array for rawvalue">separator</label>
+<input type = "text" name="separator" placeholder=""></p>
+<p><label for="tag" title="tag for main block">tag</label>
+<input type = "text" name="tag" placeholder=""></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

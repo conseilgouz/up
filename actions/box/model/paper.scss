@@ -1,0 +1,35 @@
+// === UP-BOX - PAPER
+// inspirated : https://coderwall.com/p/fw_b4q/notebook-paper-css
+
+/* PAS DE FICHIER .INI */
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:#f8f8f8;
+$box_border:1px $grisClair solid;
+
+.up-box-paper { 
+    font-family:cursive;
+    padding: 16px 16px 27px 55px;
+    position: relative;
+    border: $box_border;
+    background: $box_bg;
+    background: -webkit-linear-gradient(top, #DFE8EC 0%, $box_bg 8%) 0 57px;
+    background: -moz-linear-gradient(top, #DFE8EC 0%, $box_bg 8%) 0 57px;
+    background: linear-gradient(top, #DFE8EC 0%, $box_bg 8%) 0 57px;
+    -webkit-background-size: 100% 30px;
+    -moz-background-size: 100% 30px;
+    -ms-background-size: 100% 30px;
+    background-size: 100% 30px;
+    box-shadow:$shadow-max;
+    &:after {
+        content:''; position:absolute; width:0px; top:0; left:39px; bottom:0; 
+        border-left:1px solid #F8D3D3;}
+
+    .up-box-title {
+        font-weight:bold} //  ##title
+}

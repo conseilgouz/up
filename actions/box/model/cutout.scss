@@ -1,0 +1,65 @@
+// === UP-BOX - CUTOUT
+// template :
+// ##image-css##  ##head## ##title## ##subtitle## ##/head## ##content## ##action-link##
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:$grisPale;
+$box_border:2px $grisClair solid;
+$box_radius:5px;
+$title_bg: #eeed; // #cccd;
+$title_text: $noir;
+$action_bg: $grisFonce;
+$action_text: $blanc;
+
+.up-box-cutout { 
+    border: 1px solid #444;
+    > * {padding:0 16px;}
+    
+    .up-box-head {
+        //display:block;
+        position:relative;
+        width:100%;
+        height:300px;
+        padding:0;
+    }
+    .up-box-title {
+            // centrage du bloc texte
+            position: absolute; 
+            top: 50%; /* Position text in the middle */
+            left: 50%; /* Position text in the middle */
+            transform: translate(-50%, -50%); /* Position text in the middle */
+            display:block;
+            margin: 0 auto; /* Center the text container */
+            padding: 10px;
+            max-width: 90%;
+            // style 
+            background-color: $title_bg;
+            color: $title_text;
+            font-size: 5vw; // Responsive font size 
+            @media(max-width:640px){font-size: 15vw};  
+            font-weight: 900;
+            white-space: nowrap;
+            text-align: center; 
+            // style de fusion (screen, normal, hard-light, ...)
+            mix-blend-mode: screen;
+            // si lien
+            a {color:$title_text}
+    } 
+    .up-box-subtitle { // inclus dans title
+        display:block;
+        font-size: 2vw; // Responsive font size 
+        @media(max-width:640px){font-size: 8vw};  
+        white-space: nowrap;
+    } 
+    .up-box-action {
+        background:$action_bg;
+        color:$action_text;
+        text-align:center;
+        a {color:$action_text}
+    } 
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>attr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-attr" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Adds attributes to the first internal tag</p>
+<p>syntax:syntax: <code><b>{</b>up attr | class=bg-yellow<b>}</b></code>< p>texte< /p><code><b>{</b>/up attr<b>}</b></code><br><code><b>{</b>up attr | class=bg-yellow | tag=img<b>}</b></code><p>< img src=image.jpg ></p><code><b>{</b>/up attr<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>red-dot</u> : </b> <b>class</b>=ombreMax rotate3 mt3 p3 tc b bg-lightYellow<b> | </b><b>style</b>=border:8px dotted red<br><b><u>img-red-circle</u> : </b> <b>class</b>=mcenter display-block rotate6 bd-rond ombreMax<b> | </b><b>style</b>=border:4px dotted red<b> | </b><b>tag</b>=img
+</div >
+<p><label for="attr" title="class(es) and/or style">attr</label>
+<input type = "text" id="attr" title="" placeholder="" list="combo_attr"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_attr">
+<option value=""></option>
+<option value="red-dot">red-dot</option>
+<option value="img-red-circle">img-red-circle</option>
+</datalist></p>
+<p><label for="tag" title="tag, otherwise the first">tag</label>
+<input type = "text" name="tag"class="w20"  placeholder=""></p>
+<h4>All other keys are considered attributes</h4>
+<p><label for="xxx" title="attribute-value pair. e.g: title=title, href=//google.com">xxx</label>
+<input type = "text" name="xxx" placeholder="yyy"></p>
+<h4>secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for internal block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style for internal block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

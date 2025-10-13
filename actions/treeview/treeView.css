@@ -1,0 +1,21 @@
+.uptv, .uptv ul {
+	list-style-type: none;
+	overflow: hidden;
+        padding-left:5px;
+}
+
+.uptv li {
+	text-indent: 1%;
+	margin-top:0.2em;
+	padding-left:1.2em;
+	line-height: 22px;
+	background-repeat:no-repeat;
+	background-size: 20px 20px;
+}
+
+.uptv li.tv-close:hover {
+	cursor: pointer;
+}
+.uptv li:not(.tv-close):hover {
+	cursor: default;
+}

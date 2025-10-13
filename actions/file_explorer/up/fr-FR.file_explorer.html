@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_explorer - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-explorer" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Explorer un dossier et ses sous-dossiers avec prévisualisation et téléchargement.
+</p>
+<p>syntaxe <code><b>{</b>up file-explorer=folder_relative_path_on_server<b>}</b></code><br />##file## : chemin/nom.extension - pour copier/coller comme argument shortcode<br />##dirname## : chemin (sans slash final)<br />##basename## : nom et extension<br />##filename## : nom sans extension (sans le point)<br />##extension## : extension<br />##relpath## : chemin relatif au chemin passé comme principal argument<br />##size## : taille du fichier<br />##date## : date dernière modification<br />##icon## : icone ou vignette du fichier<br />##download## : bouton pour télécharger<br />##view-btn## : bouton pour voir le fichier dans une fenêtre modale<br />##view## & ##/view## : balise a (ouvrante et fermante) avec attributs pour voir le fichier dans une fenêtre modale<br />Motclé disponible pour le dossier en format liste (ul/li)<br />##foldername## : nom du dossier (sans l'arboresccence)<br />##folderpath## : chemin et nom du dossier (avec l'arboresccence)</p>
+
+
+</div >
+<p><label for="file_explorer" title="chemin relatif du dossier sur le serveur">file-explorer</label>
+<input type = "text" id="file_explorer" placeholder=""></p>
+<p><label for="mask" title="masque de s&eacute;lection des fichiers">mask</label>
+<input type = "text" name="mask" placeholder=""></p>
+<p><label for="file-exclude" title="fichiers non list&eacute;s. (separateur=virgule)">file-exclude</label>
+<input type = "text" name="file-exclude" placeholder=""></p>
+<p><label for="folder-recursive" title="niveaux d&#039;exploration des sous-dossiers">folder-recursive</label>
+<input type = "number" name="folder-recursive"class="w5"  placeholder="0"></p>
+<p><label for="view-root" title="si main-tag=ul, affiche t&#039;on la racine">view-root</label>
+<select name="view-root" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="view-unknow-ext" title="1: affiche tous les fichiers, 0: seules les extensions connues">view-unknow-ext</label>
+<select name="view-unknow-ext" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>type de contenu des fichiers. +ext1,ext2 : pour ajouter</h4>
+<p><label for="ext-none" title="liste des extensions sans pr&eacute;view, ni t&eacute;l&eacute;chargement">ext-none</label>
+<input type = "text" name="ext-none"class="w60"  placeholder=""></p>
+<p><label for="ext-download-only" title="fichiers non visualisables, t&eacute;l&eacute;chargement uniquement. d&eacute;faut: zip,rar">ext-download-only</label>
+<input type = "text" name="ext-download-only"class="w30"  placeholder=""></p>
+<p><label for="ext-image" title="les fichiers images. d&eacute;faut: jpg,png,webp,gif">ext-image</label>
+<input type = "text" name="ext-image"class="w30"  placeholder=""></p>
+<p><label for="ext-pdf" title="les fichiers pdf. d&eacute;faut: pdf">ext-pdf</label>
+<input type = "text" name="ext-pdf"class="w30"  placeholder=""></p>
+<p><label for="ext-office" title="les fichiers bureautiques. d&eacute;faut: doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx">ext-office</label>
+<input type = "text" name="ext-office"class="w50"  placeholder=""></p>
+<p><label for="ext-audio" title="les fichiers audios. d&eacute;faut: mp3,ogg">ext-audio</label>
+<input type = "text" name="ext-audio"class="w30"  placeholder=""></p>
+<p><label for="ext-video" title="les fichiers vid&eacute;os. d&eacute;faut: mp4,ogv">ext-video</label>
+<input type = "text" name="ext-video"class="w30"  placeholder=""></p>
+<p><label for="ext-ajax" title="fichiers g&eacute;r&eacute;s en ajax. d&eacute;faut: txt,csv,html,url">ext-ajax</label>
+<input type = "text" name="ext-ajax"class="w30"  placeholder=""></p>
+<p><label for="ext-iframe" title="fichiers g&eacute;r&eacute;s comme iframe. d&eacute;faut : aucun">ext-iframe</label>
+<input type = "text" name="ext-iframe"class="w30"  placeholder=""></p>
+<h4>Modèle de mise en forme</h4>
+<p><label for="template" title="mod&egrave;le de mise en forme du r&eacute;sultat">template</label>
+<input type = "text" name="template" placeholder="##icon## ##basename## ##view-btn## ##download##"></p>
+<p><label for="template-folder" title="mod&egrave;le de mise en forme pour les dossier en vue liste">template-folder</label>
+<input type = "text" name="template-folder" placeholder="[b]##foldername##[/b]"></p>
+<h4>Balises pour les blocs parents et enfants</h4>
+<p><label for="main-tag" title="balise principale. indispensable pour utiliser id, class et style">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="item-tag" title="balise pour un fichier ou dossier. DIV si main-tag diff&eacute;rent de UL">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="li"></p>
+<h4>Format des éléments mot-clé</h4>
+<p><label for="date-format" title="format de la date">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%Y/%m/%d %H:%M"></p>
+<p><label for="size-decimal" title="nombre de d&eacute;cimales pour la taille du fichier">size-decimal</label>
+<input type = "number" name="size-decimal"class="w5"  min="0" max="10" placeholder="0"></p>
+<p><label for="icon-thumbnail" title="pour les images, on affiche une vignette">icon-thumbnail</label>
+<select name="icon-thumbnail" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="icon-size" title="16, 32 ou 48: taille de l&#039;icone ou vignette">icon-size</label>
+<select name="icon-size" title="32" placeholder="32" value="32">
+<option value=""></option>
+<option value="16">16</option>
+<option value="32" selected>32</option>
+<option value="48">48</option>
+</select></p>
+<p><label for="icon-path" title="le chemin vers vos fichiers ic&ocirc;nes. ce dossier doit contenir 3 sous-dossiers 16,32 et 48">icon-path</label>
+<input type = "text" name="icon-path" placeholder=""></p>
+<h4>configuration bouton télécharger</h4>
+<p><label for="download-label" title="texte ou bbcode pour le bouton t&eacute;l&eacute;charger">download-label</label>
+<input type = "text" name="download-label" placeholder="&amp;#x1F4E5"></p>
+<p><label for="download-style" title="classes et/ou styles du bouton pour t&eacute;l&eacute;charger">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>configuration bouton voir</h4>
+<p><label for="view-label" title="texte du bouton pour voir le fichier">view-label</label>
+<input type = "text" name="view-label"class="w50"  placeholder="&amp;#x1F441"></p>
+<p><label for="view-style" title="classes et/ou styles du bouton ou du lien pour voir le fichier">view-style</label>
+<input type = "text" name="view-style" placeholder=""></p>
+<h4>Styles CSS</h4>
+<p><label for="js-params" title="r&egrave;gles JS d&eacute;finies par le webmaster">js-params</label>
+<input type = "text" name="js-params" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+</body>
+</html >

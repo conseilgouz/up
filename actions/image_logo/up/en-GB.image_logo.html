@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_logo - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-logo" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Add an image or text on an image</p>
+<p>syntax <code><b>{</b>up image-logo=prefset,image_logo or text<b>}</b></code>image<code><b>{</b>/up image-logo<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>etoile</u> : </b> <b>image_logo</b>=&amp;#x2b50;<b> | </b><b>pos</b>=left,top<b> | </b><b>style</b>=margin:10px;font-size:24px
+</div >
+<p><label for="image_logo" title="prefset,image_logo or text">image-logo</label>
+<input type = "text" id="image_logo"class="important"  title="" placeholder="" list="combo_image_logo"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_image_logo">
+<option value=""></option>
+<option value="etoile">etoile</option>
+</datalist></p>
+<p><label for="pos" title="right, left, top, bottom ; horizontal, vertical position">pos</label>
+<input type = "text" name="pos"class="w40"  title="right,bottom" placeholder="right,bottom" list="combo_pos"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_pos">
+<option value=""></option>
+<option value="left,top">left,top</option>
+<option value="center,top">center,top</option>
+<option value="right,top">right,top</option>
+<option value="left,center">left,center</option>
+<option value="center,center">center,center</option>
+<option value="right,center">right,center</option>
+<option value="left,bottom">left,bottom</option>
+<option value="center,bottom">center,bottom</option>
+<option value="right,bottom">right,bottom</option>
+</datalist></p>
+<p><label for="width" title="logo width. % if no unit">width</label>
+<input type = "text" name="width"class="w20"  placeholder=""></p>
+<h4>Style for the logo</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p class="hr-top"><label for="class" title="block class(es)">class</label>
+<input type = "text" name="class"class="hr-top"  placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style for outer content block</h4>
+<p><label for="main-class" title="content block class(es)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<p><label for="main-style" title="inline style for content block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="css-head" title="style added in the page HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

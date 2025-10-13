@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upactionslist - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upactionslist" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Liste des UP actions avec infos et paramètres
+</p>
+<p><code><b>{</b>up upactionslist<b>}</b></code>  toutes les actions<br /><code><b>{</b>up upactionslist=action1, action2<b>}</b></code>  une ou plusieurs actions<br /><code><b>{</b>up upactionslist | md<b>}</b></code>  fichier marknote<br /><code><b>{</b>up upactionslist | csv<b>}</b></code>  fichier CSV
+ *
+ *</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>without-custom</b>=1
+</div >
+<h4>Sélection des actions listées</h4>
+<p><label for="upactionslist" title="liste des actions &agrave; r&eacute;cup&eacute;rer. toutes par d&eacute;faut">upactionslist</label>
+<input type = "text" id="upactionslist" title="" placeholder="" list="combo_upactionslist"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_upactionslist">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p class="hr-top"><label for="exclude-prefix" title="prefix des actions non list&eacute;es. Separateur = comma">exclude-prefix</label>
+<input type = "text" name="exclude-prefix"class="w50 hr-top"  placeholder="_,x_"></p>
+<p><label for="without-custom" title="affiche les infos du dossier custom de l&#039;action. 1 pour les masquer">without-custom</label>
+<select name="without-custom" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>Affichage du lien vers la démo</h4>
+<p><label for="demo" title="afficher le lien vers la demo">demo</label>
+<select name="demo" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>Générer les fichiers JSON synonymes des noms utilisés par UP 'dico'</h4>
+<p><label for="make-dico" title="consolide le fichier principal dico.json avec ceux des actions">make-dico</label>
+<select name="make-dico" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Création des fichiers documentation</h4>
+<p><label for="csv" title="fichier doc-actions.csv avec les options des actions">csv</label>
+<select name="csv" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="comment" title="fichier &#039;comment-actions.csv&#039; avec les infos des ent&ecirc;tes scripts pour analyse">comment</label>
+<select name="comment" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="md" title="enregistre la documentation au format markdown dans plugins/content/up/doc-actions.md">md</label>
+<select name="md" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="style ou class">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="idem style">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="filter" title="condition pour ex&eacute;cuter l&#039;action">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

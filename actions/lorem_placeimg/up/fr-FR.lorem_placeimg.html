@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_placeimg - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-placeimg" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une image aleatoire
+</p>
+<p>Syntaxe :<br /><code><b>{</b>up lorem-placeimg=catégorie | width=xx | height=xx | grayscale | sepia <b>}</b></code><br />--> catégorie = any, animals, arch, nature, people, tech</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>lorem_placeimg</b>=tech<b> | </b><b>height</b>=100<b> | </b><b>width</b>=200<b> | </b><b>class</b>=bd-rouge
+</div >
+<p><label for="lorem_placeimg" title="type d&#039;image: any, animals, arch, nature, people, tech">lorem-placeimg</label>
+<input type = "text" id="lorem_placeimg"class="w10 important"  title="tech" placeholder="tech" list="combo_lorem_placeimg"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_lorem_placeimg">
+<option value=""></option>
+<option value=""></option>
+<option value=""></option>
+<option value="any">any</option>
+<option value="animals">animals</option>
+<option value="arch">arch</option>
+<option value="nature">nature</option>
+<option value="people">people</option>
+<option value="tech">tech</option>
+</datalist></p>
+<p class="hr-top"><label for="height" title="hauteur image t&eacute;l&eacute;charg&eacute;e">height (px)</label>
+<input type = "number" name="height"class="w10 hr-top"  unit="px" placeholder="100"></p>
+<p><label for="width" title="largeur image t&eacute;l&eacute;charg&eacute;e">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="200"></p>
+<p class="hr-top"><label for="grayscale" title="rendu en niveau de gris">grayscale</label>
+<select name="grayscale"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="sepia" title="rendu s&eacute;pia">sepia</label>
+<select name="sepia" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder="bd-rouge"></p>
+<p><label for="style" title="classes et styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bg_slideshow - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-bg-slideshow" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une série d'images défilantes en fond du site ou d'un bloc
+</p>
+<p>syntaxe :<br />fond site : <code><b>{</b>up bg-slideshow=liste images ou dossier<b>}</b></code><br />fond bloc : <code><b>{</b>up bg-slideshow=liste images ou dossier<b>}</b></code>contenu<code><b>{</b>/up bg-slideshow<b>}</b></code><br />fond autre bloc : <code><b>{</b>up bg-slideshow=liste images ou dossier | bg-selector=#foo<b>}</b></code><br />doc : https://developer.mozilla.org/fr/docs/Web/CSS/background</p>
+
+
+</div >
+<h4>images</h4>
+<p><label for="bg_slideshow" title="dossier ou images s&eacute;par&eacute;es par des points-virgules">bg-slideshow</label>
+<input type = "text" id="bg_slideshow"class="important"  placeholder=""></p>
+<p><label for="mobile" title="image ou r&egrave;gle(s) css">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="path" title="chemin commun aux images indiqu&eacute;es en argument principal">path</label>
+<input type = "text" name="path" placeholder=""></p>
+<p><label for="shuffle" title="tri al&eacute;atoire des images. 1=toutes, sinon le nombre d&#039;images pour all&eacute;ger le chargement">shuffle</label>
+<input type = "text" name="shuffle" placeholder="0"></p>
+<h4>emplacement du fond image</h4>
+<p><label for="bg-selector" title="bloc portant le slideshow">bg-selector</label>
+<input type = "text" name="bg-selector"class="w30"  placeholder="body"></p>
+<h4>paramètres de l'image</h4>
+<p><label for="bg-overlay" title="calque superpos&eacute; &agrave; l&#039;image de fond (png, opacit&eacute;, RGBA, CSS)">bg-overlay</label>
+<input type = "text" name="bg-overlay" placeholder=""></p>
+<p><label for="bg-color" title="couleur sous image">bg-color</label>
+<input type = "text" name="bg-color"class="w20"  placeholder=""></p>
+<h4>transparence du contenu de la page</h4>
+<p><label for="page-selector" title="bloc sur contenu">page-selector</label>
+<input type = "text" name="page-selector" placeholder=""></p>
+<p><label for="page-overlay" title="background de page-selector (png, opacit&eacute;, RGBA, CSS)">page-overlay</label>
+<input type = "text" name="page-overlay" placeholder=""></p>
+<h4>options secondaires</h4>
+<p><label for="filter" title="conditions. Voir doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="center" title="centrage vertical du contenu entre shortcodes">center</label>
+<select name="center" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="classes et styles inline pour bloc cr&eacute;&eacute;">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p class="hr-top"><label for="js-options" title="options non pr&eacute;vues par l&#039;action">js-options</label>
+<input type = "text" name="js-options"class="hr-top"  placeholder=""></p>
+<h4>paramétres de l'animation</h4>
+<p><label for="delay" title="dur&eacute;e par image">delay (ms)</label>
+<input type = "number" name="delay" min="0" max="10000" step="500" unit="ms" placeholder="5000"></p>
+<p><label for="transition" title="random,blur,flash,negative,burn,slideLeft,slideRight,slideUp,slideDown,zoomIn,zoomOut,swirlLeft,swirlRight">transition</label>
+<select name="transition" title="fade" placeholder="fade" value="fade">
+<option value=""></option>
+<option value="random">random</option>
+<option value="blur">blur</option>
+<option value="flash">flash</option>
+<option value="negative">negative</option>
+<option value="burn">burn</option>
+<option value="slideLeft">slideLeft</option>
+<option value="slideRight">slideRight</option>
+<option value="slideUp">slideUp</option>
+<option value="slideDown">slideDown</option>
+<option value="zoomIn">zoomIn</option>
+<option value="zoomOut">zoomOut</option>
+<option value="swirlLeft">swirlLeft</option>
+<option value="swirlRight">swirlRight</option>
+</select></p>
+<p><label for="transitionDuration" title="dur&eacute;e transition">transitionDuration (ms)</label>
+<input type = "number" name="transitionDuration" min="0" max="10000" step="500" unit="ms" placeholder="1000"></p>
+<p><label for="animation" title="kenburns,kenburnsLeft,kenburnsUp,kenburnsDown,kenburnsUpLeft,kenburnsUpRight,kenburnsDownLeft,kenburnsDownRight,random">animation</label>
+<select name="animation" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="kenburns">kenburns</option>
+<option value="kenburnsLeft">kenburnsLeft</option>
+<option value="kenburnsUp">kenburnsUp</option>
+<option value="kenburnsDown">kenburnsDown</option>
+<option value="kenburnsUpLeft">kenburnsUpLeft</option>
+<option value="kenburnsUpRight">kenburnsUpRight</option>
+<option value="kenburnsDownLeft">kenburnsDownLeft</option>
+<option value="kenburnsDownRight">kenburnsDownRight</option>
+<option value="random">random</option>
+</select></p>
+<p><label for="animationDuration" title="dur&eacute;e des animations">animationDuration</label>
+<input type = "text" name="animationDuration"class="w10"  title="auto" placeholder="auto" list="combo_animationDuration"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animationDuration">
+<option value=""></option>
+<option value="auto">auto</option>
+<option value="1000">1000</option>
+<option value="1500">1500</option>
+<option value="2000">2000</option>
+<option value="2500">2500</option>
+</datalist></p>
+<p><label for="timer" title="affiche barre de progression">timer</label>
+<select name="timer" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+</body>
+</html >

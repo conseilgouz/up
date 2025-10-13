@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pdf_gallery - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-pdf-gallery" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une liste des PDF contenus dans un dossier
+</p>
+<p>syntaxe <code><b>{</b>up pdf-gallery=dossier<b>}</b></code><br />syntaxe <code><b>{</b>up pdf-gallery=dossier<b>}</b></code>template<code><b>{</b>/up pdf-gallery<b>}</b></code><br />Template pour définir le rendu<br />##name## : nom et extension du fichier sans le prefixe date<br />##full-name## : nom et extension du fichier avec le prefixe date<br />##human-name## : nom du fichier sans les tirets<br />##size## : taille du fichier<br />##date## : date du fichier ou prefixe date du nom de fichier<br />##info##  : fichier .info de même nom que le PDF avec texte descriptif<br />##image## : fichier jpg ou png de même nom que le PDF<br />##image-view## : idem ##image## avec lien pour afficher PDF dans fenêtre modale<br />##btn-view##     : lien pour afficher PDF dans fenêtre modale. Texte selon btn-view-text<br />##btn-download##, ##name-download## : lien pour télécharger le PDF. Texte selon btn-download-text<br />##preview##     : vue du PDF avec la méthode jsviewer de l'action PDF.<br />ATTENTION ##preview## charge tous les fichiers PDF lors de l'affichage de la page</p>
+</div >
+<p><label for="pdf_gallery" title="chemin du dossier contenant les PDF">pdf-gallery</label>
+<input type = "text" id="pdf_gallery" placeholder=""></p>
+<p><label for="file-mask" title="pour s&eacute;lectionner les fichiers d&#039;un dossier. ex: fic-*">file-mask</label>
+<input type = "text" name="file-mask" placeholder=""></p>
+<p><label for="sort-by" title="tri des fichiers. name ou date. Voir la demo">sort-by</label>
+<input type = "text" name="sort-by" placeholder="name"></p>
+<p><label for="sort-order" title="sens du tri. asc ou desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="msg-no-file" title="message si aucun fichier PDF dans le dossier">msg-no-file</label>
+<input type = "text" name="msg-no-file" placeholder="en=no file;fr=aucun fichier"></p>
+<p><label for="template" title="modele pour affichage (bbcode et motcle)">template</label>
+<input type = "text" name="template" placeholder="##human-name## [small](##size## - ##date##)[/small] ##btn-view## ##btn-download##"></p>
+<p><label for="flip" title="activer le mode flipbook">flip</label>
+<select name="flip" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Balise pour affichage de la liste</h4>
+<p><label for="main-tag" title="balise principale. 0 = aucune">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="item-tag" title="balise pour le bloc d&#039;un fichier. 0 = aucune">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="li"></p>
+<h4>Configuration prévisualisation du PDF</h4>
+<p><label for="preview-width" title="largeur du bloc pour preview">preview-width</label>
+<input type = "text" name="preview-width"class="w10"  placeholder="100%"></p>
+<p><label for="preview-height" title="hauteur du bloc pour preview">preview-height</label>
+<input type = "text" name="preview-height"class="w10"  placeholder="500px"></p>
+<p><label for="preview-background" title="couleur fond perdu du PDF (preview et modal) au format #rrggbb">preview-background</label>
+<input type = "color" name="preview-background" title="" value="#feffff"></p>
+<h4>Configuration fenêtre modale</h4>
+<p><label for="popup-width" title="largeur de la fen&ecirc;tre popup avec unit&eacute;. Ex: 90vw, 80%, ...">popup-width</label>
+<input type = "text" name="popup-width"class="w10"  placeholder="0"></p>
+<p><label for="popup-height" title="hauteur de la fen&ecirc;tre popup avec unit&eacute;. Ex: 90vh, 500px, ...">popup-height</label>
+<input type = "text" name="popup-height"class="w10"  placeholder="0"></p>
+<p><label for="popup-close-left" title="croix de fermeture en haut &agrave; gauche. haut-droite par d&eacute;faut">popup-close-left</label>
+<select name="popup-close-left" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Bouton télécharger le PDF</h4>
+<p><label for="add-sitename" title="texte &agrave; ajouter au d&eacute;but des fichiers t&eacute;l&eacute;charg&eacute;s">add-sitename</label>
+<input type = "text" name="add-sitename"class="w20"  placeholder=""></p>
+<p><label for="btn-download-text" title="texte pour le bouton &#039;t&eacute;l&eacute;charger&#039;">btn-download-text</label>
+<input type = "text" name="btn-download-text" placeholder="en=Download %s;fr=Telecharger %s"></p>
+<p><label for="btn-download-style" title="classe et style inline pour le bouton &#039;t&eacute;l&eacute;charger&#039;">btn-download-style</label>
+<input type = "text" name="btn-download-style" placeholder=""></p>
+<h4>Bouton voir le PDF</h4>
+<p><label for="btn-view-text" title="texte pour bouton &#039;voir&#039;">btn-view-text</label>
+<input type = "text" name="btn-view-text" placeholder="Voir"></p>
+<p><label for="btn-view-style" title="classe et style inline pour le bouton &#039;voir&#039;">btn-view-style</label>
+<input type = "text" name="btn-view-style" placeholder=""></p>
+<h4>style pour ##image##</h4>
+<p><label for="image-style" title="classe et style pour l&#039;image">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="info-style" title="classe et style pour le contenu du fichier .info. Ajoute un bloc DIV">info-style</label>
+<input type = "text" name="info-style" placeholder=""></p>
+<h4>Label du fichier</h4>
+<p><label for="label-replace" title="liste des remplacements sous la forme ancien:nouveau, ... BBcode admis">label-replace</label>
+<input type = "text" name="label-replace" placeholder=""></p>
+<h4>Format pour les mots-clés</h4>
+<p><label for="format-date" title="format pour la date. ex: &#039;d/m/Y H:i&#039;">format-date</label>
+<input type = "text" name="format-date" placeholder="lang[en=m/d/Y H:i;fr=d/m/Y H:i]"></p>
+<p><label for="prefix-date-size" title="ou le nombre de caract&egrave;res pour d&eacute;finir la date. 13 si YYYYMMDDHHMM-, 11 si YYYY-MM-DD-">prefix-date-size</label>
+<input type = "number" name="prefix-date-size" min="0" max="13" placeholder="0"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc parent">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="item-style" title="classe et style inline pour un bloc fichier">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS ajout&eacute;s dans le HEAD">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

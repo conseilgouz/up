@@ -1,0 +1,1 @@
+Récupérer le code INSEE de la commune sur <a href="https://www.galichon.com/codesgeo/">galichon.com</a>

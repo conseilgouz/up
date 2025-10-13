@@ -1,0 +1,62 @@
+// === UP-BOX - image
+// template : ##image## ##title-subtitle-link## ##body## ##content## ##/body## ##action-link## 
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:$white;
+
+$title_bg: $white;
+$title_text: $bleuClair;
+$title_border: $bleuClair 2px solid;
+$subtitle_text: $gris;
+$action_bg: $gris;
+$action_text: $white;
+
+.up-box-image { 
+    margin: 0 auto; // centrage dans bloc parent
+    background:$box_bg;
+    &:after {
+        content:"";
+        display:table;
+        clear:both;
+    }
+    .up-box-image {
+        max-width:25%;
+        float:left;
+        margin-right:2%;
+    }
+    .up-box-title {
+        display:grid;
+        padding: 5px 0;   
+        // background:$title_bg;
+        border-bottom:$title_border;
+        color:$title_text;
+        margin:0;
+        a {color:$title_text}
+    }
+    .up-box-title:before {
+        content:"";
+    }
+    .up-box-subtitle {
+        display:block;
+        color:$subtitle_text;
+    }
+    .up-box-body {
+       text-align:justify;
+       margin-top:10px;
+       > *:first-child{margin-top:0}
+       > *:last-child{margin-bottom:0}
+    }
+    .up-box-action {
+        border-bottom:$title_border;
+        text-align:right;
+        font-weight:bold;
+        color:$title_text;
+        padding:0;
+        a {color:$title_text}
+    }
+}

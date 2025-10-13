@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_random - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-random" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Randomly display one of the images in a folder</p>
+<p>The folder can be a valid pattern for the PHP GLOB function.<br>syntax 1: <code><b>{</b>up image-random=folder<b>}</b></code>syntax 2: <code><b>{</b>up image-random<b>}</b></code>image 1<code><b>{</b>===<b>}</b></code>image 2 with link<code><b>{</b>/up image-random<b>}</b></code><br>syntax 3: <code><b>{</b>up image-random<b>}</b></code>content 1<code><b>{</b>===<b>}</b></code>content 2<code><b>{</b>/up image-random<b>}</b></code></p>
+
+
+</div >
+<p><label for="image_random" title="images folder">image-random</label>
+<input type = "text" id="image_random"class="important"  placeholder=""></p>
+<p><label for="path-only" title="returns only the image path for use by another action">path-only</label>
+<select name="path-only" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline block style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

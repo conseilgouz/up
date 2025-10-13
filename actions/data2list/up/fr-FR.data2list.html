@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>data2list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-data2list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche le contenu d'un fichier JSON, XML ou CSV sous forme d'une liste
+ *
+</p>
+<p>syntaxe <code><b>{</b>up data2list=data_source<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>boolean-out</b>=&amp;#x2714;, [span class=t-red]non[/span], NC
+</div >
+<h4>emplacement et type des données</h4>
+<p><label for="data2list" title="URL vers data ou fichier">data2list</label>
+<input type = "text" id="data2list"class="important"  title="" placeholder="" list="combo_data2list"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_data2list">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p><label for="datatype" title="pour forcer la d&eacute;tection du type de donn&eacute;es (json, xml, csv)">datatype</label>
+<input type = "text" name="datatype"class="w10"  placeholder=""></p>
+<p><label for="encoding" title="codage des caract&egrave;res de la source. ex: ISO-8859-1">encoding</label>
+<input type = "text" name="encoding"class="w20"  placeholder=""></p>
+<h4>uniquement pour des données CSV ou XML</h4>
+<p><label for="csv-header" title="1 si la premi&egrave;re ligne contient les titres des colonnes.">csv-header</label>
+<select name="csv-header" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="csv-header-title" title="titres des colonnes s&eacute;par&eacute;es par csv-separator. Si d&eacute;fini, remplace les titres du fichier">csv-header-title</label>
+<input type = "text" name="csv-header-title" placeholder=""></p>
+<p><label for="csv-separator" title="caract&egrave;re s&eacute;parateur pour les colonnes">csv-separator</label>
+<input type = "text" name="csv-separator"class="w5"  placeholder=";"></p>
+<p><label for="xml-attributes" title="les champs dans la balise ouvrante sont dans un sous-tableau @attributes, Non par d&eacute;faut">xml-attributes</label>
+<select name="xml-attributes" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>sélection des lignes</h4>
+<p><label for="lign-root" title="chemin vers la ligne racine. Exemple: trk/trkseg">lign-root</label>
+<input type = "text" name="lign-root" placeholder=""></p>
+<p><label for="lign-select" title="indice(s) de(s) ligne(s) de donn&eacute;es ou col1:val1;ou val2, colN:valN pour recherche contenu">lign-select</label>
+<input type = "text" name="lign-select" placeholder=""></p>
+<p><label for="lign-filter" title="filtrage apr&egrave;s lign-select sous la forme champ[=&gt;,&lt;=,==,&lt;&gt;]valeur OU field&gt;&lt;valeurMin-valeurMax">lign-filter</label>
+<input type = "text" name="lign-filter" placeholder=""></p>
+<p><label for="lign-sort" title="tri des donn&eacute;es sous la forme champ1:asc|desc, champ2:asc|desc, ...">lign-sort</label>
+<input type = "text" name="lign-sort" placeholder=""></p>
+<p><label for="lign-max" title="nombre de lignes retourn&eacute;es">lign-max</label>
+<input type = "number" name="lign-max"class="important"  min="0" max="99" placeholder=""></p>
+<h4>sélection des colonnes/champs</h4>
+<p><label for="col-include" title="liste des champs retourn&eacute;s (s&eacute;parateur virgule)">col-include</label>
+<input type = "text" name="col-include" placeholder=""></p>
+<p><label for="col-exclude" title="liste des champs non retourn&eacute;s (s&eacute;parateur virgule)">col-exclude</label>
+<input type = "text" name="col-exclude" placeholder=""></p>
+<h4>template pour mise en forme</h4>
+<p><label for="template " title="mod&egrave;le pour une ligne">template </label>
+<input type = "text" name="template " placeholder="##LABEL##: ##VALUE##"></p>
+<p><label for="array-subtitle" title="contenu du premier niveau de la liste. vide=indice">array-subtitle</label>
+<input type = "text" name="array-subtitle" placeholder=""></p>
+<h4>mise en forme du contenu</h4>
+<p><label for="col-class" title="classes pour les champs (champ1:class1 class2,champ2:class)">col-class</label>
+<input type = "text" name="col-class" placeholder=""></p>
+<p><label for="col-label" title="correspondance entre nom du champ et titre colonne (champ1:col1,champ2:col2, ...)">col-label</label>
+<input type = "text" name="col-label" placeholder=""></p>
+<h4>type des contenus</h4>
+<p><label for="col-type" title="date, url, image, boolean, string ou format pour fonction php: sprintf">col-type</label>
+<input type = "text" name="col-type"class="w50"  placeholder=""></p>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w50"  placeholder="%e %B %Y"></p>
+<p><label for="boolean-in" title="valeurs dans fichier pour true,false,null">boolean-in</label>
+<input type = "text" name="boolean-in"class="w50"  placeholder="1,0"></p>
+<p><label for="boolean-out" title="texte en sortie pour les valeurs true,false,null">boolean-out</label>
+<input type = "text" name="boolean-out"class="w50"  placeholder="&#x2714;, [span class=t-red]non[/span], NC"></p>
+<p><label for="url-target" title="Cible pour ouverture URL">url-target</label>
+<select name="url-target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<p><label for="image-path" title="chemin vers une image dans les donn&eacute;es">image-path</label>
+<input type = "text" name="image-path" placeholder=""></p>
+<p><label for="image-max-size" title="cot&eacute; du carr&eacute; dans lequel elle sera inscrite. Exemple: 100px">image-max-size</label>
+<input type = "text" name="image-max-size"class="w10"  placeholder=""></p>
+<h4>si un champ est vide</h4>
+<p><label for="col-empty" title="contenu d&#039;un champ si vide u &eacute;gal &agrave; z&eacute;ro. ex: colname:none, ...">col-empty</label>
+<input type = "text" name="col-empty" placeholder=""></p>
+<p><label for="col-empty-invisible" title="1 = ne pas afficher les labels des champs avec valeur vide">col-empty-invisible</label>
+<select name="col-empty-invisible" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="no-data-html" title="contenu si aucune donn&eacute;e disponible. BBcode admis.">no-data-html</label>
+<input type = "text" name="no-data-html" placeholder="en=no data for %s;fr=aucune donnée pour %s"></p>
+<h4>habillage du bloc retourné</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Gestion du cache interne</h4>
+<p><label for="cache-delay" title="dur&eacute;e du cache en minutes. 0 pas de cache">cache-delay</label>
+<input type = "text" name="cache-delay"class="w10"  placeholder="30"></p>
+</body>
+</html >

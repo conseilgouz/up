@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addcsshead - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addcsshead" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>adds CSS code or files to the head.</p>
+<p>without risk of cleaning by a WYSIWYG editor
+<br>syntax 1 : <code><b>{</b>up addCssHead=.foo<b>[</b>color:red]<b>}</b></code> Be careful: put <code><b>[</b> ]</code> instead of <code><b>{</b><b>}</b></code> <br>syntax 2 : <code><b>{</b>up addCssHead<b>}</b></code> .foo<code><b>{</b>color:red<b>}</b></code> <code><b>{</b>/up addCssHead<b>}</b></code> <br>syntax 3 : <code><b>{</b>up addCssHead=path<b>}</b></code><br>Use : upload a page specific CSS file</p>
+
+
+</div >
+<p><label for="addcsshead" title="CSS file or code. ATTENTION [ ] instead of {} for code in shortcode">addcsshead</label>
+<input type = "text" id="addcsshead" placeholder=""></p>
+<p><label for="filter" title="conditions. See doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

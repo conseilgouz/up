@@ -1,0 +1,13 @@
+<p>{up flexbox=5-2-5<br>| class=fg-gap m-child-raz-1 <br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| css-head=#id .row-odd[background:lightYellow] #id .col-2[border:2px dashed blue] #id .bloc-5[background:orange;color:white] <br>| class-2=bg-jaune}</p>
+<p>UN</p>
+<p>DEUX</p>
+<p>TROIS</p>
+<p>QUATRE</p>
+<p>CINQ</p>
+<p>SIX</p>
+<p>SEPT</p>
+<p>HUIT</p>
+<p>NEUF</p>
+<p>DIX</p>
+<p>ONZE</p>
+<p>{/up flexbox}</p>

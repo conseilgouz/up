@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>googlefont - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-googlefont" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>ajoute une police GoogleFont, ainsi qu'une classe pour l'utiliser
+</p>
+<p>syntaxe :<br /><code><b>{</b>up googlefont=nompolice<b>}</b></code> contenu <code><b>{</b>/up googlefont<b>}</b></code><br /><code><b>{</b>up googlefont=nompolice | class=foo<b>}</b></code> < p class="foo">...< p></p>
+
+
+</div >
+<p><label for="googlefont" title="nom police">googlefont</label>
+<input type = "text" id="googlefont"class="important"  placeholder=""></p>
+<p><label for="size" title="ajout font-size et line-height">size (px)</label>
+<input type = "number" name="size" min="8" max="96" unit="px" placeholder=""></p>
+<p><label for="family" title="famille de substitution (cursive, fantasy)">family</label>
+<input type = "text" name="family" title="" placeholder="" list="combo_family"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_family">
+<option value=""></option>
+<option value="serif">serif</option>
+<option value="sans-serif">sans-serif</option>
+<option value="monospace">monospace</option>
+<option value="cursive">cursive</option>
+<option value="fantasy">fantasy</option>
+</datalist></p>
+<h4>Divers</h4>
+<p><label for="tag" title="balise HTML pour entourer le contenu">tag</label>
+<input type = "text" name="tag"class="w10"  placeholder="span"></p>
+<p><label for="className" title="nom de la classe pour utiliser la police ailleurs dans la page">className</label>
+<input type = "text" name="className"class="w20"  placeholder=""></p>
+<h4>Style</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" placeholder=""></p>
+<p><label for="css-head" title="compl&eacute;ment de css: color, font-size, ....">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

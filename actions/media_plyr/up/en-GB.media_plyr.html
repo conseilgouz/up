@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_plyr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-plyr" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a video or audio player that fits at most in its parent block</p>
+<p><code><b>{</b>up media-plyr=yt | code=bTqVqk7FSmY <b>}</b></code><br><code><b>{</b>up media-plyr=vimeo | code=bTqVqk7FSmY <b>}</b></code><br>media-plyr : specify yt or youtube or vimeo<br>code : this is the code in the URL of the video.<br><br><code><b>{</b>up media-plyr=video | poster=url image | mp4 | webm | vtt | download <b>}</b></code><br>media-plyr : video to indicate the URL to the video.<br>poster : name of the still image<br>mp4, webm, vtt, download : if URL not specified, it will be deducted from the one to'post'.<br><br><code><b>{</b>up media-plyr=audio | mp3=url mp3 file | ogg<b>}</b></code><br>media_plyr : audio<br>mp3 : url to MP3 file (required)<br>ogg : if URL not specified, it will be deducted from the one for'MP3'.</p>
+
+
+</div >
+<p><label for="media_plyr" title="type of reading : youtube, vimeo, video or audio">media-plyr</label>
+<select id="media_plyr" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="youtube">youtube</option>
+<option value="vimeo">vimeo</option>
+<option value="video">video</option>
+<option value="audio">audio</option>
+</select></p>
+<p><label for="code" title="video code (at the end of the youtube or vimeo url)">code</label>
+<input type = "text" name="code"class="w30 important"  placeholder=""></p>
+<p><label for="poster" title="Image URL (required)">poster</label>
+<input type = "text" name="poster"class="important"  placeholder=""></p>
+<p class="hr-top"><label for="mp4" title="URL of the MP4 file. If empty, we use the name of the poster">mp4</label>
+<input type = "text" name="mp4"class="hr-top"  placeholder=""></p>
+<p><label for="webm" title="URL of the WEBM file. If empty, we use the name of the poster">webm</label>
+<input type = "text" name="webm" placeholder=""></p>
+<p><label for="vtt" title="URL of the MTB file for subtitling. If empty, we use the name of the poste">vtt</label>
+<input type = "text" name="vtt" placeholder=""></p>
+<p><label for="download" title="URL of the downloadable file. If empty, use the MP4 file name">download</label>
+<input type = "text" name="download" placeholder=""></p>
+<p class="hr-top"><label for="mp3" title="URL of the mp3 audio file. (required)">mp3</label>
+<input type = "text" name="mp3"class="important hr-top"  placeholder=""></p>
+<p><label for="ogg" title="URL of the audio file ogg. If empty, the name of the MP3 file is used">ogg</label>
+<input type = "text" name="ogg" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) added to the external block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style added to the exterior block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

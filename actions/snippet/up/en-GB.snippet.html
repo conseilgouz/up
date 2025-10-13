@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>snippet - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-snippet" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>create and load small text files (snippet)</p>
+<p><code><b>{</b>up model=foo<b>}</b></code> load a file up/snippet/foo.snippet 
+<br><code><b>{</b>up model=foo<b>}</b></code>text<code><b>{</b>/up model<b>}</b></code> save text to file up/snippet/foo.snippet
+<br><code><b>{</b>up snippet<b>}</b></code> displays the list of all files in the folder up/snippet/
+<br><code><b>{</b>up snippet=* | delete<b>}</b></code> removes all snippets corresponding to the mask</p>
+
+
+</div >
+<p><label for="snippet" title="name of the file to load/create. empty or mask for list. ex: filter*">snippet</label>
+<input type = "text" id="snippet" placeholder="*"></p>
+<p><label for="strip-tags" title="remove all HTML tags">strip-tags</label>
+<input type = "text" name="strip-tags" placeholder="0"></p>
+<p><label for="delete" title="removes the file(s) passed as main argument">delete</label>
+<input type = "text" name="delete" placeholder="0"></p>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="dir-base" title="folder for snippets. Use custom/prefs.ini">dir-base</label>
+<input type = "text" name="dir-base" placeholder="up/snippet"></p>
+</body>
+</html >

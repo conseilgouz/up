@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>anim_aos - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-anim-aos" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays content with animations on page scroll (library in pure JS)</p>
+<p>syntax 1 : animates the content of the shortcode<br><code><b>{</b>up anim-aos<b>}</b></code> your text <code><b>{</b>/up anim-aos<b>}</b></code><br>syntax 2 : animates the tags indicated in the content<br><code><b>{</b>up anim-aos | repeat=tags list<b>}</b></code> content with target tags<code><b>{</b>/up anim-aos<b>}</b></code><br>syntax 3 : animates all the tags indicated from the position of the shortcode to the end of the article<br><code><b>{</b>up anim-aos | repeat=tags list<b>}</b></code><br><br>animation : <br>fade-up, fade-down, fade-right, fade-left, fade-up-right, fade-up-left, fade-down-right, fade-down-left,flip-left, flip-right, flip-up, flip-down,zoom-in, zoom-in-up, zoom-in-down, zoom-in-left, zoom-in-right, zoom-out, zoom-out-up, zoom-out-down, zoom-out-right, zoom-out-left<br>easing :<br>linear, ease, ease-in, ease-out, ease-in-out, ease-in-back, ease-out-back, ease-in-out-back, ease-in-sine,ease-out-sine, ease-in-out-sine, ease-in-quad, ease-out-quad, ease-in-out-quad, ease-in-cubic, ease-out-cubic,ease-in-out-cubic, ease-in-quart, ease-out-quart, ease-in-out-quart<br>anchor-placement : <br>top-bottom, center-bottom, bottom-bottom, top-center, bottom-center, center-center, top-top, bottom-top</p>
+
+
+</div >
+<p><label for="anim_aos" title="animation name">anim-aos</label>
+<select id="anim_aos" title="zoom-in-right" placeholder="zoom-in-right" value="zoom-in-right">
+<option value=""></option>
+<option value="fade-up">fade-up</option>
+<option value="fade-down">fade-down</option>
+<option value="fade-right">fade-right</option>
+<option value="fade-left">fade-left</option>
+<option value="fade-up-right">fade-up-right</option>
+<option value="fade-up-left">fade-up-left</option>
+<option value="fade-down-right">fade-down-right</option>
+<option value="fade-down-left">fade-down-left</option>
+<option value="flip-left">flip-left</option>
+<option value="flip-right">flip-right</option>
+<option value="flip-up">flip-up</option>
+<option value="flip-down">flip-down</option>
+<option value="zoom-in">zoom-in</option>
+<option value="zoom-in-up">zoom-in-up</option>
+<option value="zoom-in-down">zoom-in-down</option>
+<option value="zoom-in-left">zoom-in-left</option>
+<option value="zoom-in-right" selected>zoom-in-right</option>
+<option value="zoom-out">zoom-out</option>
+<option value="zoom-out-up">zoom-out-up</option>
+<option value="zoom-out-down">zoom-out-down</option>
+<option value="zoom-out-right">zoom-out-right</option>
+<option value="zoom-out-left">zoom-out-left</option>
+</select></p>
+<p><label for="delay" title="delay in milliseconds (50,100,150,...3000 ms)">delay (msec)</label>
+<input type = "number" name="delay"class="w10"  min="50" max="3000" step="50" unit="msec" placeholder=""></p>
+<p><label for="duration" title="animation time in milliseconds (50,100,150,...3000 ms)">duration (msec)</label>
+<input type = "number" name="duration"class="w10"  min="50" max="3000" step="50" unit="msec" placeholder=""></p>
+<p><label for="easing" title="effect: linear, ease-in-back, ease-out-cubic, ease-in-sine">easing</label>
+<select name="easing" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="linear">linear</option>
+<option value="ease">ease</option>
+<option value="ease-in">ease-in</option>
+<option value="ease-out">ease-out</option>
+<option value="ease-in-out">ease-in-out</option>
+<option value="ease-in-back">ease-in-back</option>
+<option value="ease-out-back">ease-out-back</option>
+<option value="ease-in-out-back">ease-in-out-back</option>
+<option value="ease-in-sine">ease-in-sine</option>
+<option value="ease-out-sine">ease-out-sine</option>
+<option value="ease-in-out-sine">ease-in-out-sine</option>
+<option value="ease-in-quad">ease-in-quad</option>
+<option value="ease-out-quad">ease-out-quad</option>
+<option value="ease-in-out-quad">ease-in-out-quad</option>
+<option value="ease-in-cubic">ease-in-cubic</option>
+<option value="ease-out-cubic">ease-out-cubic</option>
+<option value="ease-in-out-cubic">ease-in-out-cubic</option>
+<option value="ease-in-quart">ease-in-quart</option>
+<option value="ease-out-quart">ease-out-quart</option>
+<option value="ease-in-out-quart">ease-in-out-quart</option>
+</select></p>
+<p><label for="offset" title="in px, height for release from the bottom of the screen">offset (px)</label>
+<input type = "number" name="offset"class="w10"  min="0" max="500" step="10" unit="px" placeholder=""></p>
+<p><label for="anchor-placement" title="triggers the effect when the scrolling of the element reaches certain positions">anchor-placement</label>
+<select name="anchor-placement" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="top-bottom">top-bottom</option>
+<option value="center-bottom">center-bottom</option>
+<option value="bottom-bottom">bottom-bottom</option>
+<option value="top-center">top-center</option>
+<option value="bottom-center">bottom-center</option>
+<option value="center-center">center-center</option>
+<option value="top-top">top-top</option>
+<option value="bottom-top">bottom-top</option>
+</select></p>
+<p><label for="once" title="one-time effect or not">once</label>
+<select name="once" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="repeat" title="applies the effect to all tags. Ex: h2,h3">repeat</label>
+<input type = "text" name="repeat"class="w20"  placeholder=""></p>
+<p class="hr-top"><label for="css-before" title="style of the element before the animation">css-before</label>
+<input type = "text" name="css-before"class="hr-top"  placeholder=""></p>
+<p><label for="css-after" title="style of the element after the animation">css-after</label>
+<input type = "text" name="css-after" placeholder=""></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="inline style applied to the block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="class(es) applied to the block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+</body>
+</html >

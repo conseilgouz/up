@@ -1,0 +1,29 @@
+ETAT DES TUILES AU 31/03/2024
+
+CartoDB.Voyager OK
+korona INVALID
+mapbox.comic INVALID
+mapbox.dark OK
+mapbox.emerald INVALID
+mapbox.high-contrast INVALID
+mapbox.light OK
+mapbox.outdoors OK
+mapbox.pencil INVALID
+mapbox.pirates INVALID
+mapbox.run-bike-hike INVALID
+mapbox.satellite OK
+mapbox.streets-satellite OK
+mapbox.streets OK
+mapbox.wheatpaste INVALID
+opentomap = OK
+osm-humanitarian OK
+osm-mapnik-bw INVALID
+osm-mapnik-de OK
+osm-mapnik-fr INVALID
+osm-mapnik OK
+osm-mapnikno-labels INVALID
+stamen-terrain-background OK
+stamen-terrain OK
+stamen-toner-lite OK
+stamen-toner OK
+stamen-watercolor OK

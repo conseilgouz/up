@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>markdown - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-markdown" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche du contenu MARKDOWN provenant d'un fichier ou saisi entre les shortcodes
+</p>
+<p>syntaxe 1:  <code><b>{</b>up markdown<b>}</b></code>contenu<code><b>{</b>/up markdown<b>}</b></code><br />syntaxe 2:  <code><b>{</b>up markdown=nom_fichier_md<b>}</b></code><br />Utilisation : afficher un fichier changelog.md
+ *</p>
+
+
+</div >
+<p><label for="markdown" title="chemin et nom du fichier markdown ou vide pour contenu">markdown</label>
+<input type = "text" id="markdown"class="important"  placeholder=""></p>
+<p><label for="strip-tags" title="0 pour conserver les tags HTML dans le contenu saisi entre les shortcodes. Ils sont toujours conserv&eacute;s si la source est un fichier.">strip-tags</label>
+<select name="strip-tags" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classes et styles pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

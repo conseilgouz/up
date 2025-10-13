@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_flickr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-flickr" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a random image</p>
+<p>The Flickr API is closed as well as the alternatives.
+<br>To preserve existing shortcodes, the action generates an image with a colored background and the specified dimensions.
+<br><br>Syntax : <code><b>{</b>up lorempixel=type | width=xx | height=xx <b>}</b></code><br>--> type = abstract, animals, business, cats, city, food, nightlife, fashion, people nature, sports, technics, transport<br>Note : width & height are the dimensions of the image returned by lorempixel. To display it in filling in the parent block, you must add style=width:100%</p>
+
+
+</div >
+<p><label for="lorem_flickr" title="texte affich&eacute; (anciennement mots-cl&eacute;s)">lorem-flickr</label>
+<input type = "text" id="lorem_flickr" placeholder=""></p>
+<p><label for="height" title="uploaded image height">height (px)</label>
+<input type = "number" name="height"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="width" title="width of image uploaded">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="orientation" title="NOT AVAILABLE">orientation</label>
+<select name="orientation" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="" selected></option>
+<option value="H">H</option>
+<option value="V">V</option>
+</select></p>
+<p><label for="color" title="background color">color</label>
+<input type = "text" name="color" placeholder="g"></p>
+<p><label for="number" title="number of images returned">number</label>
+<input type = "number" name="number"class="w10"  placeholder="1"></p>
+<h4>gestion du cache</h4>
+<p><label for="cache-delai" title="cache validity period. 0:none, 1:one hour, -1:unlimited">cache-delai</label>
+<input type = "number" name="cache-delai" placeholder="- 1"></p>
+<p><label for="cache-reset" title="clear ALL files in cache">cache-reset</label>
+<select name="cache-reset" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Return method</h4>
+<p><label for="mode" title="img or dir tag for path to folder">mode</label>
+<select name="mode" title="img" placeholder="img" value="img">
+<option value=""></option>
+<option value="img" selected>img</option>
+<option value="dir">dir</option>
+</select></p>
+<h4>parent block</h4>
+<p><label for="main-tag" title="parent block tag to image if options main-class or align">main-tag</label>
+<input type = "text" name="main-tag"class="w20"  placeholder="div"></p>
+<p><label for="main-class" title="classe(s)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<p><label for="align" title="horizontal alignment : left, center, right">align</label>
+<select name="align" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="left">left</option>
+<option value="center">center</option>
+<option value="right">right</option>
+</select></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classes and styles image(s) in mode=img">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classes and styles image(s) in mode=img">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>popover - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-popover" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a big tooltip when clicking an element.</p>
+<p>syntaxe <code><b>{</b>up popover=texte appel en bbcode<b>}</b></code>contenu popover<code><b>{</b>/up popover<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>list-400</u> : </b> <b>width</b>=400<b> | </b><b>pop-class</b>=p0 pt1<b> | </b><b>class</b>=badge-vert display-block mright<br><b><u>menu-vert</u> : </b> <b>popover</b>=&amp;#x1F4A1; Autres ressources &agrave; consulter<b> | </b><b>width</b>=400<b> | </b><b>pop-class</b>=p0 pt1<b> | </b><b>class</b>=badge-vert display-block mright
+</div >
+<p><label for="popover" title="bbcode for trigger element">popover</label>
+<input type = "text" id="popover" title="" placeholder="" list="combo_popover"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_popover">
+<option value=""></option>
+<option value="list-400">list-400</option>
+<option value="menu-vert">menu-vert</option>
+</datalist></p>
+<h4>Popup Window Style</h4>
+<p><label for="max-height" title="Maximum height of the popover (eg: 90vh)">max-height</label>
+<input type = "text" name="max-height"class="w10"  placeholder=""></p>
+<p><label for="pop-bg-color" title="Popover background color">pop-bg-color</label>
+<input type = "color" name="pop-bg-color" title="" value="#feffff"></p>
+<p><label for="pop-class" title="popover class">pop-class</label>
+<input type = "text" name="pop-class" placeholder=""></p>
+<p><label for="pop-style" title="Inline style of Popover">pop-style</label>
+<input type = "text" name="pop-style" placeholder=""></p>
+<h4>Trigger Style</h4>
+<p><label for="tag" title="tag for trigger element">tag</label>
+<input type = "text" name="tag"class="w10"  placeholder="button"></p>
+<p><label for="id" title="ID Generated Automatically By Up">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="trigger class">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for trigger">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="Style added in the head of the page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>Javascript settings for popover configuration</h4>
+<p><label for="width" title="popover width">width</label>
+<input type = "number" name="width" min="100" max="600" placeholder="250"></p>
+<p><label for="top" title="true : Popover over the trigger, if not below">top</label>
+<select name="top" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="arrow" title="Display the little arrow">arrow</label>
+<select name="arrow" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="offset" title="distance between Trigger and Popover">offset</label>
+<input type = "number" name="offset" placeholder="0"></p>
+<p><label for="viewportSideMargin" title="Space to leave at the side when against the viewport edge (pixels)">viewportSideMargin</label>
+<input type = "number" name="viewportSideMargin" placeholder="10"></p>
+<p><label for="fadeInDuration" title="Duration of popover fade-in animation (ms)">fadeInDuration</label>
+<input type = "number" name="fadeInDuration" placeholder="65"></p>
+<p><label for="fadeOutDuration" title="Duration of popover fade-out animation (ms)">fadeOutDuration</label>
+<input type = "number" name="fadeOutDuration" placeholder="65"></p>
+<p><label for="preventHide" title="Prevent hiding when clicking within popover (false/true)">preventHide</label>
+<select name="preventHide" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p class="hr-top"><label for="onShow" title="Callback to be run when the popover is shown. this is the trigger element and the first argument passed to the function is the popover element (both jQuery-wrapped).">onShow</label>
+<input type = "text" name="onShow"class="hr-top"  placeholder=""></p>
+<p><label for="onHide" title="Callback to be run when the popover is hidden. Same as onShow.">onHide</label>
+<input type = "text" name="onHide" placeholder=""></p>
+</body>
+</html >

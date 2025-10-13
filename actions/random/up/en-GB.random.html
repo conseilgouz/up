@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>random - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-random" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>selects one or more values from a list or folder</p>
+<p>syntax:
+<br><code><b>{</b>up random=1;2;3<b>}</b></code> -> one of 3 random values
+<br><code><b>{</b>up random=1;2;3 | maxi=2 | sep-out=;<b>}</b></code> -> two of the 3 random values separated by a semicolon
+<br><code><b>{</b>up random=1,2,3 | sep-in=,<b>}</b></code> -> one of 3 values separated by a random comma
+<br><code><b>{</b>up random=dossier/*.{jpg,ˆpng<b>}</b></code>} -> one of the jpg or png files in the folder
+<br><code><b>{</b>up random=dossier/fichier.csv<b>}</b></code> -> one of the values in the txt or csv file 
+<br><code><b>{</b>up random<b>}</b></code>val1<code><b>{</b>===<b>}</b></code>val2<code><b>{</b>===<b>}</b></code>val3<code><b>{</b>===<b>}</b></code>valN<code><b>{</b>/up random<b>}</b></code> -> one of the values in the csv file</p>
+
+
+</div >
+<p><label for="random" title="list of values, txt or csv file with values, path to files">random</label>
+<input type = "text" id="random"class="important"  placeholder=""></p>
+<p><label for="maxi" title="number of returned values">maxi</label>
+<input type = "number" name="maxi"class="w10"  placeholder="1"></p>
+<p><label for="sep-in" title="separator for list of input values">sep-in</label>
+<input type = "text" name="sep-in"class="w5"  placeholder=";"></p>
+<p><label for="sep-out" title="separator for list of output values">sep-out</label>
+<input type = "text" name="sep-out"class="w5"  placeholder=";"></p>
+<p><label for="csv-numcol" title="column number of a .csv file">csv-numcol</label>
+<input type = "number" name="csv-numcol"class="w5"  min="0" max="99" placeholder="0"></p>
+<p><label for="csv-title" title="1 if the 1st line of a .csv file contains the titles">csv-title</label>
+<select name="csv-title" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="mask" title="mask for selecting files from a folder. ex: *\[ab\].[jpg,png] -&gt; [ab]*.{jpg,png}">mask</label>
+<input type = "text" name="mask"class="w20"  title="*.*" placeholder="*.*" list="combo_mask"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_mask">
+<option value=""></option>
+<option value="*\[ab\].[jpg,png]">*\[ab\].[jpg,png]</option>
+<option value=""></option>
+</datalist></p>
+<p><label for="msg-empty" title="message if no input argument">msg-empty</label>
+<input type = "text" name="msg-empty" placeholder=""></p>
+<h4>Return formatting</h4>
+<p><label for="main-tag" title="0=text list or main container tag for support id, class and style">main-tag</label>
+<input type = "text" name="main-tag"class="w5"  placeholder="0"></p>
+<p><label for="item-tag" title="0=text list or item container tag for support id, class and style">item-tag</label>
+<input type = "text" name="item-tag"class="w5"  placeholder="div"></p>
+<p><label for="id" title="identifier">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-style" title="inline class and style for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="item-style" title="inline class and style for item blocks">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

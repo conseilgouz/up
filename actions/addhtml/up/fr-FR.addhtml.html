@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addhtml - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addhtml" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Insère du code HTML à une position de l'article
+</p>
+<p>syntaxe 1  <code><b>{</b>up addhtml=code HTML | selector=.foo | parent=2<b>}</b></code><br />syntaxe 2  <code><b>{</b>up addhtml | selector=.foo | parent=2<b>}</b></code>code HTML<code><b>{</b>/up addhtml<b>}</b></code><br />Exemple : <code><b>{</b>up addhtml=&#123;up icon=star<b>}</b></code> | selector=.header-page > h1 | parent=2}</p>
+
+
+</div >
+<p><label for="addhtml" title="Contenu HTML &agrave; ajouter. BBCode admis">addhtml</label>
+<input type = "text" id="addhtml" placeholder=""></p>
+<p><label for="selector" title="s&eacute;lecteur CSS r&eacute;f&eacute;rence pour l&#039;insertion">selector</label>
+<input type = "text" name="selector"class="w75"  placeholder=""></p>
+<p><label for="parent" title="niveau parent par rapport &agrave; selector ou si vide &agrave; la position du shortcode">parent</label>
+<input type = "number" name="parent" min="0" max="10" placeholder="0"></p>
+<p><label for="position" title="position par rapport au s&eacute;lecteur : beforebegin, afterbegin, beforeend ou afterend">position</label>
+<select name="position" title="beforebegin" placeholder="beforebegin" value="beforebegin">
+<option value=""></option>
+<option value="beforebegin" selected>beforebegin</option>
+<option value="afterbegin">afterbegin</option>
+<option value="beforeend">beforeend</option>
+<option value="afterend">afterend</option>
+</select></p>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

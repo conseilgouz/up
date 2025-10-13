@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>replace - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-replace" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Remplace un texte par un autre dans le contenu entre les shortcodes
+</p>
+<p>syntaxe <code><b>{</b>up replace=ancien:nouveau, ...<b>}</b></code></p>
+
+
+</div >
+<p><label for="replace" title="liste des remplacements sous la forme ancien:nouveau, ... BBcode admis">replace</label>
+<input type = "text" id="replace"class="w100"  placeholder=""></p>
+<p><label for="sep-item" title="s&eacute;parateur entre les groupes ancien:nouveau. virgule par d&eacute;faut">sep-item</label>
+<input type = "text" name="sep-item"class="w5"  placeholder=""></p>
+<p><label for="sep-oldnew" title="s&eacute;parateur entre les parties recherche et remplace. 2 points par d&eacute;faut">sep-oldnew</label>
+<input type = "text" name="sep-oldnew"class="w5"  placeholder=":"></p>
+<p><label for="tags" title="vide: conserve les balises autoris&eacute;es par d&eacute;faut, liste (a,b,p) ou en plus des balises par d&eacute;faut (+a,b,p)">tags</label>
+<input type = "text" name="tags"class="w50"  placeholder=""></p>
+<p><label for="regex" title="1 si la partie recherche est une expression r&eacute;guli&egrave;re">regex</label>
+<select name="regex" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+</body>
+</html >

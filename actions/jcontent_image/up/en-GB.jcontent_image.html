@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_image - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-image" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Assign an image to the intro and fulltext images of an article</p>
+<p>ssyntax 1 : <code><b>{</b>up jcontent-image<b>}</b></code> // first image of the content of the article
+<br>syntax 2 : <code><b>{</b>up jcontent-image=image_path<b>}</b></code>
+<br>syntax 3 : <code><b>{</b>up jcontent-image=folder<b>}</b></code> // first image of folder</p>
+
+
+</div >
+<p><label for="jcontent_image" title="chemin vers l&#039;image pour intro et fulltext">jcontent-image</label>
+<input type = "text" id="jcontent_image" placeholder=""></p>
+<h4>Options for intro image</h4>
+<p><label for="intro-size" title="side of the square in px. 0=no image">intro-size (px)</label>
+<input type = "number" name="intro-size"class="w10"  min="100" max="500" unit="px" step="10" placeholder="250px"></p>
+<p><label for="intro-alt" title="content of the alt attribute. 0=none, empty=humanized file name">intro-alt</label>
+<input type = "text" name="intro-alt" placeholder=""></p>
+<p><label for="intro-caption" title="caption. 0=none, empty=humanized file name">intro-caption</label>
+<input type = "text" name="intro-caption" placeholder=""></p>
+<p><label for="intro-class" title="class(es) for the image. if it starts with +, it is added to existing classes">intro-class</label>
+<input type = "text" name="intro-class" placeholder=""></p>
+<h4>Options for article image</h4>
+<p><label for="full-size" title="side of the square in px. 0=no image">full-size (px)</label>
+<input type = "number" name="full-size"class="w10"  min="100" max="500" unit="px" step="10" placeholder="500px"></p>
+<p><label for="full-alt" title="content of the alt attribute. 0=none, empty=humanized file name">full-alt</label>
+<input type = "text" name="full-alt" placeholder=""></p>
+<p><label for="full-caption" title="caption. 0=none, empty=humanized file name">full-caption</label>
+<input type = "text" name="full-caption" placeholder=""></p>
+<p><label for="full-class" title="class(es) for the image. if it starts with +, it is added to existing classes">full-class</label>
+<input type = "text" name="full-class" placeholder=""></p>
+<h4>Parameters</h4>
+<p><label for="subfolder-thumbs" title="name of the subfolder for the thumbnail. empty=images/upthumbs for all thumbnails">subfolder-thumbs</label>
+<input type = "text" name="subfolder-thumbs" w20]="" placeholder=""></p>
+<p><label for="id" title="internal. unused">id</label>
+<input type = "text" name="id"class="w10 inactif"  placeholder="identifiant interne"></p>
+</body>
+</html >

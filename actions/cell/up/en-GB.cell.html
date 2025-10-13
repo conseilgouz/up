@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cell - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-cell" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays 1 to 6 child blocks on the same line</p>
+<p>syntax 1 : <code><b>{</b>up cell=x1-x2<b>}</b></code>content with 2 child blocks<code><b>{</b>/up cell<b>}</b></code>
+syntax 2 : <code><b>{</b>up cell=x1-x2<b>}</b></code> cell-1 content <code><b>{</b>======<b>}</b></code> cell-2 content<code><b>{</b>/up cell<b>}</b></code>
+x1-x2 are the widths based on a grid of 12 columns
+example : cell=6-6 for 2 equal columns.
+The widths of the UP-width class are used</p>
+
+
+</div >
+<p><label for="cell" title="number of columns">cell</label>
+<input type = "text" id="cell"class="w20"  placeholder="12"></p>
+<p><label for="mobile" title="number of columns on a small screen">mobile</label>
+<input type = "text" name="mobile"class="w20"  placeholder=""></p>
+<p><label for="tablet" title="number of columns on medium screen">tablet</label>
+<input type = "text" name="tablet"class="w20"  placeholder=""></p>
+<h4>style of child blocks (columns)</h4>
+<p><label for="class-*" title="class for all column blocks. otherwise see class-1 to class-6">class-*</label>
+<input type = "text" name="class-*" placeholder=""></p>
+<p><label for="style-*" title="inline style for all column blocks. otherwise see style-1 to style-6">style-*</label>
+<input type = "text" name="style-*" placeholder=""></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="main block class">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="main block inline style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="filter" title="conditions. See doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

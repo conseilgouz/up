@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iframe - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-iframe" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>introduire un iFrame responsive dans un article
+</p>
+<p>syntaxe <code><b>{</b>up iframe=URL<b>}</b></code></p>
+
+
+</div >
+<p><label for="iframe" title="URL site distant">iframe</label>
+<input type = "text" id="iframe"class="important"  placeholder=""></p>
+<p><label for="preview" title="image affich&eacute;e avant chargement de l&#039;iframe">preview</label>
+<input type = "text" name="preview" placeholder=""></p>
+<h4>paramétre de l'iframe</h4>
+<p><label for="allowfullscreen" title="autorise le plein ecran">allowfullscreen</label>
+<input type = "text" name="allowfullscreen"class="w30"  placeholder="allowfullscreen"></p>
+<p><label for="scrolling" title="affiche les ascenseurs si n&eacute;cessaire">scrolling</label>
+<select name="scrolling"class="w10"  title="no" placeholder="no" value="no">
+<option value=""></option>
+<option value="no" selected>no</option>
+<option value="yes">yes</option>
+</select></p>
+<p><label for="ratio" title="sous forme largeur:hauteur ou ratio 0.5625 ou pourcentage 56.25%">ratio</label>
+<input type = "text" name="ratio"class="w20"  placeholder="16:9"></p>
+<p><label for="height" title="hauteur (utile pour mobile)">height (px)</label>
+<input type = "number" name="height"class="w10"  min="50" unit="px" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc externe">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc externe">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Interne, conservé pour compatibilité</h4>
+<p><label for="iframe-class" title="classe(s) pour bloc">iframe-class</label>
+<input type = "text" name="iframe-class"class="w10 inactif"  placeholder=""></p>
+<p><label for="iframe-style" title="style inline pour bloc">iframe-style</label>
+<input type = "text" name="iframe-style"class="w10 inactif"  placeholder=""></p>
+</body>
+</html >

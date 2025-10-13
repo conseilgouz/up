@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_by_tags - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-by-tags" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des catégories d'un mot-clé (tag)
+</p>
+<p>syntaxe : <code><b>{</b>up jcontent-by-tags=id-ou-nom-tag<b>}</b></code><br />syntaxe : <code><b>{</b>up jcontent-by-tags=id-ou-nom-tag<b>}</b></code>##title##<code><b>{</b>/up jcontent-by-tags<b>}</b></code><br /><b>Les mots-clés :</b><br />##title## ##title-link## ##subtitle## ##link##<br />##intro## ##intro-text## ##intro-text,100## ##content##<br />##image## ##image-link## ##image-src## ##image-alt##<br />##date-crea## ##date-modif##  ##date-publish##<br />##cat## ##new## ##hits## ##tags-list##<br />##CF_id_or_name## : valeur brute du custom field</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-auto-m4 fg-auto-s2 fg-gap tc<b> | </b><b>template</b>=##image-link####tags-list####new##&lt;div&gt;&lt;b&gt;##title-link##&lt;/b&gt;&lt;br&gt;##subtitle##&lt;/div&gt;
+</div >
+<p><label for="jcontent_by_tags" title="ID ou nom du tag">jcontent-by-tags</label>
+<input type = "text" id="jcontent_by_tags"class="w20 important"  title="" placeholder="" list="combo_jcontent_by_tags"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcontent_by_tags">
+<option value=""></option>
+<option value="image-6colonnes">image-6colonnes</option>
+</datalist></p>
+<p><label for="maxi" title="Nombre maxi d&#039;articles dans la liste">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="content-plugin" title="prise en compte des plugins de contenu pour ##intro et ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="no-published" title="1 pour obtenir les cat&eacute;gories non publi&eacute;es">no-published</label>
+<select name="no-published" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="current" title="1 pour inclure l&#039;article en cours">current</label>
+<select name="current" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="sort-by" title="tri: title, created, modified, publish, id, hits, ordering">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish">publish</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+<option value="ordering">ordering</option>
+</select></p>
+<p><label for="sort-order" title="ordre de tri : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<h4>Modèles de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est le contenu">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>balise & style pour le bloc principal</h4>
+<p><label for="main-tag" title="balise pour le bloc englobant tous les articles. 0 pour aucun">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="classes et styles inline pour bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour bloc principal (obsol&egrave;te)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>balise & style pour un élément</h4>
+<p><label for="item-tag" title="balise pour un bloc article. 0 pour aucun">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="item-style" title="classes et styles inline pour bloc principal">item-style</label>
+<input type = "text" name="item-style"class="hr-top"  placeholder=""></p>
+<p><label for="item-class" title="classe(s) pour bloc principal (obsol&eacute;te)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Paramètre pour l'image</h4>
+<p><label for="image-src" title="lorempixel.com/150/150&#039;, // image par d&eacute;faut">image-src</label>
+<input type = "text" name="image-src" placeholder=""></p>
+<p><label for="image-alt" title="image, texte alternatif par d&eacute;faut">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Format pour les mots-clés</h4>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w20 "  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="localisation pour les dates. Par d&eacute;faut, celle du navigateur client.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="nombre de jours depuis la cr&eacute;ation de l&#039;article">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-html" title="code HTML pour badge NEW">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge-red&quot;]nouveau[/span]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="texte avant les autres &eacute;ventuels tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="classe ou style pour les autres mots-cl&eacute;s">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="no-content-html" title="retour si aucune cat&eacute;gorie trouv&eacute;e">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="aucune catégorie pour ce mot-clé"></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>counter - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-counter" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Ajoute un compteur avec prefix et suffix
+</p>
+<p>Syntaxe : <code><b>{</b>up counter=0,100<b>}</b></code></p>
+
+
+</div >
+<p><label for="counter" title="min,max : valeurs de d&eacute;part et de fin">counter</label>
+<input type = "text" id="counter"class="important"  placeholder=""></p>
+<p><label for="width" title="largeur minimal (par d&eacute;faut en pixels)">width (px)</label>
+<input type = "number" name="width" min="0" unit="px" placeholder="0"></p>
+<p><label for="mono" title="force la police en monospace">mono</label>
+<select name="mono" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>paramétres Javascript pour configuration du compteur</h4>
+<p><label for="start" title="valeur de d&eacute;part du compteur">start</label>
+<input type = "text" name="start" placeholder="0"></p>
+<p><label for="end" title="valeur d&#039;arriv&eacute;e du compteur">end</label>
+<input type = "text" name="end" placeholder="100"></p>
+<p><label for="easing" title="ou linear : effet">easing</label>
+<input type = "text" name="easing" placeholder="swing"></p>
+<p><label for="duration" title="dur&eacute;e du d&eacute;compte en millisecondes">duration</label>
+<input type = "text" name="duration" placeholder="1500"></p>
+<p class="hr-top"><label for="prefix" title="texte devant compteur. BBcode autoris&eacute;">prefix</label>
+<input type = "text" name="prefix"class="hr-top"  placeholder=""></p>
+<p><label for="suffix" title="texte apr&egrave;s compteur. BBcode autoris&eacute;">suffix</label>
+<input type = "text" name="suffix" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>flexbox - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-flexbox" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche des blocs enfants dans une grille FLEXBOX responsive
+</p>
+<p>syntaxe 1 : <code><b>{</b>up flexbox=x1-x2<b>}</b></code>contenu avec plusieurs blocs enfants<code><b>{</b>/up flexbox<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up flexbox=x1-x2<b>}</b></code>contenu bloc-1 <code><b>{</b>====<b>}</b></code> contenu bloc-2<code><b>{</b>/up flexbox<b>}</b></code><br />x1-x2 sont les largeurs relatives des colonnes<br />exemple : flexbox=4-8 ou flexbox=33-66 pour 2 colonnes (équivalent: span4 et span8)<br />Note : les options class-1 à class-6 et style-1 à style-6 sont à saisir directement dans le shortcode</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>class</b>=fg-gap<br><b><u>2-10</u> : </b> <b>flexbox</b>=2-10<b> | </b><b>tablet</b>=3-9<b> | </b><b>mobile</b>=4-8<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>4-8</u> : </b> <b>flexbox</b>=4-8<b> | </b><b>tablet</b>=2-10<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>3-6-3</u> : </b> <b>flexbox</b>=3-6-3<b> | </b><b>tablet</b>=4-4-4<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-vspace-between-1 m-child-raz-1 fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>4-8-gris</u> : </b> <b>flexbox</b>=4-8<b> | </b><b>tablet</b>=2-10<b> | </b><b>mobile</b>=12<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:10px 10px 0;border:1px solid #999<br><b><u>8-4-gris</u> : </b> <b>flexbox</b>=8-4<b> | </b><b>tablet</b>=8-4<b> | </b><b>mobile</b>=12<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:10px 10px 0;border:1px solid #999
+</div >
+<p><label for="flexbox" title="nombre de colonnes ou prefset sous la forme x-x-x-x">flexbox</label>
+<input type = "text" id="flexbox"class="w50 important"  title="" placeholder="" list="combo_flexbox"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_flexbox">
+<option value=""></option>
+<option value="2-10">2-10</option>
+<option value="4-8">4-8</option>
+<option value="3-6-3">3-6-3</option>
+<option value="4-8-gris">4-8-gris</option>
+<option value="8-4-gris">8-4-gris</option>
+</datalist></p>
+<p><label for="tablet" title="nombre de colonnes sur moyen &eacute;cran sous la forme x-x-x-x">tablet</label>
+<input type = "text" name="tablet"class="w50 important"  placeholder=""></p>
+<p><label for="mobile" title="nombre de colonnes sur petit &eacute;cran sous la forme x-x-x-x">mobile</label>
+<input type = "text" name="mobile"class="w50 important"  placeholder=""></p>
+<p><label for="alternate" title="valeur du breapoint pour inverser l&#039;ordre des colonnes sur les lignes paires. option sans argument ou 1=480">alternate</label>
+<input type = "number" name="alternate" placeholder="0"></p>
+<h4>Style bloc principal</h4>
+<p><label for="id" title="identifiant du bloc principal">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class ou style pour le bloc principal">class</label>
+<input type = "text" name="class"class="w40"  placeholder="fg-gap"></p>
+<p><label for="style" title="class ou style pour le bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style des blocs secondaires</h4>
+<p><label for="bloc-tag" title="ajoute un bloc DIV autour des contenus enyre {===}">bloc-tag</label>
+<select name="bloc-tag" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="class-*" title="class pour tous les blocs colonnes. sinon voir class-1 &agrave; class-6">class-*</label>
+<input type = "text" name="class-*"class="w40"  placeholder=""></p>
+<p><label for="style-*" title="style inline pour tous les blocs colonnes. sinon voir style-1 &agrave; style-6">style-*</label>
+<input type = "text" name="style-*" placeholder=""></p>
+<p><label for="bloc-style" title="style et class2style ajout&eacute;s au bloc enfant">bloc-style</label>
+<input type = "text" name="bloc-style" placeholder=""></p>
+<h4>Nom des classes identificatrices</h4>
+<p><label for="class-col" title="nom des classes pour les colonnes">class-col</label>
+<input type = "text" name="class-col" placeholder="up-col-"></p>
+<p><label for="class-row" title="nom des classes pour les lignes">class-row</label>
+<input type = "text" name="class-row" placeholder="up-row-"></p>
+<h4>Style ajouté dans le head de la page</h4>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="no-content-html" title="message si aucun contenu">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="en=no content;fr=aucun contenu"></p>
+</body>
+</html >

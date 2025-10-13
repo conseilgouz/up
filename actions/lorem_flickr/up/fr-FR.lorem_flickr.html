@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_flickr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-flickr" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une image aleatoire (INUTILISABLE)
+</p>
+<p>L'API Flickr est fermée ainsi que les alternatives.<br />afin de préserver les shortcodes existants, l'action génère une image avec un fond coloré et les dimensions spécifiées<br />Syntax 1 :  <code><b>{</b>up loremflickr=type | width=xx | height=xx<b>}</b></code></p>
+
+
+</div >
+<p><label for="lorem_flickr" title="texte">lorem-flickr</label>
+<input type = "text" id="lorem_flickr" placeholder=""></p>
+<p><label for="height" title="hauteur image t&eacute;l&eacute;charg&eacute;e">height (px)</label>
+<input type = "number" name="height"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="width" title="largeur image t&eacute;l&eacute;charg&eacute;e">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="orientation" title="NON DISPONIBLE">orientation</label>
+<select name="orientation" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="" selected></option>
+<option value="H">H</option>
+<option value="V">V</option>
+</select></p>
+<p><label for="color" title="Couleur background">color</label>
+<input type = "text" name="color" placeholder="g"></p>
+<p><label for="number" title="nombre d&#039;images retourn&eacute;es">number</label>
+<input type = "number" name="number"class="w10"  placeholder="1"></p>
+<h4>gestion du cache</h4>
+<p><label for="cache-delai" title="dur&eacute;e de validit&eacute; du cache. 0:aucun, 1:une heure, -1:illimit&eacute;">cache-delai</label>
+<input type = "number" name="cache-delai" placeholder="- 1"></p>
+<p><label for="cache-reset" title="efface TOUS les fichiers dans le cache">cache-reset</label>
+<select name="cache-reset" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Methode pour retour</h4>
+<p><label for="mode" title="balise img ou dir pour le chemin vers le dossier">mode</label>
+<select name="mode" title="img" placeholder="img" value="img">
+<option value=""></option>
+<option value="img" selected>img</option>
+<option value="dir">dir</option>
+</select></p>
+<h4>Bloc parent</h4>
+<p><label for="main-tag" title="balise du bloc parent &agrave; l&#039;image si options main-class ou align">main-tag</label>
+<input type = "text" name="main-tag"class="w20"  placeholder="div"></p>
+<p><label for="main-class" title="classe(s)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<p><label for="align" title="alignement horizontal : left, center, right">align</label>
+<select name="align" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="left">left</option>
+<option value="center">center</option>
+<option value="right">right</option>
+</select></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classes et styles image(s) en mode=img">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classes et styles image(s) en mode=img">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_info - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-info" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays information about the current article</p>
+<p>syntax 1 : <code><b>{</b>up jcontent_info<b>}</b></code><br>syntax 2 : <code><b>{</b>up jcontent_info<b>}</b></code>template<code><b>{</b>/up jcontent_info<b>}</b></code><br>keywords :<br>##id## ##title## ##subtitle## <br>##image## ##image-src## ##image-alt##<br>##date-crea## ##date-modif## ##date-publish##<br>##author## ##note## ##cat## ##new## ##featured## ##hits## ##tags##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>up-usage</u> : </b> <b>template</b>=Pour info, &lt;b&gt;cette page utilise ##upnb## action(s)&lt;/b&gt; : &lt;br&gt;##uplist##<b> | </b><b>class</b>=box-note i
+</div >
+<p><label for="jcontent_info" title="none">jcontent-info</label>
+<input type = "text" id="jcontent_info" title="" placeholder="" list="combo_jcontent_info"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcontent_info">
+<option value=""></option>
+<option value="up-usage">up-usage</option>
+</datalist></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template in prefs.ini. If empty the template is the content">template</label>
+<input type = "text" name="template" placeholder="##content##"></p>
+<h4>main block tag & style</h4>
+<p><label for="tag" title="tag for the block of an article. _div = div if class or style, otherwise nothing. = 0=never">tag</label>
+<input type = "text" name="tag" placeholder="_div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="inline classes and styles for an article">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="inline classes and styles for an article">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<h4>Format for keywords</h4>
+<p class="hr-top"><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format"class="w20 hr-top"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="location for dates">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="featured-html" title="featured presentation">featured-html</label>
+<input type = "text" name="featured-html"class="hr-top"  placeholder="[b class=&quot;t-gris&quot;]&amp;#x2605;[/b], [b class=&quot;t-jauneFonce&quot;]&amp;#x2605;[/b]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="text before other possible tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="Class or style affects a span tag by keyword">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder="badge;margin-right:4px"></p>
+<p><label for="tags-list-separator" title="separator between keywords">tags-list-separator</label>
+<input type = "text" name="tags-list-separator" placeholder=""></p>
+<p class="hr-top"><label for="path-separator" title="character or bbcode to separate menu items or categories">path-separator</label>
+<input type = "text" name="path-separator"class="hr-top"  placeholder="»"></p>
+<p><label for="path-current-class" title="style of the terminal element of a path">path-current-class</label>
+<input type = "text" name="path-current-class" placeholder="b"></p>
+<p><label for="path-parent-class" title="style of parent elements">path-parent-class</label>
+<input type = "text" name="path-parent-class" placeholder="fs90"></p>
+<p><label for="path-order" title="show links on items">path-order</label>
+<input type = "text" name="path-order" placeholder="asc"></p>
+<p><label for="path-link" title="displays the links on the elements.">path-link</label>
+<input type = "text" name="path-link" placeholder="1"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

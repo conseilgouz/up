@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_audio - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-audio" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche un lecteur (HTML5) pour un ou des fichiers audio hébergé sur le serveur
+</p>
+<p>il suffit d'indiquer le chemin et le nom du fichier (avec ou sans extension)<br />pour utiliser toutes les fichiers audio de ce nom dans le dossier.<br />Si le nom du fichier n'est pas indiqué ou contient des jokers,<br />tous les fichiers audios correspondants seront retournés<br />Supporte les formats audio : mp3,ogg<br />Si une image (jpg,png,webp,gif) existe, elle sera utilisé comme preview (poster)<br />syntaxe <code><b>{</b>up media-audio=chemin_vers_audios<b>}</b></code><br />Mot-clés pour le template : ##player##, ##title##, ##image##, ##info##, ##download##</p>
+
+
+</div >
+<p><label for="media_audio" title="chemin et nom du fichier vid&eacute;o ou dossier. caract&egrave;res joker autoris&eacute;s">media-audio</label>
+<input type = "text" id="media_audio" placeholder=""></p>
+<h4>configuration du lecteur vidéo</h4>
+<p><label for="autoplay" title="lancement automatique du 1er fichier audio">autoplay</label>
+<select name="autoplay"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="muted" title="coupe le son">muted</label>
+<select name="muted"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="loop" title="joue le fichier audio en boucle">loop</label>
+<select name="loop"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="controls" title="affiche les boutons de commande">controls</label>
+<select name="controls"class="w5"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="preload" title="mode de chargement du fichier audio : none, metadata, auto.">preload</label>
+<select name="preload"class="w10"  title="auto" placeholder="auto" value="auto">
+<option value=""></option>
+<option value="none">none</option>
+<option value="metadata">metadata</option>
+<option value="auto" selected>auto</option>
+</select></p>
+<h4>Mise en forme résultat</h4>
+<p><label for="template" title="mod&egrave;le de mise en forme d&#039;un item">template</label>
+<input type = "text" name="template" placeholder="##title## ##player##"></p>
+<p><label for="main-tag" title="balise pour le bmoc principal">main-tag</label>
+<input type = "text" name="main-tag" placeholder="0"></p>
+<p><label for="main-style" title="classe(s) et style pour le bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="item-tag" title="balise pour un fichier. forc&eacute; &agrave; DIV si vide">item-tag</label>
+<input type = "text" name="item-tag" placeholder="div"></p>
+<p><label for="item-style" title="classe(s) et style pour les blocs des diff&eacute;rents morceaux">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="player-style" title="classe(s) et style pour le lecteur audio">player-style</label>
+<input type = "text" name="player-style" placeholder=""></p>
+<p><label for="title-style" title="classe(s) et style pour la l&eacute;gende">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<p><label for="title-tag" title="balise pour le titre du morceau">title-tag</label>
+<input type = "text" name="title-tag" placeholder="div"></p>
+<p><label for="image-default" title="image utilis&eacute;e par d&eacute;faut pour tous les fichiers">image-default</label>
+<input type = "text" name="image-default" placeholder=""></p>
+<p><label for="image-types" title="liste extension des fichiers images accept&eacute;s">image-types</label>
+<input type = "text" name="image-types" placeholder="jpg,jpeg,png,gif,webp"></p>
+<p><label for="image-style" title="classe(s) et style pour la l&eacute;gende">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="info-style" title="classe(s) et style pour les infos">info-style</label>
+<input type = "text" name="info-style" placeholder=""></p>
+<p><label for="download-tag" title="balise pour bouton download. forc&eacute; &agrave; DIV si vide">download-tag</label>
+<input type = "text" name="download-tag" placeholder="a"></p>
+<p><label for="download-text" title="texte pour bouton t&eacute;l&eacute;chager">download-text</label>
+<input type = "text" name="download-text" placeholder="lang[en=Download;fr=Télécharger]"></p>
+<p><label for="download-style" title="classe(s) et style pour la l&eacute;gende. ex: btn btn-primary">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>Types des fichiers audio acceptés</h4>
+<p><label for="types" title="liste extension fichier et type mime. d&eacute;faut: ogg:ogg;mp3:mpeg;MP3:mpeg">types</label>
+<input type = "text" name="types" placeholder="ogg:ogg;mp3:mpeg;MP3:mpeg"></p>
+<p><label for="codecs" title="liste type et codec support&eacute;s. ex: ogg:opus,vorbis">codecs</label>
+<input type = "text" name="codecs" placeholder=""></p>
+<h4>Messages si erreur</h4>
+<p><label for="no-audio" title="message si audio non trouv&eacute;e">no-audio</label>
+<input type = "text" name="no-audio" placeholder="lang[en=no audio;fr=aucun fichier audio]"></p>
+<p><label for="no-support" title="message si type audio non support&eacute;">no-support</label>
+<input type = "text" name="no-support" placeholder="lang[en=Your web browser does not support HTML5 audio;fr=Votre navigateur Web ne prend pas en charge l\&#039;audio HTML5"></p>
+<h4>styles</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder="identifiant instance"></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,112 @@
+/* 
+    Created on : 4 juin 2020, 22:42:57
+    Author     : LOIC
+*/
+
+body {
+    font-family:Verdana,sans-serif;
+    font-size:0.8rem;
+}    
+p, ul{
+    margin:3px 0;
+    position:relative;
+}
+code{
+    color:#069;
+}
+
+#upbtn-options input,
+#upbtn-options select {
+    border:1px #999 solid;
+}
+#upbtn-options h4 {
+	margin:5px 0;
+	padding: 4px;
+	background:#ccc;
+	text-align:center;
+}
+select#upbtn-actionname{
+    width:100%;
+    margin-bottom:2px;
+    background:#0078D7;
+    color:#FFF;
+    border:2px #369 solid;
+    padding:4px 0;
+}
+select#upbtn-actionname > optgroup{background:#0078D7;color:#fff;padding:4px 0}
+select#upbtn-actionname[size="0"] > optgroup{background:#0078D6;color:#fff;padding:4px 0}
+/*note: il faut modifier légeremment la couleur pour qu'elle soit prise en compte!! '*/
+select#upbtn-actionname optgroup>option{background:#eee;color:#000;padding:2px 5px}
+
+.upbtn-demo{
+    text-align:right;
+}
+.upbtn-demo > a{
+    text-decoration:none;
+    padding-bottom:4px;
+}
+
+.upbtn-doc,
+.upbtn-doc-webmaster {
+    max-height:200px;
+    overflow:auto;
+    border:1px solid #666;
+    padding:5px;
+}
+
+label{
+    display:inline-block;
+    width:20%;
+    text-align:right;
+}
+input[type="text"]{width:78%}
+
+#upbtn-footer label{
+    width:auto;
+}
+
+#upbtn-options, #upbtn-footer {
+    display:none;
+}
+
+#upbtn-submit, #upbtn-submitAll {
+    background:#0078D7;
+    color:#FFF;
+    padding:4px;
+    border:#035DA4 2px solid;
+    cursor:pointer;
+    width:40%;
+    margin:2%;
+}
+#upbtn-submit:hover, #upbtn-submitAll:hover {
+    color:gold;
+}
+
+.tc {text-align: center;}
+
+/* STYLES POUR OPTIONS.INI*/
+.w5{width:5% !important}
+.w10{width:10% !important}
+.w20{width:20% !important}
+.w30{width:30% !important}
+.w40{width:40% !important}
+.w50{width:50% !important}
+.w60{width:60% !important}
+.w70{width:70% !important}
+.important{background:#fffacd}
+.inactif{background:#bbbbbb}
+.attention{background:pink;border:1px solid hotpink}
+.hr-top {border-top:2px dotted #666; margin-top:5px}
+
+/* Indicateur datalist */
+.combo-indicator {
+    position: relative;
+    margin-left: -15px;
+    color: #555;
+}
+
+.modal-content {background:red}
+
+/* form filtrage */
+#upbtn-filter {width:33%;margin-bottom: 4px;}
+#upbtn-filter label, #upbtn-filter input{width:auto;text-align: left;}

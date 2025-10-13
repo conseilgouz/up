@@ -1,0 +1,42 @@
+/*
+multibox-class=" fg-vspace-between-1"
+template="##head## ##image## ##title## ##subtitle## ##/head## ##content## ##action-link##"
+*/
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+.up-box-pricelist {
+    &:hover{transform:scale(1.05)}
+    transition:scale 0.5s ease-out;
+    border:#666 solid 1px;
+    > * {padding: 0 10px}
+    .up-box-head {
+        padding:0;
+    }
+    .up-box-image {}
+    .up-box-title {
+        background:#666;
+        color:#FFF;
+        font-weight:bolder;
+        text-align:center;
+        padding:10px;
+    }
+    .up-box-subtitle {
+        margin:15px;
+        font-size:200%;
+        font-weight:bolder;
+        color:$rougeFonce;
+        text-align:center;
+    }
+    .up-box-action {
+        background:#666;
+        font-weight:bolder;
+        color:#FFF;
+        text-align:center;
+        padding:10px;
+        a {color:$jauneFonce}
+    }
+}

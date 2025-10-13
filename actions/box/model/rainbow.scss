@@ -1,0 +1,60 @@
+// === UP-BOX - PAPER
+// inspirated : https://leaverou.github.io/css3patterns/
+
+/* PAS DE FICHIER .INI */
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:#f8f8f8;
+$box_border:1px $grisClair solid;
+$box_radius:5px;
+$title_bg: $orange;
+$title_bg_hover: $bleuClair;
+$title_text: $rougeFonce;
+$title_text_hover: $bleuClair;
+$content_bg: $violet;
+$action_bg: $orange;
+$action_text: $rougeFonce;
+$action_border:2px $grisPale solid;
+
+.up-box-rainbow { 
+    position: relative;
+    border: $box_border;
+    background-color:#fff; 
+    background: 
+        linear-gradient(#F00, transparent),
+        linear-gradient(to top left, #080, transparent),
+        linear-gradient(to top right, #00F, transparent);
+    background-blend-mode: screen;
+    box-shadow:$shadow-max;
+    // valeur pour contenu 
+    & > * {padding: 10px;
+    color:#fff
+    }
+    .up-box-head, 
+    .up-box-action { // optionnel ##head##
+        background:$box_bg;
+        color:#333;
+    }                   
+    .up-box-title {  //  ##title
+        padding: 0;   
+        margin:0;
+        font-weight:bold}
+    .up-box-subtitle { //  ##subtitle
+        padding: 0;   
+        margin:0;
+        font-size:85%;
+    }
+    .up-box-image {  //  ##image
+        position:absolute;
+        top:10px; right:10px;
+        max-height: 30px;
+    }                 
+    .up-box-action {        
+        padding: 0 10px;   
+    } //  ##action
+}

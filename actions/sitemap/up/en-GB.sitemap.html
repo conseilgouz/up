@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>sitemap - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="0" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Creation of a 'sitemap.xml' file in the root website</p>
+<p>syntax <code><b>{</b>up sitemap<b>}</b></code></p>
+
+
+</div >
+<p><label for="sitemap" title="menutype name to exclude (same option menutype-exclude)">sitemap</label>
+<input type = "text" id="sitemap" placeholder=""></p>
+<p><label for="cron" title="delay  between 2 automatic generations">cron</label>
+<input type = "text" name="cron" placeholder="+1 semaine"></p>
+<p><label for="frequency" title="frequency :  always, hourly, daily, weekly, monthly, yearly, never">frequency</label>
+<select name="frequency"class="w10"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="always">always</option>
+<option value="hourly">hourly</option>
+<option value="daily">daily</option>
+<option value="weekly">weekly</option>
+<option value="monthly">monthly</option>
+<option value="yearly">yearly</option>
+<option value="never">never</option>
+</select></p>
+<p><label for="priority" title="priority (0.1 &agrave; 1)">priority</label>
+<input type = "number" name="priority"class="w10"  min="0.1" max="1" step="0.1" placeholder=""></p>
+<p><label for="menutype-exclude" title="menutype name to exclude  (same as main option)">menutype-exclude</label>
+<input type = "text" name="menutype-exclude" placeholder=""></p>
+<p class="hr-top"><label for="info" title="display the number of links and the list of non-indexed pages">info</label>
+<select name="info"class="hr-top "  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

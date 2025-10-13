@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>data_info - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-data-info" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Retourne des champs d'une source de données selon un template de mise en forme
+ *
+</p>
+<p>syntaxe <code><b>{</b>up data-info=data_source | template=##nom_champ##<b>}</b></code></p>
+
+
+</div >
+<h4>emplacement et type des données</h4>
+<p><label for="data_info" title="URL vers data ou fichier">data-info</label>
+<input type = "text" id="data_info"class="important"  placeholder=""></p>
+<p><label for="datatype" title="pour forcer la d&eacute;tection du type de donn&eacute;es (json, xml, csv)">datatype</label>
+<input type = "text" name="datatype"class="w10"  placeholder=""></p>
+<p><label for="encoding" title="codage des caract&egrave;res de la source : ISO-8859-1">encoding</label>
+<input type = "text" name="encoding"class="w20"  placeholder=""></p>
+<h4>uniquement pour des données CSV ou XML</h4>
+<p><label for="csv-header" title="0 ou 1 pour indiquer que la premi&egrave;re ligne contient les titres de colonnes">csv-header</label>
+<select name="csv-header" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="csv-header-title" title="liste des titres de colonnes s&eacute;par&eacute;s par csv-separator">csv-header-title</label>
+<input type = "text" name="csv-header-title" placeholder=""></p>
+<p><label for="csv-separator" title="caract&egrave;re s&eacute;parateur pour les colonnes">csv-separator</label>
+<input type = "text" name="csv-separator"class="w5"  placeholder=";"></p>
+<p><label for="xml-attributes" title="les champs dans la balise ouvrante sont dans un sous-tableau @attributes, Non par d&eacute;faut: 0 /* [st-sel-lign] s&eacute;lection des lignes *">xml-attributes</label>
+<select name="xml-attributes" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>sélection des lignes</h4>
+<p><label for="lign-root" title="chemin de la cl&eacute; racine. Exemple: trk/trkseg">lign-root</label>
+<input type = "text" name="lign-root" placeholder=""></p>
+<p><label for="lign-select" title="indice du groupe de donn&eacute;es ou champ:val1;val2 pour recherche champ=val1 ou val2">lign-select</label>
+<input type = "text" name="lign-select" placeholder=""></p>
+<p><label for="lign-filter" title="filtrage apr&egrave;s lign-select sous la forme champ[=&gt;,&lt;=,==,&lt;&gt;]valeur OU field&gt;&lt;valeurMin-valeurMax">lign-filter</label>
+<input type = "text" name="lign-filter" placeholder=""></p>
+<p><label for="lign-sort" title="tri des donn&eacute;es sous la forme champ1:asc|desc, champ2:asc|desc, ...">lign-sort</label>
+<input type = "text" name="lign-sort" placeholder=""></p>
+<p><label for="lign-max" title="nombre de lignes retourn&eacute;es">lign-max</label>
+<input type = "number" name="lign-max"class="important"  min="0" max="99" placeholder=""></p>
+<h4>template pour mise en forme</h4>
+<p><label for="template" title="mod&egrave;le de mise en forme r&eacute;sultat">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>type des contenus</h4>
+<p><label for="col-type" title="date, url, image, boolean, compact ou format pour fonction php: sprintf">col-type</label>
+<input type = "text" name="col-type"class="w50"  placeholder=""></p>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w50"  placeholder="%e %B %Y"></p>
+<p><label for="boolean-in" title="valeurs dans fichier pour true,false,null">boolean-in</label>
+<input type = "text" name="boolean-in"class="w50"  placeholder="1,0"></p>
+<p><label for="boolean-out" title="texte en sortie pour les valeurs true,false,null">boolean-out</label>
+<input type = "text" name="boolean-out"class="w50"  placeholder="lang[fr=oui,non,-;en=yes,no,n.a.]"></p>
+<p><label for="url-target" title="Cible pour ouverture URL">url-target</label>
+<select name="url-target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<p><label for="image-path" title="chemin vers une image dans les donn&eacute;es">image-path</label>
+<input type = "text" name="image-path" placeholder=""></p>
+<p><label for="image-max-size" title="cot&eacute; du carr&eacute; dans lequel elle sera inscrite. Exemple: 100px">image-max-size</label>
+<input type = "text" name="image-max-size"class="w10"  placeholder=""></p>
+<h4>si un champ est vide</h4>
+<p><label for="col-empty" title="contenu d&#039;un champ si vide u &eacute;gal &agrave; z&eacute;ro. ex: colname:none, ...">col-empty</label>
+<input type = "text" name="col-empty" placeholder=""></p>
+<p><label for="no-data-html" title="contenu si aucune donn&eacute;e disponible. BBcode admis.">no-data-html</label>
+<input type = "text" name="no-data-html" placeholder="en=no data for %s;fr=aucune donnée pour %s"></p>
+<h4>habillage du bloc retourné</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="tag" title="balise pour bloc principal">tag</label>
+<input type = "text" name="tag"class="w20"  placeholder=""></p>
+<p><label for="class" title="classe(s) ou style inline pour bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classe(s) ou style inline pour bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>cache interne</h4>
+<p><label for="cache-delay" title="dur&eacute;e du cache en minutes. 0 pas de cache">cache-delay</label>
+<input type = "text" name="cache-delay"class="w10"  placeholder="30"></p>
+</body>
+</html >

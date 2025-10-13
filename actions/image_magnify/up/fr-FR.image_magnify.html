@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_magnify - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-magnify" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche un effet de loupe sur une image
+ *
+</p>
+<p>syntaxe 1 <code><b>{</b>up image-magnify=petite image | imgzoom=grande image pour zoom<b>}</b></code><br />syntaxe 2 <code><b>{</b>up image-magnify=image pour vignette et zoom<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>radius</b>=5px<b> | </b><b>size</b>=150<br><b><u>carre</u> : </b> <b>radius</b>=0px<b> | </b><b>size</b>=100px<b> | </b><b>class</b>=bd-violet w3
+</div >
+<p><label for="image_magnify" title="fichier image normale">image-magnify</label>
+<input type = "text" id="image_magnify"class="important"  title="" placeholder="" list="combo_image_magnify"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_image_magnify">
+<option value=""></option>
+<option value="carre">carre</option>
+</datalist></p>
+<p><label for="imgzoom" title="fichier image utilis&eacute; pour le zoom. si vide: image principale">imgzoom</label>
+<input type = "text" name="imgzoom"class="important"  placeholder=""></p>
+<h4>Paramètres de la loupe</h4>
+<p><label for="size" title="diam&egrave;tre de la loupe en pixel">size (px)</label>
+<input type = "number" name="size"class="w10"  unit="px" placeholder="150"></p>
+<p><label for="radius" title="taille de l&#039;arrondi de la loupe en pixel">radius (px)</label>
+<input type = "number" name="radius"class="w10"  unit="px" placeholder="5px"></p>
+<p><label for="border" title="modele de bordure pour la loupe. fin ou vide">border</label>
+<input type = "text" name="border"class="w30"  title="" placeholder="" list="combo_border"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_border">
+<option value=""></option>
+<option value="fin">fin</option>
+</datalist></p>
+<h4>Style CSS</h4>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+</body>
+</html >

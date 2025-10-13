@@ -1,0 +1,49 @@
+{up flexauto=3 | class=fg-gap fg-vspace-between-1}
+
+{up box=onimage | title-class=raz notoc | subtitle-class=notoc | body-class=display:none }
+
+{title=Mémento rédacteur NO SEP}
+{subtitle=indispensable pour maitriser l'utilisation de UP}
+{image=images/illustrations/typewriter.jpg}
+{link=index.php?option=com_content&view=article&id=209&catid=26}
+
+{/up box}
+
+{up box=onimage
+| title=les actions par utilisations NO SEP
+| subtitle=Comment choisir celle nous convient
+| image=images/illustrations/brainstorming.jpg
+| link=index.php?option=com_content&view=article&id=333&catid=10
+| title-class=raz notoc | subtitle-class=notoc
+}
+
+{up box=note   | title=note NO SEP   | image=images/up-lego.png} {up lorem | max-word=20} {/up box}
+
+{/up flexauto}
+
+{up flexauto=3 | class=fg-gap fg-vspace-between-1 | bloc-tag=0}
+
+{up box=onimage | title-class=raz notoc | subtitle-class=notoc | body-class=display:none }
+
+{title=Mémento rédacteur}
+{subtitle=indispensable pour maitriser l'utilisation de UP}
+{image=images/illustrations/typewriter.jpg}
+{link=index.php?option=com_content&view=article&id=209&catid=26}
+
+{/up box}
+
+{====}
+
+{up box=onimage
+| title=les actions par utilisations
+| subtitle=Comment choisir celle nous convient
+| image=images/illustrations/brainstorming.jpg
+| link=index.php?option=com_content&view=article&id=333&catid=10
+| title-class=raz notoc | subtitle-class=notoc
+}
+
+{=======}
+
+{up box=note   | title=note   | image=images/up-lego.png} {up lorem | max-word=20} {/up box}
+
+{/up flexauto}

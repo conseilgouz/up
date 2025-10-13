@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>site_visit - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-site-visit" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>comptabilise le nombre d'appel de cette action et affiche le nombre de visite
+</p>
+<p>syntaxe :<br /><code><b>{</b>up site-visit<b>}</b></code> : incrémente le fichier log-path/alias_article.stat<br /><code><b>{</b>up site-visit=nom<b>}</b></code> : incrémente le fichier log-path/nom.stat<br /><code><b>{</b>up site-visit | info<b>}</b></code> : liste le contenu de tous les fichiers .stat dans log-path<br /><code><b>{</b>up site-visit | info=xxx<b>}</b></code> : liste le contenu de tous les fichiers action-xxx.stat dans log-path<br />Les données sauvées dans xxx.stat sont ##alias##  : le nom du fichier, puis dans l'ordre :<br />##counter##  : le cumul des visites<br />##lastdate## : la date dernère consultation<br />##id##, ##alias##, ##title##, ##created##, ##updated## : données de l'article<br />##catid##, ##catalias## : id et alias de la catégorie de l'article<br />##detail## : affiche le détail des visites par année, mois, langue</p>
+
+
+</div >
+<h4>Options principales</h4>
+<p><label for="site_visit" title="nom du compteur, si vide = alias article (si info=0)">site-visit</label>
+<input type = "text" id="site_visit"class="w30"  placeholder=""></p>
+<p><label for="catid-include" title="liste des id cat&eacute;gories &agrave; inclure, s&eacute;parateur virgule">catid-include</label>
+<input type = "text" name="catid-include"class="w30"  placeholder=""></p>
+<p><label for="catid-exclude" title="liste des id cat&eacute;gories &agrave; exclure, s&eacute;parateur virgule">catid-exclude</label>
+<input type = "text" name="catid-exclude"class="w30"  placeholder=""></p>
+<p><label for="usergroup-list" title="liste des groupes d&#039;utilisateurs &agrave; exclure, s&eacute;parateur virgule">usergroup-list</label>
+<input type = "text" name="usergroup-list"class="w30"  placeholder=""></p>
+<p><label for="ip-list" title="liste des IP &agrave; ignorer. les botnets sont ignor&eacute;s, s&eacute;parateur virgule">ip-list</label>
+<input type = "text" name="ip-list" placeholder="127.0.0.0, localhost"></p>
+<p><label for="bots-list" title="liste de bots exclus">bots-list</label>
+<input type = "text" name="bots-list" placeholder="bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter"></p>
+<h4>Options pour affichage résultats</h4>
+<p><label for="info" title="masque des fichiers stat et log dont le contenu est list&eacute;. vide = article courant, * = tous ou masque fichier">info</label>
+<input type = "text" name="info"class="w30"  placeholder=""></p>
+<p><label for="info-template" title="modele d&#039;affichage">info-template</label>
+<input type = "text" name="info-template" placeholder="##counter## visites au ##lastdate##"></p>
+<p><label for="info-catid-include" title="liste des cat&eacute;gories prise en compte">info-catid-include</label>
+<input type = "text" name="info-catid-include"class="w30"  placeholder=""></p>
+<p><label for="info-sort" title="tri de la liste. Par d&eacute;faut ##alias##. Tous les mots sont utilisables">info-sort</label>
+<select name="info-sort"class="w5"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="asc">asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="info-sort-order" title="sens de tri sur l&#039;ensemble des mots-cl&eacute; de info-sort">info-sort-order</label>
+<input type = "text" name="info-sort-order" placeholder="asc"></p>
+<p class="hr-top"><label for="detail-period-style" title="style ajout&eacute; pour la p&eacute;riode de la liste d&eacute;taill&eacute;e">detail-period-style</label>
+<input type = "text" name="detail-period-style"class="w30 hr-top"  placeholder=""></p>
+<p><label for="use-bbcode" title="utilise le format bbcode dans le r&eacute;sultat. A utiliser pour un export en CSV">use-bbcode</label>
+<select name="use-bbcode" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="date-format" title="format pour la date">date-format</label>
+<input type = "text" name="date-format" placeholder="lang[en=%B %se, %Y;fr=%e %B %Y]"></p>
+<p><label for="no-content-html" title="message affich&eacute; si aucun r&eacute;sultat pour la s&eacute;lection">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="&quot;lang[en=No statistical data;fr=Aucune donnée statistique]&quot;"></p>
+<h4>Gestion style d'une ligne</h4>
+<p><label for="item-tag" title="balise pour les lignes de la liste">item-tag</label>
+<input type = "text" name="item-tag" placeholder=""></p>
+<p><label for="item-class" title="classe pour les lignes de la liste">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<p><label for="item-style" title="style pour les lignes de la liste">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<h4>Gestion style du bloc principal</h4>
+<p><label for="main-tag" title="balise pour la liste">main-tag</label>
+<input type = "text" name="main-tag" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Pour webmaster - à ajouter dans le fichier prefs.ini</h4>
+<p><label for="log" title="argumente un fichier nom_compteur.log avec IP, langage et date">log</label>
+<select name="log" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="dir-logs" title="dossier pour logs">dir-logs</label>
+<input type = "text" name="dir-logs"class="w30"  placeholder="up/site-visit"></p>
+</body>
+</html >

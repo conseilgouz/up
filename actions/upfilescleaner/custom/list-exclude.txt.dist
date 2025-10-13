@@ -1,0 +1,10 @@
+; Ce fichier la liste des dossiers et fichiers qui ne seront jamais supprimés
+; 1 - le chemin complet vers un fichier : ce fichier uniquement 
+; 2 - le chemin complet vers un dossier : tous les fichiers et sous-dossiers du dossier 
+; 3 - le nom d'un dossier : tous les fichiers et sous-dossiers des dossiers terminaux de ce nom (ex: srcset)
+
+; This file lists the folders and files that will never be deleted
+; 1 - the full path to a file: this file only
+; 2 - the full path to a folder: all files and subfolders of the folder
+; 3 - the name of a folder: all files and subfolders of terminal folders with this name (e.g., srcset)
+

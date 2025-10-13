@@ -1,0 +1,85 @@
+// === UP-BOX - ONIMAGE
+// template :
+// ##image-css## ##head## ##title-link## ##subtitle## ##/head## ##content## ##action-link##
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$title_bg: $orange;
+$title_text: $rougeFonce;
+$title_text_hover: lighten($rougeFonce, 10);
+$content_bg: #eeed;
+$action_bg: $rougeFonce;
+$action_text: #fff;
+$action_border: 1px $gris solid;
+
+.up-box-onimage {
+    display: flex; // v5.2 bloc vers flex
+    flex-flow: column;
+    justify-content: space-evenly;
+    align-content: stretch;
+    align-items: center;
+    border: 1px transparent solid;
+    text-align: center;
+    padding: 20px;
+
+    .up-box-head {
+        display: inline-block;
+        max-width: 80%;
+        padding: 10px;
+        background-color: $title_bg;
+        margin: 10px 0;
+    }
+
+    .up-box-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: $title_text;
+
+        a {
+            color: $title_text;
+
+            &:hover {
+                color: $title_text_hover;
+            }
+        }
+    }
+
+    .up-box-subtitle {
+        font-size: 1rem;
+    }
+
+    .up-box-image {
+        width: 100%;
+    }
+
+    .up-box-body {
+        display: inline-block;
+        max-width: 90%;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #eeed;
+        text-align: justify;
+
+        // supprime marge des blocs début et fin
+        > :first-child {
+            margin-top: 0
+        }
+
+        > :last-child {
+            margin-bottom: 0
+        }
+    }
+
+    .up-box-action a {
+        display: inline-block;
+        background: $action_bg;
+        color: $action_text;
+        border: $action_border;
+        padding: 10px;
+        margin: 10px 0;
+    }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>table_sort - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-table-sort" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Trier, filtrer et paginer une table</p>
+<p>syntaxe <code><b>{</b>up table-sort<b>}</b></code>LA TABLE<code><b>{</b>up table-sort<b>}</b></code></p>
+
+
+</div >
+<p><label for="table_sort" title="Aucun argument">table-sort</label>
+<input type = "text" id="table_sort"class="w5 inactif"  placeholder=""></p>
+<p><label for="col-type" title="mode de tri des colonnes. n=numerique, a=alphanum, i=alphanum case insensitive, d=date">col-type</label>
+<input type = "text" name="col-type" placeholder=""></p>
+<p><label for="col-init" title="n&deg; de la colonne tri&eacute;e au chargement et sens (asc, desc)">col-init</label>
+<input type = "text" name="col-init" placeholder=""></p>
+<h4>champs pour recherche</h4>
+<p><label for="placeholder" title="texte dans la zone recherche">placeholder</label>
+<input type = "text" name="placeholder" placeholder="lang[en=Search;fr=Rechercher]"></p>
+<p><label for="globalSearch" title="vide= recherche sur toutes les colonnes, sinon liste des colonnes (1,2,5)">globalSearch</label>
+<input type = "text" name="globalSearch" placeholder=""></p>
+<h4>Pagination</h4>
+<p><label for="pagination" title="nombre de lignes par pages ou 0 pour d&eacute;sactiver">pagination</label>
+<input type = "text" name="pagination" placeholder="0"></p>
+<p><label for="pagination-class" title="classe pour les boutons">pagination-class</label>
+<input type = "text" name="pagination-class" placeholder=""></p>
+<p><label for="pagination-class-active" title="classe pour le bouton actif">pagination-class-active</label>
+<input type = "text" name="pagination-class-active" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es &agrave; la table">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; &agrave; la table">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>paramétres JS</h4>
+<p><label for="sortable" title="Activer le tri">sortable</label>
+<input type = "text" name="sortable" placeholder="1"></p>
+<p><label for="searchable" title="Activer la recherche">searchable</label>
+<input type = "text" name="searchable" placeholder="1"></p>
+</body>
+</html >

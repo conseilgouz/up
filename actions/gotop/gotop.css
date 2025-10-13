@@ -1,0 +1,99 @@
+/* Thank to Ivan Grozdic https://codepen.io/ig_design/pen/yrwgwO */
+
+/* #Progress
+================================================== */
+
+:root {  
+	--progress-circle-bgcolor: #AAAA ;
+	--progress-circle-color: #9993; 
+	--progress-circle-color-active: #222; 
+	--progress-icon: "\25b2"; 
+	--progress-icon-color: #222;
+	--progress-icon-color-hover: #444;
+}
+
+.progress-wrap {
+	position: fixed;
+	right: 30px;
+	bottom: 50px;
+	height: 46px;
+	width: 46px;
+	cursor: pointer;
+	display: block;
+	border-radius: 50px;
+	box-shadow: inset 0 0 0 2px var(--progress-circle-color);
+	/*cercle fond */
+	z-index: 10000;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(15px);
+	-webkit-transition: all 200ms linear;
+	transition: all 200ms linear;
+	background: var(--progress-circle-bgcolor);
+}
+
+.progress-wrap.active-progress {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.progress-wrap::after {
+	position: absolute;
+	content: var(--progress-icon);
+	text-align: center;
+	line-height: 46px;
+	font-size: 24px;
+	color: var(--progress-icon-color); /* Couleur texte content */
+	left: 0;
+	top: -2px;
+	height: 46px;
+	width: 46px;
+	cursor: pointer;
+	display: block;
+	z-index: 1;
+	-webkit-transition: all 200ms linear;
+	transition: all 200ms linear;
+}
+
+.progress-wrap:hover::after {
+	/*opacity: 0;*/
+	color: var(--progress-icon-color-hover);
+}
+
+.progress-wrap::before {
+	position: absolute;
+	content: var(--progress-icon);;
+	text-align: center;
+	line-height: 46px;
+	font-size: 24px;
+	opacity: 0;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	left: 0;
+	top: 0;
+	height: 46px;
+	width: 46px;
+	cursor: pointer;
+	display: block;
+	z-index: 2;
+	-webkit-transition: all 200ms linear;
+	transition: all 200ms linear;
+}
+
+.progress-wrap:hover::before {
+	opacity: 1;
+}
+
+.progress-wrap svg path {
+	fill: none;
+}
+
+.progress-wrap svg.progress-circle path {
+	stroke: var(--progress-circle-color-active);
+	/* cercle temoin position */
+	stroke-width: 4;
+	box-sizing: border-box;
+	-webkit-transition: all 200ms linear;
+	transition: all 200ms linear;
+}

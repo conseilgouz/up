@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cell - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-cell" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche de 1 à 6 blocs enfants sur une même ligne
+</p>
+<p>syntaxe 1 : <code><b>{</b>up cell=x1-x2<b>}</b></code>contenu avec 2 blocs enfants<code><b>{</b>/up cell<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up cell=x1-x2<b>}</b></code>contenu cell-1 <code><b>{</b>====<b>}</b></code> contenu cell-2<code><b>{</b>/up cell<b>}</b></code><br />x1-x2 sont les largeurs sur la base d'une grille de 12 colonnes<br />exemple cell=6-6 pour 2 colonnes égales.<br />On utilise les largeurs de la classe UP-width</p>
+
+
+</div >
+<p><label for="cell" title="nombre de colonnes">cell</label>
+<input type = "text" id="cell"class="w20"  placeholder="12"></p>
+<p><label for="mobile" title="nombre de colonnes sur petit &eacute;cran">mobile</label>
+<input type = "text" name="mobile"class="w20"  placeholder=""></p>
+<p><label for="tablet" title="nombre de colonnes sur moyen &eacute;cran">tablet</label>
+<input type = "text" name="tablet"class="w20"  placeholder=""></p>
+<h4>style des blocs enfants (colonnes)</h4>
+<p><label for="class-*" title="class pour tous les blocs colonnes. sinon voir class-1 &agrave; class-6">class-*</label>
+<input type = "text" name="class-*" placeholder=""></p>
+<p><label for="style-*" title="style inline pour tous les blocs colonnes. sinon voir style-1 &agrave; style-6">style-*</label>
+<input type = "text" name="style-*" placeholder=""></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

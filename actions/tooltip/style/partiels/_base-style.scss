@@ -1,0 +1,70 @@
+//    Created on : 22 avr. 2020, 20:10:27
+//    Author     : LOIC
+
+    .Zebra_Tooltip_Message {
+        @if variable-exists(up_border_color) {border-color: $up_border_color;}
+        @if variable-exists(up_background) {background: $up_background;} 
+        @if variable-exists(up_border_radius) {border-radius: $up_border_radius;} 
+        @if variable-exists(up_border_width) {border-width: $up_border_width;}
+		@if variable-exists(up_box_shadow) { box-shadow: $up_box_shadow; }
+        @if variable-exists(up_content_color) {color: $up_content_color;} 
+        @if variable-exists(up_content_font_size) {font-size: $up_content_font_size;} 
+        @if variable-exists(up_content_line_height) {line-height: $up_content_line_height;} 
+        @if variable-exists(up_content_padding) {padding: $up_content_padding;}
+        a { // ajout LM
+            @if variable-exists(up_content_link_color) {color:$up_content_link_color;}
+        }
+    }
+
+    .Zebra_Tooltip_Arrow {
+
+        &.Zebra_Tooltip_Arrow_Bottom {
+            @if variable-exists(up_border_width) {bottom: $up_border_width;}
+
+            div {
+                @if variable-exists(up_background) {border-color: $up_background transparent transparent;}
+                &.Zebra_Tooltip_Arrow_Border {
+                    @if variable-exists(up_border_color) {border-color: $up_border_color transparent transparent;}
+                }
+            }
+        }
+
+        &.Zebra_Tooltip_Arrow_Top {
+            @if variable-exists(up_border_width) {top: $up_border_width;}
+
+            div {
+                @if variable-exists(up_background) { border-color: transparent transparent $up_background; }
+                &.Zebra_Tooltip_Arrow_Border {
+                    @if variable-exists(up_border_color) {border-color: transparent transparent $up_border_color;}
+					@if variable-exists(up_box_shadow) { box-shadow: $up_box_shadow; }
+                }
+            }
+        }
+
+        div {
+			@if variable-exists(up_border_width) and  $up_border_width!=null {
+				border-width: (($zt_arrow_width / 2) - ($up_border_width * 2));
+				left: ($up_border_width * 2);
+
+				&.Zebra_Tooltip_Arrow_Border {
+					border-width: ($zt_arrow_width / 2);
+					left: 0;
+				}
+			}
+		}
+    }
+
+    .Zebra_Tooltip_Close {
+        @if variable-exists(up_close_button_color) {color: $up_close_button_color; }
+    }
+
+
+$up_content_color:null; 
+$up_content_font_size:null; 
+$up_content_line_height:null; 
+$up_content_padding:null;
+$up_background:null; 
+$up_border_color:null;
+$up_border_radius:null; 
+$up_border_width:null;
+$up_close_button_color:null;

@@ -1,0 +1,120 @@
+
+// *******************************************************************
+// VARIABLES PAR DEFAUT
+// ===================================================================
+// NE JAMAIS MODIFIER CE FICHIER
+// Surcharger les variables dans le fichier up/assets/_variables.scss
+// *******************************************************************
+// NEVER MODIFY THIS FILE
+// Overwrite variables in the file up/assets/_variables.scss
+// *******************************************************************
+
+//-- breakpoints pour mediaqueries
+$breakpoint-s : 480px;
+$breakpoint-m : 760px;
+
+
+//-- couleurs de base (utilisé par les fichiers SCSS, ...)
+$darkBlue   : #001f3f !default;	    $darkRed     : #8b0000 !default;
+$blue       : #01457F !default;	    $red         : #ff1111 !default;
+$lightBlue  : #069 !default;        $lightRed    : #f08080 !default;
+$paleBlue   : #BCE0FF !default;	    $darkYellow  : #ffc40d !default;
+$darkGreen  : #006400 !default;	    $yellow      : #ffee00 !default;
+$green      : #46a546 !default;    	$lightYellow : #ffffe0 !default;
+$lightGreen	: #98fb98 !default;	    $orange      : #ff851b !default;
+$brown      : #a0522d !default;	    $pink        : #f012be !default;
+$tan        : #E8DAC3 !default;	    $purple      : #9400D3 !default;
+// -- les gris
+$black      : #000 !default;      	$white       : #fff !default;
+$darkGrey   : #333 !default;       	$grey        : #888 !default;
+$lightGrey  : #bbb !default;       	$paleGrey    : #ddd !default;
+// -- la base
+$primary    : $blue !default;		$secondary	 : $grey !default;
+$darkPrimary: $darkBlue !default;	$darkSecondary: $darkGrey !default;
+$palePrimary: $paleBlue !default;	$paleSecondary: $paleGrey !default;
+
+//-- correspondance GB-FR pour utiliser les noms de variables en français dans les .scss des actions
+//   qui déclare : @import "../../assets/variables";
+$bleuFonce : $darkBlue;	    $rougeFonce : $darkRed;
+$bleu : $blue;	    		$rouge : $red;
+$bleuClair : $lightBlue;    $rougeClair : $lightRed;
+$bleuPale : $paleBlue;	    $jauneFonce : $darkYellow;
+$vertFonce : $darkGreen;	$jaune : $yellow;
+$vert : $green ;      		$jauneClair : $lightYellow;
+$vertClair : $lightGreen;	$orange : $orange;
+$brun : $brown;	    		$rose : $pink;
+$beige : $tan;	    		$violet : $purple;
+// -- les gris
+$noir : $black;         	$blanc : $white;
+$grisFonce : $darkGrey;     $gris : $grey;
+$grisClair : $lightGrey ;   $grisPale : $paleGrey;
+
+
+//-- liste des couleurs pour la création des classes b-color, t-color, ...
+$colorlist : 
+("noir", "black", $black),
+("grisFonce", "darkGrey", $darkGrey),
+("gris", "grey", $grey),
+("grisClair", "lightGrey", $lightGrey),
+("grisPale", "paleGrey", $paleGrey),
+("blanc", "white", $white),
+("bleuFonce", "darkBlue", $darkBlue),
+("bleu", "blue", $blue),
+("bleuClair", "lightBlue", $lightBlue),
+("bleuPale", "paleBlue", $paleBlue),
+("vertFonce", "darkGreen", $darkGreen),
+("vert", "green", $green),
+("vertClair", "lightGreen", $lightGreen),
+("brun", "brown", $brown),
+("beige", "tan", $tan),
+("rougeFonce", "darkRed", $darkRed),
+("rouge", "red", $red),
+("rougeClair", "lightRed", $lightRed),
+("jauneFonce", "darkYellow", $darkYellow),
+("jaune", "yellow", $yellow),
+("jauneClair", "lightYellow", $lightYellow),
+("orange", "orange", $orange),
+("rose", "pink", $pink),
+("violet", "purple", $purple),
+("c0", "transparent", transparent),
+("c1", "primary", $primary),
+("c1fonce", "darkPrimary", $darkPrimary),
+("c1pale", "palePrimary", $palePrimary),
+("c2", "secondary", $secondary),
+("c2fonce", "darkSecondary", $darkSecondary),
+("c2pale", "paleSecondary", $paleSecondary) !default;
+
+//-- Ombres
+$shadow: 0 3px 2px rgba(0, 0, 0, 0.2);
+$shadow-max: 0 5px 5px 0 rgba(0,0,0,0.25),0 2px 10px 0 rgba(0,0,0,0.16);
+$shadow-bottom:0 10px 6px -6px rgba(0, 0, 0, .8); // pour action box
+ 
+// ========================================================================
+// ==== espaces et largeurs
+// ========================================================================
+
+// espace : utilisé par ma1, pa2, ...
+$up-space-0: 0 !default;
+$up-space-1: 10px !default;
+$up-space-2: 24px !default;
+$up-space-3: 36px !default;
+
+// largeurs : utilisé par border (b1, b2, ...)
+$up-border-0: 0 !default;
+$up-border-1: 1px !default;
+$up-border-2: 2px !default;
+$up-border-3: 6px !default;
+
+// ===========================================
+//   AJOUT POUR TEMPLATE
+// ===========================================
+$box-radius: 5px;
+$box-shadow: $shadow-max;
+
+// ===========================================
+//   FONCTIONS UTILITAIRES POUR LES ACTIONS
+// ===========================================
+
+@function rgb2rgba($rgb, $alpha:0) {
+	@return rgba(red($rgb), green($rgb), blue($rgb), $alpha);
+}

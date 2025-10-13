@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>table_by_rows - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-table-by-rows" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>tables responsives par empilement des colonnes par lignes.
+</p>
+<p><code><b>{</b>up table-par-lignes<b>}</b></code><br />< table> ... < /table><br /><code><b>{</b>/up table-par-lignes<b>}</b></code><br />les colonnes  sont empilées par lignes avec la possibilité de les déplacer, de les fusionner, de supprimer le titre, d'afficher seulement certaines colonnes. https://github.com/codefog/restables/blob/master/README.md<br />.<br />IMPERATIF : Les titres des colonnes doivent être dans une balise HEAD</p>
+
+
+</div >
+<p><label for="table_by_rows" title="rien">table-by-rows</label>
+<input type = "text" id="table_by_rows"class="w5 inactif"  placeholder=""></p>
+<p><label for="breakpoint" title="bascule en vue responsive">breakpoint</label>
+<input type = "text" name="breakpoint"class="w10"  placeholder="720px"></p>
+<p><label for="max-height" title="max-height pour la table">max-height</label>
+<input type = "text" name="max-height"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="style inline pour balise table">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe(s) pour balise table (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="permet d&#039;ajouter des style &agrave; la table incluse">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>paramètres Javascript pour configuration</h4>
+<p><label for="merge" title="fusion de colonnes. 1:[2,3],5:[6] = 2&amp;3 avec 1 et 6 avec 5">merge</label>
+<input type = "text" name="merge"class="w30"  placeholder=""></p>
+<p><label for="move" title="d&eacute;placement colonne. 1:0,6:1 = 1 au debut et 6 en 2eme">move</label>
+<input type = "text" name="move"class="w30"  placeholder=""></p>
+<p><label for="skip" title="non visible. [3,5] = col 3 et 5 non visible">skip</label>
+<input type = "text" name="skip"class="w30"  placeholder=""></p>
+<p><label for="span" title="[2,4] = valeur sans libell&eacute; (eq: colspan)">span</label>
+<input type = "text" name="span"class="w30"  placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcategories_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcategories-list" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of descending categories. The parent category is not displayed</p>
+<p>syntax : <code><b>{</b>up jcategories-list=catid<b>}</b></code><br>MOTS-CLES ITEM MENU:<br>##id## ##access## ##title-link## ##title## ##note## ##extension## ##language##</p>
+
+
+</div >
+<p><label for="jcategories_list" title="category id or blank for all">jcategories-list</label>
+<input type = "text" id="jcategories_list"class="w10 important"  placeholder=""></p>
+<p><label for="component" title="extension name">component</label>
+<input type = "text" name="component" placeholder="Content"></p>
+<p><label for="level" title="number of levels. O = all">level</label>
+<input type = "number" name="level"class="w5"  min="0" max="6" placeholder=""></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template.">template</label>
+<input type = "text" name="template" placeholder="##title-link##[small] (id:##id##) ##access## ##extension## ##language##[/small] ##note##"></p>
+<p><label for="model-note" title="partial model for a note">model-note</label>
+<input type = "text" name="model-note" placeholder="[i class=&quot;t-blue&quot;]%s[/i]"></p>
+<h4>Main block tag and style</h4>
+<p><label for="main-tag" title="main tag (ul)">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="style" title="classes and styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<h4>Tag for items</h4>
+<p><label for="item-tag" title="secondary tag (li)">item-tag</label>
+<input type = "text" name="item-tag" placeholder="li"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

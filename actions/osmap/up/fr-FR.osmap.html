@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>osmap - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-osmap" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une carte OpenStreetMap
+</p>
+<p>syntaxe 1 : <code><b>{</b>up osmap=latitude, longitude<b>}</b></code><br />La latitude/longitude peut être connue sur le site : <a href="https://www.coordonnees-gps.fr" target="_blank">https://www.coordonnees-gps.fr</a><br />Les tuiles disponibles sont ici : https://wiki.openstreetmap.org/wiki/Tile_servers<br />.<br />syntaxe 2 : multimakers<br /><code><b>{</b>up osmap=latitude, longitude<b>}</b></code><br /><code><b>{</b>marker=latitude, longitude | popup-text | popup-clic=0 | marker-image=img | marker-options=...<b>}</b></code><br /><code><b>{</b>/up osmap<b>}</b></code></p>
+
+
+</div >
+<p><label for="osmap" title="latitude, longitude du centre de la carte (a r&eacute;cup&eacute;rer sur http://getlatlon.yohman.com)">osmap</label>
+<input type = "text" id="osmap"class="w40 important"  placeholder=""></p>
+<p><label for="zoom" title="niveau de zoom de la carte">zoom</label>
+<input type = "number" name="zoom" min="1" max="18" placeholder="13"></p>
+<p><label for="height" title="hauteur du bloc carte. La largeur est 100% du parent">height</label>
+<input type = "number" name="height"class="w10"  min="10" placeholder="250"></p>
+<p><label for="scale" title="affiche l&#039;&eacute;chelle. 0:sans, 1:m&eacute;trique, 2:imp&eacute;rial, 3:m&eacute;trique&amp;imp&eacute;rial">scale</label>
+<select name="scale" title="1" placeholder="1" value="1">
+<option value=""></option>
+<option value="0">0-sans</option>
+<option value="1">1-métrique</option>
+<option value="2">2-impérial</option>
+<option value="3">3-métrique&impérial</option>
+</select></p>
+<p><label for="map-options" title="liste des options pour la carte. ex: zoomControl:1, keyboard:0">map-options</label>
+<input type = "text" name="map-options" placeholder=""></p>
+<p class="hr-top"><label for="tile" title="nom de la tuile">tile</label>
+<input type = "text" name="tile"class="w40 hr-top"  placeholder=""></p>
+<p><label for="tile-options" title="niveau de zoom maximum, ...">tile-options</label>
+<input type = "text" name="tile-options" placeholder=""></p>
+<p><label for="tile-url" title="url de la tuile">tile-url</label>
+<input type = "text" name="tile-url" placeholder=""></p>
+<p class="hr-top"><label for="marker" title="affiche un marker au centre de la carte">marker</label>
+<select name="marker"class="hr-top"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="marker-image" title="0: aucun ou chemin image pin">marker-image</label>
+<input type = "text" name="marker-image" placeholder=""></p>
+<p><label for="marker-options" title="chaine des options du marqueur. voir https://leafletjs.com/reference-1.3.0.html#icon">marker-options</label>
+<input type = "text" name="marker-options" placeholder=""></p>
+<p class="hr-top"><label for="popup-clic" title="0: permanent ou 1: sur clic (si texte)">popup-clic</label>
+<select name="popup-clic"class="hr-top"  title="1" placeholder="1" value="1">
+<option value=""></option>
+<option value="0">Permanent</option>
+<option value="1">Clic</option>
+</select></p>
+<p><label for="popup-text" title="texte du popup en bbcode. Si vide, pas de popup">popup-text</label>
+<input type = "text" name="popup-text" placeholder=""></p>
+<p class="hr-top"><label for="gmap" title="texte du lien affich&eacute; au-dessous de la carte pour afficher la carte sous GMap">gmap</label>
+<input type = "text" name="gmap"class="hr-top"  placeholder=""></p>
+<p><label for="gmap-url" title="optionnel.Permet d&#039;afficher un marqueur">gmap-url</label>
+<input type = "text" name="gmap-url" placeholder=""></p>
+<p class="hr-top"><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

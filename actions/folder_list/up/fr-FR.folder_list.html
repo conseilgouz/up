@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>folder_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-folder-list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>retourne la liste mise en forme du contenu d'un dossier sur le serveur
+</p>
+<p>syntaxe <code><b>{</b>up folder_list=folder_relative_path_on_server | template=##file## (##size)<b>}</b></code>0<br />##file## : chemin/nom.extension - pour copier/coller comme argument shortcode<br />##dirname## : chemin (sans slash final)<br />##basename## : nom et extension<br />##filename## : nom sans extension (sans le point)<br />##extension## : extension<br />##relpath## : chemin relatif au chemin passé comme principal argument<br />##size## : taille du fichier<br />##date## : date dernière modification<br />Motclé disponible pour le dossier en format liste (ul/li)<br />##foldername## : nom du dossier (sans l'arboresccence)<br />##folderpath## : chemin et nom du dossier (avec l'arboresccence)</p>
+
+
+</div >
+<p><label for="folder_list" title="chemin relatif du dossier sur le serveur">folder-list</label>
+<input type = "text" id="folder_list" placeholder=""></p>
+<p><label for="mask" title="masque de s&eacute;lection des fichiers">mask</label>
+<input type = "text" name="mask" placeholder=""></p>
+<p><label for="recursive" title="niveaux d&#039;exploration des sous-dossiers">recursive</label>
+<input type = "text" name="recursive" placeholder="0"></p>
+<h4>Modèle de mise en forme</h4>
+<p><label for="template" title="mod&egrave;le de mise en forme du r&eacute;sultat">template</label>
+<input type = "text" name="template" placeholder="##file##"></p>
+<p><label for="template-folder" title="mod&egrave;le de mise en forme pour les dossier en vue liste">template-folder</label>
+<input type = "text" name="template-folder" placeholder="[b]##foldername##[/b]"></p>
+<h4>Balises pour les blocs parents et enfants</h4>
+<p><label for="main-tag" title="balise principale. indispensable pour utiliser id, class et style">main-tag</label>
+<input type = "text" name="main-tag" placeholder=""></p>
+<p><label for="item-tag" title="balise pour un fichier ou dossier">item-tag</label>
+<input type = "text" name="item-tag" placeholder="p"></p>
+<h4>Format des éléments mot-clé</h4>
+<p><label for="date-format" title="format de la date">date-format</label>
+<input type = "text" name="date-format" placeholder="%Y/%m/%d %H:%M"></p>
+<p><label for="decimal" title="nombre de d&eacute;cimales pour la taille du fichier">decimal</label>
+<input type = "text" name="decimal" placeholder="2"></p>
+<h4>Styles CSS</h4>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

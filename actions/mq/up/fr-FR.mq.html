@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>mq - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-mq" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Construit une chaîne mediaqueries
+</p>
+<p><code><b>{</b>up mq=#id | default=color:red | mobile=color:green | tablet=color:blue | 960-1200-screen=color:orange | 1200-0=color:black<b>}</b></code><br />retourne la chaîne<br />#id<b>[</b>color:red;@media (max-width:480px)<b>[</b>color:green]@media (min-width:481px) and (max-width:760px)<b>[</b>color:blue]<br />si selector est indiqué, il est ajouté à la chaîne<br />LE PRINCIPE :<br />on indique les plages d'action du style sous la forme 480-960<br />une plage inférieure (max-width) doit avoir la forme 0-480<br />une plage supérieure (min-width) doit avoir la forme 1200-0 ou 1200 (une seule valeur)<br />autres termes pris en compte :<br />H, horizontal, landscape, V, vertical, portrait, screen, print</p>
+
+
+</div >
+<p><label for="mq" title="vide ou s&eacute;lecteur CSS">mq</label>
+<input type = "text" id="mq"class="w20"  title="" placeholder="" list="combo_mq"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_mq">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p><label for="default" title="propri&eacute;t&eacute; CSS par d&eacute;faut hors mediaquerie">default</label>
+<input type = "text" name="default" placeholder=""></p>
+<p><label for="mobile" title="propri&eacute;t&eacute; CSS pour les mobiles">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="tablet" title="propri&eacute;t&eacute; CSS pour les tablettes">tablet</label>
+<input type = "text" name="tablet" placeholder=""></p>
+<p><label for="desktop" title="propri&eacute;t&eacute; CSS pour les ordinateurs">desktop</label>
+<input type = "text" name="desktop" placeholder=""></p>
+<p><label for="large" title="propri&eacute;t&eacute; CSS pour les grands &eacute;crans">large</label>
+<input type = "text" name="large" placeholder=""></p>
+<p><label for="xxx" title="breakpoint =&gt; propri&eacute;t&eacute;. ex: 480-960-screen=color:red">xxx</label>
+<input type = "text" name="xxx"class="w20"  placeholder="yyy"></p>
+<p><label for="use-with-up" title="crochets neutres au lieu d&#039;accolades pour argument action UP">use-with-up</label>
+<select name="use-with-up" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>Paramètres</h4>
+<p><label for="bp-mobile" title="valeur min-max pour mobile">bp-mobile</label>
+<input type = "text" name="bp-mobile"class="w20"  placeholder="0-480"></p>
+<p><label for="bp-tablet" title="valeur min-max pour tablette">bp-tablet</label>
+<input type = "text" name="bp-tablet"class="w20"  placeholder="481-760"></p>
+<p><label for="bp-desktop" title="valeur min-max pour ordinateur">bp-desktop</label>
+<input type = "text" name="bp-desktop"class="w20"  placeholder="761-1200"></p>
+<p><label for="bp-large" title="valeur min-max pour grands &eacute;crans">bp-large</label>
+<input type = "text" name="bp-large"class="w20"  placeholder="1201-0"></p>
+<p><label for="unit" title="unit&eacute; pour les largeurs d&#039;&eacute;crans">unit</label>
+<input type = "text" name="unit"class="w10"  placeholder="px"></p>
+<h4></h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

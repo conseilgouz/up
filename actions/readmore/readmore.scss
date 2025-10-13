@@ -1,0 +1,49 @@
+// le bloc de contenu
+.uprm-panel {
+	position:relative;
+	overflow: hidden;
+	transition:height .75s ease-out;
+	height:auto;
+	
+	&.inactive {
+		height:0;
+		padding:0 !important;
+	}
+	
+	// le bloc pour donner un effet dégradé à la fin du texte masqué 
+	.uprm-overlay {
+		position:absolute;
+		width:100%;
+		bottom:0; 
+		height:50px;
+		background: linear-gradient(to bottom, transparent, #fff);
+	}
+}
+
+// le bloc contenant les boutons
+// .uprm-btns{
+// }
+
+// le bouton pour afficher la suite
+.uprm-btn-more {
+	cursor: pointer;
+	pointer-events: all;
+	text-decoration:none;
+	&.inactive {
+		display:none;
+		pointer-events: none;
+	}
+}
+
+// le bouton pour replier
+.uprm-btn-less{
+	cursor: pointer;
+	pointer-events: all;
+	text-decoration:none;
+	&.inactive {
+		display:none;
+		pointer-events: none;
+	}
+}
+
+

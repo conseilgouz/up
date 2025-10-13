@@ -1,0 +1,130 @@
+/* 
+    Created on : 10 oct. 2019, 07:26:54
+    Author     : LOIC
+*/
+
+@import "../../assets/scss/variables";
+
+
+$blue : #369;
+$paleBlue : #BCE0FF;
+
+// STRUCTURE DU CODE HTML GENERE
+// <dl id="up-xx" class="csv2def model">
+//   <dt>terme unique</dt>
+//   <dd>definition unique</dd>
+//   <div>  /* uniquement pour les DT ou DD multiple */
+//     <dt>terme 1</dt>
+//     <dt>terme 2</dt>
+//   </div>
+//   ...
+// </dl>
+
+/* COMMUN */
+// ======================================================
+dl.csv2def > div {
+    > dt {
+        //  bordure entre terme 
+    }
+    > dd {
+        //  bordure entre définition 
+        border-bottom:1px dashed #999;
+    }
+    > dt:last-child,
+        > dd:last-child {
+        // suppression de la bordure du dernier terme ou definition 
+        border-bottom:none !important;
+    }
+    dd > *:first-child {
+        // suppression marge en début de definition 
+        margin-top:0;
+    }
+    dd > *:last-child {
+        // suppression marge en fin de definition 
+        margin-bottom:0;
+    }
+}
+/* STACK */
+// Mode 1 colonne
+// ======================================================
+dl.csv2def.stack {  
+    // DL 
+    > * {  
+        // bloc DT ou DD (ou DIV si multi-terme/def)
+    }
+    > *:nth-child(odd) {  
+        // DT (ou DIV si multi-terme)
+    }
+    > *:nth-child(even) { 
+        // DD (ou DIV si multi-def)
+        margin-left:20px;
+        padding-left:10px;
+        border-left:2px solid #aaa;
+    }
+}
+
+/* FLEX */
+// === Mode 2 colonnes 
+// ======================================================
+
+//  ATTENTION
+//  la marge (10px) et la largeur dt (25%) sont les valeurs par defaut des paramètres
+//  Il faut modifier le php ou personnaliser le custom/prefs.ini comme ceci :
+//  [options]
+//  gap=20
+//  term-width=33
+
+dl.csv2def.flex {
+    // DL
+    display:flex;
+    flex-flow:row wrap;
+    list-style:none;
+    padding:10px 10px 0 10px;
+    > * {
+        // bloc DT ou DD (ou DIV si multi-terme/def)
+        padding:5px;   
+    }
+    > *:nth-child(odd) {
+        // DT (ou DIV si multi-terme)
+        width:calc(25% - 5px);
+        margin:0 10px 10px 0;
+        background:#ccc;
+        text-align:right;
+    }
+    > *:nth-child(even) {
+        // DD (ou DIV si multi-def)
+        width:calc(75% - 5px);
+        margin:0 0 10px 0;
+        background:#eee;
+    }
+    @media (max-width: 760px) {
+        // Responsive 
+        padding:0;
+        > * {
+            width:100% !important;
+            margin:0 0 10px 0 !important;
+        }
+    }
+}
+
+/* BLUE */
+dl.csv2def.flex.blue {
+    > *:nth-child(odd) {
+        // la colonne DT
+        background-color:$blue;
+        color:#fff;
+        text-align:left;
+    }
+    > *:nth-child(even) {
+        // la colonne DD
+        background-color:$paleBlue;
+    }
+    > div > dt {
+        // le separateur pour multi-terme
+        border-bottom:#ff8 solid 2px;
+    }
+    > div > dd {
+        // le separateur pour multi-definition
+        border-bottom:$blue solid 2px;
+    }
+}

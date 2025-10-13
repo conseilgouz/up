@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_plyr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-plyr" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche un lecteur video ou audio qui s'inscrit au maxima dans son bloc parent
+</p>
+<p><code><b>{</b>up media_plyr=yt | code=bTqVqk7FSmY <b>}</b></code><br /><code><b>{</b>up media_plyr=vimeo | code=bTqVqk7FSmY <b>}</b></code><br /><b>media_plyr</b> : précisez yt ou youtube ou vimeo<br /><b>code</b>  : il s'agit du code figurant dans l'URL de la vidéo.<br />.<br /><code><b>{</b>up media_plyr=video | poster=url image | mp4 | webm | vtt | download <b>}</b></code><br /><b>media_plyr</b> : video pour indiquer l'URL vers la video.<br /><b>poster</b> : nom de l'image fixe (obligatoire)<br /><b>mp4, webm, vtt, download</b> : si URL non spécifiée, elle sera déduite de celle pour 'poster'<br />.<br /><code><b>{</b>up media_plyr=audio | mp3=url fichier mp3 | ogg<b>}</b></code><br /><b>media_plyr</b> : audio<br /><b>mp3</b> : url vers fichier MP3 (obligatoire)<br /><b>ogg</b> : si URL non spécifiée, elle sera déduite de celle pour 'MP3'<br />.</p>
+
+
+</div >
+<p><label for="media_plyr" title="type de lecture : youtube, vimeo, video ou audio">media-plyr</label>
+<select id="media_plyr" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="youtube">youtube</option>
+<option value="vimeo">vimeo</option>
+<option value="video">video</option>
+<option value="audio">audio</option>
+</select></p>
+<p><label for="code" title="code de la video (&agrave; la fin de l&#039;url youtube ou vimeo)">code</label>
+<input type = "text" name="code"class="w30 important"  placeholder=""></p>
+<p><label for="poster" title="URL de l&#039;image (obligatoire)">poster</label>
+<input type = "text" name="poster"class="important"  placeholder=""></p>
+<p class="hr-top"><label for="mp4" title="URL du fichier MP4. Si vide, on utilise le nom de poster">mp4</label>
+<input type = "text" name="mp4"class="hr-top"  placeholder=""></p>
+<p><label for="webm" title="URL du fichier WEBM. Si vide, on utilise le nom de poster">webm</label>
+<input type = "text" name="webm" placeholder=""></p>
+<p><label for="vtt" title="URL du fichier VTT pour sous-titrage. Si vide, on utilise le nom de poster">vtt</label>
+<input type = "text" name="vtt" placeholder=""></p>
+<p><label for="download" title="URL du fichier t&eacute;l&eacute;chargeable. Si vide, on utilise le nom du fichier MP4">download</label>
+<input type = "text" name="download" placeholder=""></p>
+<p class="hr-top"><label for="mp3" title="URL du fichier audio mp3. (obligatoire)">mp3</label>
+<input type = "text" name="mp3"class="important hr-top"  placeholder=""></p>
+<p><label for="ogg" title="URL du fichier audio ogg. Si vide, on utilise le nom du fichier MP3">ogg</label>
+<input type = "text" name="ogg" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;e(s) au bloc ext&eacute;rieur">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc ext&eacute;rieur">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

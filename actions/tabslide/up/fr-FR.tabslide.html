@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>tabslide - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-tabslide" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>ajoute des onglets pour ouvrir un panneau sur les bords de la fenêtre
+</p>
+<p>syntaxe <code><b>{</b>up tabslide=btn-text | tabLocation=top<b>}</b></code>contenu<code><b>{</b>/up tabslide<b>}</b></code><br />utilisation :<br />- un sommaire sur le coté du site<br />- un module connexion</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>tab-style</b>=bg-bleuClair t-hover-jaune t-blanc bd-blanc<br><b><u>droit</u> : </b> <b>tabLocation</b>=right<b> | </b><b>tab-class</b>=bg-violet t-blanc t-hover-jaune<b> | </b><b>tab-style</b>=<b> | </b><b>panel-style</b>=min-height:250px<b> | </b><b>offset</b>=50px
+</div >
+<h4>l'onglet</h4>
+<p><label for="tabslide" title="titre de l&#039;onglet">tabslide</label>
+<input type = "text" id="tabslide"class="w20 important"  title="" placeholder="" list="combo_tabslide"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_tabslide">
+<option value=""></option>
+<option value="droit">droit</option>
+</datalist></p>
+<p><label for="tab-style" title="classes et styles inline pour onglets">tab-style</label>
+<input type = "text" name="tab-style" placeholder="bg-bleuClair t-hover-jaune t-blanc bd-blanc"></p>
+<p><label for="tab-class" title="classe(s) pour onglet (obsol&egrave;te)">tab-class</label>
+<input type = "text" name="tab-class" placeholder=""></p>
+<h4>le panneau</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p class="hr-top"><label for="panel-style" title="classes et styles inline pour panneau">panel-style</label>
+<input type = "text" name="panel-style"class="hr-top"  placeholder=""></p>
+<p><label for="panel-class" title="classe(s) pour panneau (obsol&egrave;te)">panel-class</label>
+<input type = "text" name="panel-class" placeholder=""></p>
+<h4>Options JS disparues - conservés pour compatibilité</h4>
+<p><label for="speed" title="OBSOLETE voir bounceSpeed">speed</label>
+<input type = "text" name="speed"class="w5 inactif"  placeholder="300"></p>
+<p><label for="positioning" title="or absolute, so tabs move when window scrolls">positioning</label>
+<input type = "text" name="positioning"class="w5 inactif"  placeholder="fixed"></p>
+<p><label for="toggleButton" title="not often used">toggleButton</label>
+<input type = "text" name="toggleButton"class="w5 inactif"  placeholder=".tab-opener"></p>
+<h4>paramétres JS : définition de l'onglet</h4>
+<p><label for="tabLocation" title="position : left, right, top ou bottom">tabLocation</label>
+<select name="tabLocation"class="important"  title="left" placeholder="left" value="left">
+<option value=""></option>
+<option value="left" selected>left</option>
+<option value="right">right</option>
+<option value="top">top</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p class="hr-top"><label for="onLoadSlideOut" title="slide out after DOM load">onLoadSlideOut</label>
+<select name="onLoadSlideOut"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="clickScreenToClose" title="fermer l&#039;onglet lorsque le reste de l&#039;&eacute;cran est cliqu&eacute;">clickScreenToClose</label>
+<select name="clickScreenToClose" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="tabHandle" title="S&eacute;lecteur JQuery pour l&#039;onglet, peut utiliser #">tabHandle</label>
+<input type = "text" name="tabHandle"class="w20"  placeholder=".handle"></p>
+<p><label for="action" title="mode ouverture : &#039;hover&#039; ou &#039;click&#039;. Forcer &agrave; click sur mobile">action</label>
+<select name="action"class="important"  title="click" placeholder="click" value="click">
+<option value=""></option>
+<option value="hover">hover</option>
+<option value="click" selected>click</option>
+</select></p>
+<p><label for="hoverTimeout" title="s&eacute;lai en ms pour garder l&#039;onglet ouvert apr&egrave;s la fin du survol - uniquement si action = &#039;hover&#039;">hoverTimeout</label>
+<input type = "text" name="hoverTimeout" placeholder="5000"></p>
+<p class="hr-top"><label for="offset" title="distance pour top or left (bottom or right si offsetReverse est vrai)">offset (px)</label>
+<input type = "number" name="offset"class="hr-top"  min="0" max="500" step="10" unit="px" placeholder="200px"></p>
+<p><label for="offsetReverse" title="true= align&eacute; a droite ou en bas">offsetReverse</label>
+<select name="offsetReverse" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="otherOffset" title="si d&eacute;fini, la taille du panneau est d&eacute;finie pour maintenir cette distance &agrave; partir du bas ou de la droite (haut ou gauche si offsetReverse)">otherOffset</label>
+<input type = "text" name="otherOffset"class="w10"  placeholder="null"></p>
+<p><label for="handleOffset" title="Si null, d&eacute;tecte la bordure du panneau pour bien aligner la poign&eacute;e, sinon la distance en px">handleOffset</label>
+<input type = "text" name="handleOffset"class="w10"  placeholder="null"></p>
+<p><label for="handleOffsetReverse" title="si vrai, poign&eacute;e align&eacute;e avec la droite ou le bas du panneau">handleOffsetReverse</label>
+<select name="handleOffsetReverse" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>paramétres JS : Animation</h4>
+<p class="hr-top"><label for="bounceDistance" title="distance autoris&eacute;e pour le rebond">bounceDistance (px)</label>
+<input type = "number" name="bounceDistance"class="hr-top"  min="0" max="500" step="10" unit="px" placeholder="50px"></p>
+<p><label for="bounceTimes" title="nombre de rebonds si &#039;bounce&#039; est appel&eacute;">bounceTimes</label>
+<input type = "number" name="bounceTimes" min="0" max="20" placeholder="4"></p>
+<p><label for="bounceSpeed" title="vitesse d&#039;animation des rebonds">bounceSpeed</label>
+<input type = "text" name="bounceSpeed" placeholder="300"></p>
+<h4>paramétres JS : image pour l'onglet</h4>
+<p><label for="pathToTabImage" title="image facultative &agrave; afficher dans l&#039;onglet">pathToTabImage</label>
+<input type = "text" name="pathToTabImage" placeholder="null"></p>
+<p><label for="imageHeight" title="hauteur image">imageHeight</label>
+<input type = "text" name="imageHeight"class="w10"  placeholder="null"></p>
+<p><label for="imageWidth" title="largeur image">imageWidth</label>
+<input type = "text" name="imageWidth"class="w10"  placeholder="null"></p>
+<h4>paramétres JS : pour expert</h4>
+<p><label for="onOpen" title="appel&eacute; apr&egrave;s l&#039;ouverture">onOpen</label>
+<input type = "text" name="onOpen"class="w40 inactif"  placeholder="function () {}"></p>
+<p><label for="onClose" title="appel&eacute; apr&egrave;s la fermeture">onClose</label>
+<input type = "text" name="onClose"class="w40 inactif"  placeholder="function () {}"></p>
+<p><label for="onSlide" title="appel&eacute; apr&egrave;s l&#039;ouverture ou la fermeture">onSlide</label>
+<input type = "text" name="onSlide" placeholder="function () {}"></p>
+</body>
+</html >

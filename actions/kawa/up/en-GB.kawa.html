@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>kawa - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-kawa" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Serves as a virtual coffee</p>
+<p><img style='float:right' src='/plugins/content/up/actions/kawa/img/kawa.png'>After many long hours in front of your computer, your eyes start to close. <br>Quickly type this shortcode :<br>syntax <code><b>{</b>up kawa=long | sugar | speculoos=lotus <b>}</b></code></p>
+
+
+</div >
+<p><label for="kawa" title="empty = short coffee, long = long coffee">kawa</label>
+<select id="kawa" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="" selected></option>
+<option value="long">long</option>
+</select></p>
+<p><label for="sucre" title="sugar option">sucre</label>
+<select name="sucre" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="speculoos" title="speculoos base or specify brand (lotus)">speculoos</label>
+<input type = "text" name="speculoos"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

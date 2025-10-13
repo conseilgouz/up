@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>scroller - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-scroller" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Défilement vertical d'une liste d'éléments
+</p>
+<p>syntaxe : <code><b>{</b>up scroller<b>}</b></code>suite d'éléments<code><b>{</b>/up scroller<b>}</b></code><br />Attention :<br />- définir un style="height:..." aux images (pas de height="...")</p>
+
+
+</div >
+<p><label for="scroller" title="nombre d&#039;&eacute;l&eacute;ments">scroller</label>
+<input type = "text" id="scroller"class="w10 important"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour la balise principale">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour la balise principale">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>paramètres Javascript pour configuration</h4>
+<p><label for="newsPerPage" title="nombre de blocs par page. Idem option principale">newsPerPage</label>
+<input type = "number" name="newsPerPage"class="w5"  min="1" max="20" placeholder="4"></p>
+<p><label for="navigation" title="affiche la navigation haut/bas">navigation</label>
+<select name="navigation" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+<p><label for="autoplay" title="active la lecture automatique">autoplay</label>
+<select name="autoplay" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+<p><label for="direction" title="sens de d&eacute;filement (up/down)">direction</label>
+<select name="direction" title="up" placeholder="up" value="up">
+<option value=""></option>
+<option value="up" selected>up</option>
+<option value="down">down</option>
+</select></p>
+<p><label for="animationSpeed" title="normal, slow ou fast">animationSpeed</label>
+<select name="animationSpeed" title="normal" placeholder="normal" value="normal">
+<option value=""></option>
+<option value="normal" selected>normal</option>
+<option value="slow">slow</option>
+<option value="fast">fast</option>
+</select></p>
+<p><label for="newsTickerInterval" title="autoplay interval en ms">newsTickerInterval</label>
+<input type = "number" name="newsTickerInterval"class="w10"  min="100" max="10000" placeholder="4000"></p>
+<p><label for="pauseOnHover" title="arr&ecirc;t d&eacute;filement lors survol souris">pauseOnHover</label>
+<select name="pauseOnHover" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+</body>
+</html >

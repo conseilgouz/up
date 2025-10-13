@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ajax_view - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-ajax-view" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a button to load the content of an article or a file</p>
+<p>it is possible to ask for a password
+syntax <code><b>{</b>up ajax-view=999 | btn-label=View article<b>}</b></code>
+syntax <code><b>{</b>up ajax-view=file.ext | btn-label=show a file<b>}</b></code>
+syntax <code><b>{</b>up ajax-view=file.jpg | btn-label=<b>[</b>img src='photo-mini.jpg']<b>[</b>br]Click to view large image | password=1234<b>}</b></code>
+</p>
+
+
+</div >
+<p><label for="ajax_view" title="article id or path to txt or image file">ajax-view</label>
+<input type = "text" id="ajax_view" placeholder=""></p>
+<h4>Ajax content call button style</h4>
+<p><label for="btn-label" title="text on the call button">btn-label</label>
+<input type = "text" name="btn-label" placeholder="en=load content;fr=charger le contenu"></p>
+<p><label for="btn-style" title="style and class of the call button">btn-style</label>
+<input type = "text" name="btn-style" placeholder="btn btn-primary"></p>
+<p><label for="btn-tag" title="tag for call button">btn-tag</label>
+<input type = "text" name="btn-tag"class="w10"  placeholder="div"></p>
+<h4>Password request</h4>
+<p><label for="password" title="password to download the file">password</label>
+<input type = "text" name="password"class="w20"  placeholder=""></p>
+<h4>secondary options</h4>
+<p><label for="HTML" title="0= no processing, 1=displays the code, or list of tags to keep (ex: img,a)">HTML</label>
+<input type = "text" name="HTML" placeholder="0"></p>
+<p><label for="EOL" title="force a line break">EOL</label>
+<select name="EOL" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="ext-images" title="the extensions of the authorized image files">ext-images</label>
+<input type = "text" name="ext-images" placeholder="jpg,png,gif,webp"></p>
+<h4>Style</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-tag" title="main tag">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="class" title="class for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (added in the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

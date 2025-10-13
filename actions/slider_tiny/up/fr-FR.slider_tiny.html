@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>slider_tiny - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-slider-tiny" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>bandeau défilant d'images ou de blocs HTML
+</p>
+<p>Syntaxe 1 :<br /><code><b>{</b>up slider-tiny |items=2<b>}</b></code><br />< div>...< /div><br />< img src="..."><br />< a href="..">< img src="...">< /a><br /><code><b>{</b>/up slider-owl<b>}</b></code><br />Syntaxe 2 :<br /><code><b>{</b>up slider-tiny=dossier_images |items=2<b>}</b></code></p>
+
+
+</div >
+<p><label for="slider_tiny" title="chemin vers dossier ou rien">slider-tiny</label>
+<input type = "text" id="slider_tiny" placeholder=""></p>
+<h4>Options pour dossier d'images</h4>
+<p><label for="image-extension" title="etensions autoris&eacute;es pour les images">image-extension</label>
+<input type = "text" name="image-extension"class="w50"  placeholder="jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP,svg,SVG"></p>
+<p><label for="legend" title="Ajoute le nom humanis&eacute; du fichier comme l&eacute;gende">legend</label>
+<select name="legend" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="legend-template" title="mod&egrave;le pour l&eacute;gende s&eacute;par&eacute;e par 3 tirets. ex: [span style=&quot;&quot;]##1##[/span][span style=&quot;&quot;]##after@##[/span]">legend-template</label>
+<input type = "text" name="legend-template" placeholder=""></p>
+<p><label for="sort-by" title="date, random">sort-by</label>
+<select name="sort-by" title="name" placeholder="name" value="name">
+<option value=""></option>
+<option value="name" selected>name</option>
+<option value="date">date</option>
+<option value="random">random</option>
+</select></p>
+<p><label for="sort-order" title="asc ou desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="maxi" title="nombre d&#039;images retenues">maxi</label>
+<input type = "number" name="maxi"class="w10"  placeholder=""></p>
+<p><label for="image-style" title="classes/style appliqu&eacute;s aux images">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="zoom-suffix" title="si indiqu&eacute;, seules les images avec ce suffixe sont utilis&eacute;es. ! devant inverse la s&eacute;lection">zoom-suffix</label>
+<input type = "text" name="zoom-suffix"class="w20"  placeholder=""></p>
+<h4>Responsive</h4>
+<p><label for="responsive-breakpoints" title="liste des largeurs d&#039;&eacute;cran en px pour les points de changement">responsive-breakpoints</label>
+<input type = "text" name="responsive-breakpoints" placeholder="0, 480, 960"></p>
+<h4>Boutons précédent-suivant</h4>
+<p><label for="btn-prev" title="contenu du bouton pr&eacute;c&eacute;dent. BBcode accept&eacute;">btn-prev</label>
+<input type = "text" name="btn-prev"class="w30"  placeholder="préc"></p>
+<p><label for="btn-next" title="contenu du bouton suivant. BBcode accept&eacute;">btn-next</label>
+<input type = "text" name="btn-next"class="w30"  placeholder="suiv"></p>
+<h4>style</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="slider-style" title="classe(s) ou styles pour le slider">slider-style</label>
+<input type = "text" name="slider-style" placeholder=""></p>
+<p><label for="item-style" title="classe(s) ou styles ajout&eacute;s &agrave; chaque items du slider">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>sont responsives</h4>
+<h4>Nombre et présentation des items</h4>
+<p><label for="items" title="[RESP] Nombre de diapositives affich&eacute;es dans la fen&ecirc;tre.">items</label>
+<input type = "number" name="items"class="w10"  placeholder="1"></p>
+<p><label for="startIndex" title="[RESP] l&#039;index du 1er item affich&eacute;">startIndex</label>
+<input type = "number" name="startIndex"class="w10"  min="1" placeholder="0"></p>
+<p><label for="slideBy" title="[RESP] nombre d&#039;items d&eacute;plac&eacute;s en un clic. page: egal &agrave; items">slideBy</label>
+<input type = "number" name="slideBy"class="w10"  placeholder="1"></p>
+<p><label for="autoHeight" title="[RESP] 1: La hauteur du conteneur change en fonction de la hauteur des items visibles">autoHeight</label>
+<select name="autoHeight" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="edgePadding" title="[RESP] largeur visible des items joutant les items visualis&eacute;s (en &quot;px&quot;)">edgePadding</label>
+<input type = "number" name="edgePadding"class="w10"  placeholder="0"></p>
+<p><label for="gutter" title="[RESP] Espace entre les items (en &quot;px&quot;).">gutter</label>
+<input type = "number" name="gutter"class="w10"  placeholder="0"></p>
+<p><label for="center" title="[RESP] Centre l&#039;item actif dans la fen&ecirc;tre.">center</label>
+<select name="center" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="rewind" title="revient au d&eacute;but lorsque la fin est atteinte et vice-versa">rewind</label>
+<select name="rewind" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>responsive</h4>
+<p><label for="responsive" title="chaine json pour d&eacute;finir les options pour diff&eacute;rentes largeurs de fen&ecirc;tre">responsive</label>
+<input type = "text" name="responsive" placeholder=""></p>
+<h4>navigation boutons</h4>
+<p><label for="controls" title="[RESP] affiche les boutons pr&eacute;c&eacute;dent/suivant et active le d&eacute;placement au clavier">controls</label>
+<select name="controls" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="controlsPosition" title="position des boutons (top, bottom ou center)">controlsPosition</label>
+<select name="controlsPosition" title="top" placeholder="top" value="top">
+<option value=""></option>
+<option value="top" selected>top</option>
+<option value="center">center</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p><label for="arrowKeys" title="[RESP] Permet d&#039;utiliser les touches fl&eacute;ch&eacute;es pour changer de diapositive.">arrowKeys</label>
+<select name="arrowKeys" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>navigation dots</h4>
+<p><label for="nav" title="[RESP] affiche la navigation par points et active toutes les fonctionnalit&eacute;s">nav</label>
+<select name="nav" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="navPosition" title="position des points (top, bottom ou center)">navPosition</label>
+<select name="navPosition" title="top" placeholder="top" value="top">
+<option value=""></option>
+<option value="top" selected>top</option>
+<option value="center">center</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p><label for="navAsThumbnails" title="Si true, les points sont des vignettes toujours visibles m&ecirc;me si plus d&#039;un item est affich&eacute; dans la fen&ecirc;tre.">navAsThumbnails</label>
+<select name="navAsThumbnails" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Autoplay</h4>
+<p><label for="autoplay" title="[RESP] Active/d&eacute;sactive le changement automatique des items.">autoplay</label>
+<select name="autoplay" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="autoplayTimeout" title="[RESP] d&eacute;lai avant changement items (en &quot;ms&quot;).">autoplayTimeout</label>
+<input type = "number" name="autoplayTimeout"class="w20"  placeholder="5000"></p>
+<p><label for="speed" title="[RESP] Vitesse de l&#039;animation de transition (en &quot;ms&quot;).">speed</label>
+<input type = "number" name="speed"class="w20"  placeholder="300"></p>
+<p><label for="autoplayDirection" title="sens d&eacute;placement : forward ou backward">autoplayDirection</label>
+<select name="autoplayDirection" title="forward" placeholder="forward" value="forward">
+<option value=""></option>
+<option value="forward" selected>forward</option>
+<option value="backward">backward</option>
+</select></p>
+<p><label for="autoplayPosition" title="position du bouton marche/arr&ecirc;t (top, bottom, center, none)">autoplayPosition</label>
+<select name="autoplayPosition" title="top" placeholder="top" value="top">
+<option value=""></option>
+<option value="top" selected>top</option>
+<option value="center">center</option>
+<option value="bottom">bottom</option>
+<option value="none">none</option>
+</select></p>
+<p><label for="autoplayHoverPause" title="[RESP] Arr&ecirc;t lors survol de la souris.">autoplayHoverPause</label>
+<select name="autoplayHoverPause" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="autoplayText" title="[RESP] Texte ou bbcode du bouton marche/arr&ecirc;t">autoplayText</label>
+<input type = "text" name="autoplayText"class="w50"  placeholder="&amp;#x23F5;,&amp;#x23F8;"></p>
+<p><label for="autoplayResetOnVisibility" title="[RESP] arr&ecirc;t d&eacute;placement tant que la page est invisible">autoplayResetOnVisibility</label>
+<select name="autoplayResetOnVisibility" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<h4>Animation</h4>
+<p><label for="mode" title="comportement de l&#039;animation. carousel, glisse sur le c&ocirc;t&eacute;, gallery: animations de fondu de toutes les diapositives en m&ecirc;me temps.">mode</label>
+<select name="mode" title="carousel" placeholder="carousel" value="carousel">
+<option value=""></option>
+<option value="carousel" selected>carousel</option>
+<option value="gallery">gallery</option>
+</select></p>
+<p><label for="animateIn" title="classe animation entr&eacute;e">animateIn</label>
+<input type = "text" name="animateIn"class="w50"  placeholder="tns-fadeIn"></p>
+<p><label for="animateOut" title="classe animation sortie">animateOut</label>
+<input type = "text" name="animateOut"class="w50"  placeholder="tns-fadeOut"></p>
+<p><label for="animateDelay" title="d&eacute;lai entre chaque animation de la galerie (en &quot;ms&quot;).">animateDelay</label>
+<input type = "number" name="animateDelay"class="w20"  placeholder="0"></p>
+<h4>Options spécifique pour les mobiles</h4>
+<p><label for="touch" title="[RESP] Active la d&eacute;tection d&#039;entr&eacute;e pour les appareils tactiles.">touch</label>
+<select name="touch" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="mouseDrag" title="[RESP] Change les diapositives en les faisant glisser.">mouseDrag</label>
+<select name="mouseDrag" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4></h4>
+</body>
+</html >

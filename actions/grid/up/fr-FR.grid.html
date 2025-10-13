@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>grid - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-grid" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Mise en page par grid
+</p>
+<p>Facilite une mise en page responsive en utilisant les propriétés CSS grid<br />syntaxe <code><b>{</b>up grid='a a b' 'a a b' 'c d b'<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>2cols</u> : </b> <b>grid</b>=&#039;image texte&#039;<b> | </b><b>mobile-grid</b>=&#039;image&#039; &#039;texte&#039;<b> | </b><b>css-head</b>=#id .image[tc]#id .texte[display:flex;justify-content:center;flex-direction: column;]<br><b><u>bento1+2</u> : </b> <b>grid</b>=&#039;resultat code&#039; &#039;resultat explication&#039;<b> | </b><b>mobile-grid</b>=&#039;resultat&#039; &#039;code&#039; &#039;explication&#039;<b> | </b><b>items-style-*</b>=bd-gris p1
+</div >
+<h4>mise en page par grid-template-areas</h4>
+<p><label for="grid" title="grid-template-areas">grid</label>
+<input type = "text" id="grid" title="" placeholder="" list="combo_grid"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_grid">
+<option value=""></option>
+<option value="2cols">2cols</option>
+<option value="bento1+2">bento1+2</option>
+</datalist></p>
+<p><label for="tablet-grid" title="grid-template-areas pour tablette">tablet-grid</label>
+<input type = "text" name="tablet-grid" placeholder=""></p>
+<p><label for="mobile-grid" title="grid-template-areas pour mobile">mobile-grid</label>
+<input type = "text" name="mobile-grid" placeholder=""></p>
+<h4>taille des colonnes et des lignes</h4>
+<p><label for="grid-template-columns" title="d&eacute;finition des colonnes. par default : repeat(nb_colonnes,1fr)">grid-template-columns</label>
+<input type = "text" name="grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="tablet-grid-template-columns" title="d&eacute;finition des colonnes. par default : repeat(nb_colonnes,1fr)">tablet-grid-template-columns</label>
+<input type = "text" name="tablet-grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="mobile-grid-template-columns" title="d&eacute;finition des colonnes. par default : repeat(nb_colonnes,1fr)">mobile-grid-template-columns</label>
+<input type = "text" name="mobile-grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="grid-template-rows" title="d&eacute;finition des lignes. par default : auto">grid-template-rows</label>
+<input type = "text" name="grid-template-rows"class="w70"  placeholder=""></p>
+<p><label for="mobile-grid-template-rows" title="d&eacute;finition des lignes. par default : auto">mobile-grid-template-rows</label>
+<input type = "text" name="mobile-grid-template-rows"class="w70"  placeholder=""></p>
+<p><label for="tablet-grid-template-rows" title="d&eacute;finition des lignes. par default : auto">tablet-grid-template-rows</label>
+<input type = "text" name="tablet-grid-template-rows"class="w70"  placeholder=""></p>
+<h4>taille et position des items placés en dehors des zones définies ci-dessus)</h4>
+<p><label for="grid-auto-columns" title="taille par d&eacute;faut des colonnes pour les items non pr&eacute;vus">grid-auto-columns</label>
+<input type = "text" name="grid-auto-columns"class="w50"  placeholder=""></p>
+<p><label for="grid-auto-rows" title="taille par d&eacute;faut des lignes pour les items non pr&eacute;vus">grid-auto-rows</label>
+<input type = "text" name="grid-auto-rows"class="w50"  placeholder=""></p>
+<p><label for="grid-auto-flow" title="placement automatique des items : row, column, dense, row dense ou column dense">grid-auto-flow</label>
+<input type = "text" name="grid-auto-flow"class="w50"  placeholder=""></p>
+<h4>nom des zones et répétition</h4>
+<p><label for="zone-name" title="liste des noms de zone dans l&#039;ordre des blocs de contenu. S&eacute;parateur virgule.">zone-name</label>
+<input type = "text" name="zone-name" placeholder=""></p>
+<p><label for="grid-repeat" title="nombre de r&eacute;p&eacute;titions de la grille">grid-repeat</label>
+<input type = "number" name="grid-repeat"class="w5"  min="0" max="20" placeholder="0"></p>
+<h4>espace entre les lignes et les colonnes</h4>
+<p><label for="gap" title="espace entre les blocs. valeur_verticale valeur_horizontal. 1 seule valeur pour les deux">gap</label>
+<input type = "text" name="gap"class="w20"  placeholder="10px"></p>
+<p><label for="tablet-gap" title="espace entre les blocs. valeur_verticale valeur_horizontal. 1 seule valeur pour les deux">tablet-gap</label>
+<input type = "text" name="tablet-gap"class="w20"  placeholder=""></p>
+<p><label for="mobile-gap" title="espace entre les blocs. valeur_verticale valeur_horizontal. 1 seule valeur pour les deux">mobile-gap</label>
+<input type = "text" name="mobile-gap"class="w20"  placeholder=""></p>
+<h4>alignement et répartition des items dans le conteneur</h4>
+<p><label for="place-content" title="justify-content align-content : start end center space-around space-between space-everly">place-content</label>
+<input type = "text" name="place-content"class="w70"  placeholder=""></p>
+<p><label for="tablet-place-content" title="grid-template-rows grid-template-columns : start end center space-around space-between space-everly">tablet-place-content</label>
+<input type = "text" name="tablet-place-content"class="w70"  placeholder=""></p>
+<p><label for="mobile-place-content" title="grid-template-rows grid-template-columns : start end center space-around space-between space-everly">mobile-place-content</label>
+<input type = "text" name="mobile-place-content"class="w70"  placeholder=""></p>
+<p><label for="place-items" title="align-items justify-items : start end center stretch">place-items</label>
+<input type = "text" name="place-items"class="w70"  placeholder=""></p>
+<p><label for="tablet-place-items" title="align-items justify-items : start end center stretch">tablet-place-items</label>
+<input type = "text" name="tablet-place-items"class="w70"  placeholder=""></p>
+<p><label for="mobile-place-items" title="align-items justify-items : start end center stretch">mobile-place-items</label>
+<input type = "text" name="mobile-place-items"class="w70"  placeholder=""></p>
+<h4>style des contenus</h4>
+<p><label for="items-style-*" title="class2style et style pour les items (12 maximum dans l&#039;ordre normal ou de zone-name)">items-style-*</label>
+<input type = "text" name="items-style-*" placeholder=""></p>
+<p><label for="tablet-items-style-*" title="class2style et style pour les items sur tablet (12 maximum)">tablet-items-style-*</label>
+<input type = "text" name="tablet-items-style-*" placeholder=""></p>
+<p><label for="mobile-items-style-*" title="class2style et style pour les items sur mobile (12 maximum)">mobile-items-style-*</label>
+<input type = "text" name="mobile-items-style-*" placeholder=""></p>
+<h4>breakpoints - points de rupture</h4>
+<p><label for="tablet-bp" title="breakpoint pour tablette">tablet-bp (px)</label>
+<input type = "number" name="tablet-bp"class="w10"  min="480" max="2400" unit="px" placeholder="760px"></p>
+<p><label for="mobile-bp" title="breakpoint pour mobile">mobile-bp (px)</label>
+<input type = "number" name="mobile-bp"class="w10"  min="480" max="2400" unit="px" placeholder="480px"></p>
+<h4>Style pour le conteneur parent</h4>
+<p><label for="main-tag" title="ajoute un bloc DIV autour des contenus {===}">main-tag</label>
+<input type = "text" name="main-tag"class="W10"  placeholder="div"></p>
+<p><label for="id" title="id du conteneur principal">id</label>
+<input type = "text" name="id"class="W10"  placeholder=""></p>
+<p><label for="main-style" title="classes et style inline pour container">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-mobile-style" title="class2style et style inline pour container sur mobile">main-mobile-style</label>
+<input type = "text" name="main-mobile-style" placeholder=""></p>
+<p><label for="main-tablet-style" title="class2style et style inline pour container sur tablet">main-tablet-style</label>
+<input type = "text" name="main-tablet-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="css-head" title="class2style et style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

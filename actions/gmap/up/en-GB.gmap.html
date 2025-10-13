@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>gmap - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-gmap" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a google map for an address</p>
+<p>syntax: <code><b>{</b>up gmap = 10 Downing Street, London<b>}</b></code><br>IMPORTANT: it is necessary to enter its APIKey in the parameters of the plugin in the form: gmap-key=apikey</p>
+
+
+</div >
+<p><label for="gmap" title="adress">gmap</label>
+<input type = "text" id="gmap" placeholder=""></p>
+<p><label for="width" title="map width">width</label>
+<input type = "text" name="width"class="w10"  placeholder="100%"></p>
+<p><label for="height" title="map height">height</label>
+<input type = "text" name="height"class="w10"  placeholder="300px"></p>
+<h4>GDPR (tarteaucitron)</h4>
+<p><label for="rgpd" title="0 for not applying the rule for RGPD/GDPR">rgpd</label>
+<select name="rgpd" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<h4>Styles CSS</h4>
+<p><label for="class" title="class">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

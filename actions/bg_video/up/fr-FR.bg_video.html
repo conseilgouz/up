@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bg_video - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-bg-video" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une video locale ou youtube en fond de site ou dans un bloc
+</p>
+<p>syntaxe :<br />fond site : <code><b>{</b>up bg-video=fichier video<b>}</b></code><br />fond bloc : <code><b>{</b>up bg-video=fichier video<b>}</b></code>content<code><b>{</b>/up bg-video<b>}</b></code></p>
+
+
+</div >
+<h4>video</h4>
+<p><label for="bg_video" title="fichier video ou ID video Youtube.">bg-video</label>
+<input type = "text" id="bg_video"class="important"  placeholder=""></p>
+<p><label for="poster" title="fichier image affich&eacute; avant chargement vid&eacute;o">poster</label>
+<input type = "text" name="poster" placeholder=""></p>
+<p><label for="mobile" title="image ou css si un appareil mobile est d&eacute;tect&eacute;">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<h4>paramètres de la vidéo</h4>
+<p><label for="bg-position" title="50% 50% = position poster et video">bg-position</label>
+<input type = "text" name="bg-position"class="w30"  placeholder="50% 50%"></p>
+<p><label for="bg-ratio" title="proportion de la video">bg-ratio</label>
+<input type = "text" name="bg-ratio"class="w20"  placeholder="16/9"></p>
+<p><label for="bg-overlay" title="calque superpos&eacute; &agrave; l&#039;image de fond (png, opacit&eacute;, RGBA, CSS)">bg-overlay</label>
+<input type = "text" name="bg-overlay" placeholder=""></p>
+<p><label for="bg-color" title="couleur de fond sous la vid&eacute;o lors chargement">bg-color</label>
+<input type = "color" name="bg-color" title="" value="#feffff"></p>
+<h4>transparence du contenu de la page</h4>
+<p><label for="page-selector" title="bloc sur contenu">page-selector</label>
+<input type = "text" name="page-selector" placeholder=""></p>
+<p><label for="page-overlay" title="background de page-selector (png, opacit&eacute;, RGBA, CSS)">page-overlay</label>
+<input type = "text" name="page-overlay" placeholder=""></p>
+<h4>options secondaires</h4>
+<p><label for="center" title="style et classe pour centrage vertical du contenu entre shortcodes">center</label>
+<input type = "text" name="center" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="classes et style inline pour bloc cr&eacute;&eacute;">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classes pour bloc cr&eacute;&eacute; (deprecated)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>gestion tarteaucitron</h4>
+<p><label for="height" title="hauteur d&#039;une video Youtube ou Vimeo avec tarteaucitron">height</label>
+<input type = "text" name="height" placeholder="400px"></p>
+<p><label for="rgpd" title="0 pour ne pas appliquer la r&egrave;gle pour le RGPD">rgpd</label>
+<input type = "text" name="rgpd" placeholder="1"></p>
+</body>
+</html >

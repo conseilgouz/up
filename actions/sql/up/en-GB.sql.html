@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>sql - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-sql" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>SQL query with formatting and sorting</p>
+<p>syntax : <code><b>{</b>up sql=tablename | ...<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>modules-site</u> : </b> <b>table</b>=modules<b> | </b><b>where</b>=position = &#039;cpanel&#039;<b> | </b><b>template</b>=##title## (id: ##id##) ##publish_up##<b> | </b><b>publish_up-format</b>=date[%e %B %Y]<b> | </b><b>id-model</b>=id: %s<br><b><u>modules-admin</u> : </b> <b>table</b>=modules<b> | </b><b>id-model</b>=id: %s<br><b><u>info-resp-com</u> : </b> <b>sql</b>=#__users<b> | </b><b>select</b>=#__users.name<b> | </b><b>innerjoin</b>=#__user_usergroup_map ON #__user_usergroup_map.user_id = #__users.id<b> | </b><b>where</b>=#__user_usergroup_map.group_id=##variable-1##<b> | </b><b>setlimit</b>=1
+</div >
+<p><label for="sql" title="table name">sql</label>
+<input type = "text" id="sql"class="w20 important"  title="" placeholder="" list="combo_sql"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_sql">
+<option value=""></option>
+<option value="modules-site">modules-site</option>
+<option value="modules-admin">modules-admin</option>
+<option value="info-resp-com">info-resp-com</option>
+</datalist></p>
+<p><label for="select" title="column lists">select</label>
+<input type = "text" name="select" placeholder="*"></p>
+<p class="hr-top"><label for="where" title="where condition">where</label>
+<input type = "text" name="where"class="hr-top"  placeholder=""></p>
+<p><label for="order" title="order condition">order</label>
+<input type = "text" name="order" placeholder=""></p>
+<p><label for="group" title="group condition">group</label>
+<input type = "text" name="group" placeholder=""></p>
+<p><label for="innerjoin" title="innerjoin condition">innerjoin</label>
+<input type = "text" name="innerjoin" placeholder=""></p>
+<p><label for="outerjoin" title="outerjoin condition">outerjoin</label>
+<input type = "text" name="outerjoin" placeholder=""></p>
+<p><label for="leftjoin" title="leftjoin condition">leftjoin</label>
+<input type = "text" name="leftjoin" placeholder=""></p>
+<p><label for="rightjoin" title="rightjoin condition">rightjoin</label>
+<input type = "text" name="rightjoin" placeholder=""></p>
+<p><label for="setlimit" title="setlimit condition">setlimit</label>
+<input type = "text" name="setlimit" placeholder=""></p>
+<p><label for="variable-*" title="remplace ##variable-X## dans les options ci-dessus">variable-*</label>
+<input type = "text" name="variable-*" placeholder=""></p>
+<h4>database information</h4>
+<p><label for="dbinfos" title="if empty=table list, if table_name=column list">dbinfos</label>
+<input type = "text" name="dbinfos" placeholder=""></p>
+<p><label for="no-prefix-auto" title="use the table name without adding the prefix #__">no-prefix-auto</label>
+<input type = "text" name="no-prefix-auto" placeholder="0"></p>
+<h4>formatting of the result</h4>
+<p class="hr-top"><label for="presentation" title="presentation of the result : list,table,div or 0">presentation</label>
+<select name="presentation"class="hr-top"  title="table" placeholder="table" value="table">
+<option value=""></option>
+<option value="table" selected>table</option>
+<option value="list">list</option>
+<option value="div">div</option>
+<option value="0">0</option>
+</select></p>
+<p><label for="template" title="layout template">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<p><label for="header" title="1 or empty to use keywords, otherwise titles separated by semicolons">header</label>
+<input type = "text" name="header" placeholder=""></p>
+<p><label for="overflow" title="For table presentation : 0 so as not to encapsulate the table in a div for overflow. Useful if use of a responsive action">overflow</label>
+<input type = "text" name="overflow" placeholder="1"></p>
+<p><label for="sort" title="column sort type in the form: i,3-f-s. i:int, s:string, f:float. ,3 indicates a secondary sort on the 3rd column">sort</label>
+<input type = "text" name="sort" placeholder=""></p>
+<p><label for="sort-first" title="name or position of the column sorted first">sort-first</label>
+<input type = "text" name="sort-first"class="w20"  placeholder=""></p>
+<p><label for="col" title="alignment and width of the columns in the form x-D-C5-100. for nothing-right-center : 5%-100% (see doc)">col</label>
+<input type = "text" name="col"class="w20"  placeholder=""></p>
+<p><label for="no-content-html" title="text if the query returns no result">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="aucun résultat"></p>
+<h4>CSS style to display the result</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-class" title="up class(es) for block">main-class</label>
+<input type = "text" name="main-class" placeholder="up"></p>
+<p><label for="main-style" title="inline style for block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p class="hr-top"><label for="item-class" title="class(es) for item">item-class</label>
+<input type = "text" name="item-class"class="hr-top"  placeholder=""></p>
+<p><label for="item-style" title="inline style for item">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

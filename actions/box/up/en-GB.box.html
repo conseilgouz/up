@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>box - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-box" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a box with a title, subtitle, image, content and action</p>
+<p>syntax: <code><b>{</b>up box=model<b>}</b></code>HTML content<code><b>{</b>/up box<b>}</b></code></p>
+<div><b>&#x1F199; WEBMASTER NOTES</b></div><div>Liste des modèles disponibles : info, trombi, pricelist</div>
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>error</u> : </b> <b>title</b>=ERREUR<b> | </b><b>image</b>=images/actions-demo/box/error.png<b> | </b><b>image-class</b>=left<b> | </b><b>class</b>=bd2 bd-arrondi bd-rouge bg-jauneClair<b> | </b><b>title-class</b>=m0 bg-rouge t-jaune b raz notoc<b> | </b><b>title-style</b>=padding: 0 10px 5px<b> | </b><b>body-style</b>=padding: 0 10px<b> | </b><b>template</b>=##image## ##title## ##body## ##content## ##/body##<br><b><u>lomart-chip</u> : </b> <b>box</b>=chip<b> | </b><b>title</b>=Lomart<b> | </b><b>image</b>=images/lomart.jpg<b> | </b><b>link</b>=//lomart.fr<b> | </b><b>link-target</b>=_blank<b> | </b><b>title-link-class</b>=t-blanc t-hover-jaune<b> | </b><b>class</b>=bg-brun t-blanc<b> | </b><b>image-class</b>=bd-blanc bd2 bd-hover-jaune<br><b><u>up-news</u> : </b> <b>box</b>=image<b> | </b><b>class</b>=mb1<b> | </b><b>title-class</b>=raz<b> | </b><b>image-class</b>=maxh100<b> | </b><b>action-style</b>=border:none<b> | </b><b>action</b>=En savoir +<br><b><u>action-lign</u> : </b> <b>template</b>=[div class=&#039;fg-row fg-gap&#039;][div class=&#039;fg-c10 fg-cs12&#039;]##content##[/div][a class=&#039;fg-c2 fg-cs12 fg-row fg-center fg-vcenter btn btn-primary&#039; style=&#039;display:grid&#039; href=&quot;##link##&quot; target=&#039;##target##&#039;]##action-text##[/a][/div]<b> | </b><b>action</b>=Ex&eacute;cuter<b> | </b><b>link-target</b>=_blank<br><b><u>img-right-bando-site-up</u> : </b> <b>box</b>=img-right-bando<b> | </b><b>title-tag</b>=h2<b> | </b><b>head-class</b>=bg-jauneClair;border:2px solid #333
+</div >
+<p><label for="box" title="model [note, info, ...] or prefset">box</label>
+<input type = "text" id="box" title="" placeholder="" list="combo_box"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_box">
+<option value=""></option>
+<option value="error">error</option>
+<option value="lomart-chip">lomart-chip</option>
+<option value="up-news">up-news</option>
+<option value="action-lign">action-lign</option>
+<option value="img-right-bando-site-up">img-right-bando-site-up</option>
+<option value="badge">badge</option>
+<option value="bg-image-only">bg-image-only</option>
+<option value="chip">chip</option>
+<option value="citation">citation</option>
+<option value="crazy">crazy</option>
+<option value="cutout">cutout</option>
+<option value="danger">danger</option>
+<option value="image">image</option>
+<option value="info">info</option>
+<option value="note">note</option>
+<option value="onimage-card">onimage-card</option>
+<option value="onimage">onimage</option>
+<option value="paper">paper</option>
+<option value="pricelist">pricelist</option>
+<option value="profile">profile</option>
+<option value="rainbow">rainbow</option>
+<option value="trombi">trombi</option>
+</datalist></p>
+<p><label for="template" title="format string with keywords : ##title##, ##subtitle##, ##content##, ...">template</label>
+<input type = "text" name="template" placeholder="##head## ##title-link## ##subtitle## ##image## ##/head## ##content## ##action-link##"></p>
+<p class="hr-top"><label for="multibox" title="number of blocks on the same line (desktop-tablet-mobile)">multibox</label>
+<input type = "text" name="multibox"class="w20 hr-top"  placeholder="3-2-1"></p>
+<p><label for="multibox-class" title="class(es) for the external block">multibox-class</label>
+<input type = "text" name="multibox-class" placeholder="fg-vspace-between-1"></p>
+<p><label for="multibox-style" title="CSS style for the external block">multibox-style</label>
+<input type = "text" name="multibox-style" placeholder=""></p>
+<h4>box</h4>
+<p class="hr-top"><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="class(es) for the box">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for the box">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>title</h4>
+<p class="hr-top"><label for="title" title="title. If empty and requested: we take the first hx of the content">title</label>
+<input type = "text" name="title"class="hr-top"  placeholder=""></p>
+<p><label for="title-tag" title="title tag">title-tag</label>
+<input type = "text" name="title-tag"class="w10"  placeholder="h4"></p>
+<p><label for="title-class" title="class user for title">title-class</label>
+<input type = "text" name="title-class" placeholder=""></p>
+<p><label for="title-style" title="inline style for title">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<p><label for="title-link-class" title="class user for title with link">title-link-class</label>
+<input type = "text" name="title-link-class" placeholder=""></p>
+<p><label for="title-link-style" title="inline style for title with link">title-link-style</label>
+<input type = "text" name="title-link-style" placeholder=""></p>
+<h4>subtitle</h4>
+<p class="hr-top"><label for="subtitle" title="subtitle">subtitle</label>
+<input type = "text" name="subtitle"class="hr-top"  placeholder=""></p>
+<p><label for="subtitle-tag" title="subtitle tag">subtitle-tag</label>
+<input type = "text" name="subtitle-tag"class="w10"  placeholder="h5"></p>
+<p><label for="subtitle-class" title="class user for subtitle">subtitle-class</label>
+<input type = "text" name="subtitle-class" placeholder=""></p>
+<p><label for="subtitle-style" title="inline style for subtitle">subtitle-style</label>
+<input type = "text" name="subtitle-style" placeholder=""></p>
+<p><label for="subtitle-link-class" title="class user for subtitle with link">subtitle-link-class</label>
+<input type = "text" name="subtitle-link-class" placeholder=""></p>
+<p><label for="subtitle-link-style" title="inline style for subtitle with link">subtitle-link-style</label>
+<input type = "text" name="subtitle-link-style" placeholder=""></p>
+<h4>image</h4>
+<p class="hr-top"><label for="image" title="image. If empty and requested: we take the first image of the content">image</label>
+<input type = "text" name="image"class="hr-top"  placeholder=""></p>
+<p><label for="image-alt" title="alternative text for the image. By default, the humanized name of the file">image-alt</label>
+<input type = "text" name="image-alt" placeholder=""></p>
+<p><label for="image-class" title="class user for image">image-class</label>
+<input type = "text" name="image-class" placeholder=""></p>
+<p><label for="image-style" title="inline style for image">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="image-link-class" title="class user for image with link">image-link-class</label>
+<input type = "text" name="image-link-class" placeholder=""></p>
+<p><label for="image-link-style" title="inline style for image with link">image-link-style</label>
+<input type = "text" name="image-link-style" placeholder=""></p>
+<h4>action</h4>
+<p class="hr-top"><label for="action" title="text of the action button">action</label>
+<input type = "text" name="action"class="hr-top"  placeholder=""></p>
+<p><label for="action-tag" title="divform of the action button">action-tag</label>
+<input type = "text" name="action-tag"class="w10"  placeholder="div"></p>
+<p><label for="action-class" title="class user for action">action-class</label>
+<input type = "text" name="action-class" placeholder=""></p>
+<p><label for="action-style" title="inline style for action">action-style</label>
+<input type = "text" name="action-style" placeholder=""></p>
+<p><label for="action-link-class" title="class user for action with link">action-link-class</label>
+<input type = "text" name="action-link-class" placeholder=""></p>
+<p><label for="action-link-style" title="inline style for action with link">action-link-style</label>
+<input type = "text" name="action-link-style" placeholder=""></p>
+<h4>link</h4>
+<p class="hr-top"><label for="link" title="If empty and requested: we take the first link on title or image">link</label>
+<input type = "text" name="link"class="hr-top"  placeholder=""></p>
+<p><label for="link-target" title="_blank for new window">link-target</label>
+<input type = "text" name="link-target"class="w10"  title="" placeholder="" list="combo_link-target"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_link-target">
+<option value=""></option>
+<option value="_blank">_blank</option>
+<option value="_self">_self</option>
+</datalist></p>
+<h4>header</h4>
+<p class="hr-top"><label for="head-class" title="class for the header block. usually title, subtitle, image">head-class</label>
+<input type = "text" name="head-class"class="hr-top"  placeholder=""></p>
+<p><label for="head-style" title="style for the header block">head-style</label>
+<input type = "text" name="head-style" placeholder=""></p>
+<h4>body</h4>
+<p class="hr-top"><label for="body-class" title="class for the block. generally happy and active">body-class</label>
+<input type = "text" name="body-class"class="hr-top"  placeholder=""></p>
+<p><label for="body-style" title="style for the block. generally happy and active">body-style</label>
+<input type = "text" name="body-style" placeholder=""></p>
+<h4>general</h4>
+<p><label for="css-head" title="CSS style inserted in the HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p class="hr-top"><label for="align-vertical" title="fg-vspace-between-1type of vertical distribution in multiboxcss-head=">align-vertical</label>
+<input type = "text" name="align-vertical"class="w20 hr-top"  title="fg-vspace-between-1" placeholder="fg-vspace-between-1" list="combo_align-vertical"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_align-vertical">
+<option value=""></option>
+<option value="fg-vspace-between-1">fg-vspace-between-1</option>
+</datalist></p>
+</body>
+</html >

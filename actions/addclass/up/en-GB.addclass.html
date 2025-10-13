@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addclass - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addclass" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>adds a class to a CSS selector (default body)</p>
+<p>It is possible:<br>- to target a parent of the CSS selector<br>- to create the CSS rule with the option 'base-css=.foo<b>[</b>color:red]'.<br>syntax : <code><b>{</b>up addclass=class_name<b>}</b></code><br>Use : change the background image from an article</p>
+
+
+</div >
+<p><label for="addclass" title="class name added to the tag">addclass</label>
+<input type = "text" id="addclass" placeholder=""></p>
+<p><label for="selector" title="target beacon. Do not forget the point for a class or the # for an ID">selector</label>
+<input type = "text" name="selector"class="w20"  placeholder="body"></p>
+<p><label for="parent" title="1 to target selector&#039;s parent, 2 for grandfather, ...">parent</label>
+<input type = "number" name="parent" min="1" max="6" size="2" placeholder=""></p>
+<h4>secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="CSS code for head. Warning, use[] instead of {}">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="filter" title="conditions. See doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

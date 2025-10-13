@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_serie - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-serie" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Return a series of elements as arguments of an action</p>
+<p>syntaxe <code><b>{</b>up lorem-serie=liste_or_num_alpha_alphanum | maxi=x<b>}</b></code></p>
+
+
+</div >
+<p><label for="lorem_serie" title="list comma separator or keyword: NUM, ALPHA, ALPHANUM">lorem-serie</label>
+<input type = "text" id="lorem_serie" placeholder=""></p>
+<p><label for="maxi" title="number of returned elements">maxi</label>
+<input type = "number" name="maxi"class="min:1, max:99"  placeholder="1"></p>
+<p><label for="format" title="PHP function: strtolower, strtoupper, ucfirst">format</label>
+<select name="format" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="strtolower">strtolower</option>
+<option value="strtoupper">strtoupper</option>
+<option value="ucfirst">ucfirst</option>
+</select></p>
+<h4>Main block</h4>
+<p><label for="main-tag" title="tag of the main block. None by default">main-tag</label>
+<input type = "text" name="main-tag"class="w5"  placeholder="0"></p>
+<p><label for="main-id" title="ID in the form up-idArticle-posShortcode">main-id</label>
+<select name="main-id" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="main-style" title="class(es) or inline style for the block">main-style</label>
+<input type = "text" name="main-style"class="w70"  placeholder=""></p>
+<h4>the returned elements</h4>
+<p><label for="item-tag" title="tag of the items. 0 for raw values separated by item-sep">item-tag</label>
+<input type = "text" name="item-tag"class="w5"  placeholder="div"></p>
+<p><label for="item-style" title="class(es) or inline style for the item">item-style</label>
+<input type = "text" name="item-style"class="w70"  placeholder=""></p>
+<p><label for="item-id" title="counter prefix to identify the item">item-id</label>
+<input type = "text" name="item-id"class="w20"  placeholder=""></p>
+<p><label for="item-sep" title="if item-tag=0, the separator between the items">item-sep</label>
+<input type = "text" name="item-sep"class="w10"  placeholder=";"></p>
+<h4>Miscellaneous</h4>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

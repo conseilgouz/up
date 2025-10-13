@@ -1,0 +1,68 @@
+
+
+$bg-color : #eed;
+$border-color : #bbb;
+$shadow-color : #000;
+
+[data-popover]{
+    cursor:help;
+}
+
+.gpopover {
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+    border-color: rgba($shadow-color, 0.2);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba($shadow-color, 0.1);
+    display: none;
+    padding: 12px;
+    position: absolute;
+    z-index: 998;
+    max-width: 95%; // pour mobile
+    .gpopover-arrow {
+        border: 8px solid transparent;
+        border-bottom-color: $bg-color;
+        border-top-width: 0;
+        height: 0;
+        position: absolute;
+        width: 0;
+        z-index: 999;
+        &.bottom {
+            border-top-width:8px;
+            border-bottom-width:0;
+            border-top-color: $bg-color;
+        }
+    }
+    .gpopover-arrow-shadow {
+        border: 8px solid transparent;
+        border-bottom-color: $bg-color;
+        border-bottom-color: rgba($shadow-color, 0.275);
+        border-top-width: 0;
+        height: 0;
+        position: absolute;
+        width: 0;
+        z-index: 997;
+        &.bottom {
+            border-top-width:8px;
+            border-bottom-width:0;
+            border-top-color: rgba($shadow-color, 0.275);
+            border-bottom-color: transparent;
+        }
+    }
+}
+
+/* exemple  pour créer une autre couleur de fond incluant la fleche
+   il faut ajouter la classe à l'option pop-class
+
+$bg-color-yellow : #eea;
+
+.gpopover-yellow {
+    background-color: $bg-color-yellow;
+    .gpopover-arrow {
+        border-bottom-color: $bg-color-yellow;
+        &.bottom {
+            border-top-color: $bg-color-yellow;
+        }
+    }
+}    
+*/

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>qrcode - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-qrcode" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Generates QRCodes with Google API</p>
+<p>syntax : <code><b>{</b>up qrcode=type | xxx=...<b>}</b></code></p>
+
+
+</div >
+<p><label for="qrcode" title="type of QRCode : text/url/sms/email/phone/location/wifi/contact">qrcode</label>
+<select id="qrcode"class="important"  title="text" placeholder="text" value="text">
+<option value=""></option>
+<option value="text" selected>text</option>
+<option value="url">url</option>
+<option value="sms">sms</option>
+<option value="email">email</option>
+<option value="phone">phone</option>
+<option value="location">location</option>
+<option value="wifi">wifi</option>
+<option value="contact">contact</option>
+</select></p>
+<h4>QRCode style</h4>
+<p><label for="size" title="Dimension of a side">size</label>
+<input type = "number" name="size"class="w10"  min="10" max="500" step="10" placeholder="200"></p>
+<p><label for="margin" title="Space around QR image">margin</label>
+<input type = "text" name="margin" placeholder=""></p>
+<p><label for="light" title="Hexadecimal code for the background color of the QRcode. ex: FFFFFF = white">light</label>
+<input type = "text" name="light" placeholder=""></p>
+<p><label for="dark" title="Hexadecimal QRcode color code. ex: 000000 = black">dark</label>
+<input type = "text" name="dark" placeholder=""></p>
+<p><label for="centerImageUrl" title="Absolute URL to image in the center of the qrcode">centerImageUrl</label>
+<input type = "text" name="centerImageUrl" placeholder=""></p>
+<p><label for="centerImageSizeRatio" title="ratio image / qrcode. default 0.3">centerImageSizeRatio</label>
+<input type = "text" name="centerImageSizeRatio" placeholder=""></p>
+<p><label for="centerImageWidth" title="Width of central image in pixels">centerImageWidth</label>
+<input type = "text" name="centerImageWidth" placeholder=""></p>
+<p><label for="centerImageHeight" title="Height of central image in pixels">centerImageHeight</label>
+<input type = "text" name="centerImageHeight" placeholder=""></p>
+<h4>Types of content</h4>
+<p><label for="name" title="Name for contact">name</label>
+<input type = "text" name="name"class=""  placeholder=""></p>
+<p><label for="text" title="Free text for text, SMS, email, contact">text</label>
+<input type = "text" name="text" placeholder=""></p>
+<p><label for="phone" title="Phone number for sms, tel, contact">phone</label>
+<input type = "text" name="phone" placeholder=""></p>
+<p><label for="url" title="website for url, contact">url</label>
+<input type = "text" name="url" placeholder=""></p>
+<p><label for="email" title="Email address for email, contact">email</label>
+<input type = "text" name="email" placeholder=""></p>
+<p><label for="subject" title="suject for email">subject</label>
+<input type = "text" name="subject" placeholder=""></p>
+<p><label for="latitude" title="for geo">latitude</label>
+<input type = "text" name="latitude" placeholder=""></p>
+<p><label for="longitude" title="for geo">longitude</label>
+<input type = "text" name="longitude" placeholder=""></p>
+<p><label for="address" title="adress for contact">address</label>
+<input type = "text" name="address" placeholder=""></p>
+<p><label for="ssid" title="name of wifi access-point">ssid</label>
+<input type = "text" name="ssid" placeholder=""></p>
+<p><label for="auth" title="type of wifi-key : WPA or WEP">auth</label>
+<input type = "text" name="auth"class="w10"  placeholder="WPA"></p>
+<p><label for="password" title="key for wifi access-point">password</label>
+<input type = "text" name="password" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="alt" title="Alternative text, if the qrcode is not displayed">alt</label>
+<input type = "text" name="alt" placeholder=""></p>
+<p><label for="encoding" title="Character encoding (UTF-8)">encoding</label>
+<input type = "text" name="encoding"class="w10"  placeholder="UTF-8"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="Class(s) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="Inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (added in the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addhtml - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addhtml" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Inserts HTML code to a position of the article</p>
+<p>syntax 1  <code><b>{</b>up addhtml=code HTML | selector=.foo | parent=2<b>}</b></code>
+syntax 2  <code><b>{</b>up addhtml | selector=.foo | parent=2<b>}</b></code>code HTML<code><b>{</b>/up addhtml<b>}</b></code>
+ 
+Example : <code><b>{</b>up addhtml={up icon=star<b>}</b></code> | selector=.header-page > h1 | parent=2}</p>
+
+
+</div >
+<p><label for="addhtml" title="HTML content to add. BBcode admitted">addhtml</label>
+<input type = "text" id="addhtml" placeholder=""></p>
+<p><label for="selector" title="CSS selector Reference for insertion">selector</label>
+<input type = "text" name="selector"class="w75"  placeholder=""></p>
+<p><label for="parent" title="parent level compared to selector or so empty in the position of shortcode">parent</label>
+<input type = "number" name="parent" min="0" max="10" placeholder="0"></p>
+<p><label for="position" title="Insertion position in relation to the selector : beforebegin, afterbegin, beforeend ou afterend">position</label>
+<select name="position" title="beforebegin" placeholder="beforebegin" value="beforebegin">
+<option value=""></option>
+<option value="beforebegin" selected>beforebegin</option>
+<option value="afterbegin">afterbegin</option>
+<option value="beforeend">beforeend</option>
+<option value="afterend">afterend</option>
+</select></p>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="id" title="identifier">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

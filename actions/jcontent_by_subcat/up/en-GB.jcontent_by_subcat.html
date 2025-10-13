@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_by_subcat - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-by-subcat" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of articles by one or more category</p>
+<p>syntaxe 1 : <code><b>{</b>up jcontent-by-subcat=id-categorie<b>}</b></code><br>  Articles in a category and subcategories<br>syntaxe 2 : <code><b>{</b>up jcontent-by-subcat<b>}</b></code><br>  Articles in the current category and its subcategories<br>syntaxe 3 : <code><b>{</b>up jcontent-by-subcat=0<b>}</b></code><br>  Articles from all categories<br>syntaxe 4 : <code><b>{</b>up jcontent-by-subcat<b>}</b></code>##title##<code><b>{</b>/up jcontent-by-subcat<b>}</b></code><br>  Variant: Template for items between shortcodes<br>keywords Article:<br>-----------------<br>##title## ##title-link## ##subtitle## ##link##<br>##intro## ##intro-text## ##intro-text,100## ##content##<br>##image## ##image-src## ##image-alt##<br>##date-crea## ##date-modif## ##date-publish##<br>##author## ##note## ##cat## ##new## ##featured##  ##hits## ##tags-list##<br>keywords categorie:<br>------------------<br>##catpath## : Categories path from the root category.<br>  Ex: if we ask for category 2 with 3 levels (subcat=3): 2.1 > 2.1.1 > 2.1.1.1<br>##title## ##title-link##  ##link## : titre et lien de la categorie<br>##alias## ##id## ##nb## : Number of items in the category</p>
+
+
+</div >
+<h4>Selection of categories</h4>
+<p><label for="jcontent_by_subcat" title="ID categorie, empty for that of the current article or 0 for all">jcontent-by-subcat</label>
+<input type = "text" id="jcontent_by_subcat" placeholder=""></p>
+<p><label for="exclude" title="list of id&#039;s for categories not included">exclude</label>
+<input type = "text" name="exclude" placeholder=""></p>
+<p><label for="cat-level" title="0 a 99 - maximum level of sub-categories explored">cat-level</label>
+<input type = "text" name="cat-level" placeholder="99"></p>
+<h4>filtering and sorting articles</h4>
+<p><label for="maxi" title="Maximum number of items in each category. Empty = all">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="current" title="1 to include the current article">current</label>
+<select name="current" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="content-plugin" title="support for content plugins for ##into and ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="no-published" title="Also lists unpublished articles">no-published</label>
+<select name="no-published" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="author" title="filter on author: : list of id user ou article, current">author</label>
+<input type = "text" name="author" placeholder=""></p>
+<p><label for="sort-by" title="article sort by : title, ordering, created, modified, publish_up, id, hits">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="ordering">ordering</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish_up">publish_up</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+</select></p>
+<p><label for="sort-order" title="sort order : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<h4>Categories display settings</h4>
+<p><label for="cat-template" title="template for category lines">cat-template</label>
+<input type = "text" name="cat-template" placeholder="[small]##catpath##[/small] [b]##title##[/b]"></p>
+<p class="hr-top"><label for="cat-tag" title="tag for line category. LI to switch to list format UL/LI">cat-tag</label>
+<input type = "text" name="cat-tag"class="w10 hr-top"  placeholder="h5"></p>
+<p><label for="cat-class" title="class for category lign">cat-class</label>
+<input type = "text" name="cat-class" placeholder=""></p>
+<p><label for="cat-style" title="style for category lign">cat-style</label>
+<input type = "text" name="cat-style" placeholder=""></p>
+<p class="hr-top"><label for="cat-separator" title="to separate the categories tree">cat-separator</label>
+<input type = "text" name="cat-separator"class="w10 hr-top"  placeholder="»"></p>
+<p><label for="cat-root-view" title="display the single root category. root=never, many=always">cat-root-view</label>
+<input type = "text" name="cat-root-view" placeholder="1"></p>
+<h4>Articles display settings</h4>
+<p><label for="template" title="layout model. If empty the model is the content">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<p class="hr-top"><label for="item-tag" title="tag for the block of an article">item-tag</label>
+<input type = "text" name="item-tag"class="w10 hr-top"  placeholder="div"></p>
+<p><label for="item-style" title="inline classes and styles for an article">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="inline classes and styles for an article">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>main block tag & style</h4>
+<p><label for="main-tag" title="tag for the block containing all the articles.">main-tag</label>
+<input type = "text" name="main-tag"class="w10 "  placeholder="p"></p>
+<p><label for="id" title="ID for main-tag">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-style" title="inline classes and styles for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="inline classes and styles for main block">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Format for keywords</h4>
+<p class="hr-top"><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format"class="w20 hr-top"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="location for dates. By default, the client browser.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="number of days since the creation of the article for NEW badge">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-html" title="HTML code for NEW badge">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge bg-red t-white&quot;]nouveau[/span]"></p>
+<p><label for="featured-html" title="HTML code for featured article">featured-html</label>
+<input type = "text" name="featured-html" placeholder="&amp;#x2B50"></p>
+<p class="hr-top"><label for="image-src" title="default image">image-src</label>
+<input type = "text" name="image-src"class="hr-top"  placeholder=""></p>
+<p><label for="image-alt" title="image, alternative text by default">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="text before any other tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="class or style assigned to a span tag by keyword">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder="badge;margin-right:4px"></p>
+<p><label for="tags-list-separator" title="separator between words">tags-list-separator</label>
+<input type = "text" name="tags-list-separator" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="no-content-html" title="text if no match. 0=no text">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="lang[en=No content found;fr=Aucun contenu trouvé"></p>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

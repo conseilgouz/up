@@ -1,0 +1,10 @@
+{
+  "id": "korona",
+  "url":"INVALID",
+  "url-old": "http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}",
+  "settings": {
+	"attribution": "Korona Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
+      "minZoom": 1, 
+      "maxZoom": 20
+    } 
+}

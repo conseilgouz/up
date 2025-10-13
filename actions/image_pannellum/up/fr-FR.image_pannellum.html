@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_pannellum - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-pannellum" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un panorama 3D à partir d'une image equirectangular
+</p>
+<p>syntaxe <code><b>{</b>up image_pannellum=chemin_image_equirectangular<b>}</b></code>
+ *
+ *</p>
+
+
+</div >
+<p><label for="image_pannellum" title="chemin de l&#039;image">image-pannellum</label>
+<input type = "text" id="image_pannellum"class="important"  placeholder=""></p>
+<p><label for="height" title="hauteur en px ou vh">height (px)</label>
+<input type = "number" name="height"class="w10"  unit="px" placeholder="400px"></p>
+<p><label for="width" title="largeur en px ou %">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="100%"></p>
+<p class="hr-top"><label for="fullscreen" title="1 pour autoriser la vue plein &eacute;cran">fullscreen</label>
+<select name="fullscreen"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="language" title="liste motcl&eacute; (bylineLabel,loadButtonLabel,loadingLabel) + traduction. Exemple:bylineLabel:lang[en=by %s;fr:par %s], loadingLabel:Loading...">language</label>
+<input type = "text" name="language" placeholder=""></p>
+<p><label for="options" title="liste des options suppl&eacute;mentaires . ex: showZoomCtrl:true,compass:true -  Attention au min/maj. voir &lt;a href=&quot;https://pannellum.org/documentation/reference&quot; target=&quot;_blank&quot;&gt;cette page&lt;/a&gt;">options</label>
+<input type = "text" name="options" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>paramètres Javascript pour configuration</h4>
+<p><label for="panorama" title="chemin image (il est rempli automatiquement avec l&#039;argument principal du shortcode)">panorama</label>
+<input type = "text" name="panorama"class="inactif"  placeholder=""></p>
+<p><label for="preview" title="chemin image preview">preview</label>
+<input type = "text" name="preview" placeholder=""></p>
+<p><label for="type" title="type de l&#039;image">type</label>
+<input type = "text" name="type" placeholder="equirectangular"></p>
+<p><label for="title" title="titre. pseudo BBCode et traduction acceptes">title</label>
+<input type = "text" name="title" placeholder=""></p>
+<p><label for="author" title="auteur. pseudo BBCode et traduction acceptes">author</label>
+<input type = "text" name="author" placeholder=""></p>
+<p><label for="authorURL" title="lien vers site auteur">authorURL</label>
+<input type = "text" name="authorURL" placeholder=""></p>
+<p><label for="autoLoad" title="chargement auto de l&#039;image">autoLoad</label>
+<select name="autoLoad" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="autoRotate" title="rotation nombre de degr&eacute;s par seconde">autoRotate</label>
+<select name="autoRotate" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="showControls" title="0 pour masquer tous les boutons">showControls</label>
+<select name="showControls" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="showZoomCtrl" title="0 pour masquer les boutons +/- du zoom">showZoomCtrl</label>
+<select name="showZoomCtrl" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="showFullscreenCtrl" title="0 pour masquer le bouton plein &eacute;cran">showFullscreenCtrl</label>
+<select name="showFullscreenCtrl" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="hotSpotDebug" title="1 pour afficher les coordonn&eacute;es hotspot dans la console">hotSpotDebug</label>
+<select name="hotSpotDebug" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+</body>
+</html >

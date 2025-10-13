@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_unsplash - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-unsplash" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une image aleatoire
+</p>
+<p>Syntaxe :  <code><b>{</b>up lorem-unsplash=#image | width=xx | height=xx <b>}</b></code><br />rechercher n° image sur https://picsum.photos/images</p>
+
+
+</div >
+<p><label for="lorem_unsplash" title="n&deg; de l&#039;image sur https://picsum.photos/images">lorem-unsplash</label>
+<input type = "number" id="lorem_unsplash"class="w10 important"  placeholder=""></p>
+<p class="hr-top"><label for="height" title="hauteur image t&eacute;l&eacute;charg&eacute;e">height (px)</label>
+<input type = "number" name="height"class="w10 hr-top"  unit="px" placeholder="200"></p>
+<p><label for="width" title="largeur image t&eacute;l&eacute;charg&eacute;e">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="random" title="force la r&eacute;cup&eacute;ration al&eacute;atoire">random</label>
+<select name="random" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="grayscale" title="pour rendu en niveaux de gris">grayscale</label>
+<select name="grayscale" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="blur" title="rendu flou">blur</label>
+<select name="blur" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="gravity" title="recadrage : north, east, south, west, center">gravity</label>
+<select name="gravity" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="north">north</option>
+<option value="east">east</option>
+<option value="south">south</option>
+<option value="west">west</option>
+<option value="center">center</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classes et styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

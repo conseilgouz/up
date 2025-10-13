@@ -1,0 +1,47 @@
+// ===== BADGE 
+
+/*
+template="##title-link## ##subtitle## ##image## ##content## ##action-link##"
+*/
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+$bg-title: #333;
+$bg-content: #eee;
+$radius:4px;
+$border:#bbb 1px solid;
+
+.up-box-badge {
+    position:relative;
+    background-color: $bg-content;
+    border:$border;
+    border-radius:$radius;
+    padding: 20px 20px 0;
+    margin-top: 20px;  // compense le top 10px
+    .up-box-title {
+        position:absolute;
+        top:-20px; left:20px;
+        display:inline-block;
+        width: auto;
+        margin-bottom:0;
+        border:0 none;
+        border-radius:$radius;
+        padding: 0 10px;
+        background-color: $bg-title;
+        color:#fff;
+        a {color:$bg-content}
+    }
+    .up-box-action {
+        text-align: right;
+        padding: 0 0 15px;
+        a {        
+            background-color: $bg-title;
+            color:#fff;
+            padding:5px;
+            border-radius:$radius;
+        }
+    }
+}

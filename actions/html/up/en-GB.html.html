@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>html - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-html" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>allows you to create an HTML entity (tag) with class(es), style and attribute without switching to mode code</p>
+<p>Syntax 1 : <code><b>{</b>up html=div | class=foo | id=x123<b>}</b></code>CONTENT<code><b>{</b>/up html<b>}</b></code>
+ --> < div id=x123 class=foo>CONTENT< /div> 
+Syntax 2 : <code><b>{</b>up html=img | class=foo;border:1px red solid | src=images/img.jpg<b>}</b></code>
+ --> < img class=foo style=1px red solid src=images/img.jpg >
+<i> note: all options are considered attributes of the tag</i>
+Syntax 3 : <code><b>{</b>up html=h1.foo.xx<b>}</b></code> equals <code><b>{</b>up html=h1 | class=foo xx<b>}</b></code>
+</p>
+
+
+</div >
+<p><label for="html" title="html tag">html</label>
+<input type = "text" id="html"class="w20"  placeholder="div"></p>
+<p><label for="id" title="Specific ID">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="xxx" title="attribute-value pair (title=the title)">xxx</label>
+<input type = "text" name="xxx"class="w20 attention"  placeholder="yyy"></p>
+</body>
+</html >

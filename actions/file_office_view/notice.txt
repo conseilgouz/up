@@ -1,0 +1,7 @@
+Quelques considérations :
+- Sécurité. Les actes sont publics. De plus, il me semble que MS Office Viewer stocke une copie temporaire de votre document pour que cela fonctionne. C'est un risque.
+- Ne fonctionne pas avec localhost. MS Office Viewer nécessite un domaine et un hébergement valides.
+- Vous devrez peut-être encoder l'URL src afin qu'elle puisse gérer les espaces et autres symboles dans le nom de fichier.
+
+
+<iframe src="https://stackoverflow.com/questions/7101080/Chapter1.pptx">Your browser does not support.</iframe>

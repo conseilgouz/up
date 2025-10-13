@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv2def - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv2def" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Conversion d'un contenu au format CSV en liste de définition (DL/DT/DD)
+</p>
+<p>1/  <code><b>{</b>up csv2def=emplacement-fichier<b>}</b></code> // le contenu est lu dans un fichier<br />2/  <code><b>{</b>up csv2def<b>}</b></code><br /><b>[</b>=item=]definition<br /><b>[</b>=item1; "item;2"; ...=]<br />definition1<br /><code><b>{</b>===<b>}</b></code><br />definition 2<br /><code><b>{</b>/up csv2def<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>changelog</u> : </b> <b>model</b>=flex<b> | </b><b>term-class</b>=b fg-vspace-center tc<b> | </b><b>class</b>=m-child-raz-1
+</div >
+<p><label for="csv2def" title="chemin vers fichier &agrave; afficher">csv2def</label>
+<input type = "text" id="csv2def"class="important"  title="" placeholder="" list="combo_csv2def"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_csv2def">
+<option value=""></option>
+<option value="changelog">changelog</option>
+</datalist></p>
+<p><label for="separator" title="s&eacute;parateur des colonnes (fichier uniquement)">separator</label>
+<input type = "text" name="separator"class="w10"  title=";" placeholder=";" list="combo_separator"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_separator">
+<option value=""></option>
+<option value=",">,</option>
+<option value=";">;</option>
+</datalist></p>
+<p><label for="HTML" title="pour fichier (contenu CSV): 0=affiche le rendu, 1=affiche le code ou liste des tags conserv&eacute;s (strip_tags)">HTML</label>
+<input type = "text" name="HTML"class="w50"  placeholder="0"></p>
+<p><label for="model" title="stack: empile par d&eacute;faut. flex: sur 2 colonnes">model</label>
+<input type = "text" name="model" title="stack" placeholder="stack" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value=""></option>
+<option value="stack">stack</option>
+<option value="flex">flex</option>
+<option value="flex blue">flex blue</option>
+</datalist></p>
+<h4>Style du bloc liste de définition</h4>
+<p><label for="class" title="classe(s) pour la balise DL">class</label>
+<input type = "text" name="class"class="w20"  placeholder=""></p>
+<p><label for="style" title="style inline pour la balise DL">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style des termes définis (DT)</h4>
+<p><label for="term-class" title="classe(s) pour le bloc des termes">term-class</label>
+<input type = "text" name="term-class"class=""  placeholder=""></p>
+<p><label for="term-style" title="style pour le bloc des termes">term-style</label>
+<input type = "text" name="term-style" placeholder=""></p>
+<p><label for="term-style-separator" title="style pour s&eacute;parer les diff&eacute;rents termes">term-style-separator</label>
+<input type = "text" name="term-style-separator" placeholder=""></p>
+<h4>Style des définitions (DD)</h4>
+<p><label for="def-class" title="classe(s) pour le bloc des definitions">def-class</label>
+<input type = "text" name="def-class" placeholder=""></p>
+<p><label for="def-style" title="style pour le bloc des d&eacute;finitions">def-style</label>
+<input type = "text" name="def-style" placeholder=""></p>
+<p><label for="def-style-separator" title="style pour s&eacute;parer les diff&eacute;rentes d&eacute;finitions">def-style-separator</label>
+<input type = "text" name="def-style-separator" placeholder=""></p>
+<h4>ne concerne que le mode FLEX</h4>
+<p><label for="flex-vgap" title="espace vertical (px) entre les blocs dt/dd">flex-vgap (px)</label>
+<input type = "number" name="flex-vgap"class="w10"  min="0" max="50" unit="px" placeholder="10"></p>
+<p><label for="flex-hgap" title="espace horizontal (px) entre les blocs dt et dd">flex-hgap (px)</label>
+<input type = "number" name="flex-hgap"class="w10"  min="0" max="50" unit="px" placeholder="10"></p>
+<p><label for="flex-term-width" title="largeur en pourcentage de la colonne des termes">flex-term-width (%)</label>
+<input type = "number" name="flex-term-width"class="w10"  min="5" max="75" unit="%" placeholder="25"></p>
+<h4>options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class=" hr-top"  placeholder=""></p>
+</body>
+</html >

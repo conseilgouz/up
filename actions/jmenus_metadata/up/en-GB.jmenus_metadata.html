@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jmenus_metadata - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jmenus-metadata" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of menus with metadata</p>
+<p>syntax : <code><b>{</b>up jmenus-metadata=menutype<b>}</b></code>
+<br>KEYWORDS MENUTYPE:
+<br>##id## ##menutype## ##title## ##description##
+<br>
+<br>KEYWORDS ITEM MENU:
+<br>##id## ##title## ##title-link## ##menutype## ##note## ##access## ##language##
+<br>##level## ##type## ##home##
+<br>##image## icon ou class ?
+<br>##publish_up## ##publish_down## ##index## ##follow##
+<br>
+<br>KEYWORDS ARTICLES (v51)
+<br>##id##, ##title##, ##title-link', ##title-size##, ##alias##, ##state##, ##access##, ##featured##,
+<br>##created##, ##modified##, ##publish_up##, ##publish_down##
+<br>##catid##, ##catname##, ##language##, ##index##, ##follow##
+<br>##featured_up## ##featured_down## </p>
+
+
+</div >
+<p><label for="jmenus_metadata" title="prefset, list menutype (sep:comma) or empty for all">jmenus-metadata</label>
+<input type = "text" id="jmenus_metadata" placeholder=""></p>
+<p><label for="menutype-exclude" title="list of menutypes not included. (sep:comma)">menutype-exclude</label>
+<input type = "text" name="menutype-exclude" placeholder=""></p>
+<p><label for="menuid" title="Parent menu ID to limit to this branch">menuid</label>
+<input type = "text" name="menuid" placeholder=""></p>
+<h4>Main block tag and style</h4>
+<p><label for="main-tag" title="tag for file list">main-tag</label>
+<input type = "text" name="main-tag" placeholder="ul"></p>
+<p><label for="style" title="classes and styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="id" title="identifier">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<h4>Presentation template</h4>
+<p><label for="public-only" title="1: visible to robots, 0: visible to current user">public-only</label>
+<input type = "text" name="public-only" placeholder="0"></p>
+<p><label for="template-menutype" title="Template for menutype lines">template-menutype</label>
+<input type = "text" name="template-menutype" placeholder="[h2]##title##[/h2]"></p>
+<p><label for="template-menu" title="Template for menu lines">template-menu</label>
+<input type = "text" name="template-menu" placeholder="##state[0:icon-unpublish t-rouge,1:,-2:icon-trash t-gris] # [span class=&quot;%%&quot;] [/span] ####home[1:fa fa-home,0:] # [span]%%[/span] ####image##[b]##title-link##[/b] (id##id####language!* # - %%##) ##access!Accès public # [span class=&quot;bg-red t-white ph1&quot;]%%[/span]####menutype## / ##type## ##publish_up&gt;#now # [mark class=&quot;t-vert&quot;] publié le %% [/mark]## ##publish_down&gt;#now # [mark class=&quot;t-rouge&quot;] dépublié le %% [/mark]####index=noindex # [span class=&quot;t-red&quot;] %%[/span]## ##follow=nofollow # [span class=&quot;t-red&quot;] %%[/span]####note # [div class=&quot;t-bleu i&quot;]%%[/div]##"></p>
+<p><label for="template-article" title="Template for item lines">template-article</label>
+<input type = "text" name="template-article" placeholder="##featured[1:&amp;#x2B50;,0:] # [span]%%[/span] ####title-link## (##id##) ##access!Accès public # [span class=&quot;bg-red t-white ph1&quot;]%%[/span]## ##index=noindex # [span class=&quot;t-red&quot;] %%[/span]####follow=nofollow # [span class=&quot;t-red&quot;] %%[/span]##"></p>
+<h4>Options</h4>
+<p><label for="menu-state-show" title="list of states displayed for the menus: 0: inactive, 1: active 2: archive, -2: trash">menu-state-show</label>
+<input type = "text" name="menu-state-show" placeholder="1,0,2,-2"></p>
+<p><label for="article-state-show" title="list of states displayed for articles: 0:inactive, 1:active 2:archive, -2:trash">article-state-show</label>
+<input type = "text" name="article-state-show" placeholder="1,0,2,-2"></p>
+<p><label for="article-sort-by" title="sort : title, ordering, created, modified, publish_up, id, hits, random">article-sort-by</label>
+<input type = "text" name="article-sort-by" placeholder="title"></p>
+<p><label for="article-sort-order" title="sort order : asc, desc">article-sort-order</label>
+<input type = "text" name="article-sort-order" placeholder="asc"></p>
+<h4>Format for keywords</h4>
+<p><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format" placeholder="%d/%m/%Y"></p>
+<p><label for="date-locale" title="location for dates. By default, that of the client browser.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

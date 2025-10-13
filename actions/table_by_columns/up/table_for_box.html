@@ -1,0 +1,50 @@
+
+Essai de layout table poux les boxes
+
+<h2>Table</h2>
+<p>{up table-by-columns}</p>
+<p>{up attr=up line | tag=table | style=table-layout:fixed;}</p>
+<table>
+<tbody>
+<tr>
+<td>{up box=bg-image-only<br>| image = images/actions-demo/box/engrenage.jpg<br>| link=index.php?Itemid=1138<br>| style=bd-red minh200}</td>
+<td>{up box=bg-image-only<br>| image = images/actions-demo/box/engrenage.jpg<br>| link=index.php?Itemid=1138<br>| link-target=_blank<br>| style=bd-red minh200<br>| body-class=p2;t-rouge;fs150;b;text-shadow:0 0 10px #FF0}{up span=btn btn-primary fs200}TEXTE{/up span}{/up box}</td>
+<td>{up box=onimage<br>| title=UP en<span class="mce-nbsp-wrap" contenteditable="false"> </span>vidéo<br>| subtitle=au Joomladay<span class="mce-nbsp-wrap" contenteditable="false"> </span>2022 à<span class="mce-nbsp-wrap" contenteditable="false"> </span>Bruxelles<br>| image=images/illustrations/joomladay-2022.jpg<br>| link=#<br>| head-class=border:2px orange solid;border-radius:5px;background:#FA807266<br>| title-class=raz;notoc;text-shadow:#333 1px 0 10px<br>| subtitle-class=bg-jauneClair<br>| css-head=#id .up-box-title a[color:#EEE]}</td>
+</tr>
+<tr>
+<td>
+<p>Avec uniquement une image de fond et un lien</p>
+<pre><code class="language-markup"><b>{</b>up box=bg-image-only
+| image = images/actions-demo/box/engrenage.jpg
+| link=index.php?Itemid=1138
+| style=bd-red minh200
+<b>}</b></code></pre>
+</td>
+<td>
+<p>Avec un bouton</p>
+<pre><code class="language-markup"><b>{</b>up box=bg-image-only
+| image = images/actions-demo/box/engrenage.jpg
+| link=index.php?Itemid=1138
+| link-target=_blank
+| style=bd-red minh200
+| body-class=p2;t-rouge;fs150;b;text-shadow:0 0 10px #FF0<b>}</b>
+<b>{</b>up span=btn btn-primary fs200<b>}</b>TEXTE<b>{</b>/up span<b>}</b>
+<b>{</b>/up box<b>}</b></code></pre>
+</td>
+<td>
+<p>une box onimage</p>
+<pre><code class="language-markup"><b>{</b>up box=onimage
+| title=UP en vidéo
+| subtitle=au Joomladay 2022 à Bruxelles
+| image=images/illustrations/joomladay-2022.jpg
+| link=#
+| head-class=border:2px orange solid;border-radius:5px;background:#FA807266
+| title-class=raz;notoc;text-shadow:#333 1px 0 10px
+| subtitle-class=bg-jauneClair
+| css-head=#id .up-box-title a[color:#EEE]<b>}</b></code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p>{/up attr}</p>
+<p>{/up table-by-columns}</p>

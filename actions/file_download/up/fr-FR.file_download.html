@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_download - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-download" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Gestionnaire simple de téléchargements avec stats et protection par mot de passe
+</p>
+<p>syntaxe 1 <code><b>{</b>up file-download=dossier ou fichier<b>}</b></code><br />syntaxe 2 <code><b>{</b>up file-download=dossier ou fichier<b>}</b></code>##icon## ##filename-link##<code><b>{</b>/up file-download<b>}</b></code><br />présentation des liens :<br />##link## ##/link## ##filename-link## ##filename## ##icon## ##icon-link##<br />##hit## ##lastdownload##<br />##info##  ##size##  ##date##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>pdf-image</u> : </b> <b>class</b>=tc bd-rouge<b> | </b><b>main-tag</b>=div<b> | </b><b>item-tag</b>=0<b> | </b><b>template</b>=##icon-link##[br]##filename-link##[br](##size##)[br][small]##hit##[br]##lastdownload##[/small][br]##info##
+</div >
+<p><label for="file_download" title="fichier ou dossier">file-download</label>
+<input type = "text" id="file_download"class="important"  title="" placeholder="" list="combo_file_download"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_file_download">
+<option value=""></option>
+<option value="pdf-image">pdf-image</option>
+</datalist></p>
+<p><label for="file-mask" title="pour s&eacute;lectionner les fichiers d&#039;un dossier. ex: fic-*">file-mask</label>
+<input type = "text" name="file-mask" placeholder=""></p>
+<p><label for="file-max" title="nombre maximal de fichiers retourn&eacute;s">file-max</label>
+<input type = "text" name="file-max" placeholder="0"></p>
+<p><label for="extensions" title="extensions autoris&eacute;es">extensions</label>
+<input type = "text" name="extensions" placeholder="zip, pdf,txt,md,png,jpg,gif,svg,doc,docx,xls,xlsx,odt,ods"></p>
+<p><label for="sort-by-date" title="1 pour tri selon date des fichiers.">sort-by-date</label>
+<input type = "text" name="sort-by-date" placeholder="0"></p>
+<p><label for="sort-order" title="desc ou asc = ordre affichage">sort-order</label>
+<input type = "text" name="sort-order" placeholder="desc"></p>
+<p><label for="password" title="mot de passe pour t&eacute;l&eacute;charger le fichier">password</label>
+<input type = "text" name="password"class="w20"  placeholder=""></p>
+<p><label for="template" title="mod&egrave;le de mise en page. keywords + bbcode">template</label>
+<input type = "text" name="template" placeholder="##icon## ##filename-link## (##size## - ##date##) [small]##hit## ##lastdownload##[/small] [br]##info##"></p>
+<h4>Définition du type de liste</h4>
+<p><label for="main-tag" title="balise pour la liste des fichiers">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="main-style" title="style pour la liste des fichiers">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classes pour la liste des fichiers">main-class</label>
+<input type = "text" name="main-class" placeholder="list-none"></p>
+<h4>Définition d'une ligne pour un fichier</h4>
+<p><label for="item-tag" title="balise pour un bloc fichier">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="li"></p>
+<p><label for="item-style" title="style pour un bloc fichier">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="classes pour un bloc fichier">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<p class="hr-top"><label for="link-style" title="style pour le lien (classes admises)">link-style</label>
+<input type = "text" name="link-style"class="hr-top"  placeholder=""></p>
+<p><label for="icon" title="chemin et nom de l&#039;ic&ocirc;ne devant le lien ou taille de l&#039;ic&ocirc;ne selon extension du fichier (16 ou 32)">icon</label>
+<input type = "text" name="icon"class="w30"  title="32" placeholder="32" list="combo_icon"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_icon">
+<option value=""></option>
+<option value="32">32</option>
+<option value="16">16</option>
+</datalist></p>
+<h4>format pour les mots-clés</h4>
+<p><label for="format-date" title="&#039;d/m/Y H:i&#039; format pour la date">format-date</label>
+<input type = "text" name="format-date" placeholder="lang[en=m/d/Y H:i;fr=d/m/Y H:i]"></p>
+<p><label for="model-hit" title="pr&eacute;sentation pour ##hit##">model-hit</label>
+<input type = "text" name="model-hit" placeholder="téléchargé %s fois"></p>
+<p><label for="model-lastdownload" title="pr&eacute;sentation pour ##lastdownload##">model-lastdownload</label>
+<input type = "text" name="model-lastdownload" placeholder="dernier téléchargement le %s"></p>
+<p><label for="model-info" title="pr&eacute;sentation pour ##info##">model-info</label>
+<input type = "text" name="model-info" placeholder="%s"></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<p class="hr-top"><label for="filter" title="condition pour ex&eacute;cuter l&#039;action">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

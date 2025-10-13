@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pdf - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-pdf" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un PDF dans le contenu ou génère un bouton pour l'afficher dans une fenêtre
+</p>
+<p>Le fichier PDF peut-être hébergé sur le serveur ou ailleurs (url absolue)<br />syntaxe <code><b>{</b>up pdf=chemin du fichier PDF<b>}</b></code><br />integration libraire TurnJs http://turnjs.com/ depuis https://github.com/iberan/pdfjs-flipbook</p>
+
+
+</div >
+<p><label for="pdf" title="chemin du fichier pdf ou masque si plusieurs (v311)">pdf</label>
+<input type = "text" id="pdf"class="important"  placeholder=""></p>
+<p><label for="method" title="ou Google, Embed ... ou 0">method</label>
+<select name="method" title="PDFJS" placeholder="PDFJS" value="PDFJS">
+<option value=""></option>
+<option value="pdfjs">pdfjs</option>
+<option value="google">google</option>
+<option value="embed">embed</option>
+</select></p>
+<p><label for="maxi" title="nombre maxi de fichiers affich&eacute;s. 0 sans limite">maxi</label>
+<input type = "text" name="maxi" placeholder="0"></p>
+<p><label for="view" title="0 = masque le PDF">view</label>
+<input type = "text" name="view" placeholder="1"></p>
+<p class="hr-top"><label for="width" title="largeur iframe">width (%)</label>
+<input type = "number" name="width"class="hr-top"  max="100" unit="%" placeholder="100%"></p>
+<p><label for="height" title="hauteur iframe">height (px)</label>
+<input type = "number" name="height" max="1000" unit="px" placeholder="500px"></p>
+<h4>Gestion du lien pour télécharger le PDF</h4>
+<p><label for="download" title="1 pour afficher lien t&eacute;l&eacute;chargement">download</label>
+<select name="download" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="download-name" title="nom du fichier t&eacute;l&eacute;charg&eacute;">download-name</label>
+<input type = "text" name="download-name" placeholder=""></p>
+<p><label for="download-text" title="texte pour lien">download-text</label>
+<input type = "text" name="download-text" placeholder="en=Download %s;fr=Telecharger %s"></p>
+<p><label for="download-icon" title="image affich&eacute;e devant le lien">download-icon</label>
+<input type = "text" name="download-icon" placeholder=""></p>
+<p><label for="download-class" title="class(s) pour bouton lien seul">download-class</label>
+<input type = "text" name="download-class" placeholder=""></p>
+<p><label for="download-style" title="style inline pour bouton lien seul">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>Gestion bouton pour afficher le PDF</h4>
+<p><label for="btn" title="1 pour afficher un bouton">btn</label>
+<select name="btn" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="btn-target" title="cible : _blank, _parent, popup ou _popup">btn-target</label>
+<select name="btn-target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_parent">_parent</option>
+<option value="_self">_self</option>
+<option value="_top">_top</option>
+<option value="popup">popup</option>
+<option value="_popup">_popup</option>
+</select></p>
+<p><label for="btn-text" title="texte pour bouton">btn-text</label>
+<input type = "text" name="btn-text" placeholder="voir %s"></p>
+<p><label for="btn-icon" title="image affich&eacute;e devant le texte du bouton">btn-icon</label>
+<input type = "text" name="btn-icon" placeholder=""></p>
+<p><label for="btn-class" title="class(s) pour bouton lien seul">btn-class</label>
+<input type = "text" name="btn-class" placeholder="btn btn-primary"></p>
+<p><label for="btn-style" title="style inline pour bouton lien seul">btn-style</label>
+<input type = "text" name="btn-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="close-left" title="1=croix de fermeture en haut &agrave; gauche. 0=haut-droite par d&eacute;faut">close-left</label>
+<select name="close-left" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="flip" title="activer le mode flipbook uniquement si PDFJS">flip</label>
+<select name="flip" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="background" title="couleur fond perdu du PDF au format #rrggbb">background</label>
+<input type = "color" name="background" title="" value="#feffff"></p>
+<p><label for="zoom" title="zoom par d&eacute;faut (100%)">zoom</label>
+<input type = "text" name="zoom" placeholder=""></p>
+<p><label for="pdfjs-model" title="ou mobile (non op&eacute;rationnel)">pdfjs-model</label>
+<input type = "text" name="pdfjs-model"class="w10 inactif"  placeholder="web"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc parent">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="tag" title="balise pour bloc parent - v2.9">tag</label>
+<input type = "text" name="tag" placeholder="div"></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,34 @@
+.upvideo-box 
+	{
+	background-color: #000000;
+	text-align: center;
+	padding: 0px;
+	margin: 0px auto 0px auto;
+	width: 100%;
+	height: auto;
+	}
+
+.upvideo-box video 
+	{
+	width: 100%;
+	height: auto;
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	}
+
+.upvideo-caption 
+	{
+	color: #FFFFFF;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: center;
+	padding: 8px 5px 8px 5px;
+	}
+
+.upvideo-nosupport
+	{
+	color: #FFFFFF;
+	padding-top: 110px;
+	padding-bottom: 110px;
+	}

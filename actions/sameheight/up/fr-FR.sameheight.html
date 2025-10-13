@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>sameheight - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-sameheight" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>égalise la hauteur des enfants directs du bloc (p ou div)
+</p>
+<p>syntaxe:<br /><code><b>{</b>up sameheight<b>}</b></code><br />< div>...< /div><br />< div>...< /div><br /><code><b>{</b>/up sameheight<b>}</b></code><br />note: gestion de la largeur avec l'option "css-head" qui ajoute du code css dans le head<br />exemple: css-head=.sameheight<b>[</b>float:left;width:30%;]<br /><b style="color:red">Attention</b>: remplacer les <code><b>{</b><b>}</b></code> par <b>[</b>]</p>
+
+
+</div >
+<p><label for="sameheight" title="inutilis&eacute;">sameheight</label>
+<input type = "text" id="sameheight"class="w5 inactif"  placeholder=""></p>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style pour bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="code css libre dans le head. attention: ] au lieu de }">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

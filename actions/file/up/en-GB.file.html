@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Force the download of a file</p>
+<p>Proposes a link to a file.<br>The file can be displayed (if supported by client browser) or download may be forced with optional name change<br>A representative icon is displayed in front of the link<br>syntax : <br><code><b>{</b>up file=filename.ext | download | icon |target <b>}</b></code><br>link text<br><code><b>{</b>/up file<b>}</b></code></p>
+
+
+</div >
+<p><label for="file" title="path and name of the file to download">file</label>
+<input type = "text" id="file"class="important"  placeholder=""></p>
+<p><label for="download" title="empty or name of the file retrieved by the client">download</label>
+<input type = "text" name="download" placeholder=""></p>
+<p><label for="icon" title="path and name of the icon in front of the link or size of the icon depending on the file extension (16 or 32)">icon</label>
+<input type = "text" name="icon" placeholder="32"></p>
+<p><label for="target" title="argument or _blank if option without argument">target</label>
+<input type = "text" name="target"class="w20"  title="" placeholder="" list="combo_target"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_target">
+<option value=""></option>
+<option value="_blank">_blank</option>
+<option value="_self">_self</option>
+</datalist></p>
+<p><label for="rel" title="nofollow, noreferrer,...">rel</label>
+<input type = "text" name="rel"class="w20"  title="" placeholder="" list="combo_rel"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_rel">
+<option value=""></option>
+<option value="nofollow">nofollow</option>
+<option value="noreferrer">noreferrer</option>
+</datalist></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class(es) for tag a">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for the tag a">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

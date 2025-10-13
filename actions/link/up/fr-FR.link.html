@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>link - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-link" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un lien vers une URL, un numéro de téléphone ou un mail
+</p>
+<p>syntaxe <code><b>{</b>up link=URL | label=label | blank | class=...<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>bouton-bleu</u> : </b> <b>class</b>=p1 bg-bleuClair bd-bleu bg-hover-bleuPale t-hover-rouge
+</div >
+<p><label for="link" title="URL ou EMAIL pour l&#039;attribut href">link</label>
+<input type = "text" id="link" title="" placeholder="" list="combo_link"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_link">
+<option value=""></option>
+<option value="bouton-bleu">bouton-bleu</option>
+</datalist></p>
+<p><label for="label" title="texte alternatif pour le lien">label</label>
+<input type = "text" name="label" placeholder=""></p>
+<p><label for="blank" title="ouvre le lien dans un nouvel onglet">blank</label>
+<select name="blank" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Icône</h4>
+<p><label for="icon" title="icone affich&eacute;e devant le lien : 0=pas d&#039;ic&ocirc;ne, 1=ic&ocirc;ne par defaut, Unicode, fonticon ou image">icon</label>
+<input type = "text" name="icon" placeholder="0"></p>
+<p><label for="icon-style" title="classes et styles pour l&#039;ic&ocirc;ne">icon-style</label>
+<input type = "text" name="icon-style" placeholder=""></p>
+<p class="hr-top"><label for="icon-url" title="Icone par defaut pour les URL">icon-url</label>
+<input type = "text" name="icon-url"class="w30 hr-top"  placeholder="Ux1F517"></p>
+<p><label for="icon-phone" title="Icone par defaut pour les t&eacute;l&eacute;phone - v2.9">icon-phone</label>
+<input type = "text" name="icon-phone"class="w30"  placeholder="Ux260E"></p>
+<p><label for="icon-mail" title="Icone par defaut pour les MAIL">icon-mail</label>
+<input type = "text" name="icon-mail"class="w30"  placeholder="Ux2709"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="font-prefix" title="pour icomoon ou &#039;fa fa-&#039; pour font-awesome (a mettre dans pref.ini)">font-prefix</label>
+<input type = "text" name="font-prefix" placeholder="icon-"></p>
+<p><label for="filter" title="conditions. Voir doc action filter (v2.9)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

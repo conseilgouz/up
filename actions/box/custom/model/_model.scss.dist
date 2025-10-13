@@ -1,0 +1,32 @@
+// === UP-BOX - nom_modele
+
+/* FICHIER NOM8MODELE.INI
+template=""
+*/
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../../assets/variables";
+@import "../../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:$grisPale;
+$box_border:2px $grisClair solid;
+$box_radius:5px;
+$title_bg: $orange;
+$title_bg_hover: $bleuClair;
+$title_text: $rougeFonce;
+$title_text_hover: $bleuClair;
+$content_bg: $violet;
+$action_bg: $orange;
+$action_text: $rougeFonce;
+$action_border:2px $grisPale solid;
+
+.up-box-NOM_MODELE { 
+    .up-box-head {} // optionnel ##head##
+    .up-box-title {} //  ##title
+    .up-box-subtitle {} //  ##subtitle
+    .up-box-image {}  //  ##image
+    .up-box-body {} // optionnel ##body##
+    .up-box-action {} //  ##action
+}

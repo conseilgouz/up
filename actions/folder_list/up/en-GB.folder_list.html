@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>folder_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-folder-list" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>returns a formatted list of the contents of a folder on the server</p>
+<p>syntax <code><b>{</b>up folder_list=path | template=##file## (##size)<b>}</b></code><br> ##file## : path/filename.extension<br> ##fullpath##  : path (without slash)<br> ##relpath##   : relative path (without slash)<br> ##basename##  : name and extension<br> ##filename##  : name without extension (without dot)<br> ##extension## : extension<br> ##size## : file size<br> ##date## : Last modification date</p>
+
+
+</div >
+<p><label for="folder_list" title="folder path">folder-list</label>
+<input type = "text" id="folder_list" placeholder=""></p>
+<p><label for="mask" title="file selection mask">mask</label>
+<input type = "text" name="mask" placeholder=""></p>
+<p><label for="recursive" title="levels of exploration of sub-folders">recursive</label>
+<input type = "text" name="recursive" placeholder="0"></p>
+<h4>Formatting model</h4>
+<p><label for="template" title="output template">template</label>
+<input type = "text" name="template" placeholder="##file##"></p>
+<p><label for="template-folder" title="formatting template for list view files">template-folder</label>
+<input type = "text" name="template-folder" placeholder="[b]##foldername##[/b]"></p>
+<h4>Tags for parent and child blocks</h4>
+<p><label for="main-tag" title="main tag. essential to use id, class and style">main-tag</label>
+<input type = "text" name="main-tag" placeholder=""></p>
+<p><label for="item-tag" title="tag elements (file or folder)">item-tag</label>
+<input type = "text" name="item-tag" placeholder="p"></p>
+<h4>Format of elements</h4>
+<p><label for="date-format" title="date format">date-format</label>
+<input type = "text" name="date-format" placeholder="%Y/%m/%d %H:%M"></p>
+<p><label for="decimal" title="number of decimals for the file size">decimal</label>
+<input type = "text" name="decimal" placeholder="2"></p>
+<h4>Style CSS</h4>
+<p><label for="class" title="class for main block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for main block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>replace - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-replace" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Replaces one text with another in the content between shortcodes</p>
+<p>syntax: <code><b>{</b>up replace=old_text:new_text, ...<b>}</b></code></p>
+
+
+</div >
+<p><label for="replace" title="list of replacements in the form old:new, ... BBcode accepted">replace</label>
+<input type = "text" id="replace"class="w100"  placeholder=""></p>
+<p><label for="sep-item" title="separator between groups old:new. default comma">sep-item</label>
+<input type = "text" name="sep-item"class="w5"  placeholder=""></p>
+<p><label for="sep-oldnew" title="separator between the search and replace parts. 2 points by default">sep-oldnew</label>
+<input type = "text" name="sep-oldnew"class="w5"  placeholder=":"></p>
+<p><label for="tags" title="empty: retains default tags, list (a,b,p) or in addition to default tags (+a,b,p)">tags</label>
+<input type = "text" name="tags"class="w50"  placeholder=""></p>
+<p><label for="regex" title="1 if the search part is a regular expression">regex</label>
+<select name="regex" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+</body>
+</html >

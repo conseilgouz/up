@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_unsplash - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-unsplash" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a random image</p>
+<p>Syntax : <code><b>{</b>up lorem-unsplash=#image | width=xx | height=xx <b>}</b></code><br>search for image number on <a href="https://picsum.photos/images" target="_blank">picsum.photos</a></p>
+
+
+</div >
+<p><label for="lorem_unsplash" title="image number on &lt;a href=&quot;https://picsum.photos/images&quot; target=&quot;_blank&quot;&gt;picsum.photos&lt;/a&gt;">lorem-unsplash</label>
+<input type = "number" id="lorem_unsplash"class="w10 important"  placeholder=""></p>
+<p class="hr-top"><label for="height" title="uploaded image height">height (px)</label>
+<input type = "number" name="height"class="w10 hr-top"  unit="px" placeholder="200"></p>
+<p><label for="width" title="width of image uploaded">width (px)</label>
+<input type = "number" name="width"class="w10"  unit="px" placeholder="200"></p>
+<p><label for="random" title="forces random retrieval">random</label>
+<select name="random" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="grayscale" title="for grayscale rendering">grayscale</label>
+<select name="grayscale" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="blur" title="fuzzy rendering">blur</label>
+<select name="blur" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="gravity" title="cropping: north, east, south, south, west, center">gravity</label>
+<select name="gravity" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="north">north</option>
+<option value="east">east</option>
+<option value="south">south</option>
+<option value="west">west</option>
+<option value="center">center</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class(es)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classes and styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

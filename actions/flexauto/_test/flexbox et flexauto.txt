@@ -1,0 +1,48 @@
+<h2>FLEXAUTO</h2>
+<p>{up flexauto=3-2-1<br>| class=fg-gap m-child-raz-1<br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| style-1=color:green;<br>| class-2=bg-jaune<br>| css-head=#id .row-odd[background:lightBlue !important]<br>#id .col-2[border:2px dashed blue] <br>#id .col-3.row-1[background:green!important;color:white]<br>}</p>
+<p>UN</p>
+<p>{========}</p>
+<p>DEUX</p>
+<p>{========}</p>
+<p>TROIS</p>
+<p>{========}</p>
+<p>QUATRE</p>
+<p>{========}</p>
+<p>CINQ</p>
+<p>{========}</p>
+<p>SIX</p>
+<p>{========}</p>
+<p>SEPT</p>
+<p>{========}</p>
+<p>HUIT</p>
+<p>{========}</p>
+<p>NEUF</p>
+<p>{========}</p>
+<p>DIX</p>
+<p>{========}</p>
+<p>ONZE</p>
+<p>{/up flexauto}</p>
+<h2>FLEXBOX</h2>
+<p>{up flexbox=5-2-5<br>| class=fg-gap m-child-raz-1<br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| style-1=color:green;<br>| class-2=bg-jaune<br>| css-head=#id .row-odd[background:lightYellow !important]<br>#id .col-2[border:2px dashed blue] <br>#id .col-3.row-1[background:green!important;color:white]<br>}</p>
+<p>UN</p>
+<p>{========}</p>
+<p>DEUX</p>
+<p>{========}</p>
+<p>TROIS</p>
+<p>{========}</p>
+<p>QUATRE</p>
+<p>{========}</p>
+<p>CINQ</p>
+<p>{========}</p>
+<p>SIX</p>
+<p>{========}</p>
+<p>SEPT</p>
+<p>{========}</p>
+<p>HUIT</p>
+<p>{========}</p>
+<p>NEUF</p>
+<p>{========}</p>
+<p>DIX</p>
+<p>{========}</p>
+<p>ONZE</p>
+<p>{/up flexbox}</p>

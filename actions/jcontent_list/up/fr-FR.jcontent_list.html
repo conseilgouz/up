@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des articles d'une catégorie
+</p>
+<p>syntaxe : <code><b>{</b>up jcontent-list=id-catégorie(s)<b>}</b></code><br />Une action très pratique pour lister les articles de la catégorie en cours, il suffit de taper <code><b>{</b>up jcontent-list<b>}</b></code></p>
+
+
+</div >
+<p><label for="jcontent_list" title="ID de la cat&eacute;gorie ou vide pour celle de l&#039;article actuel">jcontent-list</label>
+<input type = "text" id="jcontent_list"class="w10 important"  placeholder=""></p>
+<p><label for="maxi" title="Nombre maxi d&#039;article dans la liste">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="no-published" title="Liste aussi les articles non publi&eacute;s">no-published</label>
+<select name="no-published" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="author" title="filtre sur auteur: liste des id ou article, current">author</label>
+<input type = "text" name="author"class="w20"  placeholder=""></p>
+<p><label for="sort-by" title="tri: title, ordering, created, modified, publish_up, id, hits">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="ordering">ordering</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish_up">publish_up</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+</select></p>
+<p><label for="sort-order" title="ordre de tri : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<h4>Style du bloc principal</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p class="hr-top"><label for="main-class" title="classe(s) pour bloc principal (obsol&eacute;te)">main-class</label>
+<input type = "text" name="main-class"class="hr-top"  placeholder=""></p>
+<p><label for="main-style" title="classes et styles inline pour bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="class" title="idem main-class. Conserv&eacute; pour compatibilit&eacute; descendante">class</label>
+<input type = "text" name="class"class="w10 inactif"  placeholder=""></p>
+<p><label for="style" title="idem main-style. Conserv&eacute; pour compatibilit&eacute; descendante">style</label>
+<input type = "text" name="style"class="w10 inactif"  placeholder=""></p>
+<h4>Titre : balise et style</h4>
+<p><label for="title" title="titre HTML si article trouv&eacute;.">title</label>
+<input type = "text" name="title" placeholder=""></p>
+<p><label for="title-tag" title="niveau du titre">title-tag</label>
+<input type = "text" name="title-tag" placeholder="h3"></p>
+<p class="hr-top"><label for="title-style" title="classes et styles inline pour le titre">title-style</label>
+<input type = "text" name="title-style"class="hr-top"  placeholder=""></p>
+<p><label for="title-class" title="classe(s) pour le titre (obsol&eacute;te)">title-class</label>
+<input type = "text" name="title-class" placeholder=""></p>
+<h4>Style de la liste</h4>
+<p><label for="list-style" title="classes et styles inline pour la liste">list-style</label>
+<input type = "text" name="list-style" placeholder=""></p>
+<p><label for="list-class" title="classe(s) pour la liste (obsol&eacute;te)">list-class</label>
+<input type = "text" name="list-class" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="code CSS dans le head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

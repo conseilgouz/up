@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cache_cleaner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-cache-cleaner" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Clears cache files</p>
+<p>Deletes all PHP files in the optionally specified sub-folder. com_content by default<br>syntax: <code><b>{</b>up cache-cleaner=com_modules<b>}</b></code></p>
+
+
+</div >
+<p><label for="cache_cleaner" title="list of cache folders (separator: semicolon) or * for all. com_content by default">cache-cleaner</label>
+<input type = "text" id="cache_cleaner" placeholder="com_content"></p>
+<p><label for="folder-exclude" title="relative path (to folder-cache) of folders to keep (separator: semicolon)">folder-exclude</label>
+<input type = "text" name="folder-exclude" placeholder=""></p>
+<p><label for="folder-cache" title="cache root folder. empty=the one defined in the Joomla configuration">folder-cache</label>
+<input type = "text" name="folder-cache" placeholder=""></p>
+<p><label for="file-mask" title="mask to select files. *.* = all, *.{php,html} = php and html">file-mask</label>
+<input type = "text" name="file-mask" placeholder="*.php"></p>
+</body>
+</html >

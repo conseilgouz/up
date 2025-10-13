@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upfilescleaner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upfilescleaner" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Déplace les fichiers inutilisés d'un dossier vers un dossier pour récupération éventuelle</p>
+<p>syntaxe <code><b>{</b>up upfilescleaner=folder_source<b>}</b></code></p>
+
+
+</div >
+<p><label for="upfilescleaner" title="chemin du dossier &agrave; analyser">upfilescleaner</label>
+<input type = "text" id="upfilescleaner"class="important"  placeholder=""></p>
+<p><label for="extensions" title=" extensions">extensions</label>
+<input type = "text" name="extensions"class="w70"  placeholder="jpg,jpeg,png,gif,pdf"></p>
+<p><label for="bd-tables" title="tables et champs.  D&eacute;faut: content:introtext,fulltext,images ; categories:description,params ; modules:params ; menus:params">bd-tables</label>
+<input type = "text" name="bd-tables" placeholder=""></p>
+<p><label for="folder-backup" title="le chemin vers le dossier de stockage des fichiers inutiles">folder-backup</label>
+<input type = "text" name="folder-backup"class="important"  placeholder="tmp/up-files-cleaner"></p>
+<p><label for="folder-purge" title="suppressions des dossiers vides du dossier upfilescleaner OU contenant uniquement les fichiers indiqu&eacute;s (ex: index.html,info.txt)">folder-purge</label>
+<input type = "text" name="folder-purge" placeholder=""></p>
+<h4>Exclure ou inclure certains fichiers</h4>
+<p><label for="suffix-lang" title="pour prendre en compte les versions avec un suffixe calcul&eacute;. Ex: -en,-fr. s&eacute;parateur : virgule">suffix-lang</label>
+<input type = "text" name="suffix-lang"class="w70"  placeholder="-fr,-en"></p>
+<p><label for="suffix-version" title="pour conserver &eacute;galement la version sans le suffixe. Ex: -mini. s&eacute;parateur : virgule">suffix-version</label>
+<input type = "text" name="suffix-version"class="w70"  placeholder="-mini"></p>
+<p><label for="folders-exclude" title="liste des dossiers non concern&eacute;s. s&eacute;parateur : virgule">folders-exclude</label>
+<input type = "text" name="folders-exclude" placeholder=""></p>
+<p><label for="files-exclude" title="liste des fichiers conserv&eacute;s. s&eacute;parateur : virgule">files-exclude</label>
+<input type = "text" name="files-exclude" placeholder=""></p>
+<h4>Style du bloc principal</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class"class="w70"  placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style"class="w70"  placeholder=""></p>
+<p><label for="btn-style" title="style du bouton action">btn-style</label>
+<input type = "text" name="btn-style"class="w50"  placeholder="btn btn-primary"></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns = "http://www.w3.org/1999/xhtml" xml:lang = "en-GB" lang = "en-GB">
+<head>
+<meta http-equiv = "content-type" content = "text/html; charset=utf-8" />
+<title>UP actions list</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+<link rel = "stylesheet" href = "upbtn.css" type = "text/css" />
+<script type = "text/javascript" src = "upbtn.js"></script>
+</head>
+<body>
+<form id="upbtn-filter">
+<label for="upbtn-filter">Filter actions: </label>
+<input type="text" id="upbtn-filter-input" tabindex="1" placeholder="Search ...">
+<button id="upbtn-filter-reset">X</button>
+</form>
+<form id="upbtn-form">
+<section class="upbtn-header">
+<select id="upbtn-actionname">
+<option value="">Select an action</option>
+<optgroup label="Top 10">
+<option value="flexauto">flexauto - a responsive grid on several columns</option>
+<option value="flexbox">flexbox - displays child blocks in a responsive FLEXBOX grid</option>
+<option value="csv2table">csv2table - Converting CSV content into a table</option>
+<option value="csv2list">csv2list - Converting CSV content into a list with a control point</option>
+<option value="note">note - Adding comments visible in WYSIWYG editor and not on the website</option>
+<option value="readmore">readmore - display/hide an HTML block using an accordion and 'read more' button</option>
+<option value="modal">modal - Displays content in a modal window (popup)</option>
+<option value="tooltip">tooltip - tooltips when hovering over an item</option>
+<option value="popover">popover - Displays a big tooltip when clicking an element.</option>
+<option value="div">div - Facilitates the entry of an inline DIV block with a wysiwyg editor</option>
+<option value="span">span - Facilitates the entry of an inline SPAN block with a wysiwyg editor</option>
+</optgroup>
+<optgroup label="Actions">
+<option value="addclass">addclass - adds a class to a CSS selector (default body)</option>
+<option value="addcodehead">addcodehead - adds free code to the head.</option>
+<option value="addcsshead">addcsshead - adds CSS code or files to the head.</option>
+<option value="addfilehead">addfilehead - Add JS or CSS files in the head</option>
+<option value="addhtml">addhtml - Inserts HTML code to a position of the article</option>
+<option value="addscript">addscript - adds code or file JS or JQuery</option>
+<option value="ajax_view">ajax-view - Displays a button to load the content of an article or a file</option>
+<option value="anim_aos">anim-aos - displays content with animations on page scroll (library in pure JS)</option>
+<option value="attr">attr - Adds attributes to the first internal tag</option>
+<option value="barcode">barcode - Generates BarCode from TCPDF library.</option>
+<option value="bbcode">bbcode - Enter HTML code with a WYSIWYG editor</option>
+<option value="bg_image">bg-image - Displays an image in the background of a block</option>
+<option value="bg_slideshow">bg-slideshow - Displays a series of scrolling images in the background of the site or one block</option>
+<option value="bg_video">bg-video - Displays a youtube or local video in the site background or a block</option>
+<option value="box">box - displays a box with a title, subtitle, image, content and action</option>
+<option value="cache_cleaner">cache-cleaner - Clears cache files</option>
+<option value="cell">cell - displays 1 to 6 child blocks on the same line</option>
+<option value="center">center - Center all child blocks by removing unnecessary margins</option>
+<option value="chart">chart - Statistical graphs with GoogleChart</option>
+<option value="chart_org">chart-org - Shows an organization's graph</option>
+<option value="clocks_gmt">clocks-gmt - Displays an analog and/or digital clock with the time of a time zone</option>
+<option value="color">color - Returns the color value of an UP colorname</option>
+<option value="corner">corner - Displays text on a ribbon or corner</option>
+<option value="countdown">countdown - displays a countdown or digital clock</option>
+<option value="countdown_simple">countdown-simple - Displays a simple and easily adaptable countdown timer</option>
+<option value="counter">counter - Add a counter with prefix and suffix</option>
+<option value="csv2def">csv2def - Converting CSV content into a definition list (DL/DT/DD)</option>
+<option value="csv2list">csv2list - Converting CSV content into a list with a control point</option>
+<option value="csv2table">csv2table - Converting CSV content into a table</option>
+<option value="csv_info">csv-info - Returns the raw value of an element (row/column) of CSV file</option>
+<option value="data2list">data2list - Displays the content of a JSON or XML file as a list</option>
+<option value="data2table">data2table - Displays the contents of a JSON, XML ou CSV file as a table</option>
+<option value="data_info">data-info - Returns fields from a data source according to a formatting template</option>
+<option value="date">date - displays a date</option>
+<option value="div">div - Facilitates the entry of an inline DIV block with a wysiwyg editor</option>
+<option value="donation">donation - Donation form with Paypal</option>
+<option value="facebook_timeline">facebook-timeline - displays the Facebook timeline</option>
+<option value="faq">faq - an accordion</option>
+<option value="field">field - Returns the value of a custom field for the current content</option>
+<option value="file">file - Force the download of a file</option>
+<option value="file_download">file-download - Simple download manager with stats and password protection</option>
+<option value="file_explorer">file-explorer - returns a formatted list of the contents of a folder on the server</option>
+<option value="file_in_content">file-in-content - Uses all files in a folder to build an article</option>
+<option value="file_office_view">file-office-view - Displays an MS Office file (word, excel, powerpoint)</option>
+<option value="file_view">file-view - Forces a file to load and display it in raw form</option>
+<option value="filter">filter - displays the content if all conditions are true</option>
+<option value="flexauto">flexauto - a responsive grid on several columns</option>
+<option value="flexbox">flexbox - displays child blocks in a responsive FLEXBOX grid</option>
+<option value="folder_list">folder-list - returns a formatted list of the contents of a folder on the server</option>
+<option value="form_select">form-select - drop-down box</option>
+<option value="geocode">geocode - returns the GPS coordinates of a postal address</option>
+<option value="get">get - description of the action. The 1st line of header</option>
+<option value="gmap">gmap - displays a google map for an address</option>
+<option value="googlefont">googlefont - adds a GoogleFont font, as well as a class to use it</option>
+<option value="gotop">gotop - Displays a button with position indicator to return to the top of the page.</option>
+<option value="grid">grid - Mise en page par grid</option>
+<option value="hr">hr - displays a horizontal line with an icon and/or text</option>
+<option value="html">html - allows you to create an HTML entity (tag) with class(es), style and attribute without switching to mode code</option>
+<option value="icon">icon - standardizes the call of icons. Avoids switching to code mode for entry</option>
+<option value="iframe">iframe - introduce a responsive iframe in an article</option>
+<option value="image_compare">image-compare - comparison of 2 images by moving a cursor</option>
+<option value="image_gallery">image-gallery - Displays one or more images in a lightbox</option>
+<option value="image_hover">image-hover - Overlay HTML content on an image with effects on hover</option>
+<option value="image_logo">image-logo - Add an image or text on an image</option>
+<option value="image_magnify">image-magnify - displays a magnifying glass effect on an image</option>
+<option value="image_pannellum">image-pannellum - Displays a 3D panorama from an equirectangular image</option>
+<option value="image_random">image-random - Randomly display one of the images in a folder</option>
+<option value="image_rollover">image-rollover - Change the image on hovering</option>
+<option value="image_secure">image-secure - Prevent image saving</option>
+<option value="imagemap">imagemap - a clickable and responsive imagemap</option>
+<option value="jcat_image">jcat-image - Displays an image related to the category of the current item</option>
+<option value="jcategories_by_tags">jcategories-by-tags - list of articles in one or more category</option>
+<option value="jcategories_list">jcategories-list - list of descending categories. The parent category is not displayed</option>
+<option value="jcontent_by_categories">jcontent-by-categories - list of articles in one or more category</option>
+<option value="jcontent_by_subcat">jcontent-by-subcat - list of articles by one or more category</option>
+<option value="jcontent_by_tags">jcontent-by-tags - list of articles in one or more category</option>
+<option value="jcontent_image">jcontent-image - Assign an image to the intro and fulltext images of an article</option>
+<option value="jcontent_in_content">jcontent-in-content - ONE article in an other article</option>
+<option value="jcontent_info">jcontent-info - Displays information about the current article</option>
+<option value="jcontent_list">jcontent-list - list of articles in one or more category</option>
+<option value="jcontent_metadata">jcontent-metadata - for metadata control</option>
+<option value="jextensions_list">jextensions-list - list of extensions installed on the site</option>
+<option value="jmenus_list">jmenus-list - menu list</option>
+<option value="jmenus_metadata">jmenus-metadata - list of menus with metadata</option>
+<option value="jmodules_list">jmodules-list - list of modules on the site</option>
+<option value="kawa">kawa - Serves as a virtual coffee</option>
+<option value="lang">lang - Choice of content according to visitor language</option>
+<option value="link">link - Displays a link to an URL or email</option>
+<option value="listup">listup - Customize simple and/or ordered lists</option>
+<option value="loadmodule">loadmodule - description of the action. The 1st line of header</option>
+<option value="lorem">lorem - Displays random text (style possible)</option>
+<option value="lorem_flickr">lorem-flickr - displays a random image</option>
+<option value="lorem_place">lorem-place - Displays an image of the specified dimensions</option>
+<option value="lorem_placeimg">lorem-placeimg - displays a random image</option>
+<option value="lorem_serie">lorem-serie - Return a series of elements as arguments of an action</option>
+<option value="lorem_unsplash">lorem-unsplash - displays a random image</option>
+<option value="mapael">mapael - Shows an interactive vector map</option>
+<option value="markdown">markdown - Displays MARKDOWN content from a file or entered between shortcodes</option>
+<option value="marquee">marquee - HTML content scrolling horizontally or vertically</option>
+<option value="masonry">masonry - Displays blocks in a fluid and responsive grid</option>
+<option value="media_audio">media-audio - displays a player (HTML5) for one or more audio files hosted on the server</option>
+<option value="media_plyr">media-plyr - displays a video or audio player that fits at most in its parent block</option>
+<option value="media_video">media-video - displays a local video in HTML5</option>
+<option value="media_vimeo">media-vimeo - displays a Viméo video which is maximally in its parent block</option>
+<option value="media_youtube">media-youtube - displays a Youtube video that is registered at the maximum in its parent block</option>
+<option value="meteo_concept">meteo-concept - Returns the weather forecast for a given date for a FRENCH given city</option>
+<option value="meteo_france">meteo-france - displays the Météo France widget</option>
+<option value="modal">modal - Displays content in a modal window (popup)</option>
+<option value="mq">mq - Build a mediaries string</option>
+<option value="note">note - Adding comments visible in WYSIWYG editor and not on the website</option>
+<option value="osmap">osmap - displays an OpenStreetMap map</option>
+<option value="page_search">page-search - Search for a word in the current page</option>
+<option value="pdf">pdf - Displays a PDF in the content or generates a button to display it in a window</option>
+<option value="pdf_gallery">pdf-gallery - Displays a list of PDFs contained in a folder</option>
+<option value="php">php - allows you to execute PHP code in an article.</option>
+<option value="php_error">php-error - Enable PHP error reports</option>
+<option value="popover">popover - Displays a big tooltip when clicking an element.</option>
+<option value="popup">popup - Opens a popup after a delay or a position in the page</option>
+<option value="printer">printer - Add a button to propose the printing of part of the page</option>
+<option value="qrcode">qrcode - Generates QRCodes with Google API</option>
+<option value="random">random - selects one or more values from a list or folder</option>
+<option value="readmore">readmore - display/hide an HTML block using an accordion and 'read more' button</option>
+<option value="replace">replace - Replaces one text with another in the content between shortcodes</option>
+<option value="sameheight">sameheight - equalizes the height of the direct children of the block (p or div)</option>
+<option value="scroll_indicator">scroll-indicator - Affiche la position dans la page dans un cercle autour du curseur</option>
+<option value="scroller">scroller - Vertical scrolling of an item list</option>
+<option value="site_stat">site-stat - counts the number of calls for this action and displays the number of visits</option>
+<option value="site_visit">site-visit - counts the number of visit for a page</option>
+<option value="sitemap">sitemap - Creation of a 'sitemap.xml' file in the root website</option>
+<option value="slider_owl">slider-owl - scrolling banner of images or HTML blocks</option>
+<option value="slider_tiny">slider-tiny - scrolling banner of images or HTML blocks</option>
+<option value="slideshow_billboard">slideshow-billboard - Responsive images slideshow with captions and links</option>
+<option value="snippet">snippet - create and load small text files (snippet)</option>
+<option value="snowfall">snowfall - Simulates snowfall or other events...</option>
+<option value="sound_hover">sound-hover - Plays a sound when flying over an element or event JS</option>
+<option value="span">span - Facilitates the entry of an inline SPAN block with a wysiwyg editor</option>
+<option value="sql">sql - SQL query with formatting and sorting</option>
+<option value="tab">tab - displays content in panels with tabs at the top, left or right. Responsive mode</option>
+<option value="table_by_columns">table-by-columns - responsive tables by stacking the rows of a column.</option>
+<option value="table_by_rows">table-by-rows - responsive tables by stacking columns by rows.</option>
+<option value="table_fixe">table-fixe - responsible tables: header line remains visible</option>
+<option value="table_flip">table-flip - responsive tables by row/column permutation</option>
+<option value="table_sort">table-sort - Sorting, filtering and paging a table</option>
+<option value="tabslide">tabslide - add tabs to open a panel at window sides </option>
+<option value="text_blink">text-blink - Blinking text</option>
+<option value="text_fit">text-fit - Adjusts a text to its container</option>
+<option value="text_typewriter">text-typewriter - Display several sentences with a typewriter effect</option>
+<option value="toc">toc - Automatic Summary</option>
+<option value="tooltip">tooltip - tooltips when hovering over an item</option>
+<option value="treeview">treeview - Displays a list as a tree (TreeView)</option>
+<option value="tweeter_timeline">tweeter-timeline - displays the timeline Tweeter</option>
+<option value="upactionslist">upactionslist - INTERNAL - list of UP actions with information and parameters</option>
+<option value="upbtn_makefile">upbtn-makefile - creation of HTML files for the editors-xtd plugin</option>
+<option value="upclass2style">upclass2style - description of the action. The 1st line of header</option>
+<option value="upfilescleaner">upfilescleaner - Moves unused files from a folder to a recovery folder</option>
+<option value="upprefset">upprefset - Displays a list of all UP presets for the site.</option>
+<option value="upscsscompiler">upscsscompiler - INTERNAL - Compile all SCSS files in the action folders</option>
+<option value="upsearch">upsearch - Research an action in the content of articles and / or modules (params)</option>
+<option value="website">website - Displays a screenshot of a site with link.</option>
+<option value="website_preview">website-preview - Displays a preview of the site when hovering over a link</option>
+</optgroup>
+</select>
+</section > <!--upbtn-header-->
+<section id="upbtn-options">
+<div id="ajax-options"></div>
+</section>
+<section id="upbtn-footer">
+<hr>
+<p>
+<label for="upbtn-close">Closing shortcode  </label> <input id="upbtn-close" type="checkbox">
+<label for="upbtn-nbparts">Number of parts  </label> <input id="upbtn-nbparts" type="number" value="1" min="1" max="12" size="3">
+<label for="upbtn-debug">Add debug  </label> <input id="upbtn-debug" type="checkbox">
+<label for="upbtn-help">Add ?  </label> <input id="upbtn-help" type="checkbox">
+</p>
+<p class="tc">
+<button id="upbtn-submit" type="button">Insert</button>
+<button id="upbtn-submitAll" type="button">Insérer ouvrant+fermant</button>
+</p>
+<input type="hidden" id="upbtn-lang" value="en-GB" />
+</section>
+</form>
+</body>
+</html>

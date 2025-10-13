@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>tweeter_timeline - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-tweeter-timeline" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche la timeline Tweeter</p>
+<p><code><b>{</b>up tweeter-timeline=<tweet id><b>}</b></code><br />voir : <a href='https://dev.twitter.com/web/embedded-timelines/parameters'>dev.twitter.com/web/embedded-timelines/parameters</a></p>
+
+
+</div >
+<p><label for="tweeter_timeline" title="tweet id">tweeter-timeline</label>
+<input type = "text" id="tweeter_timeline"class="w50 important"  placeholder=""></p>
+<h4>Paramétres pour API tweeter</h4>
+<p class="hr-top"><label for="theme" title="light ou dark">theme</label>
+<select name="theme"class="hr-top"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="light">light</option>
+<option value="dark">dark</option>
+</select></p>
+<p><label for="link-color" title="couleur des liens en hexa">link-color</label>
+<input type = "color" name="link-color" title="" value="#feffff"></p>
+<p><label for="border-color" title="couleur des bordures en hexa">border-color</label>
+<input type = "color" name="border-color" title="" value="#feffff"></p>
+<p><label for="height" title="hauteur">height (px)</label>
+<input type = "number" name="height"class="w10"  min="100" unit="px" placeholder="400"></p>
+<p><label for="width" title="largeur">width (px)</label>
+<input type = "number" name="width"class="w10"  min="100" unit="px" placeholder=""></p>
+<p><label for="tweet-limit" title="nombre maxi de tweet, sinon ind&eacute;fini">tweet-limit</label>
+<input type = "text" name="tweet-limit"class="w5"  placeholder=""></p>
+<p><label for="chrome" title="noheader nofooter noborders transparent noscrollbar">chrome</label>
+<input type = "text" name="chrome"class="w20"  title="" placeholder="" list="combo_chrome"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_chrome">
+<option value=""></option>
+<option value="noheader">noheader</option>
+<option value="nofooter">nofooter</option>
+<option value="noborders">noborders</option>
+<option value="transparent">transparent</option>
+<option value="noscrollbar">noscrollbar</option>
+</datalist></p>
+<p><label for="lang" title="code langage">lang</label>
+<input type = "text" name="lang"class="w5"  placeholder="fr"></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="classes et style inline bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe bloc parent (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+</body>
+</html >

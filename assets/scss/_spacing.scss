@@ -1,0 +1,60 @@
+/* spacing */
+
+// gestion des espaces MARGIN & PADDING
+
+
+@mixin rwd-spacing ( $coderule,   // m ou p
+                     $rule,       // margin ou padding
+                     $bp:''       // s ou m
+) {
+  @for $i from 0 to 4 {
+      .#{$coderule}#{$bp}#{$i}  {#{$rule}:space($i) !important}
+      .#{$coderule}#{$bp}l#{$i} {#{$rule}-left:space($i) !important}
+      .#{$coderule}#{$bp}t#{$i} {#{$rule}-top:space($i) !important}
+      .#{$coderule}#{$bp}r#{$i} {#{$rule}-right:space($i) !important}
+      .#{$coderule}#{$bp}b#{$i} {#{$rule}-bottom:space($i) !important}
+      .#{$coderule}#{$bp}h#{$i} {
+        #{$rule}-left:space($i) !important;
+        #{$rule}-right:space($i) !important; }
+        .#{$coderule}#{$bp}v#{$i} {
+        #{$rule}-top:space($i) !important;
+        #{$rule}-bottom:space($i) !important; }
+    }
+  @if $rule=='margin' {
+    .#{$coderule}#{$bp}left {
+        margin-left:0 !important;
+        margin-right:auto !important;
+    }
+    .#{$coderule}#{$bp}right {
+        margin-left:auto !important;
+        margin-right:0 !important;
+    }
+    .#{$coderule}#{$bp}center {
+        margin-left:auto !important;
+        margin-right:auto !important;
+    }
+  }
+}
+
+@include rwd-spacing('m','margin');
+@include rwd-spacing('p','padding');
+
+@media (max-width:$breakpoint-s) {
+  @include rwd-spacing('m','margin','s');
+  @include rwd-spacing('p','padding','s');
+}
+
+@media (min-width:$breakpoint-s +1) and (max-width:$breakpoint-m) {
+  @include rwd-spacing('m','margin','m');
+  @include rwd-spacing('p','padding','m');
+}
+
+// --- supression des marges sur premier et dernier bloc
+.m-remove > *:first-child,
+.m-remove-1 > * > *:first-child,
+.m-remove-2 > * > * > *:first-child
+{ margin-top:0}
+.m-remove > *:last-child,
+.m-remove-1 > * > *:last-child,
+.m-remove-2 > * > * > *:last-child
+{ margin-bottom:0}

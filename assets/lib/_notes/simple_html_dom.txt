@@ -1,0 +1,40 @@
+https://simplehtmldom.sourceforge.io/docs/1.9/
+
+// charge lib et init
+require_once ($this->upPath . '/assets/lib/simple_html_dom.php');
+$html = new simple_html_dom();
+// charge un site ou fichier
+$html = file_get_html('https://exemple.com'); 
+$html = file_get_html('chemin/vers/votre/fichier.html');  
+// charge un contenu texte. balises en minuscules et conservation CR/LF
+$html->load('<html>' . $this->content . '</html>', true, false);
+
+// Sélectionner des éléments HTML
+foreach($html->find('h2') as $element) {
+    echo $element->plaintext . '<br>';
+}
+// ou
+foreach($html->find('a') as $element) {
+    echo $element->href . '<br>';  // Affiche le lien de chaque balise <a>
+}
+// les enfants
+$childs = $html->find('html>*');
+foreach ($childs as $child) {
+	$child->addClass('foo');
+	$child->setAttribute('style','color:red;');
+}
+
+// Manipuler les éléments HTML
+$html->find('h2', 0)->innertext = 'Nouveau titre';
+
+// $html, $childs et $child sont actualisés au fur et à mesure
+// libere memoire
+unset($html);
+
+// ============== Fonctions principales
+// find($selector) : Trouver des éléments avec un sélecteur CSS.
+// plaintext : Obtenir ou modifier le texte brut d'un élément.
+// innertext : Obtenir ou modifier le contenu HTML d'un élément.
+// outertext : Obtenir ou modifier l'intégralité de l'élément HTML (balise incluse).
+// clear() : Libérer la mémoire lorsque vous n’avez plus besoin de l’objet HTML.
+

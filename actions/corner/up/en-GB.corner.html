@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>corner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-corner" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays text on a ribbon or corner</p>
+<p>syntax 1 (body) : <code><b>{</b>up corner=text<b>}</b></code><br>syntax 2 (block) : <code><b>{</b>up corner=text<b>}</b></code>content of the block<code><b>{</b>/up corner<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>new</u> : </b> <b>corner</b>=Nouveau<b> | </b><b>position</b>=bottom-left<b> | </b><b>bgcolor</b>=violet<b> | </b><b>color</b>=yellow
+</div >
+<p><label for="corner" title="text displayed in the corner or ribbon">corner</label>
+<input type = "text" id="corner" title="" placeholder="" list="combo_corner"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_corner">
+<option value=""></option>
+<option value="new">new</option>
+</datalist></p>
+<h4>position, size and style of the corner</h4>
+<p><label for="position" title="angle in the form of top-left or tl">position</label>
+<select name="position" title="top-left" placeholder="top-left" value="top-left">
+<option value=""></option>
+<option value="top-left" selected>top-left</option>
+<option value="top-right">top-right</option>
+<option value="bottom-left">bottom-left</option>
+<option value="bottom-right">bottom-right</option>
+</select></p>
+<p><label for="width" title="square side">width (px)</label>
+<input type = "number" name="width" min="30" max="250" step="10" unit="px" placeholder="100px"></p>
+<p><label for="height" title="square side">height (px)</label>
+<input type = "number" name="height" min="30" max="250" step="10" unit="px" placeholder="100px"></p>
+<p><label for="angle" title="angle in absolute value">angle (deg)</label>
+<input type = "number" name="angle" min="10" max="80" step="5" unit="deg" placeholder="45"></p>
+<p class="hr-top"><label for="shadow" title="adds an &#039;oriented&#039; shadow to the corner. The value indicated is the strength of the shadow">shadow</label>
+<input type = "number" name="shadow"class="hr-top"  min="0" max="10" placeholder="0"></p>
+<p><label for="color" title="text color">color</label>
+<input type = "color" name="color" title="#ffffff" value="#ffffff"></p>
+<p><label for="bgcolor" title="background color of the corner">bgcolor</label>
+<input type = "color" name="bgcolor" title="#ff0000" value="#ff0000"></p>
+<p><label for="style" title="CSS style for the corner">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classes for the corner">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<h4>if the corner is clickable</h4>
+<p class="hr-top"><label for="url" title="link">url</label>
+<input type = "text" name="url"class="w10 hr-top"  placeholder=""></p>
+<p><label for="target" title="or _self to open the site in the same tab">target</label>
+<select name="target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<h4>style of the block if the shortcode has content</h4>
+<p><label for="bloc-class" title="class(es) for block (content)">bloc-class</label>
+<input type = "text" name="bloc-class" placeholder=""></p>
+<p><label for="bloc-style" title="style for block (content)">bloc-style</label>
+<input type = "text" name="bloc-style" placeholder=""></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (added to the head)">css-head</label>
+<input type = "text" name="css-head"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="filter" title="condition string. see documentation action filter">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

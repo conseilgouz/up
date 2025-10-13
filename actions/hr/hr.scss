@@ -1,0 +1,63 @@
+/* UP - 29-11-2016 - LOMART */
+
+// ========================================
+// définition par défaut d'un HR pour l'action'
+// NE PAS MODIFIER A PARTIR D'ICI
+hr.up{
+    border:none;
+    text-align:center;
+    overflow:visible;
+    height:1px;
+	/*J4 cassopeia*/
+	opacity:100%;
+	margin: 28px auto;
+	background-color:#fff;
+}
+hr.up:before{
+    position:relative;
+    line-height:1;
+}
+// FIN DE NON MODIFICATION
+// ========================================
+
+// ====== ligne horizontale dégradée
+hr.up.degrade-gris {
+    height:2px;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%);
+
+}
+
+// ====== rond gris avec texte blanc pour icon
+hr.up.num-rond-inv:before {
+    color:white;
+    background-color: #333;
+    border-radius:50%;
+    top:-13px;
+    font-size:28px;
+    padding:0 .5em;
+}
+
+
+
+// ====== TEST
+// https://www.w3.org/Style/Examples/007/color-bullets.fr.html
+ol.up {
+    list-style:none;
+    counter-reset: li;
+    > li {
+        counter-increment: li;
+        margin-bottom:2px;
+        &:before {
+            content: counter(li); 
+            color: white;
+            background:#333;
+            display: inline-block; 
+            width: 1em; 
+            margin-left: -1.5em;
+            margin-right: 0.5em; 
+            text-align: right; 
+            padding:0 5px;
+            border-radius:3px;
+        }
+    }
+}

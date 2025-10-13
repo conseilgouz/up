@@ -1,0 +1,163 @@
+/* 
+    Created on : 5 oct. 2019, 13:31:37
+    Author     : LOIC
+*/
+@import "../../assets/custom/variables";
+@import "../../assets/scss/variables";
+
+// voir les couleurs sur : https://up.lomart.fr/infos/css
+// vous pouvez les adapter directement ici sous cette forme :
+// $yellow : #fe0;
+// $paleBlue : #BCE0FF;
+// $purple : #9400D3;
+
+// =================================================
+/* DEFAUT */
+// =================================================
+
+ul.csv2list {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    list-style: none;
+    li {
+        clear: both; 
+    }
+    .header {
+        border-bottom: 1px solid #666;
+        font-weight: bold;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+    .footer {
+        border-top: 1px solid #666;
+        font-weight: bold;
+        line-height: 200%;
+        margin-top: 5px;
+    }
+}
+
+// =================================================
+/* LEADER */
+// inspiré par : https://www.w3.org/Style/Examples/007/leaders.fr.html
+// =================================================
+ul.leaders {
+    // leaders sauf header et footer
+    li:not(.header):not(.footer):after {
+        float: left;
+        width: 0;
+        white-space: nowrap;
+        $point : "";
+        @for $i from 1 to 99 { $point : $point + ".  ";}
+        content : "\A0\A0\A0\A0" + $point;
+    }
+    // justif et fond ligne, header et footer
+    span:first-child {
+        padding-right: 0.33em;}
+    span + span {
+        float: right;
+        padding-left: 0.33em;
+        position: relative;
+        z-index: 1;}
+    // differencier header/footer si couleur differente
+    li > span {
+        background: white;}
+}
+
+// Si pas de point de conduite, on met une puce par défaut ?
+//ul:not(.leaders) li:not(.header):not(.footer)::before{
+//    content: "\27a4\a0"; color: #080;
+//}
+
+// =================================================
+/* SOLEIL */
+// =================================================
+
+ul.csv2list.soleil {
+    padding:0 5px;
+    background:LemonChiffon;
+    box-shadow: 10px 10px 30px 0 rgba(128,128,128,.5);
+    // le fond des textes pour cacher les points de conduite
+    li > span {
+        background:LemonChiffon;}
+    // les séparations avec titre et pied
+    .header {border-bottom: 3px skyBlue dotted;}    
+    .footer {border-top: 3px skyBlue dotted;}    
+    // la puce devant les lignes    
+    li:not(.header):not(.footer):before {
+        content:url(img/seasun.png)"\A0\A0"; // \A0 est un espace
+        background:LemonChiffon;} // pour masquer les leaders
+}
+
+// =================================================
+/* TAN */
+// =================================================
+
+ul.csv2list.tan {
+    background:wheat;
+    box-shadow: 5px 5px 10px 0 rgba(128,128,128,.5);
+    // fond titre et pied
+    .header, .footer {padding:0 5px;background: tan}
+    // les séparations avec titre et pied
+    .header{border-bottom:1px Sienna dotted} 
+    .footer{border-top:1px Sienna dotted}
+    // lignes de la liste
+    li {padding:0 5px;}
+    // si point de conduite
+    li.header > span, li.footer > span {background:tan;}
+    li:not(.header):not(.footer) > span {background:wheat;}
+}
+
+
+// =================================================
+/* CELLULES */
+// =================================================
+
+// images sans fond
+.img-oui{background:url(img/ok.png) no-repeat 2px center ; padding-left:25px !important}
+.img-non{background:url(img/error.png) no-repeat 2px center; padding-left:25px !important}
+.img-plus{background:url(img/plus.png) no-repeat 2px center; padding-left:25px !important}
+.img-moins{background:url(img/moins.png) no-repeat 2px center; padding-left:25px !important}
+
+// unicode
+.uni-oui:before {content:"\2705  " !important}
+.uni-non:before {content:"\274C  " !important}
+.uni-coeur:before {content:"\2764  " !important; color:red !important}
+.uni-etoile:before {content:"\2B50  " !important}
+
+// icomoon, fontAwesome
+.ico-oui:before{font-family: 'IcoMoon';content: "\47  " !important;color:green !important}
+.ico-non:before{font-family: 'IcoMoon';content: "\49  " !important;color:red !important}
+.ico-plus:before{font-family: 'FontAwesome';content: "\f067  " !important;color:green !important}
+.ico-moins:before{font-family: 'FontAwesome';content: "\f068  " !important;color:red !important}
+
+// Avec gestion fond couleur
+li.uni-oui-jaune { 
+    background:$yellow;
+    &:before{content:"\2705  " !important}
+    &:not(.header):not(.footer) > span {background:$yellow}
+}
+li.ico-non-bleuPale {
+    background:$paleBlue;
+    &:before{font-family: 'IcoMoon';content: "\49  " !important;color:red !important}
+    &:not(.header):not(.footer) > span {background:$paleBlue}
+}
+li.img-plus-violet {
+    color:#fff;
+    background:$purple url(img/plus.png) no-repeat 2px center; padding-left:25px !important;
+    &:not(.header):not(.footer) > span {background:$purple}
+}
+
+.csv2list .jaune{
+    background-color:$yellow;
+    &:not(.header):not(.footer) > span {background:$yellow}
+}
+.csv2list .bleuPale{
+    background-color:$paleBlue;
+    &:not(.header):not(.footer) > span {background:$paleBlue}
+}
+.csv2list .violet{
+    background-color:$purple; color:#fff;
+    &:not(.header):not(.footer) > span {background:$purple}
+}

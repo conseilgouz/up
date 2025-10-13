@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>site_stat - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-site-stat" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>comptabilise le nombre d'appel de cette action et affiche le nombre de visite
+</p>
+<p>syntaxe :<br /><code><b>{</b>up site-stats<b>}</b></code> : incrémente le fichier dir-logs/id-alias_article.log<br /><code><b>{</b>up site-stats=*<b>}</b></code> : Calcule et affiche les stats pour TOUS les fichiers<br /><code><b>{</b>up site-stats=0<b>}</b></code> : Calcule et affiche les stats pour l'article courant<br /><code><b>{</b>up site-stats=12<b>}</b></code> : Calcule et affiche les stats pour l'article d'ID=12<br /><code><b>{</b>up site-stats=mask<b>}</b></code> : affiche les stats des fichiers correspondant au mask<br />L'affichage est réalisé à l'aide de templates et de mots clés :<br />--- tmpl-lign : résultat pour un fichier log (un article)<br />##count##  : nombre total de visites uniques pour un article<br />##id##, ##alias##, ##title##, ##created##, ##updated## : données de l'article<br />##catid##, ##catalias## : id et alias de la catégorie de l'article<br />##detail## : affiche le détail des visites par année, mois, langue<br />--- tmpl-detail-period : modèle pour une période de ##detail##<br />Les mots clés pour les sous-templates de ##detail##<br />Détail par articles : ##PERIOD##, ##TOTAL##, ##LANG##<br />Motif répété pour ##LANG## : ##LANG##, ##COUNT##<br />Détail par nombre de pges vues par un visteur : ##PERIOD##, ##TOTAL##, ##PAGES-VISITORS##<br />Motif répété pour ##PAGES-VISITORS## : ##NBPAGES##, ##NBVISITORS## :</p>
+
+
+</div >
+<h4>Options pour enregistrement du suivi</h4>
+<p><label for="site_stat" title="vide : enregistre l&#039;acc&egrave;s, sinon masque= *:tous, 1:courant, ID article ou masque fichiers (id-alias)">site-stat</label>
+<input type = "text" id="site_stat" placeholder=""></p>
+<p><label for="catid-include" title="liste des id cat&eacute;gories &agrave; inclure, s&eacute;parateur virgule">catid-include</label>
+<input type = "text" name="catid-include"class="w50"  placeholder=""></p>
+<p><label for="catid-exclude" title="liste des id cat&eacute;gories &agrave; exclure, s&eacute;parateur virgule">catid-exclude</label>
+<input type = "text" name="catid-exclude"class="w50"  placeholder=""></p>
+<p><label for="usergroup-list" title="liste des groupes d&#039;utilisateurs &agrave; exclure, s&eacute;parateur virgule">usergroup-list</label>
+<input type = "text" name="usergroup-list"class="w50"  placeholder=""></p>
+<p><label for="ip-list" title="liste des IP &agrave; ignorer. les botnets sont ignor&eacute;s, s&eacute;parateur virgule">ip-list</label>
+<input type = "text" name="ip-list" placeholder="127.0.0.8, localhost"></p>
+<p><label for="bots-list" title="liste de bots exclus">bots-list</label>
+<input type = "text" name="bots-list" placeholder="bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter"></p>
+<h4>Options pour affichage résultats</h4>
+<p><label for="view-catid-include" title="liste des cat&eacute;gories prise en compte">view-catid-include</label>
+<input type = "text" name="view-catid-include"class="w50"  placeholder=""></p>
+<p><label for="detail-max-month" title="Nombre de mois affich&eacute;s. 0: tous">detail-max-month</label>
+<input type = "number" name="detail-max-month"class="w10"  placeholder="0"></p>
+<p><label for="tmpl-lign" title="modele d&#039;affichage pour un article ou total">tmpl-lign</label>
+<input type = "text" name="tmpl-lign" placeholder="##ALIAS## ##CATALIAS## ##DETAIL##"></p>
+<p><label for="tmpl-detail-period" title="template pour une p&eacute;riode">tmpl-detail-period</label>
+<input type = "text" name="tmpl-detail-period" placeholder="[b class=&quot;t-blue bg-grisClair ph1&quot;]##PERIOD##[/b] ([b]##TOTAL##[/b] - ##LANG##)"></p>
+<p><label for="tmpl-detail-period-lang" title="Sous-template pour un langage">tmpl-detail-period-lang</label>
+<input type = "text" name="tmpl-detail-period-lang" placeholder="[i]##LANG##[/i]:[b]##COUNT##[/b]"></p>
+<p><label for="tmpl-total-detail-period" title="template pour le nombre de pages vues par les visiteurs">tmpl-total-detail-period</label>
+<input type = "text" name="tmpl-total-detail-period" placeholder="[b class=&quot;t-blanc bg-brun ph1&quot;]##PERIOD##[/b] ([b]##TOTAL##[/b] - ##PAGES-VISITORS##)"></p>
+<p><label for="tmpl-total-detail-PV" title="Sous-template groupe de nombres de pages par visiteurs">tmpl-total-detail-PV</label>
+<input type = "text" name="tmpl-total-detail-PV" placeholder="[i]##NBPAGES##p[/i]:##COUNT##"></p>
+<p><label for="date-format" title="format pour la date">date-format</label>
+<input type = "text" name="date-format" title="lang[en=%B %se, %Y; fr=%e %B %Y]" placeholder="lang[en=%B %se, %Y; fr=%e %B %Y]" list="combo_date-format"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_date-format">
+<option value=""></option>
+<option value=""></option>
+<option value="lang[en=%B %se, %Y ; fr=%e %B %Y]">lang[en=%B %se, %Y ; fr=%e %B %Y]</option>
+</datalist></p>
+<p><label for="no-content-html" title="message affich&eacute; si aucun r&eacute;sultat pour la s&eacute;lection">no-content-html</label>
+<input type = "text" name="no-content-html" title="lang[en=No statistical data; fr=Aucune donnée statistique]" placeholder="lang[en=No statistical data; fr=Aucune donnée statistique]" list="combo_no-content-html"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_no-content-html">
+<option value=""></option>
+<option value=""></option>
+<option value="lang[en=No statistical data ; fr=Aucune donnée statistique]">lang[en=No statistical data ; fr=Aucune donnée statistique]</option>
+</datalist></p>
+<h4>Paramètres consolidation pour prefs.ini</h4>
+<p><label for="keep-days" title="nombre de jours non compact&eacute;s en mois. Aujourd&#039;hui non inclus. Ces jours ne sont pas comptabilis&eacute; dans leur mois">keep-days</label>
+<input type = "number" name="keep-days"class="w10"  placeholder="3"></p>
+<p><label for="keep-months" title="nombre minimum de mois non compact&eacute;s en ann&eacute;es. (0=ann&eacute;e courante, 12=ann&eacute;e courante et pr&eacute;c&eacute;dente)">keep-months</label>
+<input type = "number" name="keep-months"class="w10"  placeholder="12"></p>
+<p><label for="delay-unique" title="delai (en secondes) entre 2 visites d&#039;une page par une IP pour la considerer comme unique">delay-unique</label>
+<input type = "number" name="delay-unique"class="w10"  placeholder="300"></p>
+<p><label for="bots-nbpages" title="nb pages/jour pour suspision de robots">bots-nbpages</label>
+<input type = "number" name="bots-nbpages"class="w10"  placeholder="200"></p>
+<h4>Classe(s) et style(s) pour la ligne total</h4>
+<p><label for="total-style" title="style pour la derni&egrave;re ligne">total-style</label>
+<input type = "text" name="total-style"class="w50"  placeholder="bg-grisClair"></p>
+<h4>Gestion style d'une ligne</h4>
+<p><label for="item-tag" title="balise pour les lignes de la liste">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder=""></p>
+<p><label for="item-class" title="classe pour les lignes de la liste">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<p><label for="item-style" title="style pour les lignes de la liste">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<h4>Gestion style du bloc principal</h4>
+<p><label for="main-tag" title="balise pour la liste">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Pour webmaster - à ajouter dans le fichier prefs.ini</h4>
+<p><label for="dir-logs" title="dossier pour logs">dir-logs</label>
+<input type = "text" name="dir-logs"class="w50 important"  placeholder="up/site-stat"></p>
+</body>
+</html >

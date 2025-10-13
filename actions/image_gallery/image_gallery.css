@@ -1,0 +1,114 @@
+/* 
+    Created on : 23 juil. 2018, 10:16:35
+    Author     : LOIC
+    CSS spécifique à l'action'
+*/
+
+.masonry-grid figure {margin:0; }
+
+.legend-hover figure{
+    position:relative;
+    display: inline-flex; 
+}
+/* ================================ */
+.legend-hover figure figcaption{
+    position: absolute;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    font-size: 0.9rem;
+    font-weight: 400;
+    left: auto;
+    width: 100%;
+    height: 0px;
+    padding: 0 10px;
+    color: transparent;
+    background: transparent;
+    transition: all 0.6s ease;
+    flex-flow:column; 
+}
+.legend-hover.legend-bottom figure figcaption{
+    bottom: 0px;
+}
+.legend-hover.legend-top figure figcaption{
+    top:0px;
+}
+.legend-hover figure:hover figcaption{
+    display:flex;
+    height: 60px;
+    background: rgba(0,0,0,0.6);
+    color: #ddd;
+}
+/* au-dessous */
+.legend figure figcaption{
+    text-align:center;
+    font-size: 0.9rem;
+    font-weight: 400;
+    padding: 5px 10px;
+    color: #333;
+    display:flex;
+	flex-flow:column;
+}
+/* raz */
+figure.upgallery,
+figure.upgallery img{
+    margin:0;
+	vertical-align:middle;
+}
+/* inifinite scroll */
+.page-load-status {
+  display: none; /* hidden by default */
+  padding-top: 20px;
+  border-top: 1px solid #DDD;
+  text-align: center;
+  color: #777;
+}
+.loader-ellips {
+  font-size: 20px; /* change size here */
+  position: relative;
+  width: 4em;
+  height: 1em;
+  margin: 10px auto;
+}
+
+.loader-ellips__dot {
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background: #555; /* change color here */
+  position: absolute;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+}
+
+.loader-ellips__dot:nth-child(1),
+.loader-ellips__dot:nth-child(2) {
+  left: 0;
+}
+.loader-ellips__dot:nth-child(3) { left: 1.5em; }
+.loader-ellips__dot:nth-child(4) { left: 3em; }
+
+@keyframes reveal {
+  from { transform: scale(0.001); }
+  to { transform: scale(1); }
+}
+
+@keyframes slide {
+  to { transform: translateX(1.5em) }
+}
+
+.loader-ellips__dot:nth-child(1) {
+  animation-name: reveal;
+}
+
+.loader-ellips__dot:nth-child(2),
+.loader-ellips__dot:nth-child(3) {
+  animation-name: slide;
+}
+
+.loader-ellips__dot:nth-child(4) {
+  animation-name: reveal;
+  animation-direction: reverse;
+}

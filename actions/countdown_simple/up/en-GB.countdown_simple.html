@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>countdown_simple - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-countdown-simple" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a simple and easily adaptable countdown timer</p>
+<p><code><b>{</b>up countdown-simple=AAAAMMJJHHMM<b>}</b></code></p>
+
+
+</div >
+<p><label for="countdown_simple" title="target date or deadline if starts with +">countdown-simple</label>
+<input type = "text" id="countdown_simple"class="w30 important"  placeholder=""></p>
+<p><label for="model" title="template CSS for presentation">model</label>
+<input type = "text" name="model"class="w30"  placeholder=""></p>
+<p><label for="digit-view" title="displays. Put an X so as not to display it. For the first not displayed, the value will be converted and added to the first displayed">digit-view</label>
+<input type = "text" name="digit-view"class="w30"  placeholder="YMDHMS"></p>
+<h4>Texts added to the counter</h4>
+<p><label for="intro-text" title="text before all displays">intro-text</label>
+<input type = "text" name="intro-text" placeholder=""></p>
+<p><label for="close-text" title="text after all displays">close-text</label>
+<input type = "text" name="close-text" placeholder=""></p>
+<p><label for="prefix" title="text before value">prefix</label>
+<input type = "text" name="prefix" placeholder=""></p>
+<p><label for="suffix" title="text after value">suffix</label>
+<input type = "text" name="suffix" placeholder="lang[en=years,months,days,hours,minutes,seconds;fr=années,mois,jours,heures,minutes,secondes]"></p>
+<p><label for="elapsed-text" title="Text or bbcode displayed if time has elapsed">elapsed-text</label>
+<input type = "text" name="elapsed-text" placeholder="lang[en=Too late;fr=Trop tard]"></p>
+<h4>number style</h4>
+<p><label for="digit-class" title="class for the numbers">digit-class</label>
+<input type = "text" name="digit-class" placeholder=""></p>
+<p><label for="zero" title="add a zero in front of the hours, minutes and seconds">zero</label>
+<select name="zero" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (added in the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p class="hr-top"><label for="filter" title="condition(s) for performing the action">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

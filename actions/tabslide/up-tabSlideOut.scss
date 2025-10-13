@@ -1,0 +1,118 @@
+/*
+    tabSlideOUt
+
+    By  Michael Fielding
+    License: GPL v3.0
+
+    version for UP
+*/
+
+$radius : 10px;
+$panel-border:2px solid grey;
+
+.ui-slideouttab-panel, .ui-slideouttab-handle {
+    background-color: white;
+    padding: 0.4em;
+    box-sizing: border-box;
+    z-index: 9999;
+}
+.ui-slideouttab-panel {
+    display: block;
+    position: fixed;
+    border: $panel-border;
+}
+
+/* Cette classe est ajoutée après l'initialisation des onglets, sinon l'utilisateur 
+   voit que les onglets s'écartent lorsque la page est initialisée. */
+.ui-slideouttab-ready {
+	transition: transform 0.5s ease 0s;
+}
+
+/* Hide tabs and panels when printed. */
+@media print {
+    .ui-slideouttab-panel {
+        display: none;
+    }
+}
+
+/* Tab handles */
+.ui-slideouttab-handle {
+    display: block;
+    position: absolute;
+    cursor: pointer;
+    color: white;
+    background-color: grey;
+}
+.ui-slideouttab-handle-image {
+    transform: rotate(0);
+}
+
+/* Right */
+.ui-slideouttab-right {
+    right: 0px;
+    transform: translateX(100%);
+    border-right: none;
+    &.ui-slideouttab-open {
+	transform: translateX(0%);
+    }
+    .ui-slideouttab-handle {
+        transform-origin: 0% 0%;
+        transform: rotate(-90deg) translate(-100%,-100%);  
+        border-radius: $radius $radius 0 0;
+    }
+    .ui-slideouttab-handle-reverse {
+        transform-origin: 0% 100%;
+        transform: rotate(-90deg);
+    }
+}
+
+/* Left */
+.ui-slideouttab-left {
+    left: 0px;
+    transform: translateX(-100%);
+    border-left: none;
+    &.ui-slideouttab-left.ui-slideouttab-open {
+	transform: translateX(0%);
+    }
+    .ui-slideouttab-handle {
+        transform-origin: 100% 0%;
+        transform: rotate(-90deg);   
+        border-radius: 0 0 $radius $radius;    }
+    .ui-slideouttab-handle-reverse {
+        transform-origin: 100% 100%;
+        transform: rotate(-90deg) translate(100%,100%);   
+    }
+}
+/* Top */
+.ui-slideouttab-top {
+    top: 0px;
+    transform: translateY(-100%);
+    border-top: none;
+    &.ui-slideouttab-open {
+	transform: translateY(0%);
+    }
+    .ui-slideouttab-handle{
+        border-radius: 0 0 $radius $radius;   
+    }
+}    
+/* Bottom */
+.ui-slideouttab-bottom {
+    bottom: 0px;
+    transform: translateY(100%);
+    border-bottom: none;
+    &.ui-slideouttab-open {
+	transform: translateY(0%);
+    }
+    .ui-slideouttab-handle{
+        border-radius: $radius $radius 0 0;
+    }
+}
+/* turn font awesome icon in a tab upright */
+.ui-slideouttab-left .ui-slideouttab-handle>.fa-icon, 
+.ui-slideouttab-right .ui-slideouttab-handle>.fa-icon { 
+    transform: rotate(90deg);
+}
+.ui-slideouttab-handle>.fa-icon {
+    margin-left: 0.5em;
+}
+

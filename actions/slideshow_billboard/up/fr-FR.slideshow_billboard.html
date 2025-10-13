@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>slideshow_billboard - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-slideshow-billboard" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Slideshow responsive d'images avec légendes et liens
+</p>
+<p>syntaxe 1:<br /><code><b>{</b>up slideshow_billboard=chemin_sous_dossier<b>}</b></code><br />syntaxe 2:<br /><code><b>{</b>up slideshow_billboard<b>}</b></code><br />< img src="images/img.jpg" alt="légende"> // image avec légende dans alt<br />< a href="#">< img src="img.jpg">< /a> // image avec lien<br /><code><b>{</b>/up slideshow_billboard<b>}</b></code></p>
+
+
+</div >
+<p><label for="slideshow_billboard" title="si indiqu&eacute;, toutes les images de ce dossier (ordre alpha)">slideshow-billboard</label>
+<input type = "text" id="slideshow_billboard" placeholder=""></p>
+<p><label for="label" title="affiche la l&eacute;gende des images (attribut alt ou nom fichier humanis&eacute;).">label</label>
+<select name="label" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="zoom-suffix" title="si indiqu&eacute;, seules les images avec ce suffixe sont utilis&eacute;es">zoom-suffix</label>
+<input type = "text" name="zoom-suffix"class="w10"  title="" placeholder="" list="combo_zoom-suffix"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_zoom-suffix">
+<option value=""></option>
+<option value="-mini">-mini</option>
+</datalist></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>paramètres Javascript pour configuration</h4>
+<p><label for="ease" title="&lt;a href=&quot;http://easings.net/fr&quot; target=&quot;_blank&quot;&gt;mode de transition&lt;/a&gt;">ease</label>
+<select name="ease" title="easeInOutExpo" placeholder="easeInOutExpo" value="easeInOutExpo">
+<option value=""></option>
+<option value="easeInSine">easeInSine</option>
+<option value="easeOutSine">easeOutSine</option>
+<option value="easeInOutSine">easeInOutSine</option>
+<option value="easeInQuad">easeInQuad</option>
+<option value="easeOutQuad">easeOutQuad</option>
+<option value="easeInOutQuad">easeInOutQuad</option>
+<option value="easeInCubic">easeInCubic</option>
+<option value="easeOutCubic">easeOutCubic</option>
+<option value="easeInOutCubic">easeInOutCubic</option>
+<option value="easeInQuart">easeInQuart</option>
+<option value="easeOutQuart">easeOutQuart</option>
+<option value="easeInOutQuart">easeInOutQuart</option>
+<option value="easeInQuint">easeInQuint</option>
+<option value="easeOutQuint">easeOutQuint</option>
+<option value="easeInOutQuint">easeInOutQuint</option>
+<option value="easeInExpo">easeInExpo</option>
+<option value="easeOutExpo">easeOutExpo</option>
+<option value="easeInOutExpo" selected>easeInOutExpo</option>
+<option value="easeInCirc">easeInCirc</option>
+<option value="easeOutCirc">easeOutCirc</option>
+<option value="easeInOutCirc">easeInOutCirc</option>
+<option value="easeInBack">easeInBack</option>
+<option value="easeOutBack">easeOutBack</option>
+<option value="easeInOutBack">easeInOutBack</option>
+<option value="easeInElastic">easeInElastic</option>
+<option value="easeOutElastic">easeOutElastic</option>
+<option value="easeInOutElastic">easeInOutElastic</option>
+<option value="easeInBounce">easeInBounce</option>
+<option value="easeOutBounce">easeOutBounce</option>
+<option value="easeInOutBounce">easeInOutBounce</option>
+</select></p>
+<p><label for="speed" title="dur&eacute;e des transitions en millisecondes">speed (msec)</label>
+<input type = "number" name="speed" min="0" max="2000" step="10" unit="msec" placeholder="1000"></p>
+<p><label for="duration" title="dur&eacute;e entre les changements d&#039;images">duration (msec)</label>
+<input type = "number" name="duration" min="0" max="10000" step="100" unit="msec" placeholder="5000"></p>
+<p><label for="autoplay" title="d&eacute;marrage automatique">autoplay</label>
+<select name="autoplay" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="loop" title="diaporama en boucle si ex&eacute;cution automatique est vraie">loop</label>
+<select name="loop" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="transition" title="&quot;fade&quot;, &quot;up&quot;, &quot;down&quot;, &quot;left&quot;, &quot;right&quot;">transition</label>
+<select name="transition" title="left" placeholder="left" value="left">
+<option value=""></option>
+<option value="fade">fade</option>
+<option value="up">up</option>
+<option value="down">down</option>
+<option value="left" selected>left</option>
+<option value="right">right</option>
+</select></p>
+<p><label for="navType" title="&quot;controls&quot;, &quot;list&quot;, &quot;both&quot; or &quot;none&quot;">navType</label>
+<select name="navType" title="list" placeholder="list" value="list">
+<option value=""></option>
+<option value="controls">controls</option>
+<option value="list" selected>list</option>
+<option value="both">both</option>
+<option value="none">none</option>
+</select></p>
+<p><label for="styleNav" title="applies default styles to nav">styleNav</label>
+<select name="styleNav" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="includeFooter" title="afficher/masquer le pied de page (l&eacute;gende et navigation)">includeFooter</label>
+<select name="includeFooter" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p class="hr-top"><label for="autosize" title="hauteur diaporama fixe. calcul sur 1&egrave;re image">autosize</label>
+<select name="autosize"class="hr-top"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="resize" title="tente de d&eacute;tecter automatiquement la taille de chaque diapositive">resize</label>
+<select name="resize" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="stretch" title="&eacute;tire les images pour remplir le conteneur">stretch</label>
+<select name="stretch" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+</body>
+</html >

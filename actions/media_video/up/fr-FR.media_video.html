@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_video - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-video" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une vidéo locale en HTML5
+</p>
+<p>il suffit d'indiquer le chemin et le nom du fichier (avec ou sans extension)<br />pour utiliser toutes les vidéos de ce nom dans le dossier.<br />Si le nom du fichier n'est pas indiqué ou contient des jokers,<br />toutes les vidéos correspondantes seront retournées<br />Supporte les formats video : mp4,webm,ogg<br />Si une image (jpg,png,webp,gif) existe, elle sera utilisé comme preview (poster)<br />syntaxe <code><b>{</b>up media-video=chemin_vers_videos<b>}</b></code></p>
+
+
+</div >
+<p><label for="media_video" title="chemin et nom du fichier vid&eacute;o. caract&egrave;res joker autoris&eacute;s">media-video</label>
+<input type = "text" id="media_video" placeholder=""></p>
+<h4>configuration du lecteur vidéo</h4>
+<p><label for="autoplay" title="lancement automatique de la 1ere video">autoplay</label>
+<select name="autoplay"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="muted" title="coupe le son">muted</label>
+<select name="muted"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="loop" title="joue la vid&eacute;o en boucle">loop</label>
+<select name="loop"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="controls" title="affiche les boutons de commande">controls</label>
+<select name="controls"class="w5"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="preload" title="none, metadata, auto.">preload</label>
+<select name="preload"class="w10"  title="auto" placeholder="auto" value="auto">
+<option value=""></option>
+<option value="none">none</option>
+<option value="metadata">metadata</option>
+<option value="auto" selected>auto</option>
+</select></p>
+<p><label for="legend" title="texte affich&eacute; au dessous des vid&eacute;o ou 1 pour le nom humanis&eacute; de chaque vid&eacute;o">legend</label>
+<input type = "text" name="legend" placeholder=""></p>
+<p><label for="legend-style" title="classe(s) et style pour la l&eacute;gende">legend-style</label>
+<input type = "text" name="legend-style" placeholder=""></p>
+<h4>Types des vidéos acceptées</h4>
+<p><label for="types" title="liste extension fichier et type mime">types</label>
+<input type = "text" name="types" placeholder="mp4:mp4;webm:webm;ogv:ogg"></p>
+<p><label for="codecs" title="liste type et codec support&eacute;s. ex: ogg:theora,vorbis; webm:vp8.0,vorbis">codecs</label>
+<input type = "text" name="codecs" placeholder=""></p>
+<h4>Messages si erreur</h4>
+<p><label for="no-video" title="message si video non trouv&eacute;e">no-video</label>
+<input type = "text" name="no-video" placeholder="lang[en=no video;fr=aucune vidéo]"></p>
+<p><label for="no-support" title="message si video non support&eacute;e">no-support</label>
+<input type = "text" name="no-support" placeholder="lang[en=Your web browser does not support HTML5 video;fr=Votre navigateur Web ne prend pas en charge la vidéo HTML5"></p>
+<h4>styles</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

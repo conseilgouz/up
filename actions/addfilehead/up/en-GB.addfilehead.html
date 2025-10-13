@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addfilehead - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addfilehead" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Add JS or CSS files in the head</p>
+<p>syntax <code><b>{</b>up addfilehead=file1.js, file2.css, //site.fr/file.js<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>prism</u> : </b> <b>addfilehead</b>=/media/plg_lmprism/lm-prism-coy.min.css,/media/plg_lmprism/lm-prism.js
+</div >
+<p><label for="addfilehead" title="list of files or URLs. comma separator">addfilehead</label>
+<input type = "text" id="addfilehead" title="" placeholder="" list="combo_addfilehead"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_addfilehead">
+<option value=""></option>
+<option value="prism">prism</option>
+</datalist></p>
+<p><label for="filter" title="conditions. Voir doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

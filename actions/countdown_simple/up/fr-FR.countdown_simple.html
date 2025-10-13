@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>countdown_simple - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-countdown-simple" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un compte à rebours simple et facilement adaptable par CSS
+</p>
+<p>syntaxe <code><b>{</b>up countdown-simple=AAAAMMJJHHMM<b>}</b></code></p>
+
+
+</div >
+<p><label for="countdown_simple" title="date cible ou d&eacute;lai si d&eacute;bute par +">countdown-simple</label>
+<input type = "text" id="countdown_simple"class="w30 important"  placeholder=""></p>
+<p><label for="model" title="CSS de base pour la pr&eacute;sentation (digital, rainbow)">model</label>
+<input type = "text" name="model"class="w30"  placeholder=""></p>
+<p><label for="digit-view" title="afficheurs. Mettre un X pour ne pas l&#039;afficher. Pour les premiers non affich&eacute;s, la valeur sera convertie et ajout&eacute;e au premier affich&eacute;">digit-view</label>
+<input type = "text" name="digit-view"class="w30"  placeholder="YMDHMS"></p>
+<h4>Textes ajoutés au compteur</h4>
+<p><label for="intro-text" title="texte avant les afficheurs">intro-text</label>
+<input type = "text" name="intro-text" placeholder=""></p>
+<p><label for="close-text" title="texte apr&egrave;s les afficheurs">close-text</label>
+<input type = "text" name="close-text" placeholder=""></p>
+<p><label for="prefix" title="texte avant valeur">prefix</label>
+<input type = "text" name="prefix" placeholder=""></p>
+<p><label for="suffix" title="texte apr&egrave;s valeur">suffix</label>
+<input type = "text" name="suffix" placeholder="lang[en=years,months,days,hours,minutes,seconds;fr=années,mois,jours,heures,minutes,secondes]"></p>
+<p><label for="elapsed-text" title="Texte ou bbcode affich&eacute; si d&eacute;lai &eacute;coul&eacute;">elapsed-text</label>
+<input type = "text" name="elapsed-text" placeholder="lang[en=Too late;fr=Trop tard]"></p>
+<h4>style des chiffres</h4>
+<p><label for="digit-class" title="classe(s) pour les chiffres">digit-class</label>
+<input type = "text" name="digit-class" placeholder=""></p>
+<p><label for="zero" title="ajoute un z&eacute;ro devant les heures, minutes et secondes">zero</label>
+<select name="zero" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p class="hr-top"><label for="filter" title="condition d&#039;&eacute;x&eacute;cution">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

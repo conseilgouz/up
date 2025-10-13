@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upprefset - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upprefset" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche la liste de tous les prefsets de UP pour le site
+</p>
+<p>syntaxe <code><b>{</b>up upPrefSet<b>}</b></code></p>
+
+
+</div >
+<h4>Sélection des actions</h4>
+<p><label for="upprefset" title="liste des actions ou vide pour toutes">upprefset</label>
+<input type = "text" id="upprefset" placeholder=""></p>
+<p><label for="action-exclude" title="1: toutes les actions sauf celles du param&eacute;tre principal">action-exclude</label>
+<select name="action-exclude" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="prefset-exclude" title="sections exclues">prefset-exclude</label>
+<input type = "text" name="prefset-exclude" placeholder="icons,options"></p>
+<h4>Format de la mise en page</h4>
+<p><label for="action-template" title="pr&eacute;sentation pour ##action##">action-template</label>
+<input type = "text" name="action-template" placeholder="[h4]##action##[/h4]"></p>
+<p><label for="prefset-template" title="pr&eacute;sentation pour ##prefset##">prefset-template</label>
+<input type = "text" name="prefset-template" placeholder="[b class=&quot;t-vertFonce&quot;]##prefset##[/b] : [small]##options##[/small]"></p>
+<p><label for="info-template" title="pr&eacute;sentation pour ##info##">info-template</label>
+<input type = "text" name="info-template" placeholder="[div class=&quot;bd-grey ph1&quot;]##info##[/div]"></p>
+<p><label for="prefset-separator" title="s&eacute;parateur entre items">prefset-separator</label>
+<input type = "text" name="prefset-separator" placeholder="[br]"></p>
+<p><label for="options-separator" title="les underscrores sont remplac&eacute;s par des espaces">options-separator</label>
+<input type = "text" name="options-separator" placeholder="[b class=&quot;t-vert&quot;] | [/b]"></p>
+<h4>exportation des fichiers</h4>
+<p><label for="export-prefs" title="ou sous-dossier de TMP pour sauver l&#039;arborescence. ex : up-pref-foo">export-prefs</label>
+<input type = "text" name="export-prefs" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="action-class" title="classes et style pour le bloc d&#039;une action">action-class</label>
+<input type = "text" name="action-class" placeholder=""></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

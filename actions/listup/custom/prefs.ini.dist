@@ -1,0 +1,33 @@
+; PREFERENCES WEBMASTER
+
+; ce fichier permet au wenmaster de spécifier 
+; - les valeurs par défaut des options dans la section [options] 
+; - des jeux d'options en créeant une nouvelle section 
+; - de saisir des données spécifiques (clé) à une action. voir doc de l'action concernée 
+
+; Cas particulier : annulation des valeurs précédentes
+; pour une valeur texte ou numérique : laisser vide
+; pour une valeur logique : saisir 1 ou 0
+
+; ATTENTION : mettre entre guillemets doubles si caractères spéciaux. Doubler des doubles guillemets pour les utiliser
+
+[options]
+;ul-default ="circle;t-red"
+
+[num]
+listup="decimals;t-red;font-size:2rem;bg-yellow;border:solid darkRed 1px"
+prefix="Pt "
+suffix=" : "
+
+[bullets]
+oui="\2713;t-green"
+non="\2717;color:red"
+diamond="\25C6"
+triangle="\25B8"
+star="\2605;t-yellow"
+plus="\271A;t-green"
+minus="\2501;t-red"
+arrow="\27A7"
+raquo="\BB"
+step="decimal;font-size:1.5rem;t-red"
+red-square="square;t-red;border:var(--red) 2px solid"

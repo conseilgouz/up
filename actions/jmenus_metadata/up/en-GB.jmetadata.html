@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jmetadata - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jmetadata" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Affiche les metadonnees pour les menus et articles
+</p>
+<p>syntaxe <code><b>{</b>up jmetadata=menutype-exclude<b>}</b></code><br />mots-cle pour 'template-menutype'];
+   ##id##, ##title##, ##menutype##<br />mots-cle pour 'template-menu'<br />##id##, ##title##, ##title-link', ##menutype##, ##publish_up##, ##publish_down##, ##access##, ##index##, ##follow##<br />mots-cle pour 'template-article'<br />##id##, ##title##, ##title-link', ##alias##, ##state##, ##access##, ##featured##,<br />##created##, ##modified##, ##publish_up##, ##publish_down##<br />##catid##, ##catname##, ##language##, ##index##, ##follow##</p>
+
+
+</div >
+<p><label for="jmetadata" title="description argument attendu">jmetadata</label>
+<input type = "text" id="jmetadata" placeholder=""></p>
+<p><label for="public-only" title="1: visible par les robots, 0: visible par utilisateur courant">public-only</label>
+<input type = "text" name="public-only" placeholder="1"></p>
+<p><label for="template-menutype" title="">template-menutype</label>
+<input type = "text" name="template-menutype" placeholder="[h2]##title##[/h2]"></p>
+<p><label for="template-menu" title="">template-menu</label>
+<input type = "text" name="template-menu" placeholder="[b]##title##[/b] (##menutype## / ##level##) ##index=noindex [span class=&quot;t-red&quot;]!![/span]##"></p>
+<p><label for="template-article" title="">template-article</label>
+<input type = "text" name="template-article" placeholder="##featured[1:&amp;#x2B50;] [span]!![/span] ####title-link##"></p>
+<p><label for="menutype-exclude" title="">menutype-exclude</label>
+<input type = "text" name="menutype-exclude" placeholder=""></p>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

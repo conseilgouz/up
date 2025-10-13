@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_compare - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-compare" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>comparison of 2 images by moving a cursor</p>
+<p><code><b>{</b>up imagecompare<b>}</b></code><br>< img src=before.jpg ><br>< img src=after.jpg ><br><code><b>{</b>/up imagecompare<b>}</b></code></p>
+
+
+</div >
+<p><label for="image_compare" title="nothing">image-compare</label>
+<input type = "text" id="image_compare"class="w20 inactif"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="block class">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline block style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Javascript parameters for configuration</h4>
+<p><label for="initVisibleRatio" title="initial position">initVisibleRatio</label>
+<input type = "text" name="initVisibleRatio"class="w10"  size="4" placeholder="0.2"></p>
+<p><label for="interactionMode" title="mode: drag, mousemove, click">interactionMode</label>
+<select name="interactionMode" title="drag" placeholder="drag" value="drag">
+<option value=""></option>
+<option value="drag" selected>drag</option>
+<option value="mousemove">mousemove</option>
+<option value="click">click</option>
+</select></p>
+<p><label for="addSeparator" title="add separator (vertical line)">addSeparator</label>
+<select name="addSeparator" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="addDragHandle" title="adds handle on separator">addDragHandle</label>
+<select name="addDragHandle" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="animationDuration" title="Duration of animation in ms">animationDuration (ms)</label>
+<input type = "number" name="animationDuration"class="w10"  unit="ms" step="50" placeholder="450"></p>
+<p><label for="animationEasing" title="animation: linear, swing">animationEasing</label>
+<select name="animationEasing" title="linear" placeholder="linear" value="linear">
+<option value=""></option>
+<option value="linear" selected>linear</option>
+<option value="swing">swing</option>
+</select></p>
+<p><label for="precision" title="Precision report, number of decimals">precision</label>
+<input type = "number" name="precision"class="w5"  placeholder="2"></p>
+</body>
+</html >

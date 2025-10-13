@@ -1,0 +1,76 @@
+// ===== CRAZY
+// template :
+// [div class='up-box-top']##image## [div style='display:inline-grid']##title## ##subtitle##[/div][/div] 
+// [div class='up-box-panel']##content## ##action-link##"[/div]
+// * display:inline-grid aligne title et subtitle
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+$bg-title: $orange;
+$txt-title: $rougeFonce;
+$txt-title-hover: $bleuClair;
+$bg-content: $violet;
+$bg-action: $orange;
+$txt-action: $rougeFonce;
+$border-action:2px $grisPale solid;
+
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');
+
+.up-box-crazy {
+    .up-box-head {
+        background: $bg-title;
+        color:$txt-title;
+        font-family: "Freckle Face", cursive;
+        padding: 5px 10px;
+        transform:rotate(-4deg);
+        width:90%;
+        position:relative; // pour android et z-index
+        z-index:99;
+        box-shadow: $shadow-bottom;
+        transition: all .275s;
+        &:hover{
+            color:$txt-title-hover;
+            rotate:(1deg);}
+        .up-box-image, .up-box-title {
+            display:inline-block;
+        }
+        .up-box-image {
+            max-height:40px; width:auto; 
+            vertical-align:top;
+        }
+        .up-box-title {
+            font-weight:900;
+            font-size:32px;
+            vertical-align:bottom;
+            margin-bottom:0;
+        }
+        .up-box-subtitle {
+            display:block;
+        }
+    } 
+    .up-box-body {
+        background: $bg-content;
+        color:$grisPale;
+        font-family: 'Mountains of Christmas', cursive;
+        font-size:1.2rem;
+        margin-left:5%;
+        margin-top:-1.25em;
+        padding:3em 16px 1em;
+        transform:rotate(1deg);
+        box-shadow: $shadow-bottom;
+        .up-box-action {
+            text-align:center;
+            margin:20px 0 10px;
+            a { color:$txt-action;
+                background:$bg-action;
+                border: $border-action;
+                padding:10px;
+            }
+            &:hover{transform:scale(0.95)}
+        }    
+    } 
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cache_cleaner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-cache-cleaner" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Efface les fichiers du cache  
+</p>
+<p>Supprime tous les fichiers PHP du sous-dossier indiqué en option. com_content par défaut<br />syntaxe <code><b>{</b>up cache-cleaner=com_modules<b>}</b></code> // defaut : com_content</p>
+
+
+</div >
+<p><label for="cache_cleaner" title="liste des dossiers du cache ou * pour tous (s&eacute;parateur: point-virgule)">cache-cleaner</label>
+<input type = "text" id="cache_cleaner" placeholder="com_content"></p>
+<p><label for="folder-exclude" title="chemin relatif (&agrave; folder-cache) des dossiers &agrave; conserver (s&eacute;parateur: point-virgule)">folder-exclude</label>
+<input type = "text" name="folder-exclude" placeholder=""></p>
+<p><label for="folder-cache" title="dossier racine du cache. vide=celui d&eacute;fini dans la configuration Joomla">folder-cache</label>
+<input type = "text" name="folder-cache" placeholder=""></p>
+<p><label for="file-mask" title="masque pour s&eacute;lectionner les fichiers. *.* = tous, *.{php,html} = php et html">file-mask</label>
+<input type = "text" name="file-mask" placeholder="*.php"></p>
+</body>
+</html >

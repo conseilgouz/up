@@ -1,0 +1,84 @@
+// === Trombi
+// https://la-cascade.io/css-shapes-une-introduction/
+
+/*
+subtitle-tag="small"
+template="##image## ##title-tag## ##link## ##title-text## ##subtitle## ##/link## ##/title-tag## ##body## ##content## ##action-link## ##/body##"
+*/
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+// @import "../../../assets/variables";
+// @import "../../../assets/scss/variables";
+
+//	##head## 
+//	  ##title-subtitle-link## ##image## 
+//	##/head## 
+//	##body## 
+//	  [div]##content##[/div] 
+//    ##action-link## 
+//	##/body##"
+
+
+.up-box-img-right-bando {
+	display: block;
+	margin: 10px 0;
+
+	.up-box-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background: #eee;
+
+		>*:first-child {
+			margin-top: 0
+		}
+
+		>*:last-child {
+			margin-bottom: 0
+		}
+	}
+
+	.up-box-image {
+		max-width: 100px;
+		max-height: 100px;
+		@media(max-width:480px) {
+			max-width: 70px;
+			max-height: 70px;
+		}
+	}
+
+	.up-box-title {
+		padding: 15px;
+		margin:0;
+		font-weight: bolder;
+		color: #333;
+		border:none;
+		background:none;
+
+		a {
+			color: #666;
+		}
+	}
+
+	.up-box-subtitle {
+		display: block;
+	}
+
+	.up-box-body {
+		padding: 10px;
+
+		// supprime marge des blocs début et fin
+		div> :first-child {
+			margin-top: 0
+		}
+
+		div> :last-child {
+			margin-bottom: 0
+		}
+
+	}
+
+	.up-box-action {
+		text-align: right;
+	}
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>toc - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-toc" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Sommaire automatique
+</p>
+<p>Création d'un sommaire à partir des titres de l'article<br />syntaxe <code><b>{</b>up toc<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>content</b>=.com-content-article
+</div >
+<p><label for="toc" title="inutilis&eacute;">toc</label>
+<input type = "text" id="toc"class="w5 inactif"  title="" placeholder="" list="combo_toc"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_toc">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; au head de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>JS: définir le contenu analysé</h4>
+<p><label for="content" title="bloc analys&eacute; pour le sommaire">content</label>
+<input type = "text" name="content"class="w30 important"  placeholder=".com-content-article"></p>
+<p><label for="selector" title="liste des selecteurs utilis&eacute;s pour le sommaire">selector</label>
+<input type = "text" name="selector"class="w30 important"  placeholder="h2,h3,h4,h5,h6"></p>
+<p><label for="exclude" title="liste s&eacute;lecteur pour exclusion du sommaire">exclude</label>
+<input type = "text" name="exclude"class="w20"  placeholder=".notoc"></p>
+<h4>JS: Mise en forme du sommaire</h4>
+<p><label for="indexingFormats" title="format des index : number, 1, upperAlphabet, A, lowerAlphabet, a, upperRoman, I, lowerRoman, i, - (aucun)">indexingFormats</label>
+<select name="indexingFormats" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="number">number</option>
+<option value="upperAlphabet">upperAlphabet</option>
+<option value="lowerAlphabet">lowerAlphabet</option>
+<option value="upperRoman">upperRoman</option>
+<option value="lowerRoman">lowerRoman</option>
+<option value="-">none</option>
+</select></p>
+<p><label for="maxlen" title="longueur maxi des titres du sommaire">maxlen</label>
+<input type = "number" name="maxlen"class="w10"  min="10" max="99" placeholder=""></p>
+<p><label for="heading" title="Titre du sommaire">heading</label>
+<input type = "text" name="heading" placeholder=""></p>
+<h4>JS: Divers pour experts</h4>
+<p><label for="elementClass" title="class de la div navigation">elementClass</label>
+<input type = "text" name="elementClass"class="w20"  placeholder="uptoc"></p>
+<p><label for="rootUlClass" title="class pour le bloc contenant la liste">rootUlClass</label>
+<input type = "text" name="rootUlClass"class="w20"  placeholder="toc-ul-root"></p>
+<p><label for="ulClass" title="class pour la liste">ulClass</label>
+<input type = "text" name="ulClass"class="w20"  placeholder="toc-ul"></p>
+<p><label for="levelPrefixClass" title="(interne) pr&eacute;fixe des classes">levelPrefixClass</label>
+<input type = "text" name="levelPrefixClass"class="w20 inactif"  placeholder="toc-level-"></p>
+</body>
+</html >

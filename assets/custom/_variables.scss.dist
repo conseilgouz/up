@@ -1,0 +1,63 @@
+// VARIABLES WEBMASTER
+// **********************
+// ce fichier est un modèle pour créer un fichier _variables.scss spécifique au site
+// Reprendre uniquement les variables modifiées. Cela évite de bloquer les mises à jours des autres.
+// Ne pas modifier le nom des variables et de pas en créer de nouvelles 
+
+
+//== couleurs de base (utilisé par les fichiers SCSS, ...). On peut utiliser
+//   - le code hexadécimal de la couleur ou les fonctions rga, rgba
+//   - le nom d'une couleur nommée (red, navy, ...)
+//   - des fonctions scss (darken, lighten, ...)
+
+$darkBlue    : #001f3f;	// bleuFonce    
+$blue        : #01457F;	// bleu    
+$lightBlue   : #069;  	// bleuClair     
+$paleBlue    : #BCE0FF;	// bleuPale    
+$darkGreen   : #006400;	// vertFonce    
+$green       : #46a546;  // vert  	
+$lightGreen	 : #98fb98;	// vertClair    
+$darkRed     : #8b0000;	// rougeFonce
+$red         : #ff1111;	// rouge
+$lightRed    : #f08080;	// rougeClair
+$pink        : #f012be;	// rose
+$purple      : #9400D3;	// violet
+$orange      : #ff851b;	// orange
+$darkYellow  : #ffc40d;	// jauneFonce
+$yellow      : #ffee00;	// jaune
+$lightYellow : #ffffe0;	// jauneClair
+$tan         : #E8DAC3;	// beige    
+$brown       : #a0522d;	// brun
+// -- les gris
+$black       : #000;  	// noir
+$darkGrey    : #333;  	// grisFonce
+$grey        : #888;	// gris
+$lightGrey   : #bbb;  	// grisClair
+$paleGrey    : #eee;	// grisPale
+$white       : #fff;	// blanc
+// -- la base
+$primary     : $blue;	// c1			
+$secondary	 : $grey;	// c2
+
+//== les ombres
+$shadow		 : 0 3px 2px rgba(0, 0, 0, 0.2);
+$shadowMax	 : 0 5px 5px 0 rgba(0,0,0,0.25),0 2px 10px 0 rgba(0,0,0,0.16);
+$shadow-bottom:0 10px 6px -6px rgba(0, 0, 0, .8); // pour action box
+
+//== breakpoints pour mediaqueries
+$breakpoint-s : 480px;
+$breakpoint-m : 760px;
+
+//== espaces et largeurs
+
+// - espace : utilisé par ma1, pa2, ...
+$up-space-0: 0;
+$up-space-1: 10px;
+$up-space-2: 24px;
+$up-space-3: 36px;
+
+// - largeurs : utilisé par border (b1, b2, ...)
+$up-border-0: 0;
+$up-border-1: 1px;
+$up-border-2: 2px;
+$up-border-3: 6px;

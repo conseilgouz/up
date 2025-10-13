@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>countdown - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-countdown" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche un compte à rebours ou une horloge digitale
+</p>
+<p>syntaxe:<br /><code><b>{</b>up countdown=201801010000<b>}</b></code>  // délai jusqu'à une date<br /><code><b>{</b>up countdown=120<b>}</b></code>           // compte à rebours en secondes<br /><code><b>{</b>up countdown<b>}</b></code>               // affiche une horloge</p>
+
+
+</div >
+<p><label for="countdown" title="date, nombre de secondes ou vide pour horloge">countdown</label>
+<input type = "text" id="countdown"class="w30 important"  placeholder=""></p>
+<p><label for="align" title="left, center ou right">align</label>
+<select name="align" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="left">left</option>
+<option value="center">center</option>
+<option value="right">right</option>
+</select></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="filter" title="condition d&#039;&eacute;x&eacute;cution">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>paramétres Javascript pour configuration du compteur</h4>
+<p><label for="callback" title="Fonction appel&eacute;e &agrave; la fin du compte &agrave; rebours">callback</label>
+<input type = "text" name="callback"class="inactif"  placeholder=""></p>
+<p><label for="captionSize" title="fontsize legendes">captionSize (px)</label>
+<input type = "number" name="captionSize" min="0" max="36" unit="px" placeholder="0"></p>
+<p><label for="countdownAlertLimit" title="alerte en seconde avant fin countdown">countdownAlertLimit (sec)</label>
+<input type = "number" name="countdownAlertLimit" min="0" unit="sec" placeholder="10"></p>
+<p><label for="displayCaptions" title="1 = l&eacute;gendes affich&eacute;es">displayCaptions</label>
+<select name="displayCaptions" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="displayDays" title="nb chiffres affich&eacute;s pour jours">displayDays</label>
+<input type = "number" name="displayDays" min="0" placeholder="0"></p>
+<p><label for="fontFamily" title="Police pour chiffres">fontFamily</label>
+<input type = "text" name="fontFamily"class="w30"  placeholder="Verdana, sans-serif"></p>
+<p><label for="fontSize" title="Taille police en pixels pour chiffres">fontSize (px)</label>
+<input type = "number" name="fontSize" min="0" max="128" unit="px" placeholder="28"></p>
+<p><label for="lang" title="D&eacute;fini automatiquement par UP">lang</label>
+<input type = "text" name="lang"class="w10 inactif"  placeholder="en"></p>
+<p><label for="seconds" title="Temps initial en secondes pour le compte &agrave; rebours">seconds (sec)</label>
+<input type = "number" name="seconds" min="0" unit="sec" placeholder="0"></p>
+<p><label for="start" title="d&eacute;marrer automatiquement la minuterie">start</label>
+<select name="start" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="theme" title="style : white, black ou blue">theme</label>
+<select name="theme" title="white" placeholder="white" value="white">
+<option value=""></option>
+<option value="white" selected>white</option>
+<option value="black">black</option>
+<option value="blue">blue</option>
+</select></p>
+</body>
+</html >

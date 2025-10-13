@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addclass - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addclass" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>ajoute une classe à un sélecteur CSS (body par défaut.)
+</p>
+<p>Il est possible :<br />- de cibler le parent d'un sélecteur CSS ou être relatif à l'emplacement du shortcode<br />- de créer la règle CSS avec l'option 'css-head=.foo<b>[</b>color:red]'<br />syntaxe <code><b>{</b>up addclass=nom_classe<b>}</b></code><br />Utilisation : changer l'image de fond à partir d'un article
+ *</p>
+
+
+</div >
+<p><label for="addclass" title="nom de la classe ajout&eacute;e &agrave; la balise">addclass</label>
+<input type = "text" id="addclass" placeholder=""></p>
+<p><label for="selector" title="balise cible. Ne pas oublier le point pour une classe ou le # pour un ID">selector</label>
+<input type = "text" name="selector"class="w20"  placeholder="body"></p>
+<p><label for="parent" title="1 si on cible le parent de selector, 2 le grand-p&egrave;re, ...">parent</label>
+<input type = "number" name="parent" min="1" max="6" size="2" placeholder=""></p>
+<h4>options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="code CSS pour head. Attention utiliser [] au lieu de {}">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche du texte aléatoire (enrichissement possible)</p>
+<p>.<br />Syntaxe :  <code><b>{</b>up lorem=2,decorate,headers<b>}</b></code><br />- (integer) - En premier, le nombre de paragraphes (P) générés. 4 par défaut<br />- short, medium, verylong ou long - La longueur moyenne d'un paragraphe. medium par défaut.<br />- allcaps - TOUT EN MAJUSCULES.<br />- plaintext - Retourne text sans balise HTML. Idem si options max-char ou max-word.<br />- decorate - ajoute bold, underline, italique, mark, ...<br />- link - ajoute d'un lien par paragraphe.<br />- headers - ajoute un titre défini par header-tag (h3 par défaut) avant le premier paragraphe.<br />=== contenu retourné. P par défaut ===<br />- ul - ajoute listes.<br />- ol - ajoute listes ordonnées.<br />- bq - ajoute bloc citation<br />- dl - ajoute listes description.<br />- code - ajoute exemple de code.<br />si un seul type, tous les paragraphes seront de ce type.<br />Pour avoir un texte sans aucun tag, utilisez : <code><b>{</b>up lorem=2,plaintext | tag=0<b>}</b></code>.<br />Même sans balise P, le nombre de paragraphes influe sur la longueur du texte retourné.</p>
+
+
+</div >
+<p><label for="lorem" title="nombre de paragraphe et mots-cl&eacute;s s&eacute;par&eacute;s par des virgules">lorem</label>
+<input type = "text" id="lorem"class="w50 important"  placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="max-char" title="nombre maxima de caract&egrave;res">max-char</label>
+<input type = "number" name="max-char"class="w10"  placeholder="0"></p>
+<p><label for="max-word" title="nombre maxima de mots">max-word</label>
+<input type = "number" name="max-word"class="w10"  placeholder="0"></p>
+<p><label for="start-with-lorem" title="d&eacute;bute le premier paragraphe par &quot;Lorem ipsum dolor sit amet,&quot;">start-with-lorem</label>
+<select name="start-with-lorem" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="header-tag" title="h1 &agrave; h6. tag pour le titre">header-tag</label>
+<select name="header-tag"class="w10"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="h1">h1</option>
+<option value="h2">h2</option>
+<option value="h3">h3</option>
+<option value="h4">h4</option>
+<option value="h5">h5</option>
+<option value="h6">h6</option>
+</select></p>
+<p><label for="decorate-tags" title="liste des balises pour d&eacute;corer les paragraphes">decorate-tags</label>
+<input type = "text" name="decorate-tags"class="w10"  placeholder="b,i,u,mark"></p>
+<h4>Style CSS</h4>
+<p><label for="tag" title="(v1.6) tag du bloc contenant le texte en retour ou tag=0 pour aucun.">tag</label>
+<input type = "text" name="tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="id" title="pour forcer l&#039;id (sans effet, si tag=0)">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc (sans effet, si tag=0)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc (sans effet, si tag=0)">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,24 @@
+[options]
+class="fg-gap"
+
+[2-10]
+flexbox=2-10
+tablet=3-9
+mobile=4-8
+class="fg-gap"
+bloc-style="border:1px solid #444; padding:0 10px"
+
+[4-8]
+flexbox=4-8
+tablet=2
+mobile=1
+class="fg-gap"
+bloc-style="border:1px solid green; padding:0 10px"
+
+[3-6-3]
+flexbox=3-6-3
+tablet=4-4-4
+mobile=1
+class="fg-gap"
+bloc-style="border:1px solid green; padding:0 10px"
+class="fg-vspace-between-1 m-child-raz-1 fg-gap"

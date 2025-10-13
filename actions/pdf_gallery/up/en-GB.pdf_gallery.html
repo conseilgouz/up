@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pdf_gallery - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-pdf-gallery" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a list of PDFs contained in a folder</p>
+<p>syntax : <code><b>{</b>up pdf-gallery=dossier<b>}</b></code><br><u>Template to define the rendering</u> <br> ##name## : name and extension of the file without the date prefix <br> ##full-name## : file name and extension with date prefix <br> ##human-name## : filename without dash <br> ##size## : file size  <br> ##date## : file date or file name date prefix <br> ##info## : .info file of the same name as the PDF with descriptive text <br> ##image##, ##image-view## : jpg or png file with the same name as the PDF  <br> ##preview## : PDF view with jsviewer method of PDF action <br> ##btn-view## : link to view PDF in modal. Text according to btn-view-text <br> ##btn-download##, ##name-download## : link to download the PDF. Text according to btn-download-text</p>
+</div >
+<p><label for="pdf_gallery" title="path of the folder containing the PDFs">pdf-gallery</label>
+<input type = "text" id="pdf_gallery" placeholder=""></p>
+<p><label for="file-mask" title="to select files from a folder. eg: fic-*">file-mask</label>
+<input type = "text" name="file-mask" placeholder=""></p>
+<p><label for="sort-by" title="sorting files. name or date. See the demo">sort-by</label>
+<input type = "text" name="sort-by" placeholder="name"></p>
+<p><label for="sort-order" title="sorting direction. asc or desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="msg-no-file" title="message if no PDF file in folder">msg-no-file</label>
+<input type = "text" name="msg-no-file" placeholder="en=no file;fr=aucun fichier"></p>
+<p><label for="template" title="model for display (bbcode and motcle)">template</label>
+<input type = "text" name="template" placeholder="##human-name## [small](##size## - ##date##)[/small] ##btn-view## ##btn-download##"></p>
+<p><label for="flip" title="activate flipbook mode">flip</label>
+<select name="flip" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Tag for list view</h4>
+<p><label for="main-tag" title="main tag or 0 for none">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="item-tag" title="tag for the block of a file. 0 = none">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="li"></p>
+<h4>PDF Preview Setup</h4>
+<p><label for="preview-width" title="block width for preview">preview-width</label>
+<input type = "text" name="preview-width"class="w10"  placeholder="100%"></p>
+<p><label for="preview-height" title="block height for preview">preview-height</label>
+<input type = "text" name="preview-height"class="w10"  placeholder="500px"></p>
+<p><label for="preview-background" title="PDF background color (preview and modal) in format #rrggbb">preview-background</label>
+<input type = "color" name="preview-background" title="" value="#feffff"></p>
+<h4>Modal window configuration</h4>
+<p><label for="popup-width" title="width of the popup window with unit. Eg: 90vw, 80%, ...">popup-width</label>
+<input type = "text" name="popup-width"class="w10"  placeholder="0"></p>
+<p><label for="popup-height" title="height of the popup window with unit. Eg: 90vh, 500px, ...">popup-height</label>
+<input type = "text" name="popup-height"class="w10"  placeholder="0"></p>
+<p><label for="popup-close-left" title="closing cross at top left. default top-right">popup-close-left</label>
+<select name="popup-close-left" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Download PDF button</h4>
+<p><label for="add-sitename" title="text to add at the beginning of downloaded files">add-sitename</label>
+<input type = "text" name="add-sitename"class="w20"  placeholder=""></p>
+<p><label for="btn-download-text" title="text for &#039;download&#039; button">btn-download-text</label>
+<input type = "text" name="btn-download-text" placeholder="en=Download %s;fr=Telecharger %s"></p>
+<p><label for="btn-download-style" title="inline class and style for &#039;download&#039; button">btn-download-style</label>
+<input type = "text" name="btn-download-style" placeholder=""></p>
+<h4>View PDF button</h4>
+<p><label for="btn-view-text" title="text for &#039;view&#039; button">btn-view-text</label>
+<input type = "text" name="btn-view-text" placeholder="Voir"></p>
+<p><label for="btn-view-style" title="inline class and style for the &#039;view&#039; button">btn-view-style</label>
+<input type = "text" name="btn-view-style" placeholder=""></p>
+<h4>style for ##image##</h4>
+<p><label for="image-style" title="class and style for the image">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="info-style" title="class and style for the content of the .info file. Add a DIV block">info-style</label>
+<input type = "text" name="info-style" placeholder=""></p>
+<h4>file label</h4>
+<p><label for="label-replace" title="list of replacements in the form old:new, ... BBcode allowed">label-replace</label>
+<input type = "text" name="label-replace" placeholder=""></p>
+<h4>Format for keywords</h4>
+<p><label for="format-date" title="format for the date. eg:&#039;d/m/Y H:i&#039;">format-date</label>
+<input type = "text" name="format-date" placeholder="lang[en=m/d/Y H:i;fr=d/m/Y H:i]"></p>
+<p><label for="prefix-date-size" title="zero or the number of characters to set the date. 13 if YYYYMMDDHHMM-, 11 if YYYY-MM-DD-">prefix-date-size</label>
+<input type = "number" name="prefix-date-size" min="0" max="13" placeholder="0"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for parent block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for parent block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="item-style" title="inline class and style for a file block">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS ajout&eacute;s dans le HEAD">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

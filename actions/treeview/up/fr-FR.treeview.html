@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>treeview - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-treeview" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une liste sous forme d'un arbre (treeview)
+</p>
+<p>syntaxe <code><b>{</b>up treeview<b>}</b></code> liste UL/LI <code><b>{</b>/up treeview<b>}</b></code></p>
+
+
+</div >
+<p><label for="treeview" title="aucun argument">treeview</label>
+<input type = "text" id="treeview"class="w5 inactif"  placeholder=""></p>
+<h4>icônes et ligne</h4>
+<p><label for="icon-folder" title="image pour les dossiers (noeuds)">icon-folder</label>
+<input type = "text" name="icon-folder" placeholder="arrow"></p>
+<p><label for="icon-file" title="image pour &eacute;l&eacute;ments feuilles">icon-file</label>
+<input type = "text" name="icon-file" placeholder=""></p>
+<p><label for="icon-size" title="taille de l&#039;icone. Ex: 48px,960:32px,1200:24px">icon-size</label>
+<input type = "text" name="icon-size"class="w50"  placeholder=""></p>
+<p><label for="custom-icon" title="liste des ic&ocirc;nes personnalis&eacute;es pour cr&eacute;ation CSS inline">custom-icon</label>
+<input type = "text" name="custom-icon" placeholder=""></p>
+<p><label for="line" title="ligne devant les items. 1 (ligne par defaut) ou attributs pour border">line</label>
+<input type = "text" name="line"class="w50"  title="0" placeholder="0" list="combo_line"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_line">
+<option value=""></option>
+<option value="1">1</option>
+<option value="0">0</option>
+</datalist></p>
+<h4>Ouverture automatique et délai</h4>
+<p><label for="expand-all" title="1 pour ouvrir tous les noeuds">expand-all</label>
+<select name="expand-all" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="expand" title="1 pour ouvrir les noeuds de niveau 1">expand</label>
+<select name="expand" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="delay" title="dur&eacute;e ouverture noeuds en msec">delay</label>
+<input type = "number" name="delay"class="w5"  min="0" placeholder="0"></p>
+<h4>Boutons ouverture et fermeture</h4>
+<p><label for="btn-open-selector" title="s&eacute;lecteur du lien &#039;Tout d&eacute;plier&#039;">btn-open-selector</label>
+<input type = "text" name="btn-open-selector"class="w50"  placeholder=""></p>
+<p><label for="btn-close-selector" title="s&eacute;lecteur du lien &#039;Tout d&eacute;plier&#039;">btn-close-selector</label>
+<input type = "text" name="btn-close-selector"class="w50"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

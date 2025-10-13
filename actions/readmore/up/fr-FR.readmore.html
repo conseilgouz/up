@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>readmore - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-readmore" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>afficher/cacher un bloc HTML à l'aide d'un bouton 'lire la suite'
+</p>
+<p>syntaxe:<br /><code><b>{</b>up readmore=texte bouton | textless=replier<b>}</b></code> contenu caché <code><b>{</b>/up readmore<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>changelog</u> : </b> <b>textmore</b>=Voir les nouveaut&eacute;s<b> | </b><b>textmore-class</b>=bd-primary bd-arrondi ph1<b> | </b><b>class</b>=tr<b> | </b><b>panel-style</b>=box bg-beige p1 m-child-raz
+</div >
+<p><label for="readmore" title="texte bouton OUVRIR (idem textmore)">readmore</label>
+<input type = "text" id="readmore"class="w20 inactif"  title="" placeholder="" list="combo_readmore"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_readmore">
+<option value=""></option>
+<option value="changelog">changelog</option>
+</datalist></p>
+<p><label for="btn-position" title="emplacement des boutons. before=au-dessus, after=au-dessous">btn-position</label>
+<select name="btn-position"class="w10"  title="after" placeholder="after" value="after">
+<option value=""></option>
+<option value="before">before</option>
+<option value="after" selected>after</option>
+</select></p>
+<h4>Texte et style des boutons</h4>
+<p><label for="textmore" title="texte bouton OUVRIR">textmore</label>
+<input type = "text" name="textmore"class="important"  placeholder="lire la suite"></p>
+<p><label for="textmore-style" title="classe et style pour le bouton OUVRIR">textmore-style</label>
+<input type = "text" name="textmore-style" placeholder=""></p>
+<p><label for="textmore-class" title="classe et style pour le bouton OUVRIR">textmore-class</label>
+<input type = "text" name="textmore-class" placeholder=""></p>
+<p><label for="textless" title="texte bouton FERMER">textless</label>
+<input type = "text" name="textless"class="important"  placeholder="replier"></p>
+<p><label for="textless-style" title="classe et style pour le bouton FERMER">textless-style</label>
+<input type = "text" name="textless-style" placeholder=""></p>
+<p><label for="textless-class" title="classe et style pour le bouton FERMER">textless-class</label>
+<input type = "text" name="textless-class" placeholder=""></p>
+<h4>Style pour le panneau contenu</h4>
+<p><label for="panel-style" title="classes et style pour le contenu (v2.6)">panel-style</label>
+<input type = "text" name="panel-style"class="w50"  placeholder=""></p>
+<p><label for="panel-visible" title="hauteur visible du contenu quand masqu&eacute; (px ou s&eacute;lecteur CSS)">panel-visible</label>
+<input type = "text" name="panel-visible" placeholder="0"></p>
+<p><label for="panel-actif" title="&eacute;v&eacute;nement javascript sur la partie visible du contenu pour d&eacute;rouler/ enrouler le contenu.">panel-actif</label>
+<input type = "text" name="panel-actif"class="w50"  placeholder=""></p>
+<p><label for="panel-overlay" title="affiche un d&eacute;grad&eacute; pour masque le bas du panel-visible. (vide=style standard ou r&egrave;gles CSS)">panel-overlay</label>
+<input type = "text" name="panel-overlay" placeholder=""></p>
+<p><label for="panel-speed" title="vitesse d&#039;apparition du contenu. Par d&eacute;faut: 750ms">panel-speed</label>
+<input type = "number" name="panel-speed"class="w5"  min="0" max="5000" step="5" placeholder=""></p>
+<h4>Style CSS des boutons</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour les boutons OUVRIR et FERMER">class</label>
+<input type = "text" name="class" placeholder="bg-grisPale bg-gris bg-hover-grisClair p1 tc"></p>
+<p><label for="style" title="idem">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS ajout&eacute;es dans le HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,85 @@
+/*
+    Created on : 22 avr. 2020, 20:12:31
+    Author     : LOIC
+*/
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// régles par défaut
+@import "partiels/template";
+
+/* === model BLUE */
+$up_content_color: $blue;
+$up_content_link_color: $darkGrey;
+$up_content_font_size: 12px;
+$up_content_line_height: 1.4;
+$up_content_padding: 10px;
+
+$up_background: $paleBlue;
+$up_border_color: #369;
+$up_border_radius : 0;
+$up_border_width : 2px;
+
+$up_close_button_color: $up_content_color;
+
+.Zebra_Tooltip.blue {
+@import "partiels/base-style";
+}
+
+/* === model ORANGE */
+$up_content_color:$rougeFonce; 
+$up_content_link_color: lighten($up_content_color,10);
+$up_background:lighten($orange,30); 
+$up_border_color: $orange;
+$up_close_button_color:$orange;
+
+.Zebra_Tooltip.orange {
+@import "partiels/base-style";
+}
+
+/* === model VERT / GREEN */
+$up_content_color:black; 
+$up_content_link_color: lighten($up_content_color,10);
+$up_background:lighten($green,40); 
+$up_border_color:$darkGreen;
+
+.Zebra_Tooltip.green {
+@import "partiels/base-style";
+}
+
+/* === model JAUNE */
+$up_content_color:#444; 
+$up_content_link_color: $black;
+$up_background:$lightYellow; 
+$up_border_color:$darkYellow;
+$up_border_width:2px;
+
+.Zebra_Tooltip.yellow {
+@import "partiels/base-style";
+}
+
+/* === model WHITE */
+$up_content_color:$darkGrey; 
+$up_content_link_color: lighten($up_content_color,10);
+$up_background:$white; 
+$up_border_color:$darkGrey;
+$up_border_width:2px;
+
+.Zebra_Tooltip.white {
+@import "partiels/base-style";
+}
+
+// VARIABLES DISPONIBLES POUR MODIFIER LE RENDU avec la valeur par defaut
+$up_content_color:null; // #FFF
+$up_content_font_size:null;  // 12px
+$up_content_line_height:null;  // 1.4
+$up_content_padding:null; // 10px
+$up_background:null; // #222
+$up_border_color:null; // #222
+$up_border_radius:null; // 5px
+$up_border_width:null; // 0
+$zt_box_shadow:null; // 0 0 6px rgba(0, 0, 0, 0.6);
+$up_close_button_color:null; // #FFF
+

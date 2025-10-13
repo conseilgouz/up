@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upscsscompiler - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upscsscompiler" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>INTERNAL - Compile all SCSS files in the action folders</p>
+<p>syntax:<br><code><b>{</b>up upscsscompiling<b>}</b></code> all actions<br><code><b>{</b>up upscsscompiler=action1, action2<b>}</b></code> one or more actions<br>note: SCSS & CSS files are in the root directory of the action folders</p>
+
+
+</div >
+<h4>Selection of actions</h4>
+<p><label for="upscsscompiler" title="list of actions to be recompiled. all by default">upscsscompiler</label>
+<input type = "text" id="upscsscompiler" placeholder=""></p>
+<p><label for="without-custom" title="without customizations. Internal use to create the UP zip">without-custom</label>
+<select name="without-custom" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="force" title="forces the compilation of all SCSS. By default: more recent SCSS than their CSS.">force</label>
+<select name="force" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="force-filter" title="force force if the condition is met">force-filter</label>
+<input type = "text" name="force-filter" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="mode" title="Compressed, Compact, Crunched, Expanded, Nested">mode</label>
+<select name="mode" title="Compressed" placeholder="Compressed" value="Compressed">
+<option value=""></option>
+<option value="Compressed" selected>Compressed</option>
+<option value="Compact">Compact</option>
+<option value="Crunched">Crunched</option>
+<option value="Expanded">Expanded</option>
+<option value="Nested">Nested</option>
+</select></p>
+<p><label for="map" title="g&eacute;n&egrave;re une sourceMap">map</label>
+<input type = "text" name="map" placeholder="0"></p>
+<p><label for="info" title="display compilation report">info</label>
+<select name="info" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

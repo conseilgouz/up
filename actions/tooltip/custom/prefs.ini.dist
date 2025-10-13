@@ -1,0 +1,22 @@
+; PREFERENCES WEBMASTER
+
+; le principe :
+; -------------
+; 1/ le développeur de l'action indique des valeurs par défaut pour les paramétres
+; 2/ le webmaster peut indiquer ci-dessous ses préférences
+
+; Exemple :
+; ---------
+; Les classes d'un bouton sont btn-class = btn btn-primary
+; Le webmaster du site peut indiquer ci-dessous : btn-class = btn btn-success
+; qui aura priorité sur celles de l'action
+; l'utilisateur final pourra indiquer son choix dans le shortcode
+
+; Cas particulier : annulation des valeurs précédentes
+; pour une valeur texte ou numérique : laisser vide
+; pour une valeur logique : saisir 1 ou 0
+
+; ATTENTION : mettre entre guillemets doubles si caractères spéciaux. Doubler des doubles guillemets pour les in
+
+[options]
+;parametre = valeur

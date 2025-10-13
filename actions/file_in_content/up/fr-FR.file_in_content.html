@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_in_content - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-in-content" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Utilise tous les fichiers d'un dossier pour construire un article
+</p>
+<p>syntaxe <code><b>{</b>up file-in-content=fichier ou dossier<b>}</b></code><br />Mots-clés<br />##title## : le nom du fichier txt<br />##content## : le contenu du fichier txt<br />##image## : fichier image de même nom que le fichier texte<br />##date## : la date du fichier</p>
+
+
+</div >
+<p><label for="file_in_content" title="chemin et nom du fichier">file-in-content</label>
+<input type = "text" id="file_in_content"class="important"  placeholder=""></p>
+<p><label for="file-mask" title="pour s&eacute;lectionner les fichiers d&#039;un dossier sur le serveur. ex: fic-*">file-mask</label>
+<input type = "text" name="file-mask" placeholder=""></p>
+<p><label for="maxi" title="nombre maxima de fichier (selon sort-order).">maxi</label>
+<input type = "text" name="maxi" placeholder=""></p>
+<p><label for="sort-order" title="sens du tri. asc ou desc. Tri selon date">sort-order</label>
+<input type = "text" name="sort-order" placeholder="desc"></p>
+<p><label for="msg-no-file" title="message si aucun fichier PDF dans le dossier">msg-no-file</label>
+<input type = "text" name="msg-no-file" placeholder="en=no file;fr=aucun fichier"></p>
+<p><label for="template" title="mod&egrave;le pour affichage">template</label>
+<input type = "text" name="template" placeholder="[h2]##title##[/h2][div]##image####content##[/div]"></p>
+<h4>balise et style du bloc contenant les différents fichiers</h4>
+<p><label for="main-tag" title="balise pour le bloc externe (si main-tag&lt;&gt;0)">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="main-style" title="idem class &amp; style">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<h4>balise et style du bloc d'un fichier</h4>
+<p><label for="item-tag" title="balise pour le bloc d&#039;un fichier (si item-tag&lt;&gt;0)">item-tag</label>
+<input type = "text" name="item-tag" placeholder="div"></p>
+<p><label for="item-style" title="style et classe pour le bloc d&#039;un fichier">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<h4>Définition pour ##image##</h4>
+<p><label for="image-style" title="style et classe pour l&#039;image">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="image-popup" title="1 pour afficher en grand dans fen&ecirc;tre modale">image-popup</label>
+<input type = "text" name="image-popup" placeholder="0"></p>
+<p><label for="image-extension" title="liste des extensions accept&eacute;es">image-extension</label>
+<input type = "text" name="image-extension" placeholder="jpg,JPG,jpeg,JPEG,png,PNG"></p>
+<h4>Formattage</h4>
+<p><label for="HTML" title="0= aucun traitement, 1=affiche le code, ou liste des tags &agrave; garder (ex: img,a)">HTML</label>
+<select name="HTML" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="EOL" title="forcer un retour &agrave; la ligne">EOL</label>
+<select name="EOL" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="format-date" title="format pour la date. ex: &#039;d/m/Y H:i&#039;">format-date</label>
+<input type = "text" name="format-date" placeholder="lang[en=m/d/Y H:i;fr=d/m/Y H:i]"></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc (si main-tag&lt;&gt;0)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="idem class">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

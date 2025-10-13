@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>flexauto - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-flexauto" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>une grille responsive sur plusieurs colonnes
+</p>
+<p>syntaxe 1 :  <code><b>{</b>up flexauto=x_ordi | tablet=x_tablet | mobile=x_mobile <b>}</b></code>contenu<code><b>{</b>/up flexauto<b>}</b></code><br />syntaxe 2 :  <code><b>{</b>up flexauto=x_ordi-x_tablet-x_mobile <b>}</b></code>contenu<code><b>{</b>/up flexauto<b>}</b></code><br />x=1 à 12 est le nombre de colonnes sur grand écran et tablette. 4 sur mobile.</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>class</b>=fg-gap<br><b><u>2blocs</u> : </b> <b>flexauto</b>=2<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<br><b><u>3blocs</u> : </b> <b>flexauto</b>=3<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<br><b><u>2blocs-gris</u> : </b> <b>flexauto</b>=2<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>3blocs-gris</u> : </b> <b>flexauto</b>=3<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>4blocs-gris</u> : </b> <b>flexauto</b>=4<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>5blocs-gris</u> : </b> <b>flexauto</b>=5<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>fonticon</u> : </b> <b>flexauto</b>=4<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=2<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px #999 solid; padding:5px<b> | </b><b>css-head</b>=#id&gt;div&gt;div:first-child[width:50px;height:100%;text-align:center;float:left;margin-right:10px;]
+#id .fa, #id .fab [font-size:2.5rem; width:3rem;color:#069]
+#id .fab[color:darkviolet]
+#id b[color:skyblue]i[color:royalblue]
+#id .icomoon[display:block;font-size:90%;color:darkred]
+</div >
+<p><label for="flexauto" title="nombre de colonnes sur grand &eacute;cran ou ordi-tablet-mobile">flexauto</label>
+<input type = "text" id="flexauto"class="w10 important"  title="3" placeholder="3" list="combo_flexauto"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_flexauto">
+<option value=""></option>
+<option value="2blocs">2blocs</option>
+<option value="3blocs">3blocs</option>
+<option value="2blocs-gris">2blocs-gris</option>
+<option value="3blocs-gris">3blocs-gris</option>
+<option value="4blocs-gris">4blocs-gris</option>
+<option value="5blocs-gris">5blocs-gris</option>
+<option value="fonticon">fonticon</option>
+</datalist></p>
+<p><label for="tablet" title="nombre de colonnes sur moyen &eacute;cran">tablet</label>
+<input type = "number" name="tablet" min="1" max="6" placeholder="2"></p>
+<p><label for="mobile" title="nombre de colonnes sur petit &eacute;cran">mobile</label>
+<input type = "number" name="mobile" min="1" max="6" placeholder="1"></p>
+<h4>Style bloc principal</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class ou style pour le bloc principal">class</label>
+<input type = "text" name="class"class="w40"  placeholder="fg-gap"></p>
+<p><label for="style" title="class ou style pour le bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style des blocs secondaires</h4>
+<p><label for="bloc-tag" title="uniquement si {===} 0=pas de bloc">bloc-tag</label>
+<select name="bloc-tag" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="class-*" title="class pour tous les blocs colonnes. sinon voir class-1 &agrave; class-12">class-*</label>
+<input type = "text" name="class-*"class="w40"  placeholder=""></p>
+<p><label for="style-*" title="style ou class2style pour tous les blocs colonnes. sinon voir style-1 &agrave; style-12">style-*</label>
+<input type = "text" name="style-*" placeholder=""></p>
+<p><label for="bloc-style" title="style ou class2style ajout&eacute;s au bloc enfant">bloc-style</label>
+<input type = "text" name="bloc-style" placeholder=""></p>
+<h4>Nom des classes identificatrices</h4>
+<p><label for="class-col" title="nom des classes pour les colonnes">class-col</label>
+<input type = "text" name="class-col" placeholder="up-col-"></p>
+<p><label for="class-row" title="nom des classes pour les lignes">class-row</label>
+<input type = "text" name="class-row" placeholder="up-row-"></p>
+<h4>Style ajouté dans le head de la page</h4>
+<p><label for="css-head" title="style ou class2style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="no-content-html" title="message si aucun contenu">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="en=no content;fr=aucun contenu"></p>
+</body>
+</html >

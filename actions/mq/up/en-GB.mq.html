@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>mq - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-mq" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Build a mediaries string</p>
+<p>
+syntax : 
+<code><b>{</b>up mq=#id | default=color:red | mobile=color:green | tablet=color:blue | 960-1200-screen=color:orange | 1200-0=color:black<b>}</b></code>
+Return the string
+#id<b>[</b>color:red;@media (max-width:480px)<b>[</b>color:green]@media (min-width:481px) and (max-width:760px)<b>[</b>color:blue]
+@media screen and (min-width:960px) and (max-width:1200px)<b>[</b>color:orange]@media (min-width:1200px)<b>[</b>color:black]]
+
+LE PRINCIPLE :
+We indicate the action scope of the style in the form 480-960
+A lower scope (max-width) must have the 0-480 form
+A higher scope (min-width) must have the 1200-0 or 1200 form (only one value)
+
+Other terms accepted:
+H, horizontal, landscape, V, vertical, portrait, screen, print</p>
+
+
+</div >
+<p><label for="mq" title="empty or block selector">mq</label>
+<input type = "text" id="mq"class="w20"  title="" placeholder="" list="combo_mq"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_mq">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p><label for="default" title="Default CSS property outside the Mediaries">default</label>
+<input type = "text" name="default" placeholder=""></p>
+<p><label for="mobile" title="CSS property for mobiles">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="tablet" title="CSS property for tablets">tablet</label>
+<input type = "text" name="tablet" placeholder=""></p>
+<p><label for="desktop" title="CSS property for computers">desktop</label>
+<input type = "text" name="desktop" placeholder=""></p>
+<p><label for="large" title="CSS property for large screens">large</label>
+<input type = "text" name="large" placeholder=""></p>
+<p><label for="xxx" title="Breakpoint =&gt; Property. ex: 480-960-screen=color:red">xxx</label>
+<input type = "text" name="xxx"class="w20"  placeholder="yyy"></p>
+<p><label for="use-with-up" title="Neutral hooks instead of accolade for UP action argument">use-with-up</label>
+<select name="use-with-up" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<h4>params</h4>
+<p><label for="bp-mobile" title="Min-max value for mobile">bp-mobile</label>
+<input type = "text" name="bp-mobile"class="w20"  placeholder="0-480"></p>
+<p><label for="bp-tablet" title="Min-max value for tablet">bp-tablet</label>
+<input type = "text" name="bp-tablet"class="w20"  placeholder="481-760"></p>
+<p><label for="bp-desktop" title="Min-max value for computeur">bp-desktop</label>
+<input type = "text" name="bp-desktop"class="w20"  placeholder="761-1200"></p>
+<p><label for="bp-large" title="Min-max value for large screens">bp-large</label>
+<input type = "text" name="bp-large"class="w20"  placeholder="1201-0"></p>
+<p><label for="unit" title="Unit for screen sizes">unit</label>
+<input type = "text" name="unit"class="w10"  placeholder="px"></p>
+<h4>internal</h4>
+<p><label for="id" title="internal use">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

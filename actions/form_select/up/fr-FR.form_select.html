@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>form_select - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-form-select" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste déroulante d'options
+</p>
+<p>syntaxe : <code><b>{</b>up form-select=action_onchange<b>}</b></code>liste options CSV (label;value)<code><b>{</b>/up form-select<b>}</b></code></p>
+
+
+</div >
+<p><label for="form_select" title="mot-cl&eacute; (url, url-blank) ou argument pour onchange ou prefset">form-select</label>
+<input type = "text" id="form_select"class="important"  title="url" placeholder="url" list="combo_form_select"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_form_select">
+<option value=""></option>
+<option value="url">url</option>
+<option value="url-blank">url-blank</option>
+</datalist></p>
+<p><label for="file" title="fichier CSV pour contenu">file</label>
+<input type = "text" name="file" placeholder=""></p>
+<p><label for="separator" title="s&eacute;parateur colonnes du fichier CSV">separator</label>
+<input type = "text" name="separator"class="w5"  placeholder=";"></p>
+<p><label for="size" title="nombre de lignes affich&eacute;es (6) ou hauteur de la liste (ex: 50vh).">size</label>
+<input type = "text" name="size"class="w5"  placeholder="1"></p>
+<p><label for="no-content-html" title="message erreur. %s:nom fichier">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="en=content not found : %s;fr=contenu non trouvé : %s"></p>
+<h4>Label avant le select</h4>
+<p><label for="label" title="texte ajout&eacute; au dessus de la liste">label</label>
+<input type = "text" name="label" placeholder=""></p>
+<p><label for="label-style" title="classes et style inline pour le label">label-style</label>
+<input type = "text" name="label-style" placeholder=""></p>
+<h4>bouton après le select</h4>
+<p><label for="btn" title="texte du bouton pour valider le choix dans la liste. active raccourci: enter et double-clic sur liste">btn</label>
+<input type = "text" name="btn" placeholder=""></p>
+<p><label for="btn-style" title="classes et style inline pour le bouton">btn-style</label>
+<input type = "text" name="btn-style" placeholder=""></p>
+<h4>Styles CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="classes et styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

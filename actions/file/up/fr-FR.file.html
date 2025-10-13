@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Force le téléchargement d'un fichier
+</p>
+<p>Propose un lien sur un fichier.<br />Le fichier peut etre affiché (si prise en charge par navigateur client)<br />ou le téléchargement peut-etre forcé avec changement de nom optionnel<br />Une icône représentative est affichée devant le lien<br />syntaxe :<br /><code><b>{</b>up file=nomfichier.ext | download | icon |target <b>}</b></code><br />texte du lien<br /><code><b>{</b>/up file<b>}</b></code></p>
+
+
+</div >
+<p><label for="file" title="chemin et nom du fichier &agrave; t&eacute;l&eacute;charger">file</label>
+<input type = "text" id="file"class="important"  placeholder=""></p>
+<p><label for="download" title="vide ou nom du fichier r&eacute;cup&eacute;r&eacute; par le client">download</label>
+<input type = "text" name="download" placeholder=""></p>
+<p><label for="icon" title="chemin et nom de l&#039;icone devant le lien ou taille de l&#039;icone selon extension du fichier (16 ou 32)">icon</label>
+<input type = "text" name="icon" placeholder="32"></p>
+<p><label for="target" title="argument ou _blank si option sans argument">target</label>
+<input type = "text" name="target"class="w20"  title="" placeholder="" list="combo_target"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_target">
+<option value=""></option>
+<option value="_blank">_blank</option>
+<option value="_self">_self</option>
+</datalist></p>
+<p><label for="rel" title="nofollow, noreferrer, ...">rel</label>
+<input type = "text" name="rel"class="w20"  title="" placeholder="" list="combo_rel"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_rel">
+<option value=""></option>
+<option value="nofollow">nofollow</option>
+<option value="noreferrer">noreferrer</option>
+</datalist></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour la balise a">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour la balise a">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

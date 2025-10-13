@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addscript - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addscript" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>ajoute du code ou un fichier JS ou JQuery
+</p>
+<p>Par défaut, le code est ajouté dans le head.<br />Si le paramètre principal est body, le code est inséré à la position du shortcode<br />syntaxe <code><b>{</b>up addScript=body | jquery <b>}</b></code>code ou fichier<code><b>{</b>/up addScript<b>}</b></code></p>
+
+
+</div >
+<p><label for="addscript" title="ou body pour ins&eacute;rer le code &agrave; la position du shortcode">addscript</label>
+<input type = "text" id="addscript" placeholder="head"></p>
+<p><label for="jquery" title="1: entoure avec appel jquery (sauf fichier)">jquery</label>
+<select name="jquery" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

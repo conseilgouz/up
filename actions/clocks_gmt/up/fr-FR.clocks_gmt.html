@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>clocks_gmt - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-clocks-gmt" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une horloge analogique et/ou digitale avec l'heure d'un fuseau horaire
+</p>
+<p>syntaxe <code><b>{</b>up clocks-gmt=ville | offset=décalage horaire<b>}</b></code></p>
+
+
+</div >
+<p><label for="clocks_gmt" title="Nom de la ville (pour l&eacute;gende)">clocks-gmt</label>
+<input type = "text" id="clocks_gmt" placeholder=""></p>
+<p><label for="label-style" title="style inline pour le nom ville">label-style</label>
+<input type = "text" name="label-style" placeholder=""></p>
+<p><label for="digital-style" title="style inline pour horloge digitale">digital-style</label>
+<input type = "text" name="digital-style" placeholder=""></p>
+<p><label for="date-style" title="style inline pour date">date-style</label>
+<input type = "text" name="date-style" placeholder=""></p>
+<p class="hr-top"><label for="base-js-params" title="r&egrave;gles JS d&eacute;finies par le webmaster (ajout dans init JS)">base-js-params</label>
+<input type = "text" name="base-js-params"class="hr-top"  placeholder=""></p>
+<h4>style général</h4>
+<p class="hr-top"><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id"class="hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="autres r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Paramétres Javascript pour l'horloge</h4>
+<p><label for="offset" title="GMT offset">offset</label>
+<input type = "number" name="offset" min="-12" max="12" placeholder=""></p>
+<p><label for="title" title="titre">title</label>
+<input type = "text" name="title" placeholder="Greenwich, England"></p>
+<p><label for="skin" title="indice images (voir la d&eacute;mo)">skin</label>
+<input type = "text" name="skin" placeholder="1"></p>
+<p><label for="dst" title="gestion heure d&#039;&eacute;t&eacute;">dst</label>
+<select name="dst" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="analog" title="afficher horloge analogique">analog</label>
+<select name="analog" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="digital" title="afficher horloge digitale">digital</label>
+<select name="digital" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="timeformat" title="format pour la date">timeformat</label>
+<input type = "text" name="timeformat"class="w20"  placeholder="HH:mm"></p>
+<p><label for="date" title="afficher la date">date</label>
+<select name="date" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="dateformat" title="format pour l&#039;heure">dateformat</label>
+<input type = "text" name="dateformat"class="w20"  placeholder="MM/DD/YYYY"></p>
+<p><label for="imgpath" title="chemin vers les images">imgpath</label>
+<input type = "text" name="imgpath" placeholder=""></p>
+</body>
+</html >

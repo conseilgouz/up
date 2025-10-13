@@ -1,0 +1,53 @@
+// ==== DANGER
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+
+$bg-title: $jauneFonce;
+$txt-title : $rouge;
+$bg-content: $jauneClair;
+$radius:0;
+$border:2px $jauneFonce solid;
+
+.up-box-danger {
+    border:$border; 
+    border-radius:$radius;
+    background-color:$bg-content;
+    .up-box-head {
+        position:relative;
+        text-align:center;
+        padding: 5px;
+        background-color:$bg-title; 
+        color: $txt-title; 
+        border:none;
+        a {color: $txt-title}
+        > * {margin:0}
+    }
+    .up-box-title {
+        font-weight:bolder;
+    }
+    .up-box-subtitle {
+        display:block;    // LF           
+    }
+    .up-box-image {  //  ##image
+        position:absolute;
+        top:10px; right:10px;
+        max-height: 40px;
+    }                 
+    .up-box-body {
+        padding:10px;
+        // supprime marge des blocs début et fin
+        > :first-child{margin-top:0}
+        > :last-child{margin-bottom:0}
+    }
+    .up-box-action {
+        text-align:center;
+        background-color:$bg-title;
+        a{ color: $txt-title; 
+        &:hover {color: lighten($txt-title, 10)}
+        }
+    }
+}

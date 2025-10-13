@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>form_select - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-form-select" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>drop-down box</p>
+<p>syntax : <code><b>{</b>up form-select=type<b>}</b></code>options list CSV (label;value)<code><b>{</b>/up form-select<b>}</b></code></p>
+
+
+</div >
+<p><label for="form_select" title="keyword (url, url-blank) or argument for onchange or prefset">form-select</label>
+<input type = "text" id="form_select"class="important"  title="url" placeholder="url" list="combo_form_select"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_form_select">
+<option value=""></option>
+<option value="url">url</option>
+<option value="url-blank">url-blank</option>
+</datalist></p>
+<p><label for="file" title="CSV file for content">file</label>
+<input type = "text" name="file" placeholder=""></p>
+<p><label for="separator" title="column separator">separator</label>
+<input type = "text" name="separator"class="w5"  placeholder=";"></p>
+<p><label for="size" title="number of lines displayed (ex: 6) or height of the list (ex: 50vh).">size</label>
+<input type = "text" name="size"class="w5"  placeholder="1"></p>
+<p><label for="no-content-html" title="error message. %s:filename">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="en=content not found : %s;fr=contenu non trouvé : %s"></p>
+<h4>Label before select</h4>
+<p><label for="label" title="text added above list">label</label>
+<input type = "text" name="label" placeholder=""></p>
+<p><label for="label-style" title="classes and inline style for the label">label-style</label>
+<input type = "text" name="label-style" placeholder=""></p>
+<h4>button after the select</h4>
+<p><label for="btn" title="text of the button to validate the choice in the list. Activate shortcut: enter and double-click on list">btn</label>
+<input type = "text" name="btn" placeholder=""></p>
+<p><label for="btn-style" title="classes and inline style for the button">btn-style</label>
+<input type = "text" name="btn-style" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="classes and styles">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="filter" title="Terms. See doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

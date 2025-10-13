@@ -1,0 +1,37 @@
+/* LOW_PRIORITY */
+
+// ce partiel, compilé en premier, contient les règles générales 
+// qui pourront être écrasées les autres classes 
+// exemple :
+// fg-left peut surcharger justify-content de up-center
+
+// ==============================================================================
+// ==== CENTRAGE CONTENU
+// ==============================================================================
+
+.up-center {
+    display:flex; 
+    align-items:center;  // vertical
+    // height:100%; v5.2
+    justify-content:center;  // horizontal
+    > div {
+        // on supprime les marges en début et fin
+        > *:first-child{margin-top:0}
+        > *:last-child{margin-bottom:0}
+    }
+}
+
+// si +sieurs div internes 
+
+.up-center-outer {
+    display:flex; 
+    // height:100%; v5.2
+    align-items:center; 
+    justify-content:center; 
+    > div.up-center-inner {
+        z-index:1;
+        // on supprime les marges en début et fin 
+        > *:first-child{margin-top:0}
+        > *:last-child{margin-bottom:0}
+    }
+}

@@ -1,0 +1,374 @@
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../assets/custom/variables";
+@import "../../assets/scss/variables";
+
+$case : none;
+$active_border_color:#069;
+$active_text_color:#069;
+$active_bgcolor:transparent;
+$not_active_border_color:#aaa;
+$not_active_text_color:#888;
+$not_active_bgcolor:transparent;
+
+body{
+    margin: 0;
+    padding: 0;
+	/* v2.7
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+	*/
+    overflow-x: hidden;
+}
+
+
+
+.wrapper{
+    max-width: 1200px;
+    margin: 20px  auto;
+
+    > h1{
+        text-align: center;
+
+        span{
+            border-bottom: 2px solid $active_border_color;
+            display: inline-block;
+            padding:0  10px 10px;
+            color: $active_text_color;
+            transition:all 0.5s linear;
+        }
+    }
+}
+
+.tab_wrapper{
+    margin: 10px 0; // 10px 0 50px; 23/11/19
+    display: inline-block;
+    width: 100%;
+    position: relative;
+
+    >ul{
+        clear: both;
+        display: inline-block;
+        list-style: none;
+        margin:0;
+        padding: 0;
+        width: 100%;
+        border-bottom: 1px solid $active_border_color;
+        li{
+            float: left;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 8px 18px;
+            text-transform: $case;
+            border: 1px solid $not_active_border_color;
+            font-size: 1.05em;
+            border-bottom: 0;
+            position: relative;
+            border-top: 3px solid $not_active_border_color;
+            color: $not_active_text_color;
+            margin: 0 5px 0 0;
+
+            &.active{
+                border-color: $active_border_color;
+                color: $active_text_color;
+
+                &:after{
+                    content: "";
+                    position: absolute;
+                    bottom: -1px;
+                    height: 1px;
+                    left: 0;
+                    background: $active_bgcolor;
+                    width: 100%;
+                }
+            }
+        }
+        &.tab_list > li:not(.active) {
+            background:lighten($not_active_border_color,20);
+        }
+    }
+
+    .controller{
+        display: block;
+        overflow: hidden;
+        clear: both;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        span{
+            padding: 8px 22px;
+            background: $active_border_color;
+            color: $active_bgcolor;
+            text-transform: $case;
+            display: inline-block;
+
+            &.next{
+                float: right;
+                margin-left: 10px;
+            }
+        }
+    }
+
+    .content_wrapper{
+        float: left;
+        width: 100%;
+        border: 1px solid $active_border_color;
+        border-top: 0;
+        box-sizing: border-box;
+        margin-top:-6px;
+
+        .tab_content{
+            display: none;
+            padding: 15px 20px;
+            width:100%;
+
+            &.active{
+                /* display: block; */
+            }
+
+            .error{
+                color: red;
+            }
+        }
+
+        .accordian_header{
+            display: none;
+            padding: 10px 20px;
+            text-transform: $case;
+            font-weight: bold;
+            border-top: 1px solid $not_active_border_color;
+            border-bottom: 1px solid $active_bgcolor;
+            background: $not_active_bgcolor;
+            position: relative;
+            cursor: pointer;
+
+            &.active{
+                color: $active_text_color;
+                border-bottom: 1px solid $not_active_border_color;
+                background: $active_bgcolor;
+                &:after{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    content: "";
+                    width: 5px;
+                    height: 100%;
+                }
+            }
+
+            .arrow{
+                float: right;
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                position: relative;
+                border-radius: 2px;
+                transform: rotate(-135deg);
+                background: $not_active_bgcolor ;
+                border-top: 3px solid $not_active_border_color;
+                border-left: 3px solid $not_active_border_color;
+
+                /* &:after{
+                        position: absolute;
+                        top: 0;
+                        content: "";
+                        left: 0;
+                        width: 10px;
+                        height: 10px;
+                        background: $active_bgcolor;
+                        border-top: 3px solid $not_active_border_color;
+                        border-left: 3px solid $not_active_border_color;
+                } */
+            }
+
+            &.active{
+                .arrow{
+                    transform: rotate(45deg);
+                    margin-top: 5px;
+                    border-top: 3px solid $active_border_color;
+                    border-left: 3px solid $active_border_color;
+                    background:$active_bgcolor !important;
+                }
+            }
+        }
+    }
+
+    &.left_side{
+        >ul{
+            width: 25%;
+            float: left;
+            border-bottom: 1px solid $not_active_border_color;
+
+            li{
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 12px 18px;
+                border-width: 1px;
+                border-right: 0;
+                border-left: 0;
+
+                &:after{
+                    left: 0;
+                    top: 0;
+                    content: "";
+                    position: absolute;
+                    width: 5px;
+                    height: 100%;
+                    background: $not_active_border_color;
+                }
+
+                &.active{
+                    border-color: $not_active_border_color;
+                    &:after{
+                        left: 0;
+                        top: 0;
+                        width: 5px;
+                        height: 100%;
+                        background: $active_border_color;
+                    }
+
+                    &:before{
+                        right: -1px;
+                        position: absolute;
+                        top: 0;
+                        content: "";
+                        width: 2px;
+                        height: 100%;
+                        background: $active_bgcolor;
+
+                    }
+                }
+            }
+        }
+
+        .content_wrapper{
+            width: 75%;
+            border:1px solid $not_active_border_color;
+            float: left;
+        }
+
+        .controller{
+            top: -50px;
+        }
+    }
+
+    &.right_side{
+        >ul{
+            width: 25%;
+            float: right;
+            border-bottom: 1px solid $not_active_border_color;
+
+            li{
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 12px 18px;
+                border-width: 1px;
+                border-right: 0;
+                border-left: 0;
+                text-align: right;
+
+                &:after{
+                    right: 0;
+                    left: inherit;
+                    top: 0;
+                    content: "";
+                    position: absolute;
+                    width: 5px;
+                    height: 100%;
+                    background: $not_active_border_color;
+                }
+
+                &.active{
+                    border-color: $not_active_border_color;
+
+                    &:after{
+                        right: 0;
+                        left: inherit;
+                        top: 0;
+                        width: 5px;
+                        height: 100%;
+                        content: "";
+                        background: $active_border_color;
+                    }
+
+                    &:before{
+                        left: -2px;
+                        right: inherit;
+                        position: absolute;
+                        top: 0;
+                        content: "";
+                        width: 2px;
+                        height: 100%;
+                        background: $active_bgcolor;
+
+                    }
+                }
+            }
+        }
+
+        .content_wrapper{
+            width: 75%;
+            float: left;
+            border: 1px solid $not_active_border_color;
+        }
+
+        .controller{
+            top: -50px;
+        }
+    }
+
+    &.accordion{
+        .content_wrapper{
+            border-color: $not_active_border_color;
+
+            .accordian_header{
+                display: block;
+            }
+        }
+
+        >ul{
+            display: none;
+        }
+    }
+}
+
+
+@media only screen and (max-width: 736px) {
+    .tab_wrapper{
+        >ul{
+            display: none;
+        }
+        .content_wrapper{
+            border:0;
+            display:block;
+
+            .accordian_header{
+                display: block;
+            }
+        }
+
+        &.left_side ,&.right_side{
+            .content_wrapper{
+                width: 100%;
+                border-top: 0;
+            }
+        }
+
+        .controller{
+            display: none;
+        }
+    }
+}
+
+//  effet transition changement d'onglet
+.tab_content, .tab_list li {
+    animation: fadeEffect 0.7s;
+}
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}

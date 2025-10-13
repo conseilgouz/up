@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_hover - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-hover" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Superpose un contenu HTML sur une image avec des effets lors du survol
+</p>
+<p><code><b>{</b>up image-hover=images/image.jpg | effect=xx<b>}</b></code><br />-- contenu HTML affiché au survol<br /><code><b>{</b>/up image-hover<b>}</b></code><br />Voir la démo pour les numéros des effets</p>
+
+
+</div >
+<p><label for="image_hover" title="nom de l&#039;image">image-hover</label>
+<input type = "text" id="image_hover"class="important"  placeholder=""></p>
+<p><label for="effect" title="nom de l&#039;effet &agrave; trouver sur le site d&eacute;mo">effect</label>
+<input type = "text" name="effect"class="w10 important"  placeholder="11"></p>
+<h4>Style CSS pour le bloc externe</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style CSS pour l'image</h4>
+<p><label for="img-class" title="classe pour image">img-class</label>
+<input type = "text" name="img-class" placeholder=""></p>
+<p><label for="img-style" title="style inline pour image">img-style</label>
+<input type = "text" name="img-style" placeholder=""></p>
+<h4>Style CSS pour le contenu HTML</h4>
+<p><label for="text-class" title="classe pour bloc texte lors survol">text-class</label>
+<input type = "text" name="text-class" placeholder=""></p>
+<p><label for="text-style" title="style inline pour bloc texte lors survol">text-style</label>
+<input type = "text" name="text-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="css-head" title="code css pour le head. ATTENTION [] au lieu de {}">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv2table - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv2table" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Converting CSV content into a table</p>
+<p>1/ the content is read in a file<br><code><b>{</b>up csv2table=file location<b>}</b></code><br>2/ the content is entered between the shortcodes<br><code><b>{</b>up csv2table<b>}</b></code><br>article 1;5€<br>article 2;25€<br><code><b>{</b>/up csv2table<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>up-jnews-documentation</u> : </b> <b>model</b>=blue<b> | </b><b>col</b>=c5-30-70<b> | </b><b>col-style-2</b>=font-weight:bold<br><b><u>sitemap-admin</u> : </b> <b>model</b>=blue<b> | </b><b>header</b>=ID;Titre;Contenu;Tags<b> | </b><b>col</b>=c5-40-50-c10
+</div >
+<p><label for="csv2table" title="URL or path and name of a local file">csv2table</label>
+<input type = "text" id="csv2table"class="important"  title="" placeholder="" list="combo_csv2table"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_csv2table">
+<option value=""></option>
+<option value="up-jnews-documentation">up-jnews-documentation</option>
+<option value="sitemap-admin">sitemap-admin</option>
+</datalist></p>
+<p><label for="separator" title="column separator">separator</label>
+<input type = "text" name="separator"class="w10"  placeholder=";"></p>
+<p><label for="HTML" title="0= no processing, 1= displays the code, or list of tags to keep (strip_tags)">HTML</label>
+<input type = "number" name="HTML" min="0" max="1" placeholder="0"></p>
+<p><label for="model" title="name of the model class in the csv2table.css file">model</label>
+<input type = "text" name="model" title="" placeholder="" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value=""></option>
+<option value="line">line</option>
+<option value="blue">blue</option>
+<option value="green">green</option>
+</datalist></p>
+<h4>table style</h4>
+<p><label for="class" title="class(es) for the table">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for the table">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>column style</h4>
+<p><label for="col-list" title="list of columns used. eg: 1,2,5 (v2.8)">col-list</label>
+<input type = "text" name="col-list" placeholder=""></p>
+<p><label for="col" title="alignment and width of the columns in the form &#039;x-D-C5-100&#039; for &#039;none-right-center 5%-100%">col</label>
+<input type = "text" name="col"class="w60 important"  placeholder=""></p>
+<p><label for="col-style-*" title="inline style for all column blocks. otherwise see style-1 to style-6">col-style-*</label>
+<input type = "text" name="col-style-*" placeholder=""></p>
+<h4>line style</h4>
+<p><label for="color-contrast" title="color of the odd lines. the color of the even lines is to be defined in class or style">color-contrast</label>
+<input type = "color" name="color-contrast" title="" value="#feffff"></p>
+<h4>Column header</h4>
+<p><label for="header" title="0: no title, 1: first line content, columns subtitles">header</label>
+<input type = "text" name="header" title="0" placeholder="0" list="combo_header"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_header">
+<option value=""></option>
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="title-col-1;title-col-N;">title-col-1;title-col-N;</option>
+</datalist></p>
+<p><label for="header-class" title="class(es) for the thead tag">header-class</label>
+<input type = "text" name="header-class"class="w20"  placeholder=""></p>
+<p><label for="header-style" title="style for thead tag">header-style</label>
+<input type = "text" name="header-style" placeholder=""></p>
+<h4>Columns footer</h4>
+<p><label for="footer" title="0: no footer, 1: last line content, column text footer">footer</label>
+<select name="footer" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="footer-class" title="class(es) for the tfoot tag">footer-class</label>
+<input type = "text" name="footer-class"class="w20"  placeholder=""></p>
+<p><label for="footer-style" title="style for the tfoot tag">footer-style</label>
+<input type = "text" name="footer-style" placeholder=""></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules defined by the webmaster (added to the head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

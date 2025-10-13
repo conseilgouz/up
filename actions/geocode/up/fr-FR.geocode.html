@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>geocode - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-geocode" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>retourne les coordonnées GPS d'une adresse postale
+</p>
+<p>syntaxe <code><b>{</b>up geocode=adresse postale<b>}</b></code><br />mots-clé pour template : ##latitude##, ##longitude##, ##adresse##</p>
+
+
+</div >
+<p><label for="geocode" title="adresse postale">geocode</label>
+<input type = "text" id="geocode" placeholder=""></p>
+<p><label for="template" title="mise en forme pour retour">template</label>
+<input type = "text" name="template" placeholder="&quot;##latitude##,##longitude##&quot;"></p>
+<h4>mentions obligatoire pour utiliser l'API</h4>
+<p><label for="site" title="url du site. Si vide, on utilise celle du serveur">site</label>
+<input type = "text" name="site"class="w50"  placeholder=""></p>
+<p><label for="email" title="adresse email du site. Si vide, on utilise &#039;webmaster@tld_site&#039;&#039;">email</label>
+<input type = "text" name="email"class="w50"  placeholder=""></p>
+<p><label for="ssl" title="&eacute;tat SSL. permet de forcer l&#039;&eacute;tat. Vide, on r&eacute;cup&egrave;re la config serveur">ssl</label>
+<input type = "text" name="ssl" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv2list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv2list" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Converting CSV content into a list with a control point</p>
+<p>1/ <code><b>{</b>up csv2list=file location<b>}</b></code> // the content is read into a file<br>2/ <code><b>{</b>up csv2list<b>}</b></code><br>  article 1;5€<br>  article 2;25€<br><code><b>{</b>/up csv2list<b>}</b></code><br>Resources : <a href=https://up.lomart.fr/infos/references/unicode-top-100 target=_blank>unicode characters</a></p>
+
+
+</div >
+<p><label for="csv2list" title="path to file to display">csv2list</label>
+<input type = "text" id="csv2list"class="important"  placeholder=""></p>
+<p><label for="separator" title="column separator">separator</label>
+<input type = "text" name="separator"class="w10"  placeholder=";"></p>
+<p><label for="HTML" title="0= no processing, 1= displays the code, or list of tags to keep (strip_tags)">HTML</label>
+<input type = "text" name="HTML"class="w60"  placeholder="b,a,span,strong,i,em,u,mark,small,img,code"></p>
+<p><label for="model" title="name of the model class in the csv2list.css file">model</label>
+<input type = "text" name="model"class="w10"  title="stack" placeholder="stack" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value=""></option>
+<option value="soleil">soleil</option>
+<option value="tan">tan</option>
+</datalist></p>
+<h4>Style of leaders</h4>
+<p><label for="leaders" title="driving points">leaders</label>
+<select name="leaders" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="leaders-color" title="color of driving points">leaders-color</label>
+<input type = "color" name="leaders-color" title="" value="#feffff"></p>
+<h4>main list block style</h4>
+<p><label for="class" title="class(es) for the UL block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for the UL block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="bgcolor" title="background color. #FFF by default">bgcolor</label>
+<input type = "color" name="bgcolor" title="" value="#feffff"></p>
+<h4>list line style</h4>
+<p><label for="col-style-*" title="inline style for the nth SPAN tags">col-style-*</label>
+<input type = "text" name="col-style-*"class=""  placeholder=""></p>
+<p><label for="list-style" title="hexadecimal code and character color (bb,red or 26BD,#F00)">list-style</label>
+<input type = "text" name="list-style" placeholder=""></p>
+<h4>Header Style</h4>
+<p><label for="header" title="0: no title, 1: first line content or columns subtitles">header</label>
+<input type = "number" name="header"class="w10"  min="0" max="1" placeholder="0"></p>
+<p><label for="header-class" title="class(es) for the first LI tag if title">header-class</label>
+<input type = "text" name="header-class" placeholder=""></p>
+<p><label for="header-style" title="style for the first LI tag if title">header-style</label>
+<input type = "text" name="header-style" placeholder=""></p>
+<p><label for="header-bgcolor" title="background color of the title">header-bgcolor</label>
+<input type = "color" name="header-bgcolor" title="" value="#feffff"></p>
+<h4>Footer Style</h4>
+<p><label for="footer" title="0: no foot, 1: last line content or columns text for footer">footer</label>
+<input type = "number" name="footer"class="w10"  min="0" max="1" placeholder="0"></p>
+<p><label for="footer-class" title="class(es) for the last LI tag if footer">footer-class</label>
+<input type = "text" name="footer-class" placeholder=""></p>
+<p><label for="footer-style" title="style for the last LI tag if footer">footer-style</label>
+<input type = "text" name="footer-style" placeholder=""></p>
+<p><label for="footer-bgcolor" title="background color of the last line">footer-bgcolor</label>
+<input type = "color" name="footer-bgcolor" title="" value="#feffff"></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules defined by the webmaster (added to the head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

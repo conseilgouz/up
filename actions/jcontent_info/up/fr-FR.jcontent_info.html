@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_info - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-info" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche des informations sur l'article courant
+</p>
+<p>syntaxe 1 : <code><b>{</b>up jcontent-info=nom_info<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up jcontent_info<b>}</b></code>&lt;b&gt;une info :&lt;/b&gt; ##nom_info##<code><b>{</b>/up jcontent_info<b>}</b></code><br />syntaxe 3 : <code><b>{</b>up jcontent_info | template=<b>[</b>b]une info :<b>[</b>/b] ##nom_info##<b>}</b></code><br />Les mots-clés :<br />##id## ##title## ##subtitle##<br />##image## ##image-src## ##image-alt## ##image-legend##<br />##image-full## ##image-full-src## ##image-full-alt## ##image-full-legend##<br />##date-crea## ##crea_by## ##date-modif## ##modif_by##<br />##url-a## ##url-b## ##url-c##<br />##date-publish## ##date-unpublish##<br />##note## ##cat## ##catid## ##breadcrumbs##<br />##featured## ##hits## ##tags## ##tags-link## ##author##<br />##CF_id_or_name## : valeur brute du custom field</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>up-usage</u> : </b> <b>template</b>=Pour info, &lt;b&gt;cette page utilise ##upnb## action(s)&lt;/b&gt; : &lt;br&gt;##uplist##<b> | </b><b>class</b>=box-note i
+</div >
+<p><label for="jcontent_info" title="le nom d&#039;un &eacute;l&eacute;ment ou rien">jcontent-info</label>
+<input type = "text" id="jcontent_info" title="" placeholder="" list="combo_jcontent_info"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcontent_info">
+<option value=""></option>
+<option value="up-usage">up-usage</option>
+</datalist></p>
+<h4>Modèle de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est le contenu. BBCode accept&eacute;">template</label>
+<input type = "text" name="template" placeholder="##content##"></p>
+<h4>balise & style du bloc principal</h4>
+<p><label for="tag" title="balise pour le bloc d&#039;un article. _div = div si class ou style, sinon rien. = 0=jamais">tag</label>
+<input type = "text" name="tag" placeholder="_div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="classes et styles inline pour un article">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe(s) pour un article (obsol&eacute;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<h4>Format pour les mots-clés</h4>
+<p class="hr-top"><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w20 hr-top"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="localisation pour les dates. Par d&eacute;faut, celle du navigateur client.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="featured-html" title="pr&eacute;sentation mise en vedette">featured-html</label>
+<input type = "text" name="featured-html"class="hr-top"  placeholder="[b class=&quot;t-gris&quot;]&amp;#x2605;[/b], [b class=&quot;t-jauneFonce&quot;]&amp;#x2605;[/b]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="texte avant les autres eventuels tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="classe ou style affecte a une balise span par mot-cle">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder="badge;margin-right:4px"></p>
+<p><label for="tags-list-separator" title="separateur entre mots-cles">tags-list-separator</label>
+<input type = "text" name="tags-list-separator" placeholder=""></p>
+<p class="hr-top"><label for="path-separator" title="caract&egrave;re ou bbcode pour s&eacute;parer les items menus ou les cat&eacute;gories">path-separator</label>
+<input type = "text" name="path-separator"class="hr-top"  placeholder="»"></p>
+<p><label for="path-current-class" title="style de l&#039;&eacute;lement terminal d&#039;un chemin">path-current-class</label>
+<input type = "text" name="path-current-class" placeholder="b"></p>
+<p><label for="path-parent-class" title="style des &eacute;lements parents">path-parent-class</label>
+<input type = "text" name="path-parent-class" placeholder="fs90"></p>
+<p><label for="path-order" title="asc: &eacute;l&eacute;ment terminal &agrave; la fin, desc : au d&eacute;but">path-order</label>
+<input type = "text" name="path-order" placeholder="asc"></p>
+<p><label for="path-link" title="affiche les liens sur les &eacute;l&eacute;ments.">path-link</label>
+<input type = "text" name="path-link" placeholder="1"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="code CSS dans le head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

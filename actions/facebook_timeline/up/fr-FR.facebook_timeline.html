@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>facebook_timeline - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-facebook-timeline" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche la timeline Facebook
+</p>
+<p><code><b>{</b>up facebook=facebook id<b>}</b></code><br />voir https://developers.facebook.com/docs/plugins/page-plugin</p>
+
+
+</div >
+<p><label for="facebook_timeline" title="ID facebook. Voir https://findmyfbid.com">facebook-timeline</label>
+<input type = "text" id="facebook_timeline"class="important w30"  placeholder=""></p>
+<p><label for="tabs" title="Onglets &agrave; afficher, par exemple : timeline, events, messages">tabs</label>
+<input type = "text" name="tabs"class="w20"  title="timeline" placeholder="timeline" list="combo_tabs"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_tabs">
+<option value=""></option>
+<option value="timeline">timeline</option>
+<option value="events">events</option>
+<option value="messages">messages</option>
+</datalist></p>
+<p class="hr-top"><label for="width" title="La largeur du plugin en pixels. Valeur mini = 180, maxi = 500">width (px)</label>
+<input type = "number" name="width"class="w10 hr-top"  min="180" max="500" step="10" unit="px" placeholder="500"></p>
+<p><label for="height" title="La hauteur du plugin en pixels. valeur mini = 70.">height (px)</label>
+<input type = "number" name="height"class="w10"  min="70" max="800" step="10" unit="px" placeholder="500"></p>
+<p><label for="adaptwidth" title="Essayer d&rsquo;adapter la largeur au conteneur.">adaptwidth</label>
+<select name="adaptwidth" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p class="hr-top"><label for="facepile" title="Affiche les photos de profils quand des amis aiment le contenu.">facepile</label>
+<select name="facepile"class="hr-top"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="hidecover" title="Masque la photo de couverture dans l&rsquo;en-t&ecirc;te">hidecover</label>
+<select name="hidecover" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="smallheader" title="Utiliser un en-t&ecirc;te r&eacute;duit">smallheader</label>
+<select name="smallheader" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe bloc parent">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

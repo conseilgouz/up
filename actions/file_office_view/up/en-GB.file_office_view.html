@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_office_view - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-office-view" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays an MS Office file (word, excel, powerpoint)</p>
+<p>syntax <code><b>{</b>up file_office_view=file_name<b>}</b></code></p>
+
+
+</div >
+<p><label for="file_office_view" title="file name">file-office-view</label>
+<input type = "text" id="file_office_view"class="important"  placeholder=""></p>
+<p><label for="mode" title="office-view, google-docs, google-drive">mode</label>
+<select name="mode"class="w20"  title="office-embed" placeholder="office-embed" value="office-embed">
+<option value=""></option>
+<option value="office-embed" selected>office-embed</option>
+<option value="office-view">office-view</option>
+<option value="google-docs">google-docs</option>
+<option value="google-drive">google-drive</option>
+</select></p>
+<p class="hr-top"><label for="width" title="width of the container block">width</label>
+<input type = "text" name="width"class="w10 hr-top"  placeholder="100%"></p>
+<p><label for="height" title="height of the container block">height</label>
+<input type = "text" name="height"class="w10"  placeholder="50vh"></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

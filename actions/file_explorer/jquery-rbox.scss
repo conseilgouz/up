@@ -1,0 +1,159 @@
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../assets/custom/variables";
+@import "../../assets/scss/variables";
+
+
+* {
+	box-sizing: border-box;
+	/* Remove if included in your site's global styles */
+}
+
+.rbox-overlay {
+	text-align: center;
+	background: #000;
+	background: rgba(0, 0, 0, 0.8);
+	opacity: 0;
+	display: flex;
+	align-items: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	z-index: -1;
+	transition: opacity 0.25s ease;
+	/* animates the fade */
+}
+
+.rbox-overlay--show {
+	opacity: 1;
+	z-index: 10000;
+}
+
+.rbox-overlay--short {
+	align-items: flex-start;
+	/* for when rbox content is taller than viewport */
+	position: absolute;
+}
+
+.rbox-wrap {
+	margin: 25px auto;
+	max-width: 80%;
+	position: relative;
+	display: inline-block;
+}
+
+.rbox-wrap--iframe,
+.rbox-wrap--video,
+.rbox-wrap--inline,
+.rbox-wrap--html,
+.rbox-wrap--ajax {
+	background: #fff;
+	padding: 0;
+	/*20px;*/
+}
+
+.rbox {
+	// padding: 5px;
+	position: relative;
+}
+
+// ================= NAVIGATION
+.rbox-next,
+.rbox-prev,
+.rbox-close {
+	color: #777;
+	text-decoration: none;
+	padding: 10px;
+}
+
+.rbox-next:hover,
+.rbox-next:focus,
+.rbox-prev:hover,
+.rbox-prev:focus,
+.rbox-close:hover,
+.rbox-close:focus {
+	color: #aaa;
+}
+
+.rbox-close {
+	position: absolute;
+	right: -14px;
+	top: -26px;
+	font-size: 20px;
+}
+
+.rbox-next,
+.rbox-prev {
+	position: absolute;
+	top: 44%;
+	font-size: 20px;
+}
+
+.rbox-next {
+	right: -30px;
+}
+
+.rbox-prev {
+	left: -30px;
+}
+
+// ================= CONTENU
+.rbox-content img {
+	max-height: 80vh;
+	max-width: 100%;
+	object-fit: contain;
+}
+
+.rbox-content iframe {
+	max-width: 100%;
+	width: 100vw;
+	height: 70vh;
+}
+
+.rbox-content img,
+.rbox-content video {
+	display: block;
+	margin: 0 auto;
+
+}
+
+.rbox-content iframe {
+	border: 0;
+	/* Remove if included in your site's global styles */
+}
+
+/* LM */
+.rbox-content {
+	max-height: 90vh;
+	max-width: 90vw;
+	background: #fff;
+	display: block;
+	overflow:clip;
+	padding:5px;
+}
+
+.rbox-wrap--ajax .rbox-content>div:first-child {
+	white-space: pre-line;
+	text-align: left;
+	padding: 10px;
+	overflow: auto;
+	max-height: 80vh;
+}
+
+.rbox-caption {
+	background: $primary;
+	color: #FFF;
+	padding: 5px;
+	font-style: italic;
+}
+
+[data-rbox-type="iframe"] .rbox-caption {
+	margin:0;
+}
+
+.rbox-wrap--image .rbox-caption {
+	margin-top:5px;
+}

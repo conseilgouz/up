@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>slider_owl - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-slider-owl" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>scrolling banner of images or HTML blocks</p>
+<p><code><b>{</b>up slider-owl |items=2<b>}</b></code><br>&lt;div>...&lt;/div><br>&lt;img src="..."><br>&lt;a href="...">&lt;img src="...">&lt;/a><br><code><b>{</b>/up slider-owl<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>itemsDesktop</b>=[1640, 4]<b> | </b><b>itemsDesktopSmall</b>=[1024, 3]<b> | </b><b>itemsTablet</b>=[914, 2]<b> | </b><b>itemsMobile</b>=[600, 1]
+</div >
+<p><label for="slider_owl" title="no settings required">slider-owl</label>
+<input type = "text" id="slider_owl"class="w5 inactif"  title="" placeholder="" list="combo_slider_owl"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_slider_owl">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p><label for="max-height" title="&eacute;galise la hauteur de tous les blocs">max-height</label>
+<input type = "text" name="max-height" placeholder="1"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) added to the main block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style added to the main block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>JS: number of images according to screen width</h4>
+<p><label for="autoPlay" title="1 to start automatically">autoPlay (msec)</label>
+<input type = "number" name="autoPlay" min="0" step="100" unit="msec" placeholder="0"></p>
+<p><label for="slideSpeed" title="Speed in milliseconds in milliseconds">slideSpeed (msec)</label>
+<input type = "number" name="slideSpeed" min="10" max="2000" step="10" unit="msec" placeholder="200"></p>
+<h4>JS: number of images according to screen width</h4>
+<p><label for="paginationSpeed" title="Pagination in milliseconds">paginationSpeed</label>
+<input type = "text" name="paginationSpeed" placeholder="0"></p>
+<p><label for="pagination" title="Pagination display">pagination</label>
+<select name="pagination" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="paginationNumbers" title="Displays numbers inside the paging buttons">paginationNumbers</label>
+<select name="paginationNumbers" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>JS: number of images according to screen width</h4>
+<p><label for="goToFirst" title="Return to first element if automatic reading at the end">goToFirst</label>
+<select name="goToFirst" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="goToFirstSpeed" title="speed of the goToFirst option in milliseconds">goToFirstSpeed (msec)</label>
+<input type = "number" name="goToFirstSpeed" min="100" max="2000" step="100" unit="msec" placeholder="1000"></p>
+<p><label for="navigation" title="Display of &quot;next&quot; buttons and &quot;prev&quot;">navigation</label>
+<select name="navigation" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="navigationText" title="0 for buttons without text">navigationText</label>
+<input type = "text" name="navigationText"class="w40"  placeholder="&quot;prev,next&quot;"></p>
+<h4>JS: number of images according to screen width</h4>
+<p><label for="responsive" title="responsive">responsive</label>
+<select name="responsive" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p class="hr-top"><label for="items" title="Maximum number of elements displayed at the same time over the largest screen width">items</label>
+<input type = "number" name="items"class="hr-top"  min="1" max="12" placeholder="0"></p>
+<p><label for="itemsDesktop" title="This allows you to predefine the number of slides visible with a particular browser width. The format is[x, y] where x = browser width and y = number of slides displayed. For example,[1199,4] means that if (window &lt;= 1199) {display 4 slides per page} You can also use &quot;itemsDesktop: false&quot; to ignore these parameters. To understand how it works, check out my personalized demo">itemsDesktop</label>
+<input type = "text" name="itemsDesktop"class="w20"  placeholder="[1640, 4]"></p>
+<p><label for="itemsDesktopSmall" title="see above">itemsDesktopSmall</label>
+<input type = "text" name="itemsDesktopSmall"class="w20"  placeholder="[1024, 3]"></p>
+<p><label for="itemsTablet" title="see above">itemsTablet</label>
+<input type = "text" name="itemsTablet"class="w20"  placeholder="[914, 2]"></p>
+<p><label for="itemsMobile" title="see above">itemsMobile</label>
+<input type = "text" name="itemsMobile"class="w20"  placeholder="[600, 1]"></p>
+</body>
+</html >

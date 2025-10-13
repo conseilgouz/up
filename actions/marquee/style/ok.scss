@@ -1,0 +1,26 @@
+/*
+                        IMPERATIF :
+                        la premiere classe des selecteurs doit etre : lmmq-nomstyle
+*/
+@import "../../../assets/scss/variables";
+
+@import "../../../assets/scss/variables";
+
+.lmmq-ok {
+    .lmmq-out {
+        background-color:$green;
+        border:2px $green solid;
+        border-radius:99px
+    }
+
+    .lmmq_h-right .lmmq-lbl {
+        padding-right:5px;
+    }
+    .lmmq-lbl {
+        color:$lightYellow;
+    }
+    .lmmq-msg {
+        background-color:$lightYellow;
+        border-radius:99px
+    }
+}

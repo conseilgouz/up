@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_logo - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-logo" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Ajoute une image ou un texte sur une image
+</p>
+<p>syntaxe <code><b>{</b>up image-logo=prefset,image_logo ou texte<b>}</b></code>image<code><b>{</b>/up image-logo<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>etoile</u> : </b> <b>image_logo</b>=&amp;#x2b50;<b> | </b><b>pos</b>=left,top<b> | </b><b>style</b>=margin:10px;font-size:24px
+</div >
+<p><label for="image_logo" title="prefset,image_logo ou texte">image-logo</label>
+<input type = "text" id="image_logo"class="important"  title="" placeholder="" list="combo_image_logo"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_image_logo">
+<option value=""></option>
+<option value="etoile">etoile</option>
+</datalist></p>
+<p><label for="pos" title="position horizontale (left, gauche, right, droite, center, centre), verticale (top, haut, bottom, bas, center, centre)">pos</label>
+<input type = "text" name="pos"class="w40"  title="right,bottom" placeholder="right,bottom" list="combo_pos"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_pos">
+<option value=""></option>
+<option value="left,top">left,top</option>
+<option value="center,top">center,top</option>
+<option value="right,top">right,top</option>
+<option value="left,center">left,center</option>
+<option value="center,center">center,center</option>
+<option value="right,center">right,center</option>
+<option value="left,bottom">left,bottom</option>
+<option value="center,bottom">center,bottom</option>
+<option value="right,bottom">right,bottom</option>
+</datalist></p>
+<p><label for="width" title="largeur logo en px, rem, %. % par d&eacute;faut">width</label>
+<input type = "text" name="width"class="w20"  placeholder=""></p>
+<h4>Style pour le logo</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p class="hr-top"><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class"class="hr-top"  placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Style pour le bloc externe</h4>
+<p><label for="main-class" title="classe(s) pour le bloc du contenu">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<p><label for="main-style" title="style inline pour le bloc du contenu">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

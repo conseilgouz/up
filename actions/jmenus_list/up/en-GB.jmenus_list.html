@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jmenus_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jmenus-list" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>menu list</p>
+<p>syntax : <code><b>{</b>up jmenus-list=menutype<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-gap tc<b> | </b><b>template</b>={image-link}&lt;br&gt;{title-link}<br><b><u>template</u> : </b> <b>image-seule</b>={image-link}<b> | </b><b>image+tag</b>={image}{tags-list}{new}&lt;div&gt;{title}&lt;/div&gt;<br><b><u>demo</u> : </b> <b>template-menutype</b>=&lt;h4 class=notoc&gt;##title## (id:##id##)&lt;/h4&gt; ##description## / ##menutype##
+</div >
+<p><label for="jmenus_list" title="prefset, menutype name or empty for all">jmenus-list</label>
+<input type = "text" id="jmenus_list"class="w30 important"  title="" placeholder="" list="combo_jmenus_list"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jmenus_list">
+<option value=""></option>
+<option value="image-6colonnes">image-6colonnes</option>
+<option value="template">template</option>
+<option value="demo">demo</option>
+</datalist></p>
+<p><label for="menuid" title="ID parent menu to limit to this branch">menuid</label>
+<input type = "number" name="menuid"class="w10"  placeholder=""></p>
+<h4>Main block tag and style</h4>
+<p><label for="main-tag" title="tag for file list">main-tag</label>
+<input type = "text" name="main-tag"class=" w10"  placeholder="ul"></p>
+<p class="hr-top"><label for="style" title="classes and styles">style</label>
+<input type = "text" name="style"class=" hr-top"  placeholder=""></p>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="nohidden" title="5.3 : ignore hidden menus">nohidden</label>
+<select name="nohidden" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<h4>Presentation Templates</h4>
+<p><label for="template-menutype" title="Menu template or 0 for none">template-menutype</label>
+<input type = "text" name="template-menutype" placeholder="[h5]##title## (id:##id##)[/h5] ##description## / ##menutype##"></p>
+<p><label for="template-menu" title="Item menu template">template-menu</label>
+<input type = "text" name="template-menu" placeholder="##title-link##[small] (id:##id##) ##access## - ##component## ##language##[/small] ##note##"></p>
+<p><label for="model-note" title="template for note">model-note</label>
+<input type = "text" name="model-note" placeholder="[i class=&quot;t-blue&quot;] %s[/i]"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_in_content - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-in-content" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>ONE article in an other article</p>
+<p>syntax 1 : <code><b>{</b>up jcontent_in_content=id_article<b>}</b></code><br>syntax 2 : <code><b>{</b>up jcontent_in_content=id_article<b>}</b></code>template<code><b>{</b>/up jcontent_in_content<b>}</b></code><br>keywords :<br>##id## ##title## ##title-link## ##subtitle## ##link## <br>##intro## ##intro-text## ##intro-text,100## ##content##<br>##image## ##image-src## ##image-alt##<br>##date-crea## ##date-modif## ##date-publish##<br>##author## ##note## ##cat## ##new## ##featured## ##hits##</p>
+
+
+</div >
+<p><label for="jcontent_in_content" title="Article ID">jcontent-in-content</label>
+<input type = "text" id="jcontent_in_content"class="w10 important"  placeholder=""></p>
+<p><label for="no-published" title="Also lists unpublished articles">no-published</label>
+<select name="no-published" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="content-plugin" title="support for content plugins for ##into and ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template in prefs.ini. If empty the template is the content">template</label>
+<input type = "text" name="template" placeholder="##content##"></p>
+<h4>Tag & style for parent block</h4>
+<p><label for="main-tag" title="tag for the block of an article. 0 for none">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="inline classes and styles for an article">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="class(es) for an article">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Format for keywords</h4>
+<p><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="location for dates">date-locale</label>
+<input type = "text" name="date-locale"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

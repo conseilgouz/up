@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>corner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-corner" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un texte sur ruban dans un angle
+</p>
+<p>syntaxe 1 (body) : <code><b>{</b>up corner=texte<b>}</b></code><br />syntaxe 2 (bloc) : <code><b>{</b>up corner=texte<b>}</b></code>contenu du bloc<code><b>{</b>/up corner<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>new</u> : </b> <b>corner</b>=Nouveau<b> | </b><b>position</b>=bottom-left<b> | </b><b>bgcolor</b>=violet<b> | </b><b>color</b>=yellow
+</div >
+<p><label for="corner" title="texte affich&eacute; dans le coin ou ruban">corner</label>
+<input type = "text" id="corner" title="" placeholder="" list="combo_corner"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_corner">
+<option value=""></option>
+<option value="new">new</option>
+</datalist></p>
+<h4>position, taille et style du corner</h4>
+<p><label for="position" title="angle sous la forme top-left ou tl">position</label>
+<select name="position" title="top-left" placeholder="top-left" value="top-left">
+<option value=""></option>
+<option value="top-left" selected>top-left</option>
+<option value="top-right">top-right</option>
+<option value="bottom-left">bottom-left</option>
+<option value="bottom-right">bottom-right</option>
+</select></p>
+<p><label for="width" title="cot&eacute; du carr&eacute;">width (px)</label>
+<input type = "number" name="width" min="30" max="250" step="10" unit="px" placeholder="100px"></p>
+<p><label for="height" title="cot&eacute; du carr&eacute;">height (px)</label>
+<input type = "number" name="height" min="30" max="250" step="10" unit="px" placeholder="100px"></p>
+<p><label for="angle" title="angle en valeur absolue">angle (deg)</label>
+<input type = "number" name="angle" min="10" max="80" step="5" unit="deg" placeholder="45"></p>
+<p class="hr-top"><label for="shadow" title="ajoute une ombre &#039;orient&eacute;e&#039; au corner. La valeur indiqu&eacute;e est la force de l&#039;ombre">shadow</label>
+<input type = "number" name="shadow"class="hr-top"  min="0" max="10" placeholder="0"></p>
+<p><label for="color" title="couleur du texte">color</label>
+<input type = "color" name="color" title="#ffffff" value="#ffffff"></p>
+<p><label for="bgcolor" title="couleur de fond du coin">bgcolor</label>
+<input type = "color" name="bgcolor" title="#ff0000" value="#ff0000"></p>
+<p><label for="style" title="styles CSS (non propos&eacute;s ci-dessus) pour le coin">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="idem style">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<h4>si le corner est clicable</h4>
+<p class="hr-top"><label for="url" title="lien">url</label>
+<input type = "text" name="url"class="w10 hr-top"  placeholder=""></p>
+<p><label for="target" title="ou _self pour ouvrir le site dans le m&ecirc;me onglet">target</label>
+<select name="target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<h4>style du bloc si le shortcode a un contenu</h4>
+<p><label for="bloc-class" title="classe(s) pour bloc">bloc-class</label>
+<input type = "text" name="bloc-class" placeholder=""></p>
+<p><label for="bloc-style" title="style inline pour bloc">bloc-style</label>
+<input type = "text" name="bloc-style" placeholder=""></p>
+<h4>style et options secondaire</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="filter" title="chaine de conditions. Voir documentation filter">filter</label>
+<input type = "text" name="filter"class="hr-top"  placeholder=""></p>
+</body>
+</html >

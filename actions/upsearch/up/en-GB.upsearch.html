@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upsearch - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upsearch" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Research an action in the content of articles and / or modules (params)</p>
+<p>syntax: <code><b>{</b>up upsearch=nom_action | regex=... | module<b>}</b></code><br><br>keywords for template<br>##id##  ##title##  ##title-link## ##cat## ##date-crea## ##date-modif##<br>##text## : search result</p>
+
+
+</div >
+<h4>Search Criteria</h4>
+<p><label for="upsearch" title="action name or synonym">upsearch</label>
+<input type = "text" id="upsearch" placeholder=""></p>
+<p><label for="regex" title="Research pattern in shortcode or all content without action name">regex</label>
+<input type = "text" name="regex" placeholder=""></p>
+<p><label for="cat" title="list id of categories of articles, separator: comma. empty = all">cat</label>
+<input type = "text" name="cat" placeholder=""></p>
+<p><label for="module" title="For search in the Params field. empty: all client modules, if not:  part of the module name  ">module</label>
+<input type = "text" name="module" placeholder=""></p>
+<p class="hr-top"><label for="no-published" title="1: search in all archived, unpublished articles and trash">no-published</label>
+<select name="no-published"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Formatting the result
+sort-by=sort for article:  title, ordering, created, modified, publish_up, id, ... ou text for research content</h4>
+<p><label for="sort-by" title="tri pour article: title, ordering, created, modified, publish_up, id, ... ou text pour contenu recherche">sort-by</label>
+<input type = "text" name="sort-by" placeholder="title"></p>
+<p><label for="sort-order" title="sort order : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="only-one" title="View a single result per item">only-one</label>
+<input type = "text" name="only-one" placeholder="0"></p>
+<p><label for="maxlen" title="maximum  characters for the result">maxlen</label>
+<input type = "number" name="maxlen" min="0" placeholder=""></p>
+<p><label for="template" title="Model for return. by default : ##title## ; ##text## for table">template</label>
+<input type = "text" name="template" placeholder="[p]##id## ; ##title-link## ; &quot;##text##&quot;[/p]"></p>
+<p><label for="date-format" title="Format for dates">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%Y-%m-%d"></p>
+<p><label for="target" title="for the link on article">target</label>
+<select name="target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+<option value="_parent">_parent</option>
+<option value="_top">_top</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

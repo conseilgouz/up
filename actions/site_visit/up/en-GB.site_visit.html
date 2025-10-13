@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>site_visit - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-site-visit" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>counts the number of visit for a page</p>
+<p>syntaxe : 
+  <code><b>{</b>up site-visit<b>}</b></code> : increment the file log-path/alias_article.stat
+  <code><b>{</b>up site-visit=nom<b>}</b></code> : increment the file log-path/nom.stat
+  <code><b>{</b>up site-visit | info<b>}</b></code> : list the contents of all files .stat in log-path
+  <code><b>{</b>up site-visit | info=nom<b>}</b></code> : list the contents of all files action-xxx.stat in log-path
+ keywords : ##name## ##counter## ##date## ##language##
+</p>
+
+
+</div >
+<h4>Main Options</h4>
+<p><label for="site_visit" title="counter name, if empty = item alias (if info=0)">site-visit</label>
+<input type = "text" id="site_visit"class="w30"  placeholder=""></p>
+<p><label for="catid-include" title="list of category ids to include, comma separator">catid-include</label>
+<input type = "text" name="catid-include"class="w30"  placeholder=""></p>
+<p><label for="catid-exclude" title="list of category ids to exclude, comma separator">catid-exclude</label>
+<input type = "text" name="catid-exclude"class="w30"  placeholder=""></p>
+<p><label for="usergroup-list" title="list of user groups to exclude, comma separator">usergroup-list</label>
+<input type = "text" name="usergroup-list"class="w30"  placeholder=""></p>
+<p><label for="ip-list" title="list of IPs to ignore. botnets are ignored, comma separator">ip-list</label>
+<input type = "text" name="ip-list" placeholder="127.0.0.0, localhost"></p>
+<p><label for="bots-list" title="excluded bots list, comma separator">bots-list</label>
+<input type = "text" name="bots-list" placeholder="bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter"></p>
+<h4>Options for display results</h4>
+<p><label for="info" title="hides stat and log files whose content is listed. blank = current item, * = all or file mask">info</label>
+<input type = "text" name="info"class="w30"  placeholder=""></p>
+<p><label for="info-template" title="display model">info-template</label>
+<input type = "text" name="info-template" placeholder="##counter## visites au ##lastdate##"></p>
+<p><label for="info-catid-include" title="list of categories to include. empty=all">info-catid-include</label>
+<input type = "text" name="info-catid-include"class="w30"  placeholder=""></p>
+<p><label for="info-sort" title="sorting the list. Default ##alias##. All keywords are usable">info-sort</label>
+<select name="info-sort"class="w5"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="asc">asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="info-sort-order" title="sort direction on all info-sort keywords">info-sort-order</label>
+<input type = "text" name="info-sort-order" placeholder="asc"></p>
+<p class="hr-top"><label for="detail-period-style" title="style added for detailed listing period">detail-period-style</label>
+<input type = "text" name="detail-period-style"class="w30 hr-top"  placeholder=""></p>
+<p><label for="use-bbcode" title="use bbcode format in the output. To be used for a CSV export">use-bbcode</label>
+<select name="use-bbcode" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="date-format" title="date format">date-format</label>
+<input type = "text" name="date-format" placeholder="lang[en=%B %se, %Y;fr=%e %B %Y]"></p>
+<p><label for="no-content-html" title="message displayed if no result for the selection">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="&quot;lang[en=No statistical data;fr=Aucune donnée statistique]&quot;"></p>
+<h4>One line style</h4>
+<p><label for="item-tag" title="tag for list rows">item-tag</label>
+<input type = "text" name="item-tag" placeholder=""></p>
+<p><label for="item-class" title="class for list rows">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<p><label for="item-style" title="style for list lines">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<h4>Style of the main block</h4>
+<p><label for="main-tag" title="main tag for list">main-tag</label>
+<input type = "text" name="main-tag" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>For webmaster - to add in the prefs.ini file</h4>
+<p><label for="log" title="argument a file counter_name.log with IP and date">log</label>
+<select name="log" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="dir-logs" title="path folder for logs">dir-logs</label>
+<input type = "text" name="dir-logs"class="w30"  placeholder="up/site-visit"></p>
+</body>
+</html >

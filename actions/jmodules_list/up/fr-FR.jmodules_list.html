@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jmodules_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jmodules-list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des modules sur le site
+</p>
+<p>syntaxe : <code><b>{</b>up jmodules-list=position ou client_id<b>}</b></code><br />MOTS-CLES:<br />##id## ##client## ##position## ##module## ##title##<br />##state## ##note## ##ordering## ##language##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>site</u> : </b> <b>client</b>=0<b> | </b><b>template</b>=\[##position##\]  [b class=##state##]##title##[/b] [small] (id:##id##) ##language##[/small] ##note##<b> | </b><b>order</b>=position, ordering, title<br><b><u>admin</u> : </b> <b>client</b>=1<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=name
+</div >
+<h4>Critères de sélection des modules</h4>
+<p><label for="jmodules_list" title="prefset ou position(s). vide=tous les modules site">jmodules-list</label>
+<input type = "text" id="jmodules_list"class="w30 important"  title="" placeholder="" list="combo_jmodules_list"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jmodules_list">
+<option value=""></option>
+<option value="site">site</option>
+<option value="admin">admin</option>
+</datalist></p>
+<p><label for="position-exclude" title="1= toutes les positions sauf celles pass&eacute;es en param&egrave;tre principal">position-exclude</label>
+<select name="position-exclude" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="client" title="0=site, 1=admin, 2=tous">client</label>
+<input type = "number" name="client"class="w5"  min="0" max="2" placeholder="0"></p>
+<p><label for="module" title="nom du module. ex: LM-Custom-SITE">module</label>
+<input type = "text" name="module" placeholder=""></p>
+<p><label for="module-exclude" title="1= tous les modules sauf ceux pass&eacute;s au param&egrave;tre module">module-exclude</label>
+<select name="module-exclude" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="actif-only" title="1 pour lister les extensions d&eacute;publi&eacute;es">actif-only</label>
+<select name="actif-only" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="order" title="ordre de tri. s&eacute;p&eacute;rateur virgule">order</label>
+<input type = "text" name="order" placeholder="position, ordering, title"></p>
+<p class="hr-top"><label for="no-content-html" title="retour si aucune cat&eacute;gorie trouv&eacute;e">no-content-html</label>
+<input type = "text" name="no-content-html"class="hr-top"  placeholder="[p]aucun module a cette position[/p]"></p>
+<h4>Balise et style du bloc principal</h4>
+<p><label for="main-tag" title="balise pour le bloc englobant tous les modules. 0 pour aucun">main-tag</label>
+<input type = "text" name="main-tag"class=" w10 "  placeholder="ul"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="classes et styles inline pour bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour bloc principal (obsol&egrave;te)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Balise et style d'un bloc module</h4>
+<p><label for="item-tag" title="balise pour un module. 0 pour aucun">item-tag</label>
+<input type = "text" name="item-tag"class=" w10 "  placeholder="li"></p>
+<p><label for="item-style" title="classes et styles inline pour bloc ligne">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="classe(s) pour bloc ligne (obsol&egrave;te)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Modèle de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page.">template</label>
+<input type = "text" name="template"class=" w10"  placeholder="\[##position##\]  [b class=&quot;##state##&quot;][/b] [b]##title##[/b] [small] (id:##id## - ##module##) ##language##[/small] ##note##"></p>
+<p class="hr-top"><label for="model-note" title="pr&eacute;sentation pour ##note##">model-note</label>
+<input type = "text" name="model-note"class="hr-top"  placeholder="[i class=&quot;t-blue&quot;]%s[/i]"></p>
+<p><label for="state-list" title="liste de choix : inactif, actif &amp;#x1f534">state-list</label>
+<input type = "text" name="state-list" placeholder="icon-unpublish t-rouge, icon-publish t-vert, icon-trash t-gris"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

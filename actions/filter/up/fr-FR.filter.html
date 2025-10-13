@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>filter - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-filter" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche du contenu si toutes les conditions sont remplies
+</p>
+<p><i>Reprise du plugin <a href="https://lomart.fr/extensions/lm-filter">LM-Filter</a> de Lomart</i><br />SYNTAXE 1 (condition comme option):<br /><code><b>{</b>up filter | datemax=20171225<b>}</b></code> contenu si vrai  <code><b>{</b>====<b>}</b></code> contenu si faux <code><b>{</b>/up filter<b>}</b></code><br />Le contenu si faux est optionnel. Il doit être après le contenu si vrai et séparé par <code><b>{</b>===<b>}</b></code> (au minima 3 signes égal)<br />SYNTAXE 2 (condition comme argument principal):<br /><code><b>{</b>up filter=datemax:20171225<b>}</b></code> contenu si vrai  <code><b>{</b>====<b>}</b></code> contenu si faux <code><b>{</b>/up filter<b>}</b></code><br />SYNTAXE 3 (mono-shortcode):<br /><code><b>{</b>up filter | guest=0  | return-true=REGISTER  | return-false=GUEST<b>}</b></code><br />--> guest=0 est vrai si un utilisateur est connecté<br />--> la valeur retournée est saisie comme option<br />SYNTAXE 4 (multi-conditions et négation):<br /><code><b>{</b>up filter=!day:1,7 ; hperiod:0900-1200,1500-1900 | return-true=OUVERT  | return-false=FERME<b>}</b></code><br />--> vrai si pas lundi ou dimanche et entre 9-12h ou 15-19h</p>
+
+
+</div >
+<p><label for="filter" title="condition sous la forme cond1:val1,val2 ; cond2:val1,val2">filter</label>
+<input type = "text" id="filter"class="w10 inactif"  placeholder=""></p>
+<h4>Les conditions</h4>
+<p><label for="datemax" title="vrai jusqu&#039;&agrave; cette date AAAAMMJJHHMM">datemax</label>
+<input type = "text" name="datemax"class="w30"  placeholder=""></p>
+<p><label for="datemin" title="vrai &agrave; partir de cette date AAAAMMJJHHMM">datemin</label>
+<input type = "text" name="datemin"class="w30"  placeholder=""></p>
+<p><label for="period" title="vrai entre ces dates AAAAMMJJHHMM-AAAAMMJJHHMM">period</label>
+<input type = "text" name="period"class="w50"  placeholder=""></p>
+<p><label for="day" title="liste des jours autoris&eacute;s. 1=lundi, 7=dimanche">day</label>
+<input type = "text" name="day"class="w30"  placeholder=""></p>
+<p><label for="month" title="liste des mois autoris&eacute;s. 1=janvier, ...">month</label>
+<input type = "text" name="month"class="w30"  placeholder=""></p>
+<p><label for="hmax" title="vrai jusqu&#039;&agrave; cette heure HHMM">hmax</label>
+<input type = "text" name="hmax"class="w20"  placeholder=""></p>
+<p><label for="hmin" title="vrai &agrave; partir de cette heure HHMM">hmin</label>
+<input type = "text" name="hmin"class="w20"  placeholder=""></p>
+<p><label for="hperiod" title="vrai entre ces heures HHMM-HHMM">hperiod</label>
+<input type = "text" name="hperiod"class="w30"  placeholder=""></p>
+<p class="hr-top"><label for="guest" title="vrai si utilisateur invit&eacute;">guest</label>
+<select name="guest"class="hr-top"  title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="admin" title="vrai si admin connect&eacute;">admin</label>
+<select name="admin" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="user" title="liste des userid autoris&eacute;. ex: 700,790">user</label>
+<input type = "text" name="user"class="w20"  placeholder=""></p>
+<p><label for="username" title="liste des username autoris&eacute;. ex: admin,lomart">username</label>
+<input type = "text" name="username"class="w50"  placeholder=""></p>
+<p><label for="group" title="liste des usergroup autoris&eacute;. ex: 8,12">group</label>
+<input type = "text" name="group"class="w20"  placeholder=""></p>
+<p><label for="lang" title="liste des langues autoris&eacute;es. ex: fr,ca">lang</label>
+<input type = "text" name="lang"class="w20"  placeholder=""></p>
+<p class="hr-top"><label for="mobile" title="vrai si affich&eacute; sur un mobile">mobile</label>
+<select name="mobile"class="hr-top"  title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="homepage" title="vrai si affich&eacute; sur la page d&#039;accueil">homepage</label>
+<select name="homepage" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p class="hr-top"><label for="server-host" title="vrai si le domaine du serveur contient un des termes de la liste">server-host</label>
+<input type = "text" name="server-host"class="w50 hr-top"  placeholder=""></p>
+<p><label for="server-ip" title="vrai si l&#039;adresse IP du serveur des dans la liste">server-ip</label>
+<input type = "text" name="server-ip"class="w50"  placeholder=""></p>
+<p class="hr-top"><label for="artid" title="vrai si l&#039;ID de l&#039;article courant est dans la liste">artid</label>
+<input type = "text" name="artid"class="w40 hr-top"  placeholder=""></p>
+<p><label for="catid" title="vrai si l&#039;ID de la cat&eacute;gorie de l&#039;article courant est dans la liste">catid</label>
+<input type = "text" name="catid"class="w40"  placeholder=""></p>
+<p><label for="menuid" title="vrai si l&#039;ID du menu actif est dans la liste">menuid</label>
+<input type = "text" name="menuid"class="w40"  placeholder=""></p>
+<p><label for="equal" title="vrai si op1 = op2 no case sensitive">equal</label>
+<input type = "text" name="equal" placeholder=""></p>
+<p><label for="smaller" title="vrai si op1 &gt; op2 no case sensitive">smaller</label>
+<input type = "text" name="smaller" placeholder=""></p>
+<p><label for="bigger" title="vrai si op1 &lt; op2 no case sensitive">bigger</label>
+<input type = "text" name="bigger" placeholder=""></p>
+<h4>retour pour version mono-shortcode</h4>
+<p><label for="return-true" title="valeur retourn&eacute;e si vrai et pas de contenu">return-true</label>
+<input type = "text" name="return-true" placeholder="1"></p>
+<p><label for="return-false" title="valeur retourn&eacute;e si faux et pas de contenu">return-false</label>
+<input type = "text" name="return-false" placeholder="0"></p>
+<h4>Divers</h4>
+<p><label for="info" title="affiche les valeurs actuelles des arguments pour les conditions">info</label>
+<select name="info" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,191 @@
+﻿/* 
+    Created on : 5 oct. 2019, 13:31:37
+    Author     : LOIC
+*/
+
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// voir les couleurs sur : https://up.lomart.fr/infos/css
+// vous pouvez les adapter directement ici sous cette forme :
+// $brown : #...
+// $grey : #...
+// $paleGrey : #...
+// $white : #...
+// $blue : #...
+// $paleBlue : #...
+
+// =================================================
+/* par defaut */
+// =================================================
+.csv2table {
+    // toutes les tables occupent toute la largeur
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid $grey;
+    td, th {
+        border: 1px solid $grey;
+        padding:5px;
+        vertical-align:top;
+    }
+	th {
+		vertical-align:middle;
+		text-align:center;
+	}
+    thead, tfoot {
+        background: $paleGrey;
+        font-weight: bold;
+    }
+}
+
+// =================================================
+/* model = noborder */
+// =================================================
+.csv2table.noborder {
+    // supprimer les bordures
+    border: none;
+    td, th {
+        border: none;
+    }
+}
+
+
+// =================================================
+/* model = line */
+// =================================================
+
+$line-bcolor: $grey !default;  // couleur des bordures
+
+// table avec uniquement un trait horizontal pour séparer les lignes
+.csv2table.line {
+    // bordure haute et basse de la table
+    border: none;
+    border-top   : solid 2px $primary;
+    border-bottom: solid 2px $primary;
+    th, td {
+        border: none;
+        padding-left: 5px; 
+        padding-right: 5px;
+        border-bottom: solid 1px $primary;
+    }
+    thead, tfoot {
+        background: lighten($tan,5);
+        color :$primary;
+    }
+}
+
+// =================================================
+/* model = primary v2.9 */
+// =================================================
+.csv2table.primary {
+    border: 1px solid $white;
+    border-collapse: collapse;
+    td, th {
+        border: 1px solid $white;
+        padding: 3px 5px;
+    }
+    tr:nth-child(even) {
+        background: $palePrimary;
+    }
+    tr:last-of-type {
+        border-bottom: 2px solid $primary;
+    }
+
+    thead tr, tfoot tr {
+        background: $primary;
+        font-weight: bold;
+        color: $white;
+        text-align: center;
+    }
+}
+
+// =================================================
+/* model = secondary v2.9 */
+// =================================================
+.csv2table.secondary {
+    border: 1px solid $white;
+    border-collapse: collapse;
+    td, th {
+        border: 1px solid $white;
+        padding: 3px 5px;
+    }
+    tr:nth-child(even) {
+        background: $paleSecondary;
+    }
+    tr:last-of-type {
+        border-bottom: 2px solid $secondary;
+    }
+
+    thead tr, tfoot tr {
+        background: $secondary;
+        font-weight: bold;
+        color: $white;
+        text-align: center;
+    }
+}
+
+// =================================================
+/* model = blue */
+// =================================================
+.csv2table.blue {
+    border: 1px solid $white;
+    border-collapse: collapse;
+    td, th {
+        border: 1px solid $white;
+        padding: 3px 5px;
+    }
+    tr:nth-child(even) {
+        background: lighten($paleBlue,5);
+    }
+     tr:last-of-type {
+        border-bottom: 2px solid $blue;
+    }
+   thead tr, tfoot tr {
+        background: $blue;
+        font-weight: bold;
+        color: $white;
+        text-align: center;
+		a {color:#FFFACD} // jaunepale
+    }
+}
+
+// =================================================
+/* model = green */
+// =================================================
+
+.csv2table.green {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 0;
+    tr {
+        background: $paleGrey;
+        border:none;
+        &:nth-of-type(odd) {
+            background: darken($paleGrey,10);
+        }
+    }
+    td, th {
+        border: 0; 
+    }
+    thead tr {
+        font-weight: bold;
+        color: $white;
+        background: $green !important;
+    }
+    tfoot tr {
+        border-top:2px solid $grey
+    }
+}
+
+
+// =================================================
+/* Pour mise en forme cellule */
+// =================================================
+.csv2table {
+    td.red {background:$lightRed}
+    td.green {background:$lightGreen}
+    td.orange {background: $orange}
+    td.blue {background: $paleBlue}
+
+    td.oui {background:url(../img/oui.png) no-repeat center 8px}
+    td.non {background:url(../img/non.png) no-repeat center 8px}
+}

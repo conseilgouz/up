@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>tab - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-tab" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche du contenu dans des panneaux avec onglets en haut, à gauche ou à droite.</p>
+<p>Mode responsive avec gestion de l'espacement vertical<br /><code><b>{</b>up tab<b>}</b></code><br />< h4>texte onglet< /h4><br />< p>texte du panneau< /p><br />< img src=".."><br /><code><b>{</b>/up tab<b>}</b></code><br />Sur mobile ou sur demande, l'affichage est en mode accordion<br />script JS adapté par Lomart pour gestion répartition verticale</p>
+
+
+</div >
+<p><label for="tab" title="tab ou accordion">tab</label>
+<select id="tab"class="important"  title="tab" placeholder="tab" value="tab">
+<option value=""></option>
+<option value="tab" selected>tab</option>
+<option value="accordion">accordion</option>
+</select></p>
+<p><label for="auto" title="0 ou delai en millisecondes pour changement automatique d&#039;onglet">auto (msec)</label>
+<input type = "number" name="auto" min="100" max="2000" step="100" unit="msec" placeholder=""></p>
+<h4>Style des titres (onglets)</h4>
+<p><label for="title-tag" title="balise utilis&eacute;e pour les titres onglets">title-tag</label>
+<select name="title-tag" title="h4" placeholder="h4" value="h4">
+<option value=""></option>
+<option value="h2">h2</option>
+<option value="h3">h3</option>
+<option value="h4" selected>h4</option>
+<option value="h5">h5</option>
+<option value="h6">h6</option>
+</select></p>
+<p class="hr-top"><label for="title-style" title="classe(s) et style inline onglets">title-style</label>
+<input type = "text" name="title-style"class="hr-top"  placeholder=""></p>
+<p><label for="title-class" title="classe(s) onglets (obsol&egrave;te)">title-class</label>
+<input type = "text" name="title-class" placeholder=""></p>
+<h4>Style des panneaux de contenu</h4>
+<p class="hr-top"><label for="content-style" title="classe(s) et style inline contenu">content-style</label>
+<input type = "text" name="content-style"class="hr-top"  placeholder=""></p>
+<p><label for="content-class" title="classe(s) contenu (obsol&egrave;te)">content-class</label>
+<input type = "text" name="content-class" placeholder=""></p>
+<p><label for="espace-vertical" title="0, 1 ou 2 : niveau des &eacute;l&eacute;ments &agrave; r&eacute;partir">espace-vertical</label>
+<select name="espace-vertical" title="1" placeholder="1" value="1">
+<option value=""></option>
+<option value="0">0</option>
+<option value="1" selected>1</option>
+<option value="2">2</option>
+</select></p>
+<h4>Style du bloc principal</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="classe(s) et style(s) bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe(s) bloc principal (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS mises dans le head">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>paramètres Javascript pour configuration</h4>
+<p><label for="side" title="left ou right">side</label>
+<select name="side" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="left">left</option>
+<option value="right">right</option>
+</select></p>
+<p><label for="active_tab" title="1 a N">active_tab</label>
+<input type = "number" name="active_tab" min="1" max="12" placeholder=""></p>
+<p><label for="plugin_type" title="accordion (interne, ne pas modifier)">plugin_type</label>
+<input type = "text" name="plugin_type"class="w5 inactif"  placeholder=""></p>
+<p><label for="content_display" title="interne, ne pas modifier, d&eacute;fini par espace-vertical">content_display</label>
+<input type = "text" name="content_display"class="w10 inactif"  placeholder="block"></p>
+</body>
+</html >

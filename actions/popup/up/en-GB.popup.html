@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>popup - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-popup" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Opens a popup after a delay or a position in the page</p>
+<p>syntax: <code><b>{</b>up popup=5s<b>}</b></code>popup content<code><b>{</b>/up popup<b>}</b></code> Open popup 5 seconds after page load<br>syntax: <code><b>{</b>up popup=50%<b>}</b></code>popup content<code><b>{</b>/up popup<b>}</b></code> Open popup halfway down the page<br>syntax: <code><b>{</b>up popup=#bloc<b>}</b></code>popup content<code><b>{</b>/up popup<b>}</b></code> Opens the popup when the top of the block #block is at the top of the browsers visible area</p>
+
+
+</div >
+<h4>Mode and conditions of execution</h4>
+<p><label for="popup" title="Delay in sec (15s), position in the page (50%) or block selector (#block)">popup</label>
+<input type = "text" id="popup"class="w10 important"  placeholder="5s"></p>
+<p><label for="scroll-offset" title="x = before-after tolerance for scroll. x1-x2 = before and after">scroll-offset</label>
+<input type = "text" name="scroll-offset"class="w5"  placeholder="3"></p>
+<p><label for="filter" title="condition to execute the action">filter</label>
+<input type = "text" name="filter"class="w30"  placeholder=""></p>
+<p><label for="cookie-duration" title="number of days to store cookies. 0 for session or -1 for skip">cookie-duration</label>
+<input type = "number" name="cookie-duration"class="w5"  min="-1" max="365" placeholder="0"></p>
+<h4>Position and style of the pop-up window</h4>
+<p><label for="popup-position" title="YX position of the popup : TL, TC, TR, CL, CC, CR, BL, BC, BR">popup-position</label>
+<select name="popup-position"class="w5"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="TL">TL</option>
+<option value="TC">TC</option>
+<option value="TR">TR</option>
+<option value="CL">CL</option>
+<option value="CC">CC</option>
+<option value="CR">CR</option>
+<option value="BL">BL</option>
+<option value="BC">BC</option>
+<option value="BR">BR</option>
+</select></p>
+<p><label for="popup-style" title="class or style for the popup window">popup-style</label>
+<input type = "text" name="popup-style" title="" placeholder="" list="combo_popup-style"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_popup-style">
+<option value=""></option>
+<option value="popup-base">popup-base</option>
+</datalist></p>
+<h4>Background</h4>
+<p><label for="overlay-lock" title="1: the popup blocks navigation on the page">overlay-lock</label>
+<select name="overlay-lock" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="overlay-style" title="class or style to hide/attenuate content">overlay-style</label>
+<input type = "text" name="overlay-style" placeholder=""></p>
+<h4>Popup close button</h4>
+<p><label for="close-only-button" title="1: closing only by the button, 0: by clicking outside the popup">close-only-button</label>
+<select name="close-only-button" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="close-style" title="class or style for the popup window">close-style</label>
+<input type = "text" name="close-style" title="" placeholder="" list="combo_close-style"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_close-style">
+<option value=""></option>
+<option value="popup-close-left">popup-close-left</option>
+</datalist></p>
+<p><label for="close-label" title="text or symbol for the button. BBCode and UP action allowed">close-label</label>
+<input type = "text" name="close-label"class="w30"  placeholder="&amp;times;"></p>
+<h4>Animation</h4>
+<p><label for="animation-in" title="single class for popup arrival animation">animation-in</label>
+<input type = "text" name="animation-in"class="w20"  title="" placeholder="" list="combo_animation-in"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animation-in">
+<option value=""></option>
+<option value="anim-fade-in">anim-fade-in</option>
+<option value="anim-zoom-in">anim-zoom-in</option>
+<option value="anim-slide-left-in">anim-slide-left-in</option>
+<option value="anim-slide-right-in">anim-slide-right-in</option>
+<option value="anim-slide-down-in">anim-slide-down-in</option>
+<option value="anim-slide-up-in">anim-slide-up-in</option>
+</datalist></p>
+<p><label for="animation-out" title="single class for popup closing animation">animation-out</label>
+<input type = "text" name="animation-out"class="w20"  title="" placeholder="" list="combo_animation-out"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animation-out">
+<option value=""></option>
+<option value="anim-fade-out">anim-fade-out</option>
+<option value="anim-zoom-out">anim-zoom-out</option>
+<option value="anim-slide-left-out">anim-slide-left-out</option>
+<option value="anim-slide-right-out">anim-slide-right-out</option>
+<option value="anim-slide-down-out">anim-slide-down-out</option>
+<option value="anim-slide-up-out">anim-slide-up-out</option>
+</datalist></p>
+<p><label for="animation-target" title="popup or overlay">animation-target</label>
+<select name="animation-target"class="w10"  title="popup" placeholder="popup" value="popup">
+<option value=""></option>
+<option value="popup" selected>popup</option>
+<option value="overlay">overlay</option>
+</select></p>
+<h4>Divers</h4>
+<p><label for="id" title="id automatically generated by UP">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,41 @@
+// === UP-BOX - PROFILE
+// template : ##image##  ##title## ##subtitle## 
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+// variables - synthèse locale
+$box_bg:$white;
+$title_text: $black;
+$subtitle_text: $gris;
+$action_bg: $gris;
+$action_text: $white;
+
+.up-box-profile { 
+    max-width: 300px;
+    margin: 0 auto; // centrage dans bloc parent
+    box-shadow:$shadow-max;
+    text-align:center;
+    background:$box_bg;
+    .up-box-image {
+        width:100%;
+    }
+    .up-box-title {
+        color:$title_text;
+        font-size:2.5rem;
+        padding:10px;
+    }
+    .up-box-subtitle {
+        font-size:1.5rem;
+        color:$subtitle_text;
+    }
+    .up-box-action {
+        background:$action_bg;
+        font-weight:bold;
+        color:$action_text;
+        padding:10px;
+        a {color:$action_text}
+    }
+}

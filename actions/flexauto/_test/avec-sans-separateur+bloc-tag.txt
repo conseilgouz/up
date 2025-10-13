@@ -1,0 +1,64 @@
+<h2>AVEC SEPARATEUR - bloc-tag=div</h2>
+<p>{up flexauto=5-2-5<br>| class=fg-gap m-child-raz-1<br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| style-1=background:tan;<br>| css-head=#id .row-odd[background:lightYellow !important]<br>#id .col-2[border:2px dashed blue] <br>#id .bloc-5[background:orange !important;color:white]<br>| class-2=bg-jaune}</p>
+<p>UN</p>
+<p>{========}</p>
+<p>DEUX</p>
+<p>{========}</p>
+<p>TROIS</p>
+<p>{========}</p>
+<p>QUATRE</p>
+<p>{========}</p>
+<p>CINQ</p>
+<p>{========}</p>
+<p>SIX</p>
+<p>{========}</p>
+<p>SEPT</p>
+<p>{========}</p>
+<p>HUIT</p>
+<p>{========}</p>
+<p>NEUF</p>
+<p>{========}</p>
+<p>DIX</p>
+<p>{========}</p>
+<p>ONZE</p>
+<p>{/up flexauto}</p>
+<h2>AVEC SEPARATEUR + bloc-tag=0</h2>
+<p>{up flexauto=5-2-5<br>| bloc-tag=0<br>| class=fg-gap m-child-raz-1<br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| style-1=background:tan;<br>| css-head=#id .row-odd[background:lightYellow !important]<br>#id .col-2[border:2px dashed blue] <br>#id .bloc-5[background:orange !important;color:white]<br>| class-2=bg-jaune}</p>
+<p>UN</p>
+<p>{========}</p>
+<p>DEUX</p>
+<p>{========}</p>
+<p>TROIS</p>
+<p>{========}</p>
+<p>QUATRE</p>
+<p>{========}</p>
+<p>CINQ</p>
+<p>{========}</p>
+<p>SIX</p>
+<p>{========}</p>
+<p>SEPT</p>
+<p>{========}</p>
+<p>HUIT</p>
+<p>{========}</p>
+<p>NEUF</p>
+<p>{========}</p>
+<p>DIX</p>
+<p>{========}</p>
+<p>ONZE</p>
+<p>{/up flexauto}</p>
+<p></p>
+<h2>SANS SEPARATEUR</h2>
+<p>{up flexauto=5-2-5<br>| class=fg-gap m-child-raz-1<br>| bloc-style=border:1px red solid;text-align:center;padding:10px<br>| style-1=background:tan;<br>| css-head=#id .row-odd[background:lightYellow !important]<br>#id .col-2[border:2px dashed blue] <br>#id .bloc-5[background:orange !important;color:white]<br>| class-2=bg-jaune}</p>
+<p>UN</p>
+<p>DEUX</p>
+<p>TROIS</p>
+<p>QUATRE</p>
+<p>CINQ</p>
+<p>SIX</p>
+<p>SEPT</p>
+<p>HUIT</p>
+<p>NEUF</p>
+<p>DIX</p>
+<p>ONZE</p>
+<p>{/up flexauto}</p>
+<p></p>

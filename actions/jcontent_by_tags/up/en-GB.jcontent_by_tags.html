@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_by_tags - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-by-tags" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of articles in one or more category</p>
+<p>syntaxe : <code><b>{</b>up jcontent-by-tags=id-or-tag-name<b>}</b></code>
+ syntaxe : <code><b>{</b>up jcontent-by-tags=id-or-tag-name<b>}</b></code>##title##<code><b>{</b>/up jcontent-by-tags<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-auto-m4 fg-auto-s2 fg-gap tc<b> | </b><b>template</b>=##image-link####tags-list####new##&lt;div&gt;&lt;b&gt;##title-link##&lt;/b&gt;&lt;br&gt;##subtitle##&lt;/div&gt;
+</div >
+<p><label for="jcontent_by_tags" title="Category ID (separator comma) or empty for the current article ID">jcontent-by-tags</label>
+<input type = "text" id="jcontent_by_tags"class="w20 important"  title="" placeholder="" list="combo_jcontent_by_tags"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcontent_by_tags">
+<option value=""></option>
+<option value="image-6colonnes">image-6colonnes</option>
+</datalist></p>
+<p><label for="maxi" title="Maximum number of items in the list">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="content-plugin" title="support for content plugins for ##into and ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="no-published" title="1:for unpublished articles">no-published</label>
+<select name="no-published" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="current" title="1 to include the current article">current</label>
+<select name="current" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="sort-by" title="sorting: title, ordering, created, created, modified, publish_up, id, hits">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish">publish</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+<option value="ordering">ordering</option>
+</select></p>
+<p><label for="sort-order" title="sort order : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template. If empty the template is the content">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>tag & style for the main block</h4>
+<p><label for="main-tag" title="tag for the block containing all the articles. 0 for none">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="inline classes and styles for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="class(es) for main block (obsolete)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>tag & style for an element</h4>
+<p><label for="item-tag" title="tag for the block encompassing all items. 0 for none">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="item-style" title="inline classes and styles for main block">item-style</label>
+<input type = "text" name="item-style"class="hr-top"  placeholder=""></p>
+<p><label for="item-class" title="class(es) for main block (obsolete)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Image parameters</h4>
+<p><label for="image-src" title="default image">image-src</label>
+<input type = "text" name="image-src" placeholder=""></p>
+<p><label for="image-alt" title="image, default alternative text">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Format for keywords</h4>
+<p><label for="date-format" title="date format">date-format</label>
+<input type = "text" name="date-format"class="w20 "  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="format for dates. The default is the client browser.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="number of days since the creation of the article">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-html" title="HTML code for NEW badge">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge-red&quot;]nouveau[/span]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="text before any other tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="class or style for other keywords">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="no-content-html" title="message if no category found">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="aucune catégorie pour ce mot-clé"></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

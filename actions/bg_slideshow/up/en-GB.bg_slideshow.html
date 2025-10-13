@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bg_slideshow - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-bg-slideshow" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a series of scrolling images in the background of the site or one block</p>
+<p>syntax :<br>site background : <code><b>{</b>up bg-slideshow=list images or folder<b>}</b></code><br>block background : <code><b>{</b>up bg-slideshow=images or folder list<b>}</b></code>content<code><b>{</b>/up bg-slideshow<b>}</b></code><br>background other block : <code><b>{</b>up bg-slideshow=images list or folder | bg-selector=#foo<b>}</b></code></p>
+
+
+</div >
+<h4>images</h4>
+<p><label for="bg_slideshow" title="folder or images separated by semicolons">bg-slideshow</label>
+<input type = "text" id="bg_slideshow"class="important"  placeholder=""></p>
+<p><label for="mobile" title="image or css rule(s)">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="path" title="path common to the images indicated in the main argument">path</label>
+<input type = "text" name="path" placeholder=""></p>
+<p><label for="shuffle" title="tri al&eacute;atoire des images. 1=toutes, sinon le nombre d&#039;images pour all&eacute;ger le chargement">shuffle</label>
+<input type = "text" name="shuffle" placeholder="0"></p>
+<h4>image background location</h4>
+<p><label for="bg-selector" title="block carrying the slideshow">bg-selector</label>
+<input type = "text" name="bg-selector"class="w30"  placeholder="body"></p>
+<h4>image settings</h4>
+<p><label for="bg-overlay" title="layer superimposed on the background image (png, opacity, RGBA, CSS)">bg-overlay</label>
+<input type = "text" name="bg-overlay" placeholder=""></p>
+<p><label for="bg-color" title="color under image">bg-color</label>
+<input type = "text" name="bg-color"class="w20"  placeholder=""></p>
+<h4>page content transparency</h4>
+<p><label for="page-selector" title="block on content">page-selector</label>
+<input type = "text" name="page-selector" placeholder=""></p>
+<p><label for="page-overlay" title="page-selector background (png, opacity, RGBA, CSS)">page-overlay</label>
+<input type = "text" name="page-overlay" placeholder=""></p>
+<h4>secondary options</h4>
+<p><label for="filter" title="conditions. See doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="center" title="vertical centering of content between shortcodes">center</label>
+<select name="center" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="inline classes and styles for created block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (addition to the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p class="hr-top"><label for="js-options" title="options not provided for by the share">js-options</label>
+<input type = "text" name="js-options"class="hr-top"  placeholder=""></p>
+<h4>Animation Parameters</h4>
+<p><label for="delay" title="duration per frame">delay (ms)</label>
+<input type = "number" name="delay" min="0" max="10000" step="500" unit="ms" placeholder="5000"></p>
+<p><label for="transition" title="random, blur, flash, negative, burn, slideLeft, slideRight, slideUp, slideDown, zoomIn, zoomOut, swirlLeft, swirlRight">transition</label>
+<select name="transition" title="fade" placeholder="fade" value="fade">
+<option value=""></option>
+<option value="random">random</option>
+<option value="blur">blur</option>
+<option value="flash">flash</option>
+<option value="negative">negative</option>
+<option value="burn">burn</option>
+<option value="slideLeft">slideLeft</option>
+<option value="slideRight">slideRight</option>
+<option value="slideUp">slideUp</option>
+<option value="slideDown">slideDown</option>
+<option value="zoomIn">zoomIn</option>
+<option value="zoomOut">zoomOut</option>
+<option value="swirlLeft">swirlLeft</option>
+<option value="swirlRight">swirlRight</option>
+</select></p>
+<p><label for="transitionDuration" title="transition time">transitionDuration (ms)</label>
+<input type = "number" name="transitionDuration" min="0" max="10000" step="500" unit="ms" placeholder="1000"></p>
+<p><label for="animation" title="kenburns, kenburnsLeft, kenburnsUp, kenburnsDown, kenburnsUpLeft, kenburnsUpRight, kenburnsDownLeft, kenburnsDownRight, random">animation</label>
+<select name="animation" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="kenburns">kenburns</option>
+<option value="kenburnsLeft">kenburnsLeft</option>
+<option value="kenburnsUp">kenburnsUp</option>
+<option value="kenburnsDown">kenburnsDown</option>
+<option value="kenburnsUpLeft">kenburnsUpLeft</option>
+<option value="kenburnsUpRight">kenburnsUpRight</option>
+<option value="kenburnsDownLeft">kenburnsDownLeft</option>
+<option value="kenburnsDownRight">kenburnsDownRight</option>
+<option value="random">random</option>
+</select></p>
+<p><label for="animationDuration" title="animation duration">animationDuration</label>
+<input type = "text" name="animationDuration"class="w10"  title="auto" placeholder="auto" list="combo_animationDuration"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animationDuration">
+<option value=""></option>
+<option value="auto">auto</option>
+<option value="1000">1000</option>
+<option value="1500">1500</option>
+<option value="2000">2000</option>
+<option value="2500">2500</option>
+</datalist></p>
+<p><label for="timer" title="progress bar display">timer</label>
+<select name="timer" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+</body>
+</html >

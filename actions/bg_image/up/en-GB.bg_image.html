@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bg_image - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-bg-image" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays an image in the background of a block</p>
+<p>syntax :<br>site background: <code><b>{</b>up bg-image=path<b>}</b></code><br>bottom of the block: <code><b>{</b>up bg-image=path<b>}</b></code> content <code><b>{</b>/up bg-image<b>}</b></code><br>bottom of another block: <code><b>{</b>up bg-image=path_image | bg-selector=#foo<b>}</b></code></p>
+
+
+</div >
+<h4>images</h4>
+<p><label for="bg_image" title="images separated by semicolons">bg-image</label>
+<input type = "text" id="bg_image"class="important"  placeholder=""></p>
+<p><label for="mobile" title="image or css rule(s) (if smartphone)">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="path" title="base path added before the filename">path</label>
+<input type = "text" name="path" placeholder=""></p>
+<h4>image background location</h4>
+<p><label for="bg-selector" title="block selector for background image(s)">bg-selector</label>
+<input type = "text" name="bg-selector"class="w30"  placeholder="body"></p>
+<h4>image settings</h4>
+<p><label for="bg-color" title="color under image">bg-color</label>
+<input type = "text" name="bg-color"class="w20"  placeholder=""></p>
+<p><label for="bg-repeat" title="image repetition: no-repeat, repeat-x, repeat-y, repeat, repeat, space">bg-repeat</label>
+<select name="bg-repeat" title="no-repeat" placeholder="no-repeat" value="no-repeat">
+<option value=""></option>
+<option value="no-repeat" selected>no-repeat</option>
+<option value="repeat-x">repeat-x</option>
+<option value="repeat-y">repeat-y</option>
+<option value="repeat">repeat</option>
+<option value="space">space</option>
+</select></p>
+<p><label for="bg-position" title="position of the image: left">bg-position</label>
+<select name="bg-position" title="center" placeholder="center" value="center">
+<option value=""></option>
+<option value="left">left</option>
+<option value="center" selected>center</option>
+<option value="right top">right top</option>
+<option value="center" selected>center</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p><label for="bg-size" title="filling: cover, contain, 100%, 100px">bg-size</label>
+<input type = "text" name="bg-size"class="w20"  title="cover" placeholder="cover" list="combo_bg-size"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_bg-size">
+<option value=""></option>
+<option value="cover">cover</option>
+<option value="contain">contain</option>
+<option value="100%">100%</option>
+<option value="100px">100px</option>
+</datalist></p>
+<p><label for="bg-attachment" title="scrolling the image: scroll, fixed, local">bg-attachment</label>
+<select name="bg-attachment" title="scroll" placeholder="scroll" value="scroll">
+<option value=""></option>
+<option value="scroll" selected>scroll</option>
+<option value="fixed">fixed</option>
+<option value="local">local</option>
+</select></p>
+<p><label for="bg-overlay" title="image added as an overlay">bg-overlay</label>
+<input type = "text" name="bg-overlay" placeholder=""></p>
+<h4>page content transparency</h4>
+<p><label for="page-selector" title="if block defined, selector of the block on which to apply transparency">page-selector</label>
+<input type = "text" name="page-selector" placeholder=""></p>
+<p><label for="page-overlay" title="transparency in the form 70, #RGBA, image overlay or CSS rule">page-overlay</label>
+<input type = "text" name="page-overlay" placeholder="70"></p>
+<h4>secondary options & styles</h4>
+<p><label for="filter" title="conditions. See doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="center" title="vertical centering of content between shortcodes">center</label>
+<input type = "text" name="center" placeholder=""></p>
+<p class="hr-top"><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="CSS rules defined by the webmaster (addition to the head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

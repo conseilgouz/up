@@ -1,0 +1,45 @@
+/*base*/
+// classe appelée en @extend
+// elles sont obligatoirement intégrées
+
+// ===== Ombre
+.clear{
+  &:after, &:before {
+    content:"";
+    display:table;
+    clear:both
+  }
+}
+
+// ===== Ombre
+.shadow, .ombre,
+.shadow-hover:hover, .ombre-hover:hover {
+    box-shadow:$shadow;
+}
+.shadowMax, .ombreMax,
+.shadowMax-hover:hover, .ombreMax-hover:hover {
+    box-shadow:$shadow-max;
+}
+// ======= ALIGNEMENT
+.tl{text-align:left!important}
+.tr{text-align:right!important}
+.tj{text-align:justify!important}
+.tc{text-align:center!important}
+@media (max-width:$breakpoint-s) {
+    .tls{text-align:left!important}
+    .trs{text-align:right!important}
+    .tjs{text-align:justify!important}
+    .tcs{text-align:center!important}
+}
+
+// ======= suppression des marges sur premier et dernier bloc
+/*.m-child-raz {
+  > *:first-child {margin-top:0}
+  > *:last-child {margin-bottom:0}
+}*/
+.m-child-raz,
+.m-child-raz-1 > *,
+.m-child-raz-2 > * > *{
+    > *:first-child {margin-top:0 !important}
+    > *:last-child {margin-bottom:0 !important}
+}

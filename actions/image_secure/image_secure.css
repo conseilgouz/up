@@ -1,0 +1,4 @@
+.up-secure {position:relative;}
+.up-secure > img {width:10%;}
+.up-secure > .overlay {position:absolute;width:100%;height:100%;}
+.up-secure > .overlay > img {width:100%;height:100%;display:inline-block}

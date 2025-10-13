@@ -1,0 +1,32 @@
+/*box*/
+
+// général
+[class^="box-"] { 
+    // 10/19 *= -> ^= car conflit sur actions box
+    margin: space(1) 0;
+    > *:first-child {margin-top:0}
+    > *:last-child {margin-bottom:0}
+}
+
+// avec image 20x20px en haut à gauche
+@mixin box-icon($bgcolor, $img:null) {
+    padding:space(1);
+    @if $img!=null {
+        background: $bgcolor url($img) no-repeat 10px 10px;
+        padding-left: 40px;
+    } @else {
+        background-color: $bgcolor;
+    }
+    border:darken($bgcolor,15%) 1px solid;
+}
+
+
+.box-info  { @include box-icon($paleBlue, 'img/ico-info.png'); }
+.box-idee  { @include box-icon(darken($lightYellow,10%), 'img/ico-idee.png'); }
+.box-note  { @include box-icon($tan, 'img/ico-crayon.png'); }
+.box-ok    { @include box-icon($lightGreen, 'img/ico-vrai.png'); }
+.box-error { @include box-icon($lightRed, 'img/ico-faux.png'); }
+.box-danger{ @include box-icon(lighten($orange, 15%), 'img/ico-danger.png'); }
+
+.box-gris{ @include box-icon(lighten($grey, 15%)); }
+.box-grisPale{ @include box-icon($paleGrey); }

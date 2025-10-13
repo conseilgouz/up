@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_image - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-image" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affecte une image aux images intro et fulltext d'un article
+</p>
+<p>syntaxe 1 : <code><b>{</b>up jcontent-image<b>}</b></code> // première image du contenu de l'article<br />syntaxe 2 : <code><b>{</b>up jcontent-image=chemin_vers_image<b>}</b></code><br />syntaxe 3 : <code><b>{</b>up jcontent-image=dossier<b>}</b></code> // première image du dossier
+ *</p>
+
+
+</div >
+<p><label for="jcontent_image" title="chemin vers l&#039;image pour intro et fulltext">jcontent-image</label>
+<input type = "text" id="jcontent_image" placeholder=""></p>
+<h4>Options pour image d'introduction</h4>
+<p><label for="intro-size" title="cot&eacute; du carr&eacute; en px. 0=pas d&#039;image">intro-size (px)</label>
+<input type = "number" name="intro-size"class="w10"  min="100" max="500" unit="px" step="10" placeholder="250px"></p>
+<p><label for="intro-alt" title="contenu attribut alt. 0=aucun, vide=nom du fichier humanis&eacute;">intro-alt</label>
+<input type = "text" name="intro-alt" placeholder=""></p>
+<p><label for="intro-caption" title="l&eacute;gende. 0=aucun, vide=nom du fichier humanis&eacute;">intro-caption</label>
+<input type = "text" name="intro-caption" placeholder=""></p>
+<p><label for="intro-class" title="classe(s) pour l&#039;image. si d&eacute;bute par +, on ajoute aux classes existantes">intro-class</label>
+<input type = "text" name="intro-class" placeholder=""></p>
+<h4>Options pour image de l'article</h4>
+<p><label for="full-size" title="cot&eacute; du carr&eacute; en px. 0=pas d&#039;image">full-size (px)</label>
+<input type = "number" name="full-size"class="w10"  min="100" max="500" unit="px" step="10" placeholder="500px"></p>
+<p><label for="full-alt" title="contenu attribut alt. 0=aucun, vide=nom du fichier humanis&eacute;">full-alt</label>
+<input type = "text" name="full-alt" placeholder=""></p>
+<p><label for="full-caption" title="l&eacute;gende. 0=aucun, vide=nom du fichier humanis&eacute;">full-caption</label>
+<input type = "text" name="full-caption" placeholder=""></p>
+<p><label for="full-class" title="classe(s) pour l&#039;image. si d&eacute;bute par +, on ajoute aux classes existantes">full-class</label>
+<input type = "text" name="full-class" placeholder=""></p>
+<h4>Paramètres</h4>
+<p><label for="subfolder-thumbs" title="nom du sous-dossier pour la vignette. vide=images/upthumbs pour toutes les vignettes">subfolder-thumbs</label>
+<input type = "text" name="subfolder-thumbs" w20]="" placeholder=""></p>
+<p><label for="id" title="interne. inutilis&eacute;">id</label>
+<input type = "text" name="id"class="w10 inactif"  placeholder="identifiant interne"></p>
+</body>
+</html >

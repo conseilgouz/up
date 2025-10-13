@@ -1,0 +1,49 @@
+/*
+                        IMPERATIF :
+                        la premiere classe des selecteurs doit etre : lmmq-nomstyle
+*/
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+.lmmq-info {
+    .lmmq-out { border:$lightBlue 2px solid;background-color:$paleBlue }
+
+    .lmmq-lbl { background:$lightBlue }
+
+    .lmmq-lbl > div {transform:rotate(-45deg);display:inline-block;font-size:150%}
+
+    .lmmq-lbl:after {
+        border:solid transparent;
+        content:" ";
+        height:0;
+        width:0;
+        position:absolute;
+        z-index:1;
+        pointer-events:none;
+        border-color: rgb2rgba($lightBlue); // rgba(0,102,153,0);
+        border-width: 15px;
+        margin-top: -15px;
+    }
+
+    .lmmq-h-left .lmmq-lbl:after {
+        border-left-color:$lightBlue;
+        left: 100%;
+        top: 50%;
+    }
+    .lmmq-h-right .lmmq-lbl:after {
+        border-right-color: $lightBlue;
+        right: 100%;
+        top: 50%;
+    }
+    // ne fonctionne pas (23/11/19)    
+    //    .lmmq-v-top .lmmq-lbl:after {
+    //        border-top-color: $lightBlue;
+    //        bottom: 100%;
+    //        left: 50%;
+    //    }
+    //    .lmmq-v-bottom .lmmq-lbl:after {
+    //        border-bottom-color: $lightBlue;
+    //        bottom: 100%;
+    //        left: 50%;
+    //    }
+}

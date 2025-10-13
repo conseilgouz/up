@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv2list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv2list" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Conversion d'un contenu au format CSV en liste avec point de conduite
+</p>
+<p>1/  <code><b>{</b>up csv2list=emplacement-fichier<b>}</b></code> // le contenu est lu dans un fichier<br />2/  <code><b>{</b>up csv2list<b>}</b></code><br />article 1;5€<br />article 2;25€<br /><code><b>{</b>/up csv2list<b>}</b></code><br />Ressources : <a href="https://lomart.fr/references/26-caracteres-unicode" target="_blank">caractères unicode</a>, <a href="https://lomart.fr/references/59-caracteres-speciaux" target="_blank">caractères spéciaux</a> et <a href="https://lomart.fr/references/24-couleurs-sures" target="_blank">couleurs sures</a></p>
+
+
+</div >
+<p><label for="csv2list" title="chemin vers fichier &agrave; afficher">csv2list</label>
+<input type = "text" id="csv2list"class="important"  placeholder=""></p>
+<p><label for="separator" title="s&eacute;parateur des colonnes">separator</label>
+<input type = "text" name="separator"class="w10"  placeholder=";"></p>
+<p><label for="HTML" title="0= aucun traitement, 1=affiche le code, ou liste des tags a garder (strip_tags)">HTML</label>
+<input type = "text" name="HTML"class="w60"  placeholder="b,a,span,strong,i,em,u,mark,small,img,code"></p>
+<p><label for="model" title="nom de la classe mod&egrave;le dans le fichier csv2list.css">model</label>
+<input type = "text" name="model"class="w10"  title="stack" placeholder="stack" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value=""></option>
+<option value="soleil">soleil</option>
+<option value="tan">tan</option>
+</datalist></p>
+<h4>Style des points de conduite</h4>
+<p><label for="leaders" title="points de conduite">leaders</label>
+<select name="leaders" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="leaders-color" title="couleur points de conduite">leaders-color</label>
+<input type = "color" name="leaders-color" title="" value="#feffff"></p>
+<h4>style du bloc principal de la liste</h4>
+<p><label for="class" title="classe(s) pour la balise UL">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour la balise UL">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="bgcolor" title="couleur de fond. #FFF par defaut">bgcolor</label>
+<input type = "color" name="bgcolor" title="" value="#feffff"></p>
+<h4>style des lignes de la liste</h4>
+<p><label for="col-style-*" title="style inline pour les ni&egrave;mes balise SPAN">col-style-*</label>
+<input type = "text" name="col-style-*"class=""  placeholder=""></p>
+<p><label for="list-style" title="code hexadecimal et couleur du caract&egrave;re (bb,red ou 26BD,#F00)">list-style</label>
+<input type = "text" name="list-style" placeholder=""></p>
+<h4>Style de l'entête</h4>
+<p><label for="header" title="0: pas de titre, 1: la premi&egrave;re ligne du contenu sera le titre des colonnes">header</label>
+<input type = "number" name="header"class="w10"  min="0" max="1" placeholder="0"></p>
+<p><label for="header-class" title="classe(s) pour la premi&egrave;re balise LI si titre">header-class</label>
+<input type = "text" name="header-class" placeholder=""></p>
+<p><label for="header-style" title="style pour la premi&egrave;re balise LI si titre">header-style</label>
+<input type = "text" name="header-style" placeholder=""></p>
+<p><label for="header-bgcolor" title="couleur de fond du titre">header-bgcolor</label>
+<input type = "color" name="header-bgcolor" title="" value="#feffff"></p>
+<h4>Style du pied de liste</h4>
+<p><label for="footer" title="0: pas de pied, 1: la derni&egrave;re ligne du contenu sera le pied des colonnes">footer</label>
+<input type = "number" name="footer"class="w10"  min="0" max="1" placeholder="0"></p>
+<p><label for="footer-class" title="classe(s) pour la derni&egrave;re balise LI si pied">footer-class</label>
+<input type = "text" name="footer-class" placeholder=""></p>
+<p><label for="footer-style" title="style pour la derni&egrave;re balise LI si pied">footer-style</label>
+<input type = "text" name="footer-style" placeholder=""></p>
+<p><label for="footer-bgcolor" title="couleur de fond de la derni&egrave;re ligne">footer-bgcolor</label>
+<input type = "color" name="footer-bgcolor" title="" value="#feffff"></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

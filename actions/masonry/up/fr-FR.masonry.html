@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>masonry - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-masonry" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche des blocs dans une grille fluide et responsive
+</p>
+<p>syntaxe <code><b>{</b>up masonry=breakpoint:nbCols*margeX*margeY<b>}</b></code> bloc-1 bloc-2 bloc-n <code><b>{</b>/up masonry<b>}</b></code><br />l'argument principal est la liste du nombre de colonnes et des marges par breakpoint.<br />Exemple :<br /><code><b>{</b>up masonry=960:4,1200:5<b>}</b></code> 4 colonnes au-dessus de 960px, 5 si 1200px<br /><code><b>{</b>up masonry=960:4*10, 1200:5*10*20<b>}</b></code> idem plus marges XY de 10px pour 960 et marge X de 10px et Y de 20px pour 12000</p>
+
+
+</div >
+<p><label for="masonry" title="colonnes et marges par breakpoint : bp:col*x*y. ex: 960:2*10*10,480:1">masonry</label>
+<input type = "text" id="masonry"class="important"  placeholder="480:2,720:3,960:4,1200:5"></p>
+<p><label for="margin" title="marge en pixels. x*y pour des marges diff&eacute;rentes en horizontal et vertical">margin</label>
+<input type = "text" name="margin"class="w10"  placeholder="0"></p>
+<h4>Options annexes</h4>
+<p class="hr-top"><label for="preserve-order" title="1: l&#039;ordre des blocs est pr&eacute;serv&eacute;. 0=priorit&eacute; &agrave; l&#039;&eacute;galit&eacute; de la hauteur des colonnes">preserve-order</label>
+<select name="preserve-order"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="wait-images" title="1: charge toutes les images avant le calcul. 0: calcul &agrave; chaque chargement d&#039;image.">wait-images</label>
+<select name="wait-images" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="breakpoints-container" title="0: breakpoints d&eacute;finis sur la largeur du navigateur. 1: largeur du bloc parent">breakpoints-container</label>
+<select name="breakpoints-container" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>mise en forme CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

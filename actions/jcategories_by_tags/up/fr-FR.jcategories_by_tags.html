@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcategories_by_tags - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcategories-by-tags" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des catégories d'un mot-clé (tag)
+</p>
+<p>syntaxe : <code><b>{</b>up jcategories-by-tags=id-ou-nom-tag<b>}</b></code><br />MOTS-CLES :<br />##title## ##title-link## ##subtitle## ##link##<br />##intro## ##content## : la description de la catégorie en HTML<br />##intro-text## ##intro-text,100## : la description de la catégorie en TEXT<br />##image## ##image-link## ##image-src## ##image-alt##<br />##date-crea## ##date-modif## ##new## ##count## ##hits## ##tags-list##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-gap tc<b> | </b><b>template</b>=##image-link##&lt;br&gt;##title-link##
+</div >
+<p><label for="jcategories_by_tags" title="ID ou nom du tag">jcategories-by-tags</label>
+<input type = "text" id="jcategories_by_tags"class="w30 important"  title="" placeholder="" list="combo_jcategories_by_tags"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcategories_by_tags">
+<option value=""></option>
+<option value="image-6colonnes">image-6colonnes</option>
+</datalist></p>
+<p><label for="maxi" title="Nombre maxi d&#039;article dans la liste">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="1" max="20" placeholder=""></p>
+<p><label for="no-published" title="1 pour obtenir les cat&eacute;gories non publi&eacute;es">no-published</label>
+<select name="no-published" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="content-plugin" title="prise en compte des plugins de contenu pour ##into et ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="sort-by" title="tri: title, ordering, created, modified, id, hits">sort-by</label>
+<select name="sort-by" title="title" placeholder="title" value="title">
+<option value=""></option>
+<option value="title" selected>title</option>
+<option value="rgt">rgt</option>
+<option value="created_time">created_time</option>
+<option value="modified_time">modified_time</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+</select></p>
+<p><label for="sort-order" title="ordre de tri : asc, desc">sort-order</label>
+<select name="sort-order" title="asc" placeholder="asc" value="asc">
+<option value=""></option>
+<option value="asc" selected>asc</option>
+<option value="desc">desc</option>
+</select></p>
+<p><label for="no-content-html" title="retour si aucune cat&eacute;gorie trouv&eacute;e">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="[p]aucune catégorie pour ce mot-clé[/p]"></p>
+<h4>Modèle pour affichage résultat</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est d&eacute;fini par le contenu">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>Style du bloc principal</h4>
+<p><label for="main-tag" title="balise pour le bloc englobant tous les articles. 0 pour aucun">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="main-style" title="classes et styles inline pour bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour bloc principal (obsol&eacute;te)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Style d'une ligne résultat</h4>
+<p><label for="item-tag" title="balise pour le bloc. 0 pour aucun">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p><label for="item-style" title="classes et styles inline">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="classe(s)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Paramètres pour images</h4>
+<p><label for="image-src" title="lorempixel.com/150/150&#039;, // image par d&eacute;faut">image-src</label>
+<input type = "text" name="image-src" placeholder=""></p>
+<p><label for="image-alt" title="image, texte alternatif par d&eacute;faut">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Formats pour les mots-clés</h4>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w10"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="localisation pour les dates. Par d&eacute;faut, celle du navigateur client.">date-locale</label>
+<input type = "text" name="date-locale"class="w10"  placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="nombre de jours depuis la cr&eacute;ation de l&#039;article">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-html" title="code HTML pour badge NEW">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge-red&quot;]nouveau[/span]"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="texte avant les autres eventuels tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="classe ou style pour les autres mots-cl&eacute;s">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

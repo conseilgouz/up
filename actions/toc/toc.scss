@@ -1,0 +1,44 @@
+/**
+ * TocJS (https://github.com/nghuuphuoc/tocjs)
+ *
+ * Generate a table of contents based on headings
+ *
+ * @author      http://twitter.com/nghuuphuoc
+ * @copyright   (c) 2013 - 2014 Nguyen Huu Phuoc
+ * @license     MIT
+ */
+
+// ==== le CSS de base
+.uptoc ul {
+    list-style:none;
+    padding: 0 8px;
+    a { color:#333;}
+}
+.toc-ul {
+    margin:0;
+}
+
+// Heading (Table of Contents)
+.uptoc .toc-heading {
+    background-color: #333;
+    text-align:center;
+    a {color: #eee;}
+    &:before {content:"\0a" !important;}
+}
+
+// === Decalage niveaux
+@for $i from 2 to 6 {
+    .toc-level-#{$i} {margin-left:6px*$i;}
+}
+
+// === MODELS
+
+// === puces minimales : chevron
+.uptoc.chevron {
+    li:before {
+        content:"\BB\0A";
+        color:#369;
+    }
+    .toc-level-1 > a{font-weight:bold}
+    .toc-level-1:before {content:"\27a7\0a";color:Teal}
+}

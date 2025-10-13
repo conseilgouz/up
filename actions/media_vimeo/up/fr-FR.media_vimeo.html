@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_vimeo - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-vimeo" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche une video Viméo qui s'inscrit au maxima dans son bloc parent
+</p>
+<p><code><b>{</b>up media_vimeo=ID <b>[</b>| autoplay | portrait |title |muted |loop | play-on-visible]<b>}</b></code><br />ID : il s'agit du code figurant à la fin de l'URL de la vidéo.<br />L'autoplay sous Firefox/Chrome est interdit si la video contient du son.<br />Utilisez muted pour débloquer cela.<br />voir https://vimeo.zendesk.com/hc/en-us/articles/115004485728-Autoplaying-and-looping-embedded-videos<br />Les options title et portrait ne fonctionne que si la video le supporte.</p>
+
+
+</div >
+<p><label for="media_vimeo" title="code de la video (&agrave; la fin de l&#039;url vimeo)">media-vimeo</label>
+<input type = "text" id="media_vimeo"class="w20 important"  placeholder=""></p>
+<p><label for="width" title="largeur de la video en px ou %">width (%)</label>
+<input type = "number" name="width"class="w10"  unit="%" placeholder=""></p>
+<p><label for="autoplay" title="d&eacute;marrage automatique">autoplay</label>
+<select name="autoplay" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="title" title="afficher le titre de la vid&eacute;o">title</label>
+<select name="title" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="portrait" title="afficher l&#039;image de profil de l&#039;auteur (portrait)">portrait</label>
+<select name="portrait" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="loop" title="boucle en fin de video">loop</label>
+<select name="loop" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="muted" title="coupe le son">muted</label>
+<select name="muted" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="play-on-visible" title="d&eacute;marre et arr&ecirc;te la video selon sa visibilit&eacute; sur l&#039;ecran">play-on-visible</label>
+<select name="play-on-visible" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe pour bloc externe">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="code css libre pour bloc externe">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="rgpd" title="0 pour ne pas appliquer la r&egrave;gle pour le RGPD">rgpd</label>
+<input type = "text" name="rgpd" placeholder="1"></p>
+</body>
+</html >

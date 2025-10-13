@@ -1,0 +1,52 @@
+// === Trombi
+// https://la-cascade.io/css-shapes-une-introduction/
+
+/*
+subtitle-tag="small"
+template="##image## ##title-tag## ##link## ##title-text## ##subtitle## ##/link## ##/title-tag## ##body## ##content## ##action-link## ##/body##"
+*/
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+.up-box-trombi {
+    display:block;
+    .up-box-image {
+        width:100px; height:100px;
+        border-radius:50%;
+        float:left;
+        clip-path: ellipse();
+        shape-outside: ellipse();
+        background:#aaa;
+        margin-left:0;
+        margin-right:10px;
+        padding:0;
+        border: 3px #666 solid;
+    }
+    .up-box-title {
+        font-weight:bolder;
+        color:#666;
+        a {color:#666;}
+//        &:before{content:"\A0"}
+    }
+    .up-box-subtitle {
+        display:block;
+        &:before{content:"\A0"}
+    }
+    .up-box-body{
+        margin-left:30px;
+        padding:10px;
+        border: 2px #666 solid;
+        outline: 3px #666 dashed;
+        background:$beige;
+        box-shadow: $shadow-max;
+        // supprime marge des blocs début et fin
+        div > :first-child{margin-top:0}
+        div > :last-child{margin-bottom:0}
+
+    }
+    .up-box-action {
+        text-align:right;
+    }
+}

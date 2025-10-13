@@ -1,0 +1,9 @@
+{
+  "id": "stamen-toner-lite",
+  "url": "https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png",
+  "settings": {
+	  "attribution": "<a target='_blank' href='http://stadiamaps.com'>Stamen Design</a> Data © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors.", 
+      "minZoom": 1, 
+      "maxZoom": 16
+    } 
+}

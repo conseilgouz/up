@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bg_image - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-bg-image" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une image en fond d'un bloc
+</p>
+<p>syntaxe :<br />fond du site : <code><b>{</b>up bg-image=chemin_image<b>}</b></code><br />fond du bloc : <code><b>{</b>up bg-image=chemin_image<b>}</b></code> contenu <code><b>{</b>/up bg-image<b>}</b></code><br />fond d'un autre bloc : <code><b>{</b>up bg-image=chemin_image | bg-selector=#foo<b>}</b></code>
+ *<br />doc : https://developer.mozilla.org/fr/docs/Web/CSS/background</p>
+
+
+</div >
+<h4>images</h4>
+<p><label for="bg_image" title="images s&eacute;par&eacute;es par des points-virgules">bg-image</label>
+<input type = "text" id="bg_image"class="important"  placeholder=""></p>
+<p><label for="mobile" title="image ou r&egrave;gle(s) css (si smartphone)">mobile</label>
+<input type = "text" name="mobile" placeholder=""></p>
+<p><label for="path" title="chemin de base ajout&eacute; devant le nom des fichiers">path</label>
+<input type = "text" name="path" placeholder=""></p>
+<h4>emplacement du fond image</h4>
+<p><label for="bg-selector" title="s&eacute;lecteur du bloc pour image(s) de fond">bg-selector</label>
+<input type = "text" name="bg-selector"class="w30"  placeholder="body"></p>
+<h4>paramètres de l'image</h4>
+<p><label for="bg-color" title="couleur sous image">bg-color</label>
+<input type = "text" name="bg-color"class="w20"  placeholder=""></p>
+<p><label for="bg-repeat" title="r&eacute;p&eacute;tition de l&#039;image : no-repeat, repeat-x, repeat-y, repeat, space">bg-repeat</label>
+<select name="bg-repeat" title="no-repeat" placeholder="no-repeat" value="no-repeat">
+<option value=""></option>
+<option value="no-repeat" selected>no-repeat</option>
+<option value="repeat-x">repeat-x</option>
+<option value="repeat-y">repeat-y</option>
+<option value="repeat">repeat</option>
+<option value="space">space</option>
+</select></p>
+<p><label for="bg-position" title="position de l&#039;image : left|center|right top|center|bottom">bg-position</label>
+<select name="bg-position" title="center" placeholder="center" value="center">
+<option value=""></option>
+<option value="left">left</option>
+<option value="center" selected>center</option>
+<option value="right top">right top</option>
+<option value="center" selected>center</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p><label for="bg-size" title="remplissage : cover, contain, 100%, 100px">bg-size</label>
+<input type = "text" name="bg-size"class="w20"  title="cover" placeholder="cover" list="combo_bg-size"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_bg-size">
+<option value=""></option>
+<option value="cover">cover</option>
+<option value="contain">contain</option>
+<option value="100%">100%</option>
+<option value="100px">100px</option>
+</datalist></p>
+<p><label for="bg-attachment" title="d&eacute;filement de l&#039;image : scroll, fixed, local">bg-attachment</label>
+<select name="bg-attachment" title="scroll" placeholder="scroll" value="scroll">
+<option value=""></option>
+<option value="scroll" selected>scroll</option>
+<option value="fixed">fixed</option>
+<option value="local">local</option>
+</select></p>
+<p><label for="bg-overlay" title="image ajout&eacute;e en overlay">bg-overlay</label>
+<input type = "text" name="bg-overlay" placeholder=""></p>
+<h4>transparence du contenu de la page</h4>
+<p><label for="page-selector" title="si un bloc est d&eacute;fini, s&eacute;lecteur du bloc sur lequel appliquer la transparence">page-selector</label>
+<input type = "text" name="page-selector" placeholder=""></p>
+<p><label for="page-overlay" title="transparence sous la forme 70, #RGBA, image overlay ou r&egrave;gle CSS">page-overlay</label>
+<input type = "text" name="page-overlay" placeholder="70"></p>
+<h4>options secondaires</h4>
+<p><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="center" title="centrage vertical du contenu entre shortcodes">center</label>
+<input type = "text" name="center" placeholder=""></p>
+<p class="hr-top"><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

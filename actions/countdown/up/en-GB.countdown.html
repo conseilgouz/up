@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>countdown - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-countdown" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a countdown or digital clock</p>
+<p>syntax:<br><code><b>{</b>up countdown=20180101010000<b>}</b></code> // delay until a date<br><code><b>{</b>up countdown=120<b>}</b></code> // Countdown in seconds<br><code><b>{</b>up countdown<b>}</b></code> // displays a clock</p>
+
+
+</div >
+<p><label for="countdown" title="false: clock, true: countdown">countdown</label>
+<input type = "text" id="countdown"class="w30 important"  placeholder=""></p>
+<p><label for="align" title="left, center or right">align</label>
+<select name="align" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="left">left</option>
+<option value="center">center</option>
+<option value="right">right</option>
+</select></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="filter" title="condition(s) for performing the action">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>Javascript parameters for counter configuration</h4>
+<p><label for="callback" title="Function called at the end of the countdown">callback</label>
+<input type = "text" name="callback"class="inactif"  placeholder=""></p>
+<p><label for="captionSize" title="fontsize legends">captionSize (px)</label>
+<input type = "number" name="captionSize" min="0" max="36" unit="px" placeholder="0"></p>
+<p><label for="countdownAlertLimit" title="alert in second before end of countdown">countdownAlertLimit (sec)</label>
+<input type = "number" name="countdownAlertLimit" min="0" unit="sec" placeholder="10"></p>
+<p><label for="displayCaptions" title="1 to display captions">displayCaptions</label>
+<select name="displayCaptions" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="displayDays" title="number of digits displayed for days">displayDays</label>
+<input type = "number" name="displayDays" min="0" placeholder="0"></p>
+<p><label for="fontFamily" title="Font for number">fontFamily</label>
+<input type = "text" name="fontFamily"class="w30"  placeholder="Verdana, sans-serif"></p>
+<p><label for="fontSize" title="Font size in pixels for numbers">fontSize (px)</label>
+<input type = "number" name="fontSize" min="0" max="128" unit="px" placeholder="28"></p>
+<p><label for="lang" title="Automatically defined by UP">lang</label>
+<input type = "text" name="lang"class="w10 inactif"  placeholder="en"></p>
+<p><label for="seconds" title="Initial time in seconds for the countdown">seconds (sec)</label>
+<input type = "number" name="seconds" min="0" unit="sec" placeholder="0"></p>
+<p><label for="start" title="automatically start the timer">start</label>
+<select name="start" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="theme" title="style : white, black or blue">theme</label>
+<select name="theme" title="white" placeholder="white" value="white">
+<option value=""></option>
+<option value="white" selected>white</option>
+<option value="black">black</option>
+<option value="blue">blue</option>
+</select></p>
+</body>
+</html >

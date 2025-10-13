@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>field - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-field" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Retourne la valeur d'un custom field pour le contenu courant
+</p>
+<p>syntaxe<br /><code><b>{</b>up field=id_or_name_field<b>}</b></code>  // contenu brut du champ<br /><code><b>{</b>up field=id_or_name_field | model=value<b>}</b></code>  // contenu mis en forme du champ<br /><code><b>{</b>up field=id_or_name_field | model=label : <b>[</b>b]%id_or_name_field%<b>[</b>/b]<b>}</b></code>  // modèle avec BBCODE</p>
+
+
+</div >
+<p><label for="field" title="id ou name du champ">field</label>
+<input type = "text" id="field" placeholder=""></p>
+<p><label for="model" title="mod&egrave;le BBCODE avec id ou nom des champs entre signes %">model</label>
+<input type = "text" name="model" placeholder=""></p>
+<p><label for="separator" title="s&eacute;pare les &eacute;l&eacute;ments d&#039;un tableau pour rawvalue">separator</label>
+<input type = "text" name="separator" placeholder=""></p>
+<p><label for="tag" title="balise pour bloc principal">tag</label>
+<input type = "text" name="tag" placeholder=""></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

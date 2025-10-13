@@ -1,0 +1,8 @@
+; ce fichier contient les équivalences de termes définies par UP
+; il sert à construire le fichier dico.json 
+; IMPORTANT : Ne jamais modifier directement le fichier dico.json
+; Ce fichier dico.ini contient les termes généraux dans différents langage
+; Il sera utilisé  par upactionlist pour construire le fichier dico.json
+; pour les noms d'actions, mettre le nom avec les underscores
+
+; nouveau_nom=nom_origine

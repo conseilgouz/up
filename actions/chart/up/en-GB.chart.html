@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>chart - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-chart" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Statistical graphs with GoogleChart</p>
+<p>syntaxe= : <code><b>{</b>up chart=type_chart<b>}</b></code>... data ...<code><b>{</b>/up chart<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>pie-max</u> : </b> <b>chart</b>=pie<b> | </b><b>maximized</b>=1<b> | </b><b>colors</b>=red,green<b> | </b><b>donut</b>=30
+</div >
+<p><label for="chart" title="type of chart : area, bar,bubble,column,combo,line,pie,scatter,SteppedArea">chart</label>
+<input type = "text" id="chart"class="important"  title="" placeholder="" list="combo_chart"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_chart">
+<option value=""></option>
+<option value="pie-max">pie-max</option>
+<option value=""></option>
+<option value="area">area</option>
+<option value="bar">bar</option>
+<option value="bubble">bubble</option>
+<option value="column">column</option>
+<option value="combo">combo</option>
+<option value="line">line</option>
+<option value="pie">pie</option>
+<option value="scatter">scatter</option>
+<option value="SteppedArea">SteppedArea</option>
+</datalist></p>
+<p><label for="separator" title="separator for values in the list">separator</label>
+<input type = "text" name="separator"class="w5"  title="" placeholder="" list="combo_separator"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_separator">
+<option value=""></option>
+<option value=",">,</option>
+<option value=";">;</option>
+</datalist></p>
+<h4>graph formatting</h4>
+<p><label for="area" title="value in% in order : left, top, width, height. EX: 10,25,90,75">area</label>
+<input type = "text" name="area"class="w10"  placeholder=""></p>
+<p><label for="maximized" title="display fills the block">maximized</label>
+<select name="maximized" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="height" title="min-height parent block">height (px)</label>
+<input type = "number" name="height"class="w10"  unit="px" placeholder=""></p>
+<p><label for="colors" title="color list">colors</label>
+<input type = "text" name="colors" placeholder=""></p>
+<h4>chart title</h4>
+<p><label for="title" title="chart title">title</label>
+<input type = "text" name="title" placeholder=""></p>
+<p><label for="title-position" title="in, out, none (default)">title-position</label>
+<select name="title-position" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="in">in</option>
+<option value="out">out</option>
+<option value="none">none</option>
+</select></p>
+<p><label for="title-style" title="color: blue, fontsize: 14px, bold:true (attention to the syntax)">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<h4>chart legend</h4>
+<p><label for="legend-position" title="in, none (defaut), top, bottom">legend-position</label>
+<select name="legend-position" title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="in">in</option>
+<option value="none">none</option>
+<option value="top">top</option>
+<option value="bottom">bottom</option>
+</select></p>
+<p><label for="legend-style" title="eq: color:blue,fontSize:14,bold:true">legend-style</label>
+<input type = "text" name="legend-style" placeholder=""></p>
+<h4>Specific parameters according to the type of graph</h4>
+<p><label for="vertical" title="horizontal (default )or vertical. All except bar and bubble">vertical</label>
+<select name="vertical" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="bar-width" title="bar width in percent. . Area, bubble, pie, scatter &amp; stepped">bar-width (%)</label>
+<input type = "number" name="bar-width" min="1" max="100" unit="%" placeholder=""></p>
+<p><label for="3D" title="pie in relief. All except pie">3D</label>
+<select name="3D" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="donut" title="percentage of the central hole. ex: 0.5 for half. Only for pie">donut</label>
+<select name="donut" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="isstacked" title="true (absolute) or relative.  All except bubble, line, pie &amp; scatter">isstacked</label>
+<select name="isstacked" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="options" title="the other options offered by google.chart (replace {} with [] in JSON string)">options</label>
+<input type = "text" name="options" placeholder=""></p>
+<h4>style and secondary options</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="block class (es)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the page HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

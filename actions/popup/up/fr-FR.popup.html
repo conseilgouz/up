@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>popup - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-popup" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Ouvre un popup après un délai ou une position dans la page
+</p>
+<p>syntaxe <code><b>{</b>up popup=5s<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup 5 secondes après le chargement de la page<br />syntaxe <code><b>{</b>up popup=50%<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup à la moitié de la page<br />syntaxe <code><b>{</b>up popup=#bloc<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup quand le haut du bloc #bloc est en haut de la zone visible du navigateur</p>
+
+
+</div >
+<h4>Mode et conditions d'exécution</h4>
+<p><label for="popup" title="D&eacute;lai en sec (15s), position dans la page (50%) ou s&eacute;lecteur de bloc (#bloc)">popup</label>
+<input type = "text" id="popup"class="w10 important"  placeholder="5s"></p>
+<p><label for="scroll-offset" title="x = tol&eacute;rance avant-apr&egrave;s pour le scroll. x1-x2 = avant et apr&egrave;s">scroll-offset</label>
+<input type = "text" name="scroll-offset"class="w5"  placeholder="3"></p>
+<p><label for="filter" title="condition pour ex&eacute;cuter l&#039;action">filter</label>
+<input type = "text" name="filter"class="w30"  placeholder=""></p>
+<p><label for="cookie-duration" title="nombre de jours de conservation des cookies. 0 pour la session ou -1 pour ignorer">cookie-duration</label>
+<input type = "number" name="cookie-duration"class="w5"  min="-1" max="365" placeholder="0"></p>
+<h4>Position et style de la fenêtre surgissante</h4>
+<p><label for="popup-position" title="position YX du popup : TL, TC, TR, CL, CC, CR, BL, BC, BR">popup-position</label>
+<select name="popup-position"class="w5"  title="" placeholder="" value="">
+<option value="" selected></option>
+<option value="TL">TL</option>
+<option value="TC">TC</option>
+<option value="TR">TR</option>
+<option value="CL">CL</option>
+<option value="CC">CC</option>
+<option value="CR">CR</option>
+<option value="BL">BL</option>
+<option value="BC">BC</option>
+<option value="BR">BR</option>
+</select></p>
+<p><label for="popup-style" title="classe ou style pour la fenetre popup">popup-style</label>
+<input type = "text" name="popup-style" title="" placeholder="" list="combo_popup-style"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_popup-style">
+<option value=""></option>
+<option value="popup-base">popup-base</option>
+</datalist></p>
+<h4>Arrière-plan</h4>
+<p><label for="overlay-lock" title="1: le popup bloque la navigation sur la page">overlay-lock</label>
+<select name="overlay-lock" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="overlay-style" title="classe ou style pour masquer/att&eacute;nuer le contenu">overlay-style</label>
+<input type = "text" name="overlay-style" placeholder=""></p>
+<h4>Bouton fermeture popup</h4>
+<p><label for="close-only-button" title="1: fermeture uniquement par le bouton, 0: en cliquant hors du popup">close-only-button</label>
+<select name="close-only-button" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="close-style" title="classe ou style pour la fenetre popup">close-style</label>
+<input type = "text" name="close-style" title="" placeholder="" list="combo_close-style"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_close-style">
+<option value=""></option>
+<option value="popup-close-left">popup-close-left</option>
+</datalist></p>
+<p><label for="close-label" title="texte ou symbole pour le bouton. BBCode et action UP admis">close-label</label>
+<input type = "text" name="close-label"class="w30"  placeholder="&amp;times;"></p>
+<h4>Animation</h4>
+<p><label for="animation-in" title="classe unique pour animation ouverture du popup">animation-in</label>
+<input type = "text" name="animation-in"class="w20"  title="" placeholder="" list="combo_animation-in"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animation-in">
+<option value=""></option>
+<option value="anim-fade-in">anim-fade-in</option>
+<option value="anim-zoom-in">anim-zoom-in</option>
+<option value="anim-slide-left-in">anim-slide-left-in</option>
+<option value="anim-slide-right-in">anim-slide-right-in</option>
+<option value="anim-slide-down-in">anim-slide-down-in</option>
+<option value="anim-slide-up-in">anim-slide-up-in</option>
+</datalist></p>
+<p><label for="animation-out" title="classe unique pour animation fermeture du popup">animation-out</label>
+<input type = "text" name="animation-out"class="w20"  title="" placeholder="" list="combo_animation-out"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_animation-out">
+<option value=""></option>
+<option value="anim-fade-out">anim-fade-out</option>
+<option value="anim-zoom-out">anim-zoom-out</option>
+<option value="anim-slide-left-out">anim-slide-left-out</option>
+<option value="anim-slide-right-out">anim-slide-right-out</option>
+<option value="anim-slide-down-out">anim-slide-down-out</option>
+<option value="anim-slide-up-out">anim-slide-up-out</option>
+</datalist></p>
+<p><label for="animation-target" title="popup ou overlay: cible de l&#039;animation">animation-target</label>
+<select name="animation-target"class="w10"  title="popup" placeholder="popup" value="popup">
+<option value=""></option>
+<option value="popup" selected>popup</option>
+<option value="overlay">overlay</option>
+</select></p>
+<h4>Divers</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP. A pr&eacute;ciser pour les cookies dans les modules">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

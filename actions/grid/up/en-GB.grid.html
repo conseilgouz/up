@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>grid - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-grid" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Mise en page par grid</p>
+<p>Facilite une mise en page responsive en utilisant les propriétés CSS grid
+ <br> syntaxe <code><b>{</b>up grid='a a b' 'a a b' 'c d b'<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>2cols</u> : </b> <b>grid</b>=&#039;image texte&#039;<b> | </b><b>mobile-grid</b>=&#039;image&#039; &#039;texte&#039;<b> | </b><b>css-head</b>=#id .image[tc]#id .texte[display:flex;justify-content:center;flex-direction: column;]<br><b><u>bento1+2</u> : </b> <b>grid</b>=&#039;resultat code&#039; &#039;resultat explication&#039;<b> | </b><b>mobile-grid</b>=&#039;resultat&#039; &#039;code&#039; &#039;explication&#039;<b> | </b><b>items-style-*</b>=bd-gris p1
+</div >
+<h4>layout using grid-template-areas</h4>
+<p><label for="grid" title="grid-template-areas">grid</label>
+<input type = "text" id="grid" title="" placeholder="" list="combo_grid"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_grid">
+<option value=""></option>
+<option value="2cols">2cols</option>
+<option value="bento1+2">bento1+2</option>
+</datalist></p>
+<p><label for="tablet-grid" title="grid-template for tablet">tablet-grid</label>
+<input type = "text" name="tablet-grid" placeholder=""></p>
+<p><label for="mobile-grid" title="grid-template for mobile">mobile-grid</label>
+<input type = "text" name="mobile-grid" placeholder=""></p>
+<h4>size of columns and rows</h4>
+<p><label for="grid-template-columns" title="definition of columns. by default: repeat(nb_columns,1fr)">grid-template-columns</label>
+<input type = "text" name="grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="tablet-grid-template-columns" title="definition of columns. by default: repeat(nb_columns,1fr)">tablet-grid-template-columns</label>
+<input type = "text" name="tablet-grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="mobile-grid-template-columns" title="definition of columns. by default: repeat(nb_columns,1fr)">mobile-grid-template-columns</label>
+<input type = "text" name="mobile-grid-template-columns"class="w70"  placeholder=""></p>
+<p><label for="grid-template-rows" title="definition of rows. by default: auto">grid-template-rows</label>
+<input type = "text" name="grid-template-rows"class="w70"  placeholder=""></p>
+<p><label for="mobile-grid-template-rows" title="definition of rows. by default: auto">mobile-grid-template-rows</label>
+<input type = "text" name="mobile-grid-template-rows"class="w70"  placeholder=""></p>
+<p><label for="tablet-grid-template-rows" title="definition of rows. by default: auto">tablet-grid-template-rows</label>
+<input type = "text" name="tablet-grid-template-rows"class="w70"  placeholder=""></p>
+<h4>size and position of items placed outside the defined areas above)</h4>
+<p><label for="grid-auto-columns" title="default size of columns for unforeseen items">grid-auto-columns</label>
+<input type = "text" name="grid-auto-columns"class="w50"  placeholder=""></p>
+<p><label for="grid-auto-rows" title="default size of rows for unforeseen items">grid-auto-rows</label>
+<input type = "text" name="grid-auto-rows"class="w50"  placeholder=""></p>
+<p><label for="grid-auto-flow" title="automatic placement of items: row, column, dense, row dense or column dense">grid-auto-flow</label>
+<input type = "text" name="grid-auto-flow"class="w50"  placeholder=""></p>
+<h4>zone names and repetition</h4>
+<p><label for="zone-name" title="list of zone names in the order of content blocks. Comma separator.">zone-name</label>
+<input type = "text" name="zone-name" placeholder=""></p>
+<p><label for="grid-repeat" title="number of grid repetitions">grid-repeat</label>
+<input type = "number" name="grid-repeat"class="w5"  min="0" max="20" placeholder="0"></p>
+<h4>space between rows and columns</h4>
+<p><label for="gap" title="space between blocks. vertical_value horizontal_value. 1 value for both">gap</label>
+<input type = "text" name="gap"class="w20"  placeholder="10px"></p>
+<p><label for="tablet-gap" title="space between blocks. vertical_value horizontal_value. 1 value for both">tablet-gap</label>
+<input type = "text" name="tablet-gap"class="w20"  placeholder=""></p>
+<p><label for="mobile-gap" title="space between blocks. vertical_value horizontal_value. 1 value for both">mobile-gap</label>
+<input type = "text" name="mobile-gap"class="w20"  placeholder=""></p>
+<h4>alignment and distribution of items in the container</h4>
+<p><label for="place-content" title="justify-content align-content: start end center space-around space-between space-evenly">place-content</label>
+<input type = "text" name="place-content"class="w70"  placeholder=""></p>
+<p><label for="tablet-place-content" title="grid-template-rows grid-template-columns: start end center space-around space-between space-evenly">tablet-place-content</label>
+<input type = "text" name="tablet-place-content"class="w70"  placeholder=""></p>
+<p><label for="mobile-place-content" title="grid-template-rows grid-template-columns: start end center space-around space-between space-evenly">mobile-place-content</label>
+<input type = "text" name="mobile-place-content"class="w70"  placeholder=""></p>
+<p><label for="place-items" title="align-items justify-items: start end center stretch">place-items</label>
+<input type = "text" name="place-items"class="w70"  placeholder=""></p>
+<p><label for="tablet-place-items" title="align-items justify-items: start end center stretch">tablet-place-items</label>
+<input type = "text" name="tablet-place-items"class="w70"  placeholder=""></p>
+<p><label for="mobile-place-items" title="align-items justify-items: start end center stretch">mobile-place-items</label>
+<input type = "text" name="mobile-place-items"class="w70"  placeholder=""></p>
+<h4>style of contents</h4>
+<p><label for="items-style-*" title="class2style and style for items (12 maximum in normal order or zone-name)">items-style-*</label>
+<input type = "text" name="items-style-*" placeholder=""></p>
+<p><label for="tablet-items-style-*" title="class2style and style for items on tablet (12 maximum)">tablet-items-style-*</label>
+<input type = "text" name="tablet-items-style-*" placeholder=""></p>
+<p><label for="mobile-items-style-*" title="class2style and style for items on mobile (12 maximum)">mobile-items-style-*</label>
+<input type = "text" name="mobile-items-style-*" placeholder=""></p>
+<h4>breakpoints - break points</h4>
+<p><label for="tablet-bp" title="breakpoint for tablet">tablet-bp (px)</label>
+<input type = "number" name="tablet-bp"class="w10"  min="480" max="2400" unit="px" placeholder="760px"></p>
+<p><label for="mobile-bp" title="breakpoint for mobile">mobile-bp (px)</label>
+<input type = "number" name="mobile-bp"class="w10"  min="480" max="2400" unit="px" placeholder="480px"></p>
+<h4>Style for the parent container</h4>
+<p><label for="main-tag" title="adds a DIV block around the contents {===}">main-tag</label>
+<input type = "text" name="main-tag"class="W10"  placeholder="div"></p>
+<p><label for="id" title="id of the main container">id</label>
+<input type = "text" name="id"class="W10"  placeholder=""></p>
+<p><label for="main-style" title="classes and inline style for container">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-mobile-style" title="class2style and inline style for container on mobile">main-mobile-style</label>
+<input type = "text" name="main-mobile-style" placeholder=""></p>
+<p><label for="main-tablet-style" title="class2style and inline style for container on tablet">main-tablet-style</label>
+<input type = "text" name="main-tablet-style" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="css-head" title="class2style and style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

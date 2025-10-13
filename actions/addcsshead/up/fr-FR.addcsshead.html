@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>addcsshead - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-addcsshead" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>ajoute du code ou fichier CSS dans le head.
+</p>
+<p>sans risque de nettoyage par un éditeur WYSIWYG<br />syntaxe 1 <code><b>{</b>up addCssHead=.foo<b>[</b>color:red]<b>}</b></code> Attention: mettre des <b>[</b> ] au lieu de <code><b>{</b><b>}</b></code><br />syntaxe 2 <code><b>{</b>up addCssHead<b>}</b></code>.foo<code><b>{</b>color:red<b>}</b></code><code><b>{</b>/up addCssHead<b>}</b></code><br />syntaxe 3 <code><b>{</b>up addCssHead=chemin_fichier_css<b>}</b></code><br />Utilisation : charger un fichier CSS spécifique à une page</p>
+
+
+</div >
+<p><label for="addcsshead" title="fichier ou code CSS. ATTENTION [ ] &agrave; la place des {} pour code dans shortcode">addcsshead</label>
+<input type = "text" id="addcsshead" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter  (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

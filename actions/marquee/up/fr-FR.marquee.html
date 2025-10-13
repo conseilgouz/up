@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>marquee - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-marquee" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>contenu HTML défilant horizontalement ou verticalement
+</p>
+<p><code><b>{</b>up marquee=label<b>}</b></code> texte du message défilant <code><b>{</b>/up marquee<b>}</b></code>
+ *</p>
+
+
+</div >
+<p><label for="marquee" title="le texte de l&#039;etiquette">marquee</label>
+<input type = "text" id="marquee" placeholder=""></p>
+<p><label for="model" title="style CSS dans .upmq-*style*. 0=aucun">model</label>
+<input type = "text" name="model" title="base" placeholder="base" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value="base">base</option>
+<option value="cahier">cahier</option>
+<option value="info-img">info-img</option>
+<option value="info">info</option>
+<option value="ok">ok</option>
+<option value="promo">promo</option>
+<option value="red">red</option>
+</datalist></p>
+<p><label for="height" title="hauteur defaut pour scroll vetical">height (px)</label>
+<input type = "number" name="height"class="w10"  min="0" unit="px" placeholder="100px"></p>
+<h4>Style CSS</h4>
+<p><label for="out-class" title="classe(s) pour div out">out-class</label>
+<input type = "text" name="out-class" placeholder=""></p>
+<p><label for="out-style" title="style inline pour div out">out-style</label>
+<input type = "text" name="out-style" placeholder=""></p>
+<p class="hr-top"><label for="msg-class" title="classe(s) pour div msg">msg-class</label>
+<input type = "text" name="msg-class"class="hr-top"  placeholder=""></p>
+<p><label for="msg-style" title="style inline pour div msg">msg-style</label>
+<input type = "text" name="msg-style" placeholder=""></p>
+<p class="hr-top"><label for="lbl-class" title="classe(s) pour div label">lbl-class</label>
+<input type = "text" name="lbl-class"class="hr-top"  placeholder=""></p>
+<p><label for="lbl-style" title="style inline pour div label">lbl-style</label>
+<input type = "text" name="lbl-style" placeholder=""></p>
+<p><label for="lbl-pos" title="position label : left, right, top, bottom, none">lbl-pos</label>
+<input type = "text" name="lbl-pos" placeholder=""></p>
+<p><label for="lbl-nowrap" title="1 = label sur une ligne">lbl-nowrap</label>
+<input type = "text" name="lbl-nowrap" placeholder="0"></p>
+<h4>Divers</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="filter" title="conditions. Voir doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<h4>Paramètres Javascript pour configuration</h4>
+<p><label for="direction" title="right, up, down">direction</label>
+<select name="direction" title="left" placeholder="left" value="left">
+<option value=""></option>
+<option value="left" selected>left</option>
+<option value="right">right</option>
+<option value="up">up</option>
+<option value="down">down</option>
+</select></p>
+<p><label for="loop" title="nombre d&#039;affichage, -1 : infini">loop</label>
+<input type = "number" name="loop"class="w10"  min="-1" placeholder="- 1"></p>
+<p><label for="scrolldelay" title="delai en millisecondes">scrolldelay (msec)</label>
+<input type = "number" name="scrolldelay"class="w10"  min="0" unit="msec" placeholder="0"></p>
+<p><label for="scrollamount" title="vitesse">scrollamount</label>
+<input type = "number" name="scrollamount"class="w10"  min="0" placeholder="50"></p>
+<p><label for="circular" title="mode carousel. si contenu plus large que .str_wrap">circular</label>
+<select name="circular" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="drag" title="deplacement msg avec souris">drag</label>
+<select name="drag" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="runshort" title="scroll si texte court (visible sans scroll)">runshort</label>
+<select name="runshort" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="hoverstop" title="pause lors survol">hoverstop</label>
+<select name="hoverstop" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="inverthover" title="scroll uniquement lors survol">inverthover</label>
+<select name="inverthover" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+</body>
+</html >

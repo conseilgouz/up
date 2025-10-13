@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>meteo_france - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-meteo-france" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche le widget de Météo France
+</p>
+<p>Syntaxe :  <code><b>{</b>up meteo-france=ville | orientation=sens<b>}</b></code><br />le code commune de la ville à récupérer sur <a href="http://www.meteofrance.com/meteo-widget" target="_blank">http://www.meteofrance.com/meteo-widget</a></p>
+
+
+</div >
+<p><label for="meteo_france" title="le code commune de la ville &agrave; r&eacute;cup&eacute;rer sur &lt;a href=&quot;http://www.meteofrance.com/meteo-widget&quot; target=&quot;_blank&quot;&gt;http://www.meteofrance.com/meteo-widget&lt;/a&gt;">meteo-france</label>
+<input type = "text" id="meteo_france"class="w20 important"  placeholder=""></p>
+<p><label for="orientation" title="bloc horizontal (H) ou vertical (V)">orientation</label>
+<select name="orientation" title="v" placeholder="v" value="v">
+<option value=""></option>
+<option value="H">horizontal</option>
+<option value="V">vertical</option>
+</select></p>
+<p><label for="block" title="balise HTML autour du module m&eacute;t&eacute;o">block</label>
+<input type = "text" name="block"class="W10"  placeholder="p"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="Identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc parent">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

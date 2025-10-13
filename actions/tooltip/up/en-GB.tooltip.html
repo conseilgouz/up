@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>tooltip - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-tooltip" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>tooltips when hovering over an item</p>
+<p>syntaxe <code><b>{</b>up tooltip=tooltips text<b>}</b></code>text<code><b>{</b>/up tooltip<b>}</b></code></p>
+
+
+</div >
+<p><label for="tooltip" title="bubble text. bbcode allowed">tooltip</label>
+<input type = "text" id="tooltip"class="important"  placeholder=""></p>
+<h4>tooltip style and position</h4>
+<p><label for="model" title="one of the main classes defined in up-model.scss">model</label>
+<input type = "text" name="model"class="w20"  title="" placeholder="" list="combo_model"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_model">
+<option value=""></option>
+<option value="white">white</option>
+<option value="blue">blue</option>
+<option value="green">green</option>
+<option value="yellow">yellow</option>
+<option value="orange">orange</option>
+</datalist></p>
+<p><label for="position" title="left, right">position</label>
+<select name="position" title="center" placeholder="center" value="center">
+<option value=""></option>
+<option value="left">left</option>
+<option value="center" selected>center</option>
+<option value="right">right</option>
+</select></p>
+<p><label for="bottom" title="true to display the bubble below">bottom</label>
+<select name="bottom" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">au-dessus/top</option>
+<option value="0">au-dessous/bottom</option>
+</select></p>
+<p><label for="width" title="maximum width of the tooltip">width (px)</label>
+<input type = "number" name="width" min="100" max="999" unit="px" placeholder="250"></p>
+<p><label for="offset" title="vertical offset of tooltip. Negative = upwards">offset (px)</label>
+<input type = "number" name="offset"class="w10"  min="-99" max="99" unit="px" placeholder="0"></p>
+<p><label for="opacity" title="transparency of the tooltip">opacity</label>
+<input type = "number" name="opacity"class="w10"  min="20" max="100" placeholder="95"></p>
+<p><label for="open" title="tooltip displayed when the page loads">open</label>
+<select name="open" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>CSS styling for the trigger element</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class (es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules defined by the webmaster (addition in the head)">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

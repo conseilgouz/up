@@ -1,0 +1,68 @@
+// === UP-BOX - CITATION
+
+/* AJOUT DANS .INI
+title-tag="p"
+subtitle-tag="p"
+template="##image## ##body## ##content## ##title-link## ##subtitle## ##body##"
+*/
+
+// référence aux préférences générales de UP
+// si version dans sous-dossier 'custom', ajouter '../' au début du chemin
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+
+$box_bg:$grisPale;
+$box_border: 2px darken($box_bg,10) solid;
+$box_radius:5px;
+$txt_title: #444;
+
+.up-box-citation {
+    display:block;
+    border:$box_border;
+    background:$box_bg;
+    border-radius:$box_radius;
+    padding:16px 16px 8px;
+    margin:16px 0;
+    &::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .up-box-title {
+        text-align:right;
+        font-weight:bold;
+        color:$txt_title;
+        margin:0 0 0 auto;
+        width:80%;
+        border-top: 1px darken($box_bg,10) inset;
+    }
+    .up-box-subtitle {
+        text-align:right;
+        color:$txt_title;
+        margin:0;
+        font-size:80%
+    }
+    .up-box-image {
+        float:left;
+        margin-right:20px;
+        border-radius:50%;
+        max-width:80px;
+    }
+    .up-box-body {
+        margin: -15px 10px;
+        font-style:italic;
+        text-align:justify;
+        p:first-of-type:before {
+            content:'\275D\A0'; color:#aaa;
+            font-size:200%;
+            vertical-align:text-bottom;
+        }
+        p:last-of-type:after {
+            content:'\A0\275E'; color:#aaa;
+            font-size:200%;
+            vertical-align:text-top;
+            margin-bottom:0;
+        }
+    }
+}

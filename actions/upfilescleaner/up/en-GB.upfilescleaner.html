@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>upfilescleaner - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-upfilescleaner" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Moves unused files from a folder to a recovery folder</p>
+<p>syntax <code><b>{</b>up upfilescleaner=folder_source<b>}</b></code></p>
+
+
+</div >
+<p><label for="upfilescleaner" title="path of the folder to analyze">upfilescleaner</label>
+<input type = "text" id="upfilescleaner"class="important"  placeholder=""></p>
+<p><label for="extensions" title="extensions">extensions</label>
+<input type = "text" name="extensions"class="w70"  placeholder="jpg,jpeg,png,gif,pdf"></p>
+<p><label for="bd-tables" title="tables and fields. Default: content:introtext,fulltext,images ; categories:description,params ; modules:params ; menus:params">bd-tables</label>
+<input type = "text" name="bd-tables" placeholder=""></p>
+<p><label for="folder-backup" title="The path to the storage folder of unnecessary files">folder-backup</label>
+<input type = "text" name="folder-backup"class="important"  placeholder="tmp/up-files-cleaner"></p>
+<p><label for="folder-purge" title="deletes empty folders from upfilescleaner folder OR folders containing only specified files (e.g.: index.html,info.txt)">folder-purge</label>
+<input type = "text" name="folder-purge" placeholder=""></p>
+<h4>Exclude or include some files</h4>
+<p><label for="suffix-lang" title="to take into account versions with a calculated suffix. E.g.: -en,-fr. separator: comma">suffix-lang</label>
+<input type = "text" name="suffix-lang"class="w70"  placeholder="-fr,-en"></p>
+<p><label for="suffix-version" title="to also keep the version without the suffix. E.g.: -mini. separator: comma">suffix-version</label>
+<input type = "text" name="suffix-version"class="w70"  placeholder="-mini"></p>
+<p><label for="folders-exclude" title="list of excluded folders. separator: comma">folders-exclude</label>
+<input type = "text" name="folders-exclude" placeholder=""></p>
+<p><label for="files-exclude" title="list of kept files. separator: comma">files-exclude</label>
+<input type = "text" name="files-exclude" placeholder=""></p>
+<h4>Main block style</h4>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class"class="w70"  placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style"class="w70"  placeholder=""></p>
+<p><label for="btn-style" title="style for the action button">btn-style</label>
+<input type = "text" name="btn-style"class="w50"  placeholder="btn btn-primary"></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

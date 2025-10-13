@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>php - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-php" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>permet d'exécuter du code PHP dans un article.
+</p>
+<p>Exemples :<br />date actuelle :  <code><b>{</b>up php=echo date('d-m-Y H:i:s');<b>}</b></code><br />langage : <code><b>{</b>up php=echo JFactory::getLanguage()getTag(); <b>}</b></code><br />nom user : <code><b>{</b>up php=  $user = JFactory::getUser(); echo  ($user->guest!=1) ? $user->username : 'invité'; <b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>date</u> : </b> <b>php</b>=echo date(&#039;d-m-Y H:i:s&#039;);<b> | </b><b>class</b>=bd-violet tc display-inline<br><b><u>navigateur</u> : </b> <b>php</b>=$client = JFactory::getApplication()-&gt;client;echo $client-&gt;userAgent;echo ($client-&gt;mobile) ? &#039; sur mobile petit &eacute;cran&#039; : &#039; sur grand &eacute;cran&#039;;<br><b><u>user</u> : </b> <b>php</b>=$user = JFactory::getUser();echo  ($user-&gt;guest!=1) ? $user-&gt;name : &#039;invit&eacute;&#039;;
+</div >
+<p><label for="php" title="le code PHP">php</label>
+<input type = "text" id="php"class="important"  title="" placeholder="" list="combo_php"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_php">
+<option value=""></option>
+<option value="date">date</option>
+<option value="navigateur">navigateur</option>
+<option value="user">user</option>
+</datalist></p>
+<p><label for="authorized-functions" title="liste des exemptions &agrave; la liste des fonctions bannies. s&eacute;parateur virgule">authorized-functions</label>
+<input type = "text" name="authorized-functions" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="tag" title="balise utilis&eacute;e pour les classes, styles et id si class ou style d&eacute;finis">tag</label>
+<input type = "text" name="tag"class="w10"  placeholder="div"></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ou style pour le bloc retour&#039;">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classe(s) ou style pour le bloc retour&#039;">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="filter" title="conditions. Voir doc action filter (v1.8)">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

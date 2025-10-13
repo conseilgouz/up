@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>text_fit - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-text-fit" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Adjusts a text to its container</p>
+<p>syntax : <code><b>{</b>up text-fit=selector<b>}</b></code>texte<code><b>{</b>/up text-fit<b>}</b></code></p>
+
+
+</div >
+<p><label for="text_fit" title="block selector. e.g. h1, h1.foo, #id, h2#id, ...">text-fit</label>
+<input type = "text" id="text_fit" placeholder=""></p>
+<h4>Definition of minimum/maximum values</h4>
+<p><label for="blocsize" title="mini-maxi width in px of container block">blocsize</label>
+<input type = "text" name="blocsize"class="w20"  placeholder="320-960"></p>
+<p><label for="fontsize" title="mini-maxi size in em of the police. Other unit: em,rem,px,ex,%,vh,vw. eg. 16-32px">fontsize</label>
+<input type = "text" name="fontsize" placeholder="1-1.8"></p>
+<p><label for="lineheight" title="mini-maxi line height. multiplier factor in the size of the font">lineheight</label>
+<input type = "text" name="lineheight" placeholder="1.33-1.25"></p>
+<p><label for="fontweight" title="mini-maxi weight if variable font. eg. 400-900">fontweight</label>
+<input type = "text" name="fontweight" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="fontfile" title="path to the file of a character font">fontfile</label>
+<input type = "text" name="fontfile" placeholder=""></p>
+<p><label for="fontclass" title="Class name assigned to police">fontclass</label>
+<input type = "text" name="fontclass" placeholder=""></p>
+<p><label for="container" title="block used for computing blocksize. parent or self.">container</label>
+<input type = "text" name="container" placeholder="parent"></p>
+<h4>Style CSS</h4>
+<p><label for="tag" title="tag by default">tag</label>
+<input type = "text" name="tag" placeholder="div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="block classes">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style added to the page&#039;s HEAD">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

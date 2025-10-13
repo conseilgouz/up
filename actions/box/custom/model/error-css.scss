@@ -1,0 +1,31 @@
+.up-box-error-css {
+	border: 2px solid red;
+	border-radius: 4px;
+	background: lightYellow;
+
+	>*:first-child {
+		margin-top: 0
+	}
+
+	>*:last-child {
+		margin-bottom: 0
+	}
+
+	.up-box-image {
+		float: left;
+		margin-right: 10px;
+	}
+
+	.up-box-title {
+		background: red;
+		color: yellow;
+		font-weight: bold;
+		padding: 0 10px 5px;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	.up-box-body {
+		padding: 0 10px;
+	}
+}

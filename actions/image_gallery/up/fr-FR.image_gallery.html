@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_gallery - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-gallery" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une ou plusieurs images dans une lightbox</p>
+<p>avec adaptation de la taille image à celle de l'appareil et légendes<br />syntaxe 1 <code><b>{</b>up image-gallery=chemin_image | alt=texte<b>}</b></code><br />syntaxe 2 <code><b>{</b>up image-gallery=chemin_dossier<b>}</b></code><br />syntaxe 3 <code><b>{</b>up image-gallery<b>}</b></code>contenu avec des images<code><b>{</b>/up image-gallery<b>}</b></code></p>
+<div><b>&#x1F199; WEBMASTER NOTES</b></div><div>Pour créer une galerie :<br />
+1 - préparez un dossier avec un nom décrivant le contenu<br />
+2 - copier toutes les images dans ce dossier<br />
+3 - renommez les images pour définir leur libellé<br />
+    # les underscores sont convertis en tirets<br />
+    # les tirets simples sont remplacés par des espaces.<br />
+    # les tirets doubles deviennent des tirets simples.<br />
+    # 3 tirets ou plus seront convertis en " -- "<br />
+4 - copiez ce dossier dans le dossier "images" ou dans le sous-dossier d'un groupe de galeries<br />
+</div>
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>srcset-dir</b>=tmp/up-img
+</div >
+<p><label for="image_gallery" title="fichier image, dossier pour galerie ou largeurs des images contenues">image-gallery</label>
+<input type = "text" id="image_gallery" title="" placeholder="" list="combo_image_gallery"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_image_gallery">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<p><label for="layout" title="layout pour galerie : grid-x-x-x, none-x-x-x, shuffle-x-x-x">layout</label>
+<input type = "text" name="layout" title="masonry-3-2-1" placeholder="masonry-3-2-1" list="combo_layout"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_layout">
+<option value=""></option>
+<option value="grid-x-x-x">grid-x-x-x</option>
+<option value="none-x-x-x">none-x-x-x</option>
+<option value="shuffle-x-x-x">shuffle-x-x-x</option>
+</datalist></p>
+<p><label for="grid-ratio" title="pour layout grid, rapport hauteur/largeur. 1:carr&eacute;, 0.7:horizontal, 1.4:vertical">grid-ratio</label>
+<input type = "text" name="grid-ratio" placeholder=""></p>
+<p><label for="nb-img" title="nombre de vignettes affich&eacute; pour la galerie d&#039;un dossier, 0 = toutes">nb-img</label>
+<input type = "number" name="nb-img" placeholder="0"></p>
+<p><label for="gallery" title="affiche la galerie dans une lightbox. Saisie oblig&eacute;e pour faire une galerie des images du contenu">gallery</label>
+<select name="gallery" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="random" title="tri al&eacute;atoire des images pour gallerie depuis un dossier">random</label>
+<select name="random" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="sort-desc" title="tri alphanum&eacute;rique descendant">sort-desc</label>
+<input type = "text" name="sort-desc" placeholder="0"></p>
+<p><label for="sort-by-date" title="tri par date de cr&eacute;ation">sort-by-date</label>
+<input type = "text" name="sort-by-date" placeholder="0"></p>
+<h4>configuration de la legende (type et style)</h4>
+<p><label for="legend" title="label pour image unique">legend</label>
+<input type = "text" name="legend" placeholder=""></p>
+<p><label for="legend-type" title="0:aucune, 1:hover-top, 2:hover-bottom, 3:sous l&#039;image">legend-type</label>
+<select name="legend-type" title="2" placeholder="2" value="2">
+<option value=""></option>
+<option value="0">0-none</option>
+<option value="1">hover-top</option>
+<option value="2">hover-bottom</option>
+<option value="3">under image</option>
+</select></p>
+<p class="hr-top"><label for="legend-class" title="classe(s) pour la l&eacute;gende vignette">legend-class</label>
+<input type = "text" name="legend-class"class="hr-top"  placeholder=""></p>
+<p><label for="legend-style" title="style pour la l&eacute;gende vignette">legend-style</label>
+<input type = "text" name="legend-style" placeholder=""></p>
+<p><label for="legend-template" title="mod&egrave;le pour l&eacute;gende s&eacute;par&eacute;e par 3 tirets. ex: [span style=&quot;&quot;]##1##[/span][span style=&quot;&quot;]##after@##[/span]">legend-template</label>
+<input type = "text" name="legend-template" placeholder=""></p>
+<h4>pour proposer le téléchargement haute-définition de l'image</h4>
+<p><label for="download-label" title="texte ajout&eacute; &agrave; la l&eacute;gende . Ex: lang[en=Download; fr=T&eacute;l&eacute;charger] ou &amp;#x1f4e5;">download-label</label>
+<input type = "text" name="download-label" placeholder=""></p>
+<p><label for="download-title" title="texte de la bulle d&#039;aide">download-title</label>
+<input type = "text" name="download-title" placeholder=""></p>
+<p><label for="download-style" title="classe ou style pour le lien de t&eacute;l&eacute;chargement. Ex: color:#FFF;bg-white">download-style</label>
+<input type = "text" name="download-style"class="w60"  placeholder=""></p>
+<h4>style des images</h4>
+<p><label for="img-class" title="classe(s) pour bloc figure avec image et legende">img-class</label>
+<input type = "text" name="img-class" placeholder=""></p>
+<p><label for="img-style" title="style inline pour bloc avec image et legende">img-style</label>
+<input type = "text" name="img-style" placeholder=""></p>
+<h4>style du bloc principal</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style CSS ins&eacute;r&eacute; dans le HEAD">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>options pour layout=masonry uniquement (recherche et classement par sous-dossiers)</h4>
+<p><label for="search" title="afficher un champ de recherche">search</label>
+<select name="search" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="shuffle-reverse" title="inverser l&#039;ordre d&#039;affichage des sous-dossiers">shuffle-reverse</label>
+<select name="shuffle-reverse" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>mode chargement progressif (layout=masonry uniquement)</h4>
+<p><label for="infinite-scroll" title="0 ou le nombre d&#039;images affich&eacute;es pour activer infinite scroll">infinite-scroll</label>
+<input type = "number" name="infinite-scroll"class="w5"  min="0;max:100" placeholder="0"></p>
+<h4>gestion responsive. paramétres des images adaptées (srcset)</h4>
+<p><label for="img-sizes" title="largeur image en pourcentage de wmax-page en mode desktop, tablette et mobile. 100,100,100 par d&eacute;faut">img-sizes</label>
+<input type = "text" name="img-sizes"class="w30"  placeholder=""></p>
+<p><label for="wmin-image" title="largeur mini de l&#039;image pour prise en charge">wmin-image (px)</label>
+<input type = "number" name="wmin-image" step="10" unit="px" placeholder="250"></p>
+<p><label for="wmax-page" title="largeur maxi du conteneur contenu de la page">wmax-page (px)</label>
+<input type = "number" name="wmax-page" step="10" unit="px" placeholder="1200"></p>
+<p><label for="wmax-lightbox" title="largeur image dans lightbox">wmax-lightbox (px)</label>
+<input type = "number" name="wmax-lightbox" step="10" unit="px" placeholder="1200"></p>
+<p class="hr-top"><label for="wmax-lightbox-mobile" title="largeur image dans lightboox sur mobile ou 0 pour d&eacute;sactiver. Multipli&eacute; par pixel-ratio">wmax-lightbox-mobile (px)</label>
+<input type = "number" name="wmax-lightbox-mobile"class="hr-top"  step="10" unit="px" placeholder="768"></p>
+<p><label for="pixel-ratio" title="facteur DPR. ex: 0:sans, vide, 1 ou 2: 2, 3:3">pixel-ratio</label>
+<input type = "text" name="pixel-ratio"class="w20 inactif"  placeholder="0"></p>
+<p><label for="quality" title="taux compression jpeg">quality</label>
+<input type = "number" name="quality" step="10" placeholder="70"></p>
+<p><label for="similarity" title="taux minimal. Si la largeur entre 2 images alternatives est inf&eacute;rieure a 80%, la plus petite n&#039;est pas cree">similarity (%)</label>
+<input type = "number" name="similarity" step="10" unit="%" placeholder="80"></p>
+<p class="hr-top"><label for="bp-tablet" title="point de rupture tablette">bp-tablet (px)</label>
+<input type = "number" name="bp-tablet"class="hr-top"  step="10" unit="px" placeholder="768"></p>
+<p><label for="bp-mobile" title="point de rupture smartphone">bp-mobile (px)</label>
+<input type = "number" name="bp-mobile" step="10" unit="px" placeholder="480"></p>
+<h4>gestion du dossier de stockage des variantes de tailles pour les images (a mettre dans custom/prefset.ini)</h4>
+<p><label for="srcset-dir" title="par d&eacute;faut, dans le dossier de l&#039;image. &#039;tmp/subdir&#039; = non sauvegard&eacute; par Akeeba-backup">srcset-dir</label>
+<input type = "text" name="srcset-dir"class="w20 attention"  placeholder="tmp/up-img"></p>
+<p><label for="srcset-raz" title="1 pour supprimer tous les sous-dossiers srcset du dossier pass&eacute; comme option principale">srcset-raz</label>
+<select name="srcset-raz"class="attention"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+</body>
+</html >

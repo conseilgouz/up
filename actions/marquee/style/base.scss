@@ -1,0 +1,22 @@
+/* BASE = style par defaut */
+
+/************* NE PAS EFFACER CE FICHIER **************/
+
+@import "../../../assets/custom/variables";
+@import "../../../assets/scss/variables";
+
+$bordercolor : $darkGrey;
+$bgcolor : $paleGrey;
+$color : white;
+
+.lmmq-base {
+    .lmmq-out {
+        background-color:$bgcolor;
+        border:1px solid $bordercolor;
+    }
+    .lmmq-lbl {
+        background-color:$bordercolor;
+        color: $color;
+        padding:4px;
+    }
+}

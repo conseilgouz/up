@@ -1,0 +1,48 @@
+.upaudio-main {
+//	border: 2px solid purple;
+	padding :5px;
+}
+.upaudio-item 
+	{
+//	background-color: #FFFFFF;
+//	text-align: center;
+	padding: 5px 0;
+	width: 100%;
+	height: auto;
+	display: flex;
+	align-items: center;
+//	border:1px dotted red;
+	}
+
+.upaudio-player
+	{
+	width: 100%;
+	// height: auto; bloque sous Chrome
+	display: block;
+	padding: 0px;
+	margin: 0px;
+	}
+
+
+.upaudio-image {
+	max-height:80px;
+}
+.upaudio-title 
+	{
+	color: #000000;
+	font-weight: bold;
+	text-align: left;
+	padding: 8px 5px 8px 5px;
+	width: 100%;
+	}
+
+.upaudio-download {
+	display:block;
+}
+
+.upaudio-nosupport
+	{
+	color: #FFFFFF;
+	padding-top: 110px;
+	padding-bottom: 110px;
+	}

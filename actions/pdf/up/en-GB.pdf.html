@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pdf - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-pdf" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a PDF in the content or generates a button to display it in a window</p>
+<p>The PDF file can be hosted on the server or elsewhere (absolute url)<br>syntax <code><b>{</b>up pdf=path of the PDF file<b>}</b></code></p>
+
+
+</div >
+<p><label for="pdf" title="pdf file path">pdf</label>
+<input type = "text" id="pdf"class="important"  placeholder=""></p>
+<p><label for="method" title="PDFJS or Google, Embed... or 0">method</label>
+<select name="method" title="PDFJS" placeholder="PDFJS" value="PDFJS">
+<option value=""></option>
+<option value="pdfjs">pdfjs</option>
+<option value="google">google</option>
+<option value="embed">embed</option>
+</select></p>
+<p><label for="maxi" title="nombre maxi de fichiers affich&eacute;s. 0 sans limite">maxi</label>
+<input type = "text" name="maxi" placeholder="0"></p>
+<p><label for="view" title="1 or Google, Embed... or 0">view</label>
+<input type = "text" name="view" placeholder="1"></p>
+<p class="hr-top"><label for="width" title="iframe width">width (%)</label>
+<input type = "number" name="width"class="hr-top"  max="100" unit="%" placeholder="100%"></p>
+<p><label for="height" title="height in px or vh">height (px)</label>
+<input type = "number" name="height" max="1000" unit="px" placeholder="500px"></p>
+<h4>Management of the link to download the PDF</h4>
+<p><label for="download" title="1 to display download link">download</label>
+<select name="download" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="download-name" title="name of the downloaded file">download-name</label>
+<input type = "text" name="download-name" placeholder=""></p>
+<p><label for="download-text" title="en=Download %s;fr=Download %s : text for link">download-text</label>
+<input type = "text" name="download-text" placeholder="en=Download %s;fr=Telecharger %s"></p>
+<p><label for="download-icon" title="image displayed in front of the link">download-icon</label>
+<input type = "text" name="download-icon" placeholder=""></p>
+<p><label for="download-class" title="class(es) for single link button">download-class</label>
+<input type = "text" name="download-class" placeholder=""></p>
+<p><label for="download-style" title="inline style for single link button">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>Management button to display the PDF</h4>
+<p><label for="btn" title="1 to display a button">btn</label>
+<select name="btn" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="btn-target" title="target: _blank, _parent, popup or _popup">btn-target</label>
+<select name="btn-target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_parent">_parent</option>
+<option value="_self">_self</option>
+<option value="_top">_top</option>
+<option value="popup">popup</option>
+<option value="_popup">_popup</option>
+</select></p>
+<p><label for="btn-text" title="see %s : button text">btn-text</label>
+<input type = "text" name="btn-text" placeholder="voir %s"></p>
+<p><label for="btn-icon" title="image displayed before the text">btn-icon</label>
+<input type = "text" name="btn-icon" placeholder=""></p>
+<p><label for="btn-class" title="class(es) for single link button">btn-class</label>
+<input type = "text" name="btn-class" placeholder="btn btn-primary"></p>
+<p><label for="btn-style" title="inline style for single link button">btn-style</label>
+<input type = "text" name="btn-style" placeholder=""></p>
+<h4>Miscellaneous</h4>
+<p><label for="close-left" title="closing cross at the top left. high right by default">close-left</label>
+<select name="close-left" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="flip" title="activate flipbook mode only if pdfJs">flip</label>
+<select name="flip" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="background" title="bleed color of the PDF in #rrggbb format">background</label>
+<input type = "color" name="background" title="" value="#feffff"></p>
+<p><label for="zoom" title="default zoom (100%)">zoom</label>
+<input type = "text" name="zoom" placeholder=""></p>
+<p><label for="pdfjs-model" title="web or mobile (non-operational)">pdfjs-model</label>
+<input type = "text" name="pdfjs-model"class="w10 inactif"  placeholder="web"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for parent block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for parent block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="tag" title="tag for parent block - v2.9">tag</label>
+<input type = "text" name="tag" placeholder="div"></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_audio - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-audio" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a player (HTML5) for one or more audio files hosted on the server</p>
+<p>just indicate the path and name of the file (with or without extension) to use all audio files of that name in the folder.  
+<br>If the file name is not specified or contains wildcards, all matching audio files will be returned.
+<br>Support audio formats: mp3,ogg
+<br>If an image (jpg,png,webp,gif) exists, it will be used as a preview (poster)
+<br>
+<br>syntax <code><b>{</b>up media-audio=path_to_audios<b>}</b></code>
+<br>Keywords for the template: 
+<br>##player##, ##title##, ##image##, ##info##, ##download##</p>
+
+
+</div >
+<p><label for="media_audio" title="path and name of the video file or folder. wildcards allowed">media-audio</label>
+<input type = "text" id="media_audio" placeholder=""></p>
+<h4>video player setup</h4>
+<p><label for="autoplay" title="automatic play of the 1st audio file">autoplay</label>
+<select name="autoplay"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="muted" title="mute the sound">muted</label>
+<select name="muted"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="loop" title="plays the audio file in a loop">loop</label>
+<select name="loop"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="controls" title="displays the control buttons">controls</label>
+<select name="controls"class="w5"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="preload" title="audio file loading mode: none, metadata, auto">preload</label>
+<select name="preload"class="w10"  title="auto" placeholder="auto" value="auto">
+<option value=""></option>
+<option value="none">none</option>
+<option value="metadata">metadata</option>
+<option value="auto" selected>auto</option>
+</select></p>
+<h4>Formatting result</h4>
+<p><label for="template" title="item formatting template">template</label>
+<input type = "text" name="template" placeholder="##title## ##player##"></p>
+<p><label for="main-tag" title="tag for main block">main-tag</label>
+<input type = "text" name="main-tag" placeholder="0"></p>
+<p><label for="main-style" title="class(es) and style for the main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="item-tag" title="tag for a file. forced to DIV if empty">item-tag</label>
+<input type = "text" name="item-tag" placeholder="div"></p>
+<p><label for="item-style" title="class(es) and style for the blocks of different musical pieces">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="player-style" title="class(es) and style for the audio player">player-style</label>
+<input type = "text" name="player-style" placeholder=""></p>
+<p><label for="title-style" title="class(es) and style for the legend">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<p><label for="title-tag" title="tag for song title">title-tag</label>
+<input type = "text" name="title-tag" placeholder="div"></p>
+<p><label for="image-default" title="image used by default for all files">image-default</label>
+<input type = "text" name="image-default" placeholder=""></p>
+<p><label for="image-types" title="list of extensions of accepted image files">image-types</label>
+<input type = "text" name="image-types" placeholder="jpg,jpeg,png,gif,webp"></p>
+<p><label for="image-style" title="class(es) and style for the legend">image-style</label>
+<input type = "text" name="image-style" placeholder=""></p>
+<p><label for="info-style" title="class(es) and style for info">info-style</label>
+<input type = "text" name="info-style" placeholder=""></p>
+<p><label for="download-tag" title="tag for download button. forced to DIV if empty">download-tag</label>
+<input type = "text" name="download-tag" placeholder="a"></p>
+<p><label for="download-text" title="text for download button">download-text</label>
+<input type = "text" name="download-text" placeholder="lang[en=Download;fr=Télécharger]"></p>
+<p><label for="download-style" title="class(es) and style for the legend. ex: btn btn-primary">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>Accepted audio file types</h4>
+<p><label for="types" title="list file extension and mime type. . default: ogg:ogg;mp3:mpeg;MP3:mpeg">types</label>
+<input type = "text" name="types" placeholder="ogg:ogg;mp3:mpeg;MP3:mpeg"></p>
+<p><label for="codecs" title="list of supported types and codecs. ex: ogg:opus,vorbis">codecs</label>
+<input type = "text" name="codecs" placeholder=""></p>
+<h4>Accepted audio file types</h4>
+<p><label for="no-audio" title="message if audio not found">no-audio</label>
+<input type = "text" name="no-audio" placeholder="lang[en=no audio;fr=aucun fichier audio]"></p>
+<p><label for="no-support" title="message if audio type not supported">no-support</label>
+<input type = "text" name="no-support" placeholder="lang[en=Your web browser does not support HTML5 audio;fr=Votre navigateur Web ne prend pas en charge l\&#039;audio HTML5"></p>
+<h4>styles</h4>
+<p><label for="id" title="instance identifier">id</label>
+<input type = "text" name="id" class="w10" placeholder="identifiant instance"></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

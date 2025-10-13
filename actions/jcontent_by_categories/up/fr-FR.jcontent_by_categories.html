@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_by_categories - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-by-categories" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>liste des articles d'une catégorie
+</p>
+<p>syntaxe 1 : <code><b>{</b>up jcontent-by-categories=id-catégorie(s) | template=##title-link##<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up jcontent-by-categories=id-catégorie(s)<b>}</b></code>##title-link##<code><b>{</b>/up jcontent-by-categories<b>}</b></code><br />Une action très pratique pour lister les articles de la catégorie en cours, il suffit de taper <code><b>{</b>up article-category<b>}</b></code><br />Les mots-clés :<br />##title## ##title-link## ##subtitle## ##maintitle## ##link## ##id##<br />##intro## ##intro-text## ##intro-text,100## ##content##<br />##image## ##image-src## ##image-alt##<br />##date-crea## ##date-modif## ##date-publish## ##date-max##<br />##author## ##note## ##cat## ##cat-link## ##new## ##featured##  ##hits## ##tags-list##<br />##CF_id_or_name## : valeur brute du custom field<br />##upnb## : nbre actions UP dans la page - ##uplist## : nbre par actions</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>image-src</b>=//placeimg.com/50/50/tech<b> | </b><b>new-html</b>={up icon=etoile}<br><b><u>tab</u> : </b> <b>template</b>=&lt;h4 class=&quot;lh80 mv0 pv1 notoc&quot;&gt;##title##&lt;/h4&gt;&lt;h3 class=&quot;notoc&quot;&gt;##subtitle##&lt;/h3&gt;&lt;p class=&quot;ph1 clear&quot;&gt;&lt;img class=&quot;left w3 ws2&quot; src=&quot;##image-src##&quot; alt=##image-alt##\&gt;##intro-text##&lt;/p&gt;&lt;p class=&quot;fs80 mb0 bd-bleu bd0 bdt1&quot;&gt;&lt;a href=&quot;##link##&quot; class=&quot;float-right fs120 b pr1&quot;&gt;Lire la suite&lt;/a&gt; cr&eacute;e le ##date-crea## par ##author##&lt;/p&gt;<br><b><u>compact</u> : </b> <b>maxi</b>=8<b> | </b><b>image-src</b>=images/css/news.jpg<b> | </b><b>main-tag</b>=0<b> | </b><b>item-tag</b>=0<b> | </b><b>template</b>=&lt;div class=&#039;fg-row fg-gap bd-bleu bd0 bdb1&#039;&gt;&lt;div class=&#039;fg-c2 fg-cs2&#039;&gt;&lt;a href=&#039;##link##&#039;&gt;##image##&lt;/a&gt;&lt;/div&gt;&lt;div class=&#039;fg-c10 fg-cs10&#039;&gt;&lt;h4 class=&#039;mv0 pv0 notoc&#039;&gt;##title-link##&lt;br&gt;&lt;small&gt;##subtitle##&lt;/small&gt;&lt;/h4&gt;&lt;p class=&#039;pt1&#039;&gt;##intro-text,200##&lt;/p&gt;&lt;p class=&#039;fs80 mb0 &#039;&gt;&lt;a href=&#039;##link##&#039; class=&#039;float-right fs120 b pr1&#039;&gt;Lire la suite&lt;/a&gt; cr&eacute;e le ##date-crea## par ##author##&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;<br><b><u>article-avec-image</u> : </b> <b>template</b>=&lt;h4 class=&quot;mv0 pv1 notoc&quot;&gt;##title##&lt;br&gt;&lt;small&gt;##subtitle##&lt;/small&gt;&lt;/h4&gt;&lt;p class=&quot;ph1 clear&quot;&gt;&lt;img class=&quot;left w3 ws2&quot; src=&quot;##image-src##&quot; alt=##image-alt##\&gt;##intro-text##&lt;/p&gt;&lt;p class=&quot;fs80 mb0 bd-bleu bd0 bdt1&quot;&gt;&lt;a href=&quot;##link##&quot; class=&quot;float-right fs120 b pr1&quot;&gt;Lire la suite&lt;/a&gt; cr&eacute;e le ##date-crea## par ##author##&lt;/p&gt;<br><b><u>article-pour-tab</u> : </b> <b>main-tag</b>=0<b> | </b><b>item-tag</b>=0<b> | </b><b>template</b>=&lt;h4 class=&quot;lh80 mv0 pv1 notoc&quot;&gt;##title##&lt;/h4&gt;&lt;h3 class=&quot;notoc&quot;&gt;##subtitle##&lt;/h3&gt;&lt;p class=&quot;ph1 clear&quot;&gt;&lt;img class=&quot;left w3 ws2&quot; src=&quot;##image-src##&quot; alt=##image-alt##\&gt;##intro-text##&lt;/p&gt;&lt;p class=&quot;fs80 mb0 bd-bleu bd0 bdt1&quot;&gt;&lt;a href=&quot;##link##&quot; class=&quot;float-right fs120 b pr1&quot;&gt;Lire la suite&lt;/a&gt; cr&eacute;e le ##date-crea## par ##author##&lt;/p&gt;<br><b><u>list-actions-csv</u> : </b> <b>main-tag</b>=0<b> | </b><b>item-tag</b>=0<b> | </b><b>sort_by</b>=title<b> | </b><b>sort_order</b>=asc<b> | </b><b>tags-list-style</b>=badge;margin-right:4px<b> | </b><b>template</b>=##title##;##subtitle##;##tags-list##<br><b><u>list-csv-infos-tech</u> : </b> <b>main-tag</b>=0<b> | </b><b>item-tag</b>=0<b> | </b><b>sort-by</b>=ordering<b> | </b><b>sort-order</b>=asc<b> | </b><b>tags-list-style</b>=badge;margin-right:4px<b> | </b><b>template</b>=##id##;##title-link##&lt;br&gt;&lt;small&gt;##subtitle##&lt;/small&gt;;##intro-text,250##<br><b><u>sitemap-admin</u> : </b> <b>main-tag</b>=0<b> | </b><b>item-tag</b>=p<b> | </b><b>sort-by</b>=ordering<b> | </b><b>sort-order</b>=asc<b> | </b><b>tags-list-style</b>=<b> | </b><b>tags-list-separator</b>=, <b> | </b><b>template</b>=&#039;##id##&#039;;&#039;##title-link## &lt;small&gt;##subtitle##&lt;/small&gt;&#039;;&#039;##intro-text,250####note##&#039;;&#039;##tags-list##&#039;<br><b><u>sitemap-admin-alias</u> : </b> <b>main-tag</b>=0<b> | </b><b>item-tag</b>=p<b> | </b><b>sort-by</b>=ordering<b> | </b><b>sort-order</b>=asc<b> | </b><b>tags-list-style</b>=<b> | </b><b>tags-list-separator</b>=, <b> | </b><b>template</b>=&#039;##id##&#039;;&#039;##title-link## &lt;small&gt;##subtitle##&lt;br&gt;Alias : ##alias##&lt;/small&gt;&#039;;&#039;##intro-text,250####note##&#039;;&#039;tag:##tags-list##&#039;
+</div >
+<p><label for="jcontent_by_categories" title="ID(s) cat&eacute;gorie(s) s&eacute;par&eacute;(s) avec virgule, vide pour celle de l&#039;article actuel ou 0 pour toutes">jcontent-by-categories</label>
+<input type = "text" id="jcontent_by_categories"class="w20 important"  title="" placeholder="" list="combo_jcontent_by_categories"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jcontent_by_categories">
+<option value=""></option>
+<option value="tab">tab</option>
+<option value="compact">compact</option>
+<option value="article-avec-image">article-avec-image</option>
+<option value="article-pour-tab">article-pour-tab</option>
+<option value="list-actions-csv">list-actions-csv</option>
+<option value="list-csv-infos-tech">list-csv-infos-tech</option>
+<option value="sitemap-admin">sitemap-admin</option>
+<option value="sitemap-admin-alias">sitemap-admin-alias</option>
+</datalist></p>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="maxi" title="Nombre maxi d&#039;articles dans la liste. Vide = tous">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="exclude" title="liste des id des cat&eacute;gories non reprises si option principale=0">exclude</label>
+<input type = "text" name="exclude" placeholder=""></p>
+<p><label for="current" title="1 pour inclure l&#039;article en cours">current</label>
+<select name="current" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="no-published" title="Liste aussi les articles non publi&eacute;s">no-published</label>
+<select name="no-published" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="featured" title="show : tous les articles, 0 ou hide : sauf les articles en vedette, 1 ou only : uniquement les articles en vedette">featured</label>
+<input type = "text" name="featured" placeholder="show"></p>
+<p><label for="content-plugin" title="prise en compte des plugins de contenu pour ##into et ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="author" title="filtre sur auteur: liste des id ou article, current">author</label>
+<input type = "text" name="author" placeholder=""></p>
+<p><label for="sort-by" title="tri: title, ordering, created, modified, publish_up, id, hits, random">sort-by</label>
+<select name="sort-by" title="publish_up" placeholder="publish_up" value="publish_up">
+<option value=""></option>
+<option value="title">title</option>
+<option value="ordering">ordering</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish_up" selected>publish_up</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+<option value="random">random</option>
+</select></p>
+<p><label for="sort-order" title="ordre de tri : asc, desc">sort-order</label>
+<select name="sort-order" title="desc" placeholder="desc" value="desc">
+<option value=""></option>
+<option value="asc">asc</option>
+<option value="desc" selected>desc</option>
+</select></p>
+<p><label for="no-content-html" title="texte si aucune correspondance. 0=aucun texte">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="Pas de nouvelles, bonnes nouvelles ...[br]No news, good news ..."></p>
+<h4>Modèles de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est le contenu">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>Balise et style pour le bloc principal</h4>
+<p><label for="main-tag" title="balise pour le bloc englobant tous les articles. 0 pour aucun">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="main-style" title="classes et styles inline pour bloc principal">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour bloc principal (obsol&egrave;te)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Balise et style pour un article</h4>
+<p><label for="item-tag" title="balise pour le bloc d&#039;un article. 0 pour aucun">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p><label for="item-style" title="classes et styles inline pour un article">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="classe(s) pour un article (obsol&egrave;te)">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Paramètre pour l'image</h4>
+<p><label for="image-src" title="lorempixel.com/300/300&#039;, // image par d&eacute;faut">image-src</label>
+<input type = "text" name="image-src" placeholder="//placeimg.com/50/50/tech"></p>
+<p><label for="image-alt" title="image, texte alternatif par d&eacute;faut">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Format pour les mots-clés</h4>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="localisation pour les dates. Par d&eacute;faut, celle du navigateur client.">date-locale</label>
+<input type = "text" name="date-locale" placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="nombre de jours depuis la cr&eacute;ation de l&#039;article">new-days</label>
+<input type = "text" name="new-days"class="hr-top"  placeholder="30"></p>
+<p><label for="new-date" title="date utilis&eacute;e pour le calcul de new-day : featured, created, modified, max (la plus r&eacute;cente)">new-date</label>
+<input type = "text" name="new-date" placeholder="featured"></p>
+<p><label for="new-html" title="code HTML pour badge NEW">new-html</label>
+<input type = "text" name="new-html" placeholder="{up icon=etoile}"></p>
+<p><label for="featured-html" title="code HTML pour article en vedette">featured-html</label>
+<input type = "text" name="featured-html" placeholder="&amp;#x2B50"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="texte avant les autres &eacute;ventuels tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="classe ou style affect&eacute; &agrave; une balise span par mot-cl&eacute;">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder="badge;margin-right:4px"></p>
+<p><label for="tags-list-separator" title="s&eacute;parateur entre mots-cl&eacute;s">tags-list-separator</label>
+<input type = "text" name="tags-list-separator" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="code CSS dans le head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

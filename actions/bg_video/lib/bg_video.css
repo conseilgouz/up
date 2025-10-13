@@ -1,0 +1,47 @@
+/* 
+    Created on : 27 sept. 2018, 19:24:18
+    Author     : LOMART
+*/
+
+/* Bloc externe */
+.up-bgvid-body {
+    position:fixed;
+    top:0;
+    left:0;
+    min-width:100%;
+    min-height:100vh;
+    z-index:-100;
+}
+.up-bgvid-bloc {
+    position: relative;
+    z-index:1;
+}
+
+/* Bloc-inner */ 
+.up-bgvid-inner {
+    position: absolute;
+    top: 0px; 
+    left: 0px; 
+    bottom: 0px; 
+    right: 0px; 
+    overflow: hidden; 
+    background-size: cover; 
+    background-color: transparent; 
+    background-repeat: no-repeat; 
+    background-position: 50% 50%; 
+    background-image: none;
+}
+
+/* Bloc-overlay */
+.up-overlay {
+    position: absolute; 
+    width:100%; 
+    height:100%; 
+    top:0; 
+    left:0;
+    z-index:-1;
+}
+
+.up-bgvid-body .up-bgvid-overlay {
+    z-index:0
+}

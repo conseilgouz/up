@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>icon - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-icon" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>uniformise l'appel des icônes. Evite de passer en mode code pour la saisie
+</p>
+<p>syntaxe 1 : <code><b>{</b>up icon=nom_icone<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up icon=Ux1F7A7<b>}</b></code><br />syntaxe 3 : <code><b>{</b>up icon=images/icone.png<b>}</b></code><br />syntaxe 4 : <code><b>{</b>up icon=Ux1F7A7,#F00,2rem<b>}</b></code><br />Important : indiquer dans prefs.ini le préfixe pour la police d'icones installée sur le site</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>prefix</b>=fa fa-<b> | </b><b>fontname</b>=Font Awesome 6 Free<br><b><u>lomart-logo</u> : </b> <b>icon</b>=images/lomart.jpg, 64px<b> | </b><b>class</b>=bd-rouge<b> | </b><b>size</b>=48px<br><b><u>up-logo</u> : </b> <b>src</b>=images/up-lego.png<b> | </b><b>size</b>=48px<br><b><u>up-logo-2</u> : </b> <b>icon</b>=images/up-lego.png,48px<b> | </b><b>class</b>=bd-rouge mb1<br><b><u>icons</u> : </b> <b>etoile</b>=Ux2b50,24px<b> | </b><b>smiley</b>=Ux1F600<b> | </b><b>un</b>=Ux2776<b> | </b><b>deux</b>=Ux2777<b> | </b><b>trois</b>=Ux2778<b> | </b><b>quatre</b>=Ux2779<b> | </b><b>cinq</b>=Ux277A<b> | </b><b>six</b>=Ux277B<b> | </b><b>sept</b>=Ux277C<b> | </b><b>huit</b>=Ux277D<b> | </b><b>neuf</b>=Ux277E<b> | </b><b>info2</b>=Ux1F6C8,steelblue<b> | </b><b>fleche</b>=Ux27A7,green<b> | </b><b>fleche-2</b>=Ux279C,green<b> | </b><b>param</b>=cog,steelblue,24px<b> | </b><b>france</b>=plugins/content/up/assets/img/france.png,2rem<b> | </b><b>belgique</b>=plugins/content/up/assets/img/belgique.png,2rem<b> | </b><b>canada</b>=plugins/content/up/assets/img/canada.png,2rem<b> | </b><b>gb</b>=plugins/content/up/assets/img/gb.png,2rem<b> | </b><b>usa</b>=plugins/content/up/assets/img/usa.png,2rem<b> | </b><b>note</b>=plugins/content/up/assets/img/ico-crayon.png,20px<b> | </b><b>idee</b>=plugins/content/up/assets/img/ico-idee.png,20px<b> | </b><b>vrai</b>=plugins/content/up/assets/img/ico-vrai.png,20px<b> | </b><b>faux</b>=plugins/content/up/assets/img/ico-faux.png,20px<b> | </b><b>info</b>=plugins/content/up/assets/img/ico-info.png,20px<b> | </b><b>danger</b>=plugins/content/up/assets/img/ico-danger.png,20px
+</div >
+<p><label for="icon" title="jeu d&#039;options ou src,color,size">icon</label>
+<input type = "text" id="icon"class="important"  title="" placeholder="" list="combo_icon"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_icon">
+<option value=""></option>
+<option value="lomart-logo">lomart-logo</option>
+<option value="up-logo">up-logo</option>
+<option value="up-logo-2">up-logo-2</option>
+<option value="icons">icons</option>
+</datalist></p>
+<p><label for="src" title="nom ic&ocirc;ne, code unicode, chemin image (indispensable si prefset)">src</label>
+<input type = "text" name="src" placeholder=""></p>
+<p><label for="size" title="taille ic&ocirc;ne ou cot&eacute; du carr&eacute; dans lequel est inscrit l&#039;image. px, rem, em, % (px par defaut). Responsive= basesize, breakpoint1:size1, breakpointN:sizeN">size</label>
+<input type = "number" name="size"class="w50"  placeholder=""></p>
+<p><label for="color" title="couleur">color</label>
+<input type = "color" name="color" title="" value="#feffff"></p>
+<p><label for="color-hover" title="couleur lors survol ic&ocirc;ne (sauf image et unicode color&eacute;)">color-hover</label>
+<input type = "color" name="color-hover" title="" value="#feffff"></p>
+<h4>Pour ajouter l'icône à un bloc sur la page</h4>
+<p><label for="selector" title="selecteur CSS pour identifier le bloc cibl&eacute;">selector</label>
+<input type = "text" name="selector"class="w50"  placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="info" title="1 affiche la liste des ic&ocirc;nes d&eacute;finies dans prefs.ini comme un message debug, 2 la retourne pour affichage &agrave; la place du shortcode">info</label>
+<input type = "number" name="info"class="w10"  min="0" max="2" placeholder="0"></p>
+<p><label for="title" title="texte affich&eacute; au survol de l&#039;icone">title</label>
+<input type = "text" name="title" placeholder=""></p>
+<p><label for="prefix" title="pour icomoon ou &#039;fa fa-&#039; pour font-awesome (a mettre dans pref.ini)">prefix</label>
+<input type = "text" name="prefix"class="w10"  placeholder="fa fa-"></p>
+<p><label for="fontname" title="pour icomoon ou FontAwesome ou autres (a mettre dans pref.ini)">fontname</label>
+<input type = "text" name="fontname"class="w20"  placeholder="Font Awesome 6 Free"></p>
+<h4>Style CSS</h4>
+<p><label for="style" title="style inline">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="id" title="identificateur">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

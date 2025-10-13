@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>data2table - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-data2table" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays the contents of a JSON, XML ou CSV file as a table</p>
+<p>syntax <code><b>{</b>up data2table=data_source<b>}</b></code></p>
+
+
+</div >
+<h4>emplacement et type des données</h4>
+<p><label for="data2table" title="URL to data or file">data2table</label>
+<input type = "text" id="data2table" placeholder=""></p>
+<p><label for="datatype" title="to force data type detection (json, xml, csv)">datatype</label>
+<input type = "text" name="datatype"class="w10"  placeholder=""></p>
+<p><label for="encoding" title="source character encoding. ex:ISO-8859-1">encoding</label>
+<input type = "text" name="encoding"class="w20"  placeholder=""></p>
+<h4>only for CSV or XML data</h4>
+<p><label for="csv-header" title="0 or 1 to indicate that the first line contains the column titles">csv-header</label>
+<select name="csv-header" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="csv-header-title" title="list of column titles separated by csv-separator">csv-header-title</label>
+<input type = "text" name="csv-header-title" placeholder=""></p>
+<p><label for="csv-separator" title="separator character for columns">csv-separator</label>
+<input type = "text" name="csv-separator"class="w5"  placeholder=";"></p>
+<p><label for="xml-attributes" title="fields in the opening tag are in an @attributes sub-array, No default: 0 st-sel-lign=&#039;rowselection&#039;">xml-attributes</label>
+<select name="xml-attributes" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>root selection data and rows</h4>
+<p><label for="lign-root" title="root key path. Example: trk/trkseg">lign-root</label>
+<input type = "text" name="lign-root" placeholder=""></p>
+<p><label for="lign-select" title="data group index or field:value for content search">lign-select</label>
+<input type = "text" name="lign-select" placeholder=""></p>
+<p><label for="lign-filter" title="0">lign-filter</label>
+<input type = "text" name="lign-filter" placeholder=""></p>
+<p><label for="lign-sort" title="tri des donn&eacute;es sous la forme champ1:asc|desc, champ2:asc|desc, ...">lign-sort</label>
+<input type = "text" name="lign-sort" placeholder=""></p>
+<p><label for="lign-max" title="number of lines returned. empty=all">lign-max</label>
+<input type = "number" name="lign-max"class="important"  min="0" max="99" placeholder=""></p>
+<h4>selection of columns/fields</h4>
+<p><label for="col-include" title="list of returned fields (comma separator)">col-include</label>
+<input type = "text" name="col-include" placeholder=""></p>
+<p><label for="col-exclude" title="list of unreturned fields (comma separator)">col-exclude</label>
+<input type = "text" name="col-exclude" placeholder=""></p>
+<h4>content formatting</h4>
+<p><label for="col-list" title="">col-list</label>
+<input type = "text" name="col-list" placeholder=""></p>
+<p><label for="col-class" title="classes for fields (field1:class1 class2,field2:class)">col-class</label>
+<input type = "text" name="col-class" placeholder=""></p>
+<p><label for="col-label" title="correspondence between field name and column title (field1:col1,field2:col2, ...)">col-label</label>
+<input type = "text" name="col-label" placeholder=""></p>
+<h4>type of content</h4>
+<p><label for="col-type" title="type : date, url, image, boolean, string or format for php function: sprintf">col-type</label>
+<input type = "text" name="col-type"class="w50"  placeholder=""></p>
+<p><label for="date-format" title="format for dates : %e %B %Y">date-format</label>
+<input type = "text" name="date-format"class="w50"  placeholder="%e %B %Y"></p>
+<p><label for="boolean-in" title="values in file for true,false,null. ex: &#039;1,0,&#039;">boolean-in</label>
+<input type = "text" name="boolean-in"class="w50"  placeholder="1,0"></p>
+<p><label for="boolean-out" title="output text for values true,false,null">boolean-out</label>
+<input type = "text" name="boolean-out"class="w50"  placeholder="lang[fr=oui,non,-;en=yes,no,n.a.]"></p>
+<p><label for="url-target" title="Target for opening URL">url-target</label>
+<select name="url-target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<p><label for="image-path" title="path to an image in data">image-path</label>
+<input type = "text" name="image-path" placeholder=""></p>
+<p><label for="image-max-size" title="side of the square in which the image will be inscribed. Example: 100px">image-max-size</label>
+<input type = "text" name="image-max-size"class="w10"  placeholder=""></p>
+<h4>if a field is empty</h4>
+<p><label for="col-empty" title="content if no content for a cell">col-empty</label>
+<input type = "text" name="col-empty" placeholder=""></p>
+<h4>Formatting for return</h4>
+<p><label for="model" title="model class name in data2table.css file: noborder, line, blue, green">model</label>
+<input type = "text" name="model" placeholder=""></p>
+<p><label for="id" title="identifier">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="class(es) or inline style for main block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="class(es) or inline style for main block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>internal action cache</h4>
+<p><label for="cache-delay" title="cache duration in minutes. 0 no cache">cache-delay</label>
+<input type = "text" name="cache-delay"class="w10"  placeholder="30"></p>
+</body>
+</html >

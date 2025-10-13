@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv_info - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv-info" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Retourne la valeur brute d'un élément (ligne/colonne) d'un fichier CSV
+</p>
+<p>syntaxe <code><b>{</b>up csv-info=chemin-fichier | col=x | line=x<b>}</b></code></p>
+
+
+</div >
+<p><label for="csv_info" title="URL ou chemin et nom d&#039;un fichier local">csv-info</label>
+<input type = "text" id="csv_info" placeholder=""></p>
+<p><label for="separator" title="s&eacute;parateur des colonnes">separator</label>
+<input type = "text" name="separator"class="w10"  placeholder=";"></p>
+<p><label for="line" title="Titre dans la 1ere colonne ou num&eacute;ro de la ligne o&ugrave; se trouve l&#039;information. un nombre n&eacute;gatif recherche &agrave; partir de la fin">line</label>
+<input type = "text" name="line"class="w10"  placeholder="-1"></p>
+<p><label for="col" title="Titre de la colonne dans la premi&egrave;re ligne ou numero de colonne de l&#039;information. N&eacute;gatif &agrave; partir de la fin">col</label>
+<input type = "text" name="col"class="w10"  placeholder="1"></p>
+<p><label for="default" title="valeur retourn&eacute;e si coordonn&eacute;es cellule hors feuille">default</label>
+<input type = "text" name="default" placeholder="[b class=&quot;t-red&quot;]###[/b]"></p>
+</body>
+</html >

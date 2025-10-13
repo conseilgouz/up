@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>meteo_concept - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-meteo-concept" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Returns the weather forecast for a given date for a FRENCH given city</p>
+<p>syntax 1 
+<code><b>{</b>up meteo=Forecast date or datetime |insee=code |token=Token provided by Meteo Concept <b>}</b></code> 
+syntax 2 
+<code><b>{</b>up meteo=Forecast date or datetime |insee=code |token=Token provided by Meteo Concept <b>}</b></code> 
+   text template with keywords
+<code><b>{</b>/up meteo<b>}</b></code>
+Find an insee code : https://www.insee.fr/fr/recherche/recherche-geographique
+
+ ---- KEYWORDS
+ ##insee##            Insee code of the town
+ ##cp##               zipcode of the town
+ ##name##             Name of the town
+ ##latitude##         Decimal latitude
+ ##longitude##        Decimal longitude
+ ##altitude##         Altitude in meters
+ ##dirwind10m## ou ##winddirs##   Wind direction 
+ ##gust10m##          Wind gusts at 10 meters in km/h
+ ##gustx##            Potential wind gust under storm or squall in km/h
+ ##probafog##         Probability of fog between 0 and 100%.
+ ##probafrost##       Probability of freezing between 0 and 100%.
+ ##rainprob## ou ##probarain##    Probability of rain between 0 and 100%.
+ ##probawind100##     Probability of wind >70 km/h between 0 and 100%.
+ ##probawind70##      Probability of wind >100 km/h between 0 and 100%.
+ ##rainmax## ou ##rr1##   Maximum daily rainfall in mm
+ ##rain## ou ##rr10## Total rainfall for the day in mm
+ ##weather-text##     Weather report in text form
+ ##weather##          weather report index (number from 0 to 235)
+ ##windspeed## ou ##wind10m##   Average wind at 10 meters in km/h
+ ---- DAY PART ONLY
+ ##temp## ou ##temp2m##      Temperature at 2 meters in °C
+ ---- FULL DAY ONLY
+ ##temp-max## ou ##tmax##    Maximum temperature at 2 meters in °C
+ ##temp-min## ou ##tmin##    Minimum temperature at 2 meters in °C
+ ##sun_hours##   	  Sunshine in hours
+ ##etp##              Total evaporation in mm</p>
+
+
+</div >
+<p><label for="meteo_concept" title="Date de la pr&eacute;vision sous la forme AAAAMMJJ (journ&eacute;e) ou AAAAMMJJHHMM (quart de journ&eacute;e d&eacute;but &agrave; 1,7,13 ou 19h)">meteo-concept</label>
+<input type = "text" id="meteo_concept"class="w10"  placeholder=""></p>
+<p><label for="insee" title="Localisation par code insee de la commune (mode prioritaire)">insee</label>
+<input type = "text" name="insee"class="w10 important"  placeholder=""></p>
+<h4>Si la date n'est pas dans les 14 jours à venir</h4>
+<p><label for="msg" title="1 pour afficher un message si hors p&eacute;riode de 14 jours">msg</label>
+<input type = "text" name="msg" placeholder="0"></p>
+<p><label for="msg-before" title="message si date ant&eacute;rieure">msg-before</label>
+<input type = "text" name="msg-before" placeholder="L\&#039;événement est terminé depuis le %s"></p>
+<p><label for="msg-after" title="message si date post&eacute;rieur">msg-after</label>
+<input type = "text" name="msg-after" placeholder="Prévisions disponibles à partir du %s"></p>
+<h4>CSS pour bloc principal</h4>
+<p><label for="tag" title="balise utilis&eacute;e pour le bloc principal si un style est indiqu&eacute;.">tag</label>
+<input type = "text" name="tag"class="w10"  title="div" placeholder="div" list="combo_tag"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_tag">
+<option value=""></option>
+<option value="div">div</option>
+<option value="span">span</option>
+</datalist></p>
+<p><label for="style" title="classe et style pour le bloc principal.">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<h4>Paramètres webmaster</h4>
+<p><label for="date-format" title="format de la date">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%A %e %B %Y"></p>
+<p><label for="cache-delay" title="dur&eacute;e du cache en minutes. 0 pas de cache">cache-delay</label>
+<input type = "number" name="cache-delay" min="0" max="240" step="5" placeholder="60"></p>
+<p><label for="token" title="Token fourni par M&eacute;t&eacute;o Concept">token</label>
+<input type = "text" name="token" placeholder=""></p>
+</body>
+</html >

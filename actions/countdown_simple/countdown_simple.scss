@@ -1,0 +1,56 @@
+// 
+//    Created on : 8 nov. 2019, 06:05:40
+//    Author     : LOIC
+//
+
+// ===== global
+.countdown-simple,
+.countdown-simple > div > div {
+  display: inline-block; }
+
+// ===== digital : 
+.countdown-simple.digital {
+  display: inline-block; 
+  > .digits > div {
+      display: inline-block; 
+      text-align: center;
+    > span {
+      font-weight: 100;
+      font-size: 50px;
+      font-weight: 900;
+      display: block;
+      margin: 0 5px;
+      color: #eabd1f;
+      min-width: 80px;
+      padding: 0 10px 5px;
+      text-shadow: 1px 1px #444, -1px -1px #222;
+      border: 2px #999 solid;
+      border-radius: 5px;
+      background: linear-gradient(0deg, black 0%, #444444 25%, black 49%, white 50%, black 51%, #444444 74%, black 100%); }
+  }
+}  
+
+
+// ===== rainbow : modele colore inspiré de l'exemple fourni avec le script loopcounter
+.countdown-simple.rainbow {
+  display: inline-block; 
+  [class^=counter-] {
+    font-weight: 100;
+    font-size: 50px;
+    width: 100%;
+    display: block; }
+  > div > div {
+    display: inline-block;
+    margin: 0px 16px;
+    color: #333;
+    padding-bottom: 16px;
+    text-align: center; }
+  .block-days {
+      border-bottom: 2px solid #ff4444; }
+  .block-hours {
+      border-bottom: 2px solid  #33b5e5; }
+  .block-minutes {
+      border-bottom: 2px solid #99cc00; }
+  .block-seconds {
+      border-bottom: 2px solid #ffbb33; }
+}

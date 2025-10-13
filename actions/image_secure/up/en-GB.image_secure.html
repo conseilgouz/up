@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>image_secure - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-image-secure" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Prevent image saving</p>
+<p>syntax <code><b>{</b>up image-secure=image_path<b>}</b></code></p>
+
+
+</div >
+<p><label for="image_secure" title="relative path to jpg or png image">image-secure</label>
+<input type = "text" id="image_secure"class="important"  placeholder=""></p>
+<p><label for="folder-source" title="root folder of original images">folder-source</label>
+<input type = "text" name="folder-source" placeholder="images"></p>
+<p><label for="folder-strip" title="root folder og strips images">folder-strip</label>
+<input type = "text" name="folder-strip" placeholder="images/image-secure"></p>
+<p><label for="nb-strip" title="strips number">nb-strip</label>
+<input type = "number" name="nb-strip"class="w10"  min="2" max="10" placeholder="5"></p>
+<p><label for="alt" title="alternative text for image. So empty: humanized file name">alt</label>
+<input type = "text" name="alt" placeholder=""></p>
+<p><label for="quality" title="quality for jpeg images">quality</label>
+<input type = "number" name="quality"class="w10"  max="100" step="5" placeholder="80"></p>
+<p class="hr-top"><label for="reset" title="force the generation of strip images">reset</label>
+<select name="reset"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="delete-source" title="remove source image after generation of strips">delete-source</label>
+<select name="delete-source" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="block class(es)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the page HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

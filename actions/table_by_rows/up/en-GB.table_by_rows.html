@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>table_by_rows - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-table-by-rows" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>responsive tables by stacking columns by rows.</p>
+<p><code><b>{</b>up table-by-line<b>}</b></code><br>< table> ... < /table><br><code><b>{</b>/up table-by-line<b>}</b></code><br>the columns are stacked in rows with the possibility to move them, merge them, delete the title, to display only certain columns. see: https://github.com/codefog/restables/blob/master/README.md<br><b>IMPERATIVE</b> : Column titles must be in a THEAD tag</p>
+
+
+</div >
+<p><label for="table_by_rows" title="nothing">table-by-rows</label>
+<input type = "text" id="table_by_rows"class="w5 inactif"  placeholder=""></p>
+<p><label for="breakpoint" title="switch to responsive view">breakpoint</label>
+<input type = "text" name="breakpoint"class="w10"  placeholder="720px"></p>
+<p><label for="max-height" title="max-height for the table">max-height</label>
+<input type = "text" name="max-height"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="inline style for table">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="class(es) for table tags (obsolete">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules put in the head">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>Javascript parameters for configuration</h4>
+<p><label for="merge" title="column merging. 1:[2,3],5:[6] = 2&amp;3 with 1 and 6 with 5">merge</label>
+<input type = "text" name="merge"class="w30"  placeholder=""></p>
+<p><label for="move" title="column displacement. 1:0,6:1 = 1 at the beginning and 6 in 2nd">move</label>
+<input type = "text" name="move"class="w30"  placeholder=""></p>
+<p><label for="skip" title="not visible. 3.5] = collar 3 and 5 not visible">skip</label>
+<input type = "text" name="skip"class="w30"  placeholder=""></p>
+<p><label for="span" title="[2.4] = value without label (eq: colspan)">span</label>
+<input type = "text" name="span"class="w30"  placeholder=""></p>
+</body>
+</html >

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>table_fixe - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-table-fixe" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>tables responsives: ligne entete reste visible
+</p>
+<p><code><b>{</b>up table-fixe<b>}</b></code><br />< table> ... < /table><br /><code><b>{</b>/up table-fixe<b>}</b></code><br />col-left :  nombre de colonnes toujours visible.<br />Une barre de défilement est ajoutée pour les autres colonnes.</p>
+
+
+</div >
+<p><label for="table_fixe" title="aucun argument">table-fixe</label>
+<input type = "text" id="table_fixe"class="w5 inactif"  placeholder=""></p>
+<p><label for="col-left" title="nombre de colonnes fix&eacute;es &agrave; gauche">col-left</label>
+<input type = "number" name="col-left"class="w10"  min="0" max="6" placeholder="0"></p>
+<p><label for="max-height" title="max-height pour le bloc parent">max-height</label>
+<input type = "text" name="max-height"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="classes et styles pour le bloc parent">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="classe(s) pour le bloc parent (obsol&egrave;te)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="permet d&#039;ajouter des style &agrave; la table incluse">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

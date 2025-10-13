@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>donation - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-donation" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Formulaire de donation avec Paypal
+</p>
+<p>syntaxe <code><b>{</b>up donation=compte_paypal<b>}</b></code></p>
+
+
+</div >
+<p><label for="donation" title="Votre adresse e-mail PayPal enregistr&eacute;e ou votre identifiant PayPal">donation</label>
+<input type = "text" id="donation"class="important"  placeholder=""></p>
+<p><label for="template" title="mod&egrave;le mise en page">template</label>
+<input type = "text" name="template" placeholder="##title## [span style=&quot;white-space:nowrap;padding:6px;display:inline-block&quot;]##amount## ##currency##[/span] ##button##"></p>
+<h4>définition du titre  (##title##)</h4>
+<p><label for="title" title="texte pour ##title##. bbcode accept&eacute;">title</label>
+<input type = "text" name="title" placeholder=""></p>
+<p class="hr-top"><label for="title-tag" title="balise pour le titre (##title##) span par d&eacute;faut si title-style">title-tag</label>
+<input type = "text" name="title-tag"class="w10 hr-top"  placeholder=""></p>
+<p><label for="title-style" title="classes et styles pour le titre">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<h4>définition du texte d'accompagnement (##text##)</h4>
+<p><label for="text" title="texte bbcode pour motcl&eacute; ##text##">text</label>
+<input type = "text" name="text" placeholder=""></p>
+<p class="hr-top"><label for="text-tag" title="balise pour le titre (##text##) span par d&eacute;faut si text-style">text-tag</label>
+<input type = "text" name="text-tag"class="w10 hr-top"  placeholder=""></p>
+<p><label for="text-style" title="classes et styles pour texte d&#039;accompagnement">text-style</label>
+<input type = "text" name="text-style" placeholder=""></p>
+<h4>définition du bouton (##button##)</h4>
+<p><label for="button" title="texte ou image Paypal pour ##button##">button</label>
+<input type = "text" name="button" placeholder="lang[en=Donate;fr=Faire un don]"></p>
+<p class="hr-top"><label for="button-style" title="classes et styles pour bouton (##button##)">button-style</label>
+<input type = "text" name="button-style"class="hr-top"  placeholder="b;t-grisFonce;background:#FFC439;border:#ECB300 1px outset;border-radius:50px;cursor:pointer"></p>
+<h4>définition du montant et de la devise (##amount## & ##currency##)</h4>
+<p><label for="amount" title="Montant du don. Inutile si ##amount##">amount</label>
+<input type = "text" name="amount" placeholder="10"></p>
+<p><label for="currency-code" title="Devise. Inutile si ##currency##">currency-code</label>
+<input type = "text" name="currency-code" placeholder="EUR"></p>
+<p><label for="currency-list" title="liste des devises accept&eacute;es. 1&egrave;re par d&eacute;faut">currency-list</label>
+<input type = "text" name="currency-list" placeholder="EUR,USD,GBP,CHF,AUD,HKD,CAD,JPY,NZD,SGD,SEK,DKK,PLN,NOK,HUF,CZK,ILS,MXN"></p>
+<p class="hr-top"><label for="amount-style" title="classes et styles pour montant (##amount##)">amount-style</label>
+<input type = "text" name="amount-style"class="hr-top"  placeholder=""></p>
+<p><label for="currency-style" title="classes et styles pour choix devises (##currency##)">currency-style</label>
+<input type = "text" name="currency-style" placeholder=""></p>
+<h4>Données transmises et utilisées par le site de Paypal</h4>
+<p><label for="item-name" title="La raison de vos dons. Sera imprim&eacute; sur la confirmation PayPal">item-name</label>
+<input type = "text" name="item-name"class="important w40"  placeholder="Donation"></p>
+<p><label for="image-url" title="URL du logo de de votre organisme affich&eacute; sur la confirmation d Paypal">image-url</label>
+<input type = "text" name="image-url" placeholder=""></p>
+<p class="hr-top"><label for="url-valid" title="&#039;, // Chemin complet vers la page de retour apr&egrave;s un paiement correct">url-valid</label>
+<input type = "text" name="url-valid"class="hr-top"  placeholder="http:"></p>
+<p><label for="url-cancel" title="&#039;, // Chemin complet vers la page de retour apr&egrave;s un &eacute;chec de paiement">url-cancel</label>
+<input type = "text" name="url-cancel" placeholder="http:"></p>
+<p class="hr-top"><label for="use-sandbox" title="pour tester la donation">use-sandbox</label>
+<select name="use-sandbox"class="hr-top"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>style et options secondaires</h4>
+<p class="hr-top"><label for="id" title="id pour bloc externe">id</label>
+<input type = "text" name="id"class="hr-top"  placeholder=""></p>
+<p><label for="class" title="classe(s) pour bloc externe">class</label>
+<input type = "text" name="class" placeholder="tc"></p>
+<p><label for="style" title="style inline pour bloc externe">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

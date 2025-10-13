@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>media_video - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-media-video" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays a local video in HTML5</p>
+<p>just indicate the path and the name of the file (with or without extension)
+ to use all videos of that name in the folder.
+ <br>Support video formats: mp4, webm, ogg
+ <br>If an image (jpg,png,webp,gif) exists, it will be used as a preview (poster)
+ <br>syntax <code><b>{</b>up media-video=path_to_videos<b>}</b></code></p>
+
+
+</div >
+<p><label for="media_video" title="video file path and name">media-video</label>
+<input type = "text" id="media_video" placeholder=""></p>
+<h4>video player setup</h4>
+<p><label for="autoplay" title="auto launch">autoplay</label>
+<select name="autoplay"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="muted" title="mute the sound">muted</label>
+<select name="muted"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="loop" title="play video in loop">loop</label>
+<select name="loop"class="w5"  title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="controls" title="show command buttons">controls</label>
+<select name="controls"class="w5"  title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="preload" title="none, metadata, auto">preload</label>
+<select name="preload"class="w10"  title="auto" placeholder="auto" value="auto">
+<option value=""></option>
+<option value="none">none</option>
+<option value="metadata">metadata</option>
+<option value="auto" selected>auto</option>
+</select></p>
+<p><label for="legend" title="text displayed below the video">legend</label>
+<input type = "text" name="legend" placeholder=""></p>
+<p><label for="legend-style" title="class(es) and style for legend">legend-style</label>
+<input type = "text" name="legend-style" placeholder=""></p>
+<h4>Types of videos accepted</h4>
+<p><label for="types" title="list file extension and mime type">types</label>
+<input type = "text" name="types" placeholder="mp4:mp4;webm:webm;ogv:ogg"></p>
+<p><label for="codecs" title="supported type and codec list. ex: ogg:theora,vorbis; webm:vp8.0,vorbis">codecs</label>
+<input type = "text" name="codecs" placeholder=""></p>
+<h4>Messages if error</h4>
+<p><label for="no-video" title="message if video not found">no-video</label>
+<input type = "text" name="no-video" placeholder="lang[en=no video;fr=aucune vidéo]"></p>
+<p><label for="no-support" title="message if video not supported">no-support</label>
+<input type = "text" name="no-support" placeholder="lang[en=Your web browser does not support HTML5 video;fr=Votre navigateur Web ne prend pas en charge la vidéo HTML5"></p>
+<h4>styles</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

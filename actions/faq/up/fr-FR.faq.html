@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>faq - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-faq" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>accordion très simple
+</p>
+<p>syntaxe : une alternance de titres pour les onglets en H4 et de contenu HTML<br /><code><b>{</b>up faq<b>}</b></code><br />-- titre en H4<br />-- contenu HTML<br /><code><b>{</b>/up faq<b>}</b></code>
+ *</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>admin</u> : </b> <b>filter</b>=admin<b> | </b><b>title-class</b>=bg-orange
+</div >
+<p><label for="faq" title="aucun argument n&eacute;cessaire">faq</label>
+<input type = "text" id="faq"class="inactif w10"  title="" placeholder="" list="combo_faq"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_faq">
+<option value=""></option>
+<option value="admin">admin</option>
+</datalist></p>
+<h4>Définition des titres des onglets</h4>
+<p><label for="title-tag" title="pour utiliser une autre balise pour les titres">title-tag</label>
+<input type = "text" name="title-tag"class="w10"  title="h4" placeholder="h4" list="combo_title-tag"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_title-tag">
+<option value=""></option>
+<option value="h2">h2</option>
+<option value="h3">h3</option>
+<option value="h4">h4</option>
+<option value="h5">h5</option>
+<option value="h6">h6</option>
+</datalist></p>
+<p><label for="title-tag-preserve" title="1 pour conserver &#039;title-tag&#039; au lieu de div">title-tag-preserve</label>
+<input type = "text" name="title-tag-preserve" placeholder="0"></p>
+<p><label for="title-class" title="classe et/ou style inline pour le titre (onglet)">title-class</label>
+<input type = "text" name="title-class" placeholder=""></p>
+<p><label for="title-style" title="classe et/ou style inline pour le titre">title-style</label>
+<input type = "text" name="title-style" placeholder=""></p>
+<h4>Définition des panneaux</h4>
+<p><label for="content-class" title="classe et/ou style inline pour le contenu">content-class</label>
+<input type = "text" name="content-class" placeholder=""></p>
+<p><label for="content-style" title="classe et/ou style inline pour le contenu">content-style</label>
+<input type = "text" name="content-style" placeholder=""></p>
+<h4>style et options secondaires</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="filter" title="conditions. Voir doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+</body>
+</html >

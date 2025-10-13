@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>site_stat - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-site-stat" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>counts the number of calls for this action and displays the number of visits</p>
+<p>syntax:
+<br><code><b>{</b>up site-visit<b>}</b></code>: increment the dir-logs/id-alias_article.log file
+<br><code><b>{</b>up site-visit=*<b>}</b></code>: Calculates and displays stats for ALL files
+<br><code><b>{</b>up site-visit=0<b>}</b></code>: displays the stats for current article
+<br><code><b>{</b>up site-visit=12<b>}</b></code>: displays the stats for article id = 12
+<br><code><b>{</b>up site-visit=mask<b>}</b></code>: displays the stats of the files corresponding to the mask
+
+<br>The display is made using templates and keywords:
+<br>--- tmpl-lign: result for a log file (an article)
+<br>##count##: total number of unique visits for an article
+<br>##id##, ##alias##, ##title##, ##created##, ##updated##: article data
+<br>##catid##, ##catalias##: id and alias of the category of the article
+<br>##detail##: displays the details of visits by year, month, language
+<br>--- tmpl-detail-period: model for a period of ##detail##
+<br>Keywords for sub-templates of ##detail##
+<br>Breakdown by item: ##PERIOD##, ##TOTAL##, ##LANG##
+<br>Repeating pattern for ##LANG##: ##LANG##, ##COUNT##
+<br>Detail by number of pages viewed by a visitor: ##PERIOD##, ##TOTAL##, ##PAGES-VISITORS##
+<br>Repeated pattern for ##PAGES-VISITORS##: ##NBPAGES##, ##NBVISITORS##:</p>
+
+
+</div >
+<h4>Options for tracking recording</h4>
+<p><label for="site_stat" title="empty: save access, otherwise mask= *:all, 1:current, item ID or mask files (id-alias)">site-stat</label>
+<input type = "text" id="site_stat" placeholder=""></p>
+<p><label for="catid-include" title="list of category ids to include, comma separator">catid-include</label>
+<input type = "text" name="catid-include"class="w50"  placeholder=""></p>
+<p><label for="catid-exclude" title="list of category ids to exclude, comma separator">catid-exclude</label>
+<input type = "text" name="catid-exclude"class="w50"  placeholder=""></p>
+<p><label for="usergroup-list" title="list of user groups to exclude, comma separator">usergroup-list</label>
+<input type = "text" name="usergroup-list"class="w50"  placeholder=""></p>
+<p><label for="ip-list" title="list of IPs to ignore. botnets are ignored, comma separator">ip-list</label>
+<input type = "text" name="ip-list" placeholder="127.0.0.8, localhost"></p>
+<p><label for="bots-list" title="list of excluded bots">bots-list</label>
+<input type = "text" name="bots-list" placeholder="bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter"></p>
+<h4>Options for displaying results</h4>
+<p><label for="view-catid-include" title="ID category list included, comma separator">view-catid-include</label>
+<input type = "text" name="view-catid-include"class="w50"  placeholder=""></p>
+<p><label for="detail-max-month" title="Number of months displayed. 0: all">detail-max-month</label>
+<input type = "number" name="detail-max-month"class="w10"  placeholder="0"></p>
+<p><label for="tmpl-lign" title="display model for an item or total">tmpl-lign</label>
+<input type = "text" name="tmpl-lign" placeholder="##ALIAS## ##CATALIAS## ##DETAIL##"></p>
+<p><label for="tmpl-detail-period" title="template for a period">tmpl-detail-period</label>
+<input type = "text" name="tmpl-detail-period" placeholder="[b class=&quot;t-blue bg-grisClair ph1&quot;]##PERIOD##[/b] ([b]##TOTAL##[/b] - ##LANG##)"></p>
+<p><label for="tmpl-detail-period-lang" title="Subtemplate for a language">tmpl-detail-period-lang</label>
+<input type = "text" name="tmpl-detail-period-lang" placeholder="[i]##LANG##[/i]:[b]##COUNT##[/b]"></p>
+<p><label for="tmpl-total-detail-period" title="template for the number of pages viewed by visitors">tmpl-total-detail-period</label>
+<input type = "text" name="tmpl-total-detail-period" placeholder="[b class=&quot;t-blanc bg-brun ph1&quot;]##PERIOD##[/b] ([b]##TOTAL##[/b] - ##PAGES-VISITORS##)"></p>
+<p><label for="tmpl-total-detail-PV" title="Sub-template group of page counts per visitors">tmpl-total-detail-PV</label>
+<input type = "text" name="tmpl-total-detail-PV" placeholder="[i]##NBPAGES##p[/i]:##COUNT##"></p>
+<p><label for="date-format" title="date format">date-format</label>
+<input type = "text" name="date-format" title="lang[en=%B %se, %Y; fr=%e %B %Y]" placeholder="lang[en=%B %se, %Y; fr=%e %B %Y]" list="combo_date-format"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_date-format">
+<option value=""></option>
+<option value=""></option>
+<option value="lang[en=%B %se, %Y ; fr=%e %B %Y]">lang[en=%B %se, %Y ; fr=%e %B %Y]</option>
+</datalist></p>
+<p><label for="no-content-html" title="message displayed if no result for the selection">no-content-html</label>
+<input type = "text" name="no-content-html" title="lang[en=No statistical data; fr=Aucune donnée statistique]" placeholder="lang[en=No statistical data; fr=Aucune donnée statistique]" list="combo_no-content-html"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_no-content-html">
+<option value=""></option>
+<option value=""></option>
+<option value="lang[en=No statistical data ; fr=Aucune donnée statistique]">lang[en=No statistical data ; fr=Aucune donnée statistique]</option>
+</datalist></p>
+<h4>Consolidation settings for prefs.ini</h4>
+<p><label for="keep-days" title="number of uncompacted days in months. Today not included. These days are not counted in their month">keep-days</label>
+<input type = "number" name="keep-days"class="w10"  placeholder="3"></p>
+<p><label for="keep-months" title="minimum number of unpacked months in years. (0=current year, 12=current and previous year)">keep-months</label>
+<input type = "number" name="keep-months"class="w10"  placeholder="12"></p>
+<p><label for="delay-unique" title="delay (in seconds) between 2 visits of a page by an IP to consider it as unique">delay-unique</label>
+<input type = "number" name="delay-unique"class="w10"  placeholder="300"></p>
+<p><label for="bots-nbpages" title="nb pages/day for suspission of robots">bots-nbpages</label>
+<input type = "number" name="bots-nbpages"class="w10"  placeholder="200"></p>
+<h4>Class(es) and style(s) for the total line</h4>
+<p><label for="total-style" title="style for the last line">total-style</label>
+<input type = "text" name="total-style"class="w50"  placeholder="bg-grisClair"></p>
+<h4>Style of an line</h4>
+<p><label for="item-tag" title="tag for list rows">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder=""></p>
+<p><label for="item-class" title="class for list rows">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<p><label for="item-style" title="style for list lines">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<h4>Style management of the main block</h4>
+<p><label for="main-tag" title="tag for list">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder=""></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<h4>For webmaster - to add in the prefs.ini file</h4>
+<p><label for="dir-logs" title="folder for logs">dir-logs</label>
+<input type = "text" name="dir-logs"class="w50 important"  placeholder="up/site-stat"></p>
+</body>
+</html >

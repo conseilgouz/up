@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>website - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-website" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays a screenshot of a site with link.</p>
+<p>syntax <code><b>{</b>up website=URL<b>}</b></code><br />by default, the text displayed below the thumbnail is the URL without http://</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>renew</b>=0<b> | </b><b>timeout</b>=30
+</div >
+<p><label for="website" title="Site URL">website</label>
+<input type = "text" id="website"class="important"  title="" placeholder="" list="combo_website"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_website">
+<option value=""></option>
+<option value=""></option>
+</datalist></p>
+<h4>Site display</h4>
+<p><label for="link" title="displays the link below the screenshot">link</label>
+<select name="link" title="1" placeholder="1" value="1">
+<option value=""></option>
+<option value="0">0-image only</option>
+<option value="1">1-texte au-dessous / text below</option>
+</select></p>
+<p><label for="link-text" title="text displayed for the link and alt">link-text</label>
+<input type = "text" name="link-text" placeholder=""></p>
+<p><label for="target" title="or _self to open the site in the same tab">target</label>
+<select name="target" title="_blank" placeholder="_blank" value="_blank">
+<option value=""></option>
+<option value="_blank" selected>_blank</option>
+<option value="_self">_self</option>
+</select></p>
+<h4>Refresh frequency</h4>
+<p><label for="renew" title="number of days to update thumbnails. 0 = never (v2.2)">renew</label>
+<input type = "number" name="renew"class="w5"  min="0" max="60" placeholder="0"></p>
+<p><label for="timeout" title="delay (seconds) to retrieve information from the Google server (v2.2)">timeout</label>
+<input type = "number" name="timeout"class="w5"  min="0" max="60" placeholder="30"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="style" title="classes and inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="class" title="class(es) for block (obsolete)">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="CSS rules defined by the webmaster (added to the head)">css-head</label>
+<input type = "text" name="css-head"class="w10 hr-top"  placeholder=""></p>
+</body>
+</html >

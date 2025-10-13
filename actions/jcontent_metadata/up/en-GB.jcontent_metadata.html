@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_metadata - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-metadata" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>for metadata control</p>
+<p>list of articles from one or more categories with information highlighted for referencing
+<br>syntax 1 : <code><b>{</b>up jcontent-metadata=id-catégorie(s) | template=##title-link##<b>}</b></code>
+<br>syntax 2 : <code><b>{</b>up jcontent-metadata=id-catégorie(s)<b>}</b></code>##title-link##<code><b>{</b>/up jcontent-metadata<b>}</b></code>
+--- Keywords :
+<br>##title## ##title-link## ##subtitle## ##maintitle## ##link## ##id##
+<br>##intro## ##intro-text## ##intro-text,100## ##content##
+<br>##image## ##image-src## ##image-alt##
+<br>##date-crea## ##date-modif## ##nivaccess## ##id##
+<br>##author## ##note## ##cat## ##cat-link## ##new## ##featured##  ##hits## ##tags-list##
+<br>##upnb## : nbre actions UP dans la page - ##uplist## : nbre par actions
+<br>##date-publish## ##date-publish-end## ##date-featured## ##date-featured-end##
+<br>##meta-index## ##meta-follow## ##meta-title## ##meta-desc## ##meta-key## 
+</p>
+
+
+</div >
+<p><label for="jcontent_metadata" title="Category ID, empty for the current article ID or 0 for all">jcontent-metadata</label>
+<input type = "text" id="jcontent_metadata" placeholder=""></p>
+<p><label for="filter" title="terms. See doc action filter">filter</label>
+<input type = "text" name="filter" placeholder=""></p>
+<p><label for="maxi" title="Maximum number of items in the list. Empty = all">maxi</label>
+<input type = "number" name="maxi"class="w10"  min="0" placeholder=""></p>
+<p><label for="exclude" title="list of category ids not included if main option=0">exclude</label>
+<input type = "text" name="exclude" placeholder=""></p>
+<p><label for="current" title="1 to include the current article">current</label>
+<select name="current" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="nivaccess" title="list of groups for access level. 1=public only, 0=all, 1.9=public and guest">nivaccess</label>
+<select name="nivaccess"class="w20"  title="1" placeholder="1" value="1">
+<option value=""></option>
+<option value="0">0-all</option>
+<option value="1">1-public</option>
+<option value="2">2-registred</option>
+<option value="7">7-admin</option>
+<option value="8">8-superadmin</option>
+</select></p>
+<p><label for="content-plugin" title="support for content plugins for ##into and ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="no-published" title="Also lists unpublished articles">no-published</label>
+<select name="no-published" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="author" title="filter on author: list of ids ou article, current">author</label>
+<input type = "text" name="author" placeholder=""></p>
+<p><label for="sort-by" title="sort by: title, ordering, created, modified, publish_up, id, hits">sort-by</label>
+<select name="sort-by" title="publish_up" placeholder="publish_up" value="publish_up">
+<option value=""></option>
+<option value="title">title</option>
+<option value="ordering">ordering</option>
+<option value="created">created</option>
+<option value="modified">modified</option>
+<option value="publish_up" selected>publish_up</option>
+<option value="id">id</option>
+<option value="hits">hits</option>
+<option value="random">random</option>
+</select></p>
+<p><label for="sort-order" title="sort order : asc, desc">sort-order</label>
+<select name="sort-order" title="desc" placeholder="desc" value="desc">
+<option value=""></option>
+<option value="asc">asc</option>
+<option value="desc" selected>desc</option>
+</select></p>
+<p><label for="no-content-html" title="Pas de nouvelles, bonnes nouvelles ...&lt;br&gt;No news, good news ...">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="aucun article ne correspond aux critéres ...[br]no item matches the criteria ..."></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template in prefs.ini. If empty the template is the content">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<h4>Tag and style for main block</h4>
+<p><label for="main-tag" title="tag for the block encompassing all articles. 0 for none">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="main-style" title="inline classes and styles for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="class(es) for main block">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Tag and style for an article</h4>
+<p><label for="item-tag" title="tag for the block of an article. 0 for none">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="div"></p>
+<p><label for="item-style" title="inline classes and styles for an article">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="class(es) for an article">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Image parameters</h4>
+<p><label for="image-src" title="default image">image-src</label>
+<input type = "text" name="image-src" placeholder=""></p>
+<p><label for="image-alt" title="image, default alternative text">image-alt</label>
+<input type = "text" name="image-alt" placeholder="news"></p>
+<h4>Format for keywords</h4>
+<p><label for="date-format" title="format for dates">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%d/%m/%Y"></p>
+<p><label for="date-locale" title="location for dates">date-locale</label>
+<input type = "text" name="date-locale"class="w30"  placeholder=""></p>
+<p class="hr-top"><label for="new-days" title="number of days since the creation of the article">new-days</label>
+<input type = "text" name="new-days"class="w5 hr-top"  min="0" max="200" placeholder="30"></p>
+<p><label for="new-html" title="HTML code for NEW badge">new-html</label>
+<input type = "text" name="new-html" placeholder="[span class=&quot;badge bg-red t-white&quot;]nouveau[/span]"></p>
+<p><label for="featured-html" title="HTML code for featured article">featured-html</label>
+<input type = "text" name="featured-html" placeholder="&amp;#x2B50"></p>
+<p class="hr-top"><label for="tags-list-prefix" title="text before any other tags">tags-list-prefix</label>
+<input type = "text" name="tags-list-prefix"class="hr-top"  placeholder=""></p>
+<p><label for="tags-list-style" title="class or style assigned to a span tag by keyword">tags-list-style</label>
+<input type = "text" name="tags-list-style" placeholder="badge;margin-right:4px"></p>
+<p><label for="tags-list-separator" title="tag separator">tags-list-separator</label>
+<input type = "text" name="tags-list-separator" placeholder=""></p>
+<h4>spécifique jcontent-metadata</h4>
+<p><label for="meta-title-min" title="minimum/reasonable number of characters for the title tag of the page. Site name included according to config">meta-title-min</label>
+<input type = "number" name="meta-title-min"class="w5"  min="0" max="30" placeholder="30"></p>
+<p><label for="meta-title-max" title="maximum number of characters for the title tag of the page. Site name included according to config">meta-title-max</label>
+<input type = "number" name="meta-title-max"class="w5"  min="150" max="300" placeholder="65"></p>
+<p><label for="meta-desc-min" title="minimum/reasonable number of characters for meta tag/page description">meta-desc-min</label>
+<input type = "number" name="meta-desc-min"class="w5"  min="0" max="150" placeholder="0"></p>
+<p><label for="meta-desc-max" title="maximum number of characters for meta tag/page description">meta-desc-max</label>
+<input type = "number" name="meta-desc-max"class="w5"  min="150" max="500" placeholder="160"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

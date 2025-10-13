@@ -1,0 +1,75 @@
+.fliptable {
+    display: block;
+    width: 100%;
+    margin: 1em 0;
+
+
+    thead, tbody, thead tr, th {
+        display: block;
+    }
+
+    thead {
+        float: left;
+    }
+
+    tbody {
+        width: auto;
+        position: relative;
+        overflow-x: auto;
+    }
+
+    td, th {
+        padding: .625em;
+        line-height: 1.5em;
+        border-bottom: 1px dashed #ccc;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    th {
+        text-align: left;
+        background: rgba(0, 0, 0, 0.14);
+        border-bottom: 1px dashed #aaa;
+    }
+
+    tbody tr {
+        display: table-cell;
+    }
+
+    tbody td {
+        display: block;
+        white-space:  nowrap; /* ajout LM */
+    }
+
+    tr:nth-child(odd) {
+        background: rgba(0, 0, 0, 0.07);
+    }
+}
+@media screen and (min-width: 50em) {
+
+    .fliptable {
+        display: table;
+
+        thead {
+            display: table-header-group;
+            float: none;
+        }
+
+        tbody {
+            display: table-row-group;
+        }
+
+        thead tr, tbody tr {
+            display: table-row;
+        }
+
+        th, tbody td {
+            display: table-cell;
+        }
+
+        td, th {
+            width: auto;
+        }
+    }
+}

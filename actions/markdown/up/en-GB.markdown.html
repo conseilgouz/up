@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>markdown - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-markdown" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Displays MARKDOWN content from a file or entered between shortcodes</p>
+<p>syntax 1: <code><b>{</b>up markdown<b>}</b></code>content<code><b>{</b>/up markdown<b>}</b></code><br>syntax 2: <code><b>{</b>up markdown=fichiermdname<b>}</b></code><br>Use : display a changelog.md file</p>
+
+
+</div >
+<p><label for="markdown" title="path and name of the markdown or empty file for content">markdown</label>
+<input type = "text" id="markdown"class="important"  placeholder=""></p>
+<p><label for="strip-tags" title="0 to keep the HTML tags in the content entered between shortcodes. They are
+are always kept if the source is a file.">strip-tags</label>
+<select name="strip-tags" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<h4>Style CSS</h4>
+<p class="hr-top"><label for="id" title="">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style">style</label>
+<input type = "text" name="style" placeholder=""></p>
+</body>
+</html >

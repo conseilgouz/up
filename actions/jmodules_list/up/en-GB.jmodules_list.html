@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jmodules_list - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jmodules-list" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>list of modules on the site</p>
+<p>syntax : <code><b>{</b>up jmodules-list=position ou client_id<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>site</u> : </b> <b>client</b>=0<b> | </b><b>template</b>=\[##position##\]  [b class=##state##]##title##[/b] [small] (id:##id##) ##language##[/small] ##note##<b> | </b><b>order</b>=position, ordering, title<br><b><u>admin</u> : </b> <b>client</b>=1<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=name
+</div >
+<h4>Module Selection Criteria</h4>
+<p><label for="jmodules_list" title="prefset ou position(s). empty=all site modules">jmodules-list</label>
+<input type = "text" id="jmodules_list"class="w30 important"  title="" placeholder="" list="combo_jmodules_list"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_jmodules_list">
+<option value=""></option>
+<option value="site">site</option>
+<option value="admin">admin</option>
+</datalist></p>
+<p><label for="position-exclude" title="1 = all positions except those passed in main parameter">position-exclude</label>
+<select name="position-exclude" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="client" title="0=site, 1=admin, 2=tous">client</label>
+<input type = "number" name="client"class="w5"  min="0" max="2" placeholder="0"></p>
+<p><label for="module" title="module name. ex: LM-Custom-SITE">module</label>
+<input type = "text" name="module" placeholder=""></p>
+<p><label for="module-exclude" title="1= all modules except those passed to the module parameter">module-exclude</label>
+<select name="module-exclude" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="actif-only" title="1 to list the unpublished extensions">actif-only</label>
+<select name="actif-only" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="order" title="sorting column(s)">order</label>
+<input type = "text" name="order" placeholder="position, ordering, title"></p>
+<p class="hr-top"><label for="no-content-html" title="text back if no category found">no-content-html</label>
+<input type = "text" name="no-content-html"class="hr-top"  placeholder="[p]aucun module a cette position[/p]"></p>
+<h4>Main block tag and style</h4>
+<p><label for="main-tag" title="main tag (ul)">main-tag</label>
+<input type = "text" name="main-tag"class=" w10 "  placeholder="ul"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="inline classes and styles for main block">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="class (es) for main block">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Tag and style of a module block</h4>
+<p><label for="item-tag" title=" secondary tag(li)">item-tag</label>
+<input type = "text" name="item-tag"class=" w10 "  placeholder="li"></p>
+<p><label for="item-style" title="inline classes and styles for ligns">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p><label for="item-class" title="class (es) for ligns">item-class</label>
+<input type = "text" name="item-class" placeholder=""></p>
+<h4>Presentation Templates</h4>
+<p><label for="template" title="layout template">template</label>
+<input type = "text" name="template"class=" w10"  placeholder="\[##position##\]  [b class=&quot;##state##&quot;][/b] [b]##title##[/b] [small] (id:##id## - ##module##) ##language##[/small] ##note##"></p>
+<p class="hr-top"><label for="model-note" title="template for note">model-note</label>
+<input type = "text" name="model-note"class="hr-top"  placeholder="[i class=&quot;t-blue&quot;]%s[/i]"></p>
+<p><label for="state-list" title="choice list : inactif, actif &amp;#x1f534">state-list</label>
+<input type = "text" name="state-list" placeholder="icon-unpublish t-rouge, icon-publish t-vert, icon-trash t-gris"></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="CSS code in the head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

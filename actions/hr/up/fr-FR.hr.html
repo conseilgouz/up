@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>hr - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-hr" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>affiche un trait horizontal avec une icône et/ou du texte
+</p>
+<p>syntaxe 1 : <code><b>{</b>up hr=nom_class_modele<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up hr=nom_prefset<b>}</b></code><br />syntaxe 3 : <code><b>{</b>up hr=1px, solid, #F00, 50%<b>}</b></code></p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>param</u> : </b> <b>hr</b>=2px dotted green 50%<b> | </b><b>hr-border-top</b>=2px dotted green<b> | </b><b>hr-width</b>=50%<b> | </b><b>icon</b>=\f008<b> | </b><b>icon-color</b>=green<b> | </b><b>icon-size</b>=32px<b> | </b><b>hr-class</b>=mt3<br><b><u>typo-feuille</u> : </b> <b>hr-class</b>=degrade-gris<b> | </b><b>hr-border-top</b>=<b> | </b><b>hr-height</b>=2px<b> | </b><b>icon</b>=Ux2767<b> | </b><b>icon-size</b>=36px<b> | </b><b>icon-color</b>=tan<b> | </b><b>icon-v-offset</b>=-3px<b> | </b><b>hr-style</b>=margin-top:36px<br><b><u>typo-text</u> : </b> <b>hr-class</b>=degrade-gris<b> | </b><b>hr-border-top</b>=<b> | </b><b>hr-height</b>=2px<b> | </b><b>hr-width</b>=80%<b> | </b><b>icon-size</b>=18px<b> | </b><b>icon-color</b>=darkgreen<b> | </b><b>icon-v-offset</b>=-3px<br><b><u>up-demo</u> : </b> <b>hr-class</b>=degrade-gris<b> | </b><b>hr-border-top</b>=<b> | </b><b>hr-height</b>=2px<b> | </b><b>hr-width</b>=60%<b> | </b><b>icon</b>=Ux1F79B<b> | </b><b>icon-size</b>=18px<b> | </b><b>icon-v-offset</b>=2px<br><b><u>i-love-up</u> : </b> <b>icon-text</b>=I\2764UP<b> | </b><b>icon-color</b>=red<b> | </b><b>fontname</b>=cursive<b> | </b><b>hr-width</b>=80%<b> | </b><b>hr-bg</b>=linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,0,255,1) 15%, rgba(255,0,255,1) 30%, rgba(255,255,255,1) 50%, rgba(255,0,255,1) 70%, rgba(255,0,255,1) 85%, rgba(255,255,255,1) 99%, rgba(255,255,255,1) 100%)<b> | </b><b>hr-height</b>=2px
+</div >
+<p><label for="hr" title="nom ic&ocirc;ne, code unicode, chemin image ou nom dans prefs.ini + color, size">hr</label>
+<input type = "text" id="hr" title="" placeholder="" list="combo_hr"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_hr">
+<option value=""></option>
+<option value="param">param</option>
+<option value="typo-feuille">typo-feuille</option>
+<option value="typo-text">typo-text</option>
+<option value="up-demo">up-demo</option>
+<option value="i-love-up">i-love-up</option>
+</datalist></p>
+<h4>la ligne de séparation</h4>
+<p><label for="hr-border-top" title="style du trait sup&eacute;rieur">hr-border-top</label>
+<input type = "text" name="hr-border-top" placeholder="3px double #666"></p>
+<p><label for="hr-border-bottom" title="style du trait inf&eacute;rieur">hr-border-bottom</label>
+<input type = "text" name="hr-border-bottom" placeholder=""></p>
+<p><label for="hr-width" title="largeur du trait">hr-width (%)</label>
+<input type = "number" name="hr-width" min="0" max="100" unit="%" placeholder="100%"></p>
+<p><label for="hr-height" title="hauteur pour bg">hr-height (px)</label>
+<input type = "number" name="hr-height" min="0" max="50" unit="px" placeholder=""></p>
+<p><label for="hr-bg" title="argument pour background : couleur, d&eacute;grad&eacute;, image">hr-bg</label>
+<input type = "text" name="hr-bg" placeholder=""></p>
+<p><label for="hr-align" title="position de la ligne : left, center, right">hr-align</label>
+<select name="hr-align" title="center" placeholder="center" value="center">
+<option value=""></option>
+<option value="left">left</option>
+<option value="center" selected>center</option>
+<option value="right">right</option>
+</select></p>
+<p><label for="hr-style" title="style inline pour la ligne">hr-style</label>
+<input type = "text" name="hr-style" placeholder=""></p>
+<p><label for="hr-class" title="classe pour la ligne">hr-class</label>
+<input type = "text" name="hr-class" placeholder=""></p>
+<h4>texte ou image sur la ligne</h4>
+<p><label for="icon" title="icon. admet raccourci icon, size, color">icon</label>
+<input type = "text" name="icon"class="w40"  placeholder=""></p>
+<p><label for="icon-text" title="texte en remplacement ou apr&egrave;s l&#039;icone">icon-text</label>
+<input type = "text" name="icon-text" placeholder=""></p>
+<p class="hr-top"><label for="icon-size" title="taille icone en px, rem (px par defaut) - cot&eacute; du carr&eacute; dans lequel est inscrit l&#039;image">icon-size (px)</label>
+<input type = "number" name="icon-size"class="hr-top"  min="8" max="50" unit="px" placeholder="24px"></p>
+<p><label for="icon-color" title="couleur pour icon et texte">icon-color</label>
+<input type = "color" name="icon-color" title="" value="#feffff"></p>
+<p><label for="icon-bg" title="couleur de fond">icon-bg</label>
+<input type = "color" name="icon-bg" title="#ffffff" value="#ffffff"></p>
+<p><label for="icon-space" title="espace entre icon et trait">icon-space (px)</label>
+<input type = "number" name="icon-space" min="0" max="20" unit="px" placeholder="4px"></p>
+<p><label for="icon-h-offset" title="d&eacute;calage horizontal en px ou rem n&eacute;gatif pour aller vers la gauche">icon-h-offset (px)</label>
+<input type = "number" name="icon-h-offset" min="-20" max="20" unit="px" placeholder=""></p>
+<p><label for="icon-v-offset" title="d&eacute;calage vertical dans la m&ecirc;me unit&eacute; que icon-size. Par d&eacute;faut moiti&eacute; de icon-size">icon-v-offset (px)</label>
+<input type = "number" name="icon-v-offset" min="-20" max="20" unit="px" placeholder="0"></p>
+<p><label for="icon-style" title="style inline pour l&#039;ic&ocirc;ne ou le texte">icon-style</label>
+<input type = "text" name="icon-style" placeholder=""></p>
+<h4>Divers</h4>
+<p><label for="fontname" title="pour icomoon ou FontAwesome ou autres (a mettre dans pref.ini)">fontname</label>
+<input type = "text" name="fontname" title="Font Awesome 6 Free" placeholder="Font Awesome 6 Free" list="combo_fontname"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_fontname">
+<option value=""></option>
+<option value="icomoon">icomoon</option>
+<option value="FontAwesome">FontAwesome</option>
+</datalist></p>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+</body>
+</html >

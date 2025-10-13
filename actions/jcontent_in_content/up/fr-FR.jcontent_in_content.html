@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jcontent_in_content - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-jcontent-in-content" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche le contenu d'un article dans un autre
+</p>
+<p>syntaxe 1 : <code><b>{</b>up jcontent-in-content=id_article<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up jcontent_in_content=145<b>}</b></code>template<code><b>{</b>/up jcontent_in_content<b>}</b></code><br />Les mots-clés :<br />##id## ##title## ##title-link## ##subtitle## ##link##<br />##intro## ##intro-text## ##intro-text,100## ##content##<br />##image## ##image-src## ##image-alt##<br />##date-crea## ##date-modif## ##date-publish##<br />##author## ##note## ##cat## ##new## ##featured## ##hits##<br />##CF_id_or_name## : valeur brute du custom field</p>
+
+
+</div >
+<p><label for="jcontent_in_content" title="ID de l&#039;article">jcontent-in-content</label>
+<input type = "text" id="jcontent_in_content"class="w10 important"  placeholder=""></p>
+<p><label for="no-published" title="Liste aussi les articles non publi&eacute;s">no-published</label>
+<select name="no-published" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Oui</option>
+<option value="0">Non</option>
+</select></p>
+<p><label for="content-plugin" title="prise en compte des plugins de contenu pour ##into et ##content##">content-plugin</label>
+<select name="content-plugin" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Modèle de présentation</h4>
+<p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est le contenu. BBCode accept&eacute;">template</label>
+<input type = "text" name="template" placeholder="##content##"></p>
+<h4>Balise & style pour le bloc parent</h4>
+<p><label for="main-tag" title="balise pour le bloc d&#039;un article. 0 pour aucun">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+<p><label for="main-style" title="classes et styles inline pour un article">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour un article (obsol&eacute;te)">main-class</label>
+<input type = "text" name="main-class" placeholder=""></p>
+<h4>Format pour les mots-clés</h4>
+<p><label for="date-format" title="format pour les dates">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%e %B %Y"></p>
+<p><label for="date-locale" title="localisation pour les dates. Par d&eacute;faut, celle du navigateur client.">date-locale</label>
+<input type = "text" name="date-locale"class="w20"  placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="css-head" title="code CSS dans le head">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

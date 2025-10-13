@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>file_explorer - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-file-explorer" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>returns a formatted list of the contents of a folder on the server</p>
+<p>syntax <code><b>{</b>up folder_list=path | template=##file## (##size)<b>}</b></code>
+<br>##file## : path/name.extension - to copy/paste as shortcode argument
+<br>##dirname## : path (without ending slash)
+<br>##basename## : name and extension
+<br>##filename## : name without extension (without the dot)
+<br>##extension## : extension
+<br>##relpath## : path relative for the path passed as the main argument
+<br>##size## : file size
+<br>##date## : last modification date
+<br>##icon## : file icon or thumbnail
+<br>##download## : button to download
+<br>##view-btn## : button to view the file in a modal window
+<br>##view## & ##/view## : a tag (opening and closing) with attributes to view the file in a modal window
+<br>
+<br>Keyword available for the file in list format(ul/li)
+<br>##foldername## : folder name (without tree structure)
+<br>##folderpath## : path and name of the folder (with tree structure)</p>
+
+
+</div >
+<p><label for="file_explorer" title="relative path of folder on server">file-explorer</label>
+<input type = "text" id="file_explorer" placeholder=""></p>
+<p><label for="mask" title="file selection mask">mask</label>
+<input type = "text" name="mask" placeholder=""></p>
+<p><label for="file-exclude" title="files not listed. (separator=comma)">file-exclude</label>
+<input type = "text" name="file-exclude" placeholder=""></p>
+<p><label for="folder-recursive" title="subfolder exploration levels">folder-recursive</label>
+<input type = "number" name="folder-recursive"class="w5"  placeholder="0"></p>
+<p><label for="view-root" title="if main-tag=ul, do we display the root">view-root</label>
+<select name="view-root" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p><label for="view-unknow-ext" title="0: shows all files, 0: only known extensions">view-unknow-ext</label>
+<select name="view-unknow-ext" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<h4>file content type</h4>
+<p><label for="ext-none" title="extension list with no preview and no download">ext-none</label>
+<input type = "text" name="ext-none"class="w60"  placeholder=""></p>
+<p><label for="ext-download-only" title="files not viewable, download only">ext-download-only</label>
+<input type = "text" name="ext-download-only"class="w30"  placeholder=""></p>
+<p><label for="ext-image" title="image files. default: jpg,png,webp,gif">ext-image</label>
+<input type = "text" name="ext-image"class="w30"  placeholder=""></p>
+<p><label for="ext-pdf" title="pdf files. default: pdf">ext-pdf</label>
+<input type = "text" name="ext-pdf"class="w30"  placeholder=""></p>
+<p><label for="ext-office" title="office files. default: doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx">ext-office</label>
+<input type = "text" name="ext-office"class="w50"  placeholder=""></p>
+<p><label for="ext-audio" title="audio files. default:mp3,ogg">ext-audio</label>
+<input type = "text" name="ext-audio"class="w30"  placeholder=""></p>
+<p><label for="ext-video" title="video files. default:mp4,ogv">ext-video</label>
+<input type = "text" name="ext-video"class="w30"  placeholder=""></p>
+<p><label for="ext-ajax" title="files work in ajax. default: txt,csv,html,url">ext-ajax</label>
+<input type = "text" name="ext-ajax"class="w30"  placeholder=""></p>
+<p><label for="ext-iframe" title="files managed as iframe. default: none">ext-iframe</label>
+<input type = "text" name="ext-iframe"class="w30"  placeholder=""></p>
+<h4>layout template</h4>
+<p><label for="template" title="result formatting template">template</label>
+<input type = "text" name="template" placeholder="##icon## ##basename## ##view-btn## ##download##"></p>
+<p><label for="template-folder" title="formatting template for folders in list view">template-folder</label>
+<input type = "text" name="template-folder" placeholder="[b]##foldername##[/b]"></p>
+<h4>Tags for parent and child blocks</h4>
+<p><label for="main-tag" title="main tag. essential to use id, class and style">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="ul"></p>
+<p><label for="item-tag" title="tag for a file or folder">item-tag</label>
+<input type = "text" name="item-tag"class="w10"  placeholder="li"></p>
+<h4>Format of keyword elements</h4>
+<p><label for="date-format" title="date format">date-format</label>
+<input type = "text" name="date-format"class="w20"  placeholder="%Y/%m/%d %H:%M"></p>
+<p><label for="size-decimal" title="number of decimal places for file size">size-decimal</label>
+<input type = "number" name="size-decimal"class="w5"  min="0" max="10" placeholder="0"></p>
+<p><label for="icon-thumbnail" title="for images, we display a thumbnail">icon-thumbnail</label>
+<select name="icon-thumbnail" title="1" placeholder="1" value="1">
+<option value="" selected></option>
+<option value="1" selected>Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="icon-size" title="16, 32 or 48: size of the icon or thumbnail">icon-size</label>
+<select name="icon-size" title="32" placeholder="32" value="32">
+<option value=""></option>
+<option value="16">16</option>
+<option value="32" selected>32</option>
+<option value="48">48</option>
+</select></p>
+<p><label for="icon-path" title="path to your icon files. this folder must contain 3 subfolders 16,32 and 48">icon-path</label>
+<input type = "text" name="icon-path" placeholder=""></p>
+<h4>configuration download button</h4>
+<p><label for="download-label" title="text or bbcode for download button">download-label</label>
+<input type = "text" name="download-label" placeholder="&amp;#x1F4E5"></p>
+<p><label for="download-style" title="classes and/or styles of the button to download">download-style</label>
+<input type = "text" name="download-style" placeholder=""></p>
+<h4>configuration button view</h4>
+<p><label for="view-label" title="button text to view file">view-label</label>
+<input type = "text" name="view-label"class="w50"  placeholder="&amp;#x1F441"></p>
+<p><label for="view-style" title="classes and/or styles of the button or link to view the file">view-style</label>
+<input type = "text" name="view-style" placeholder=""></p>
+<h4>Styles CSS</h4>
+<p><label for="js-params" title="JS rules defined by the webmaster">js-params</label>
+<input type = "text" name="js-params" placeholder=""></p>
+<p><label for="class" title="class for main block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for main block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="id" title="Identifier">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+</body>
+</html >

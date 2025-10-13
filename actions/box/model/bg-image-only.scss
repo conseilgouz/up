@@ -1,0 +1,23 @@
+/*
+
+*/
+
+.up-box-bg-image-only {
+	display: grid;
+
+	a {
+		text-decoration: none;
+	}
+
+	.up-box-body {
+		min-height: 100%;
+		min-width: 100%;
+
+		/*
+		@media (max-width:480px) {
+			min-height: 80vw !important;
+			min-width: calc(100%- 1rem)
+		}
+		*/
+	}
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ajax_view - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-ajax-view" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche un bouton pour charger le contenu d'un article ou un fichier
+</p>
+<p>il est possible de demander un mot de passe<br />syntaxe <code><b>{</b>up ajax-view=999 | btn-label=Voir un article<b>}</b></code><br />syntaxe <code><b>{</b>up ajax-view=fichier.ext | btn-label=afficher un fichier<b>}</b></code><br />syntaxe <code><b>{</b>up ajax-view=fichier.jpg | btn-label=<b>[</b>img src='photo-mini.jpg']<b>[</b>br]Cliquer pour voir l'image en grand | password=1234<b>}</b></code></p>
+
+
+</div >
+<p><label for="ajax_view" title="id article ou chemin vers fichier txt ou image">ajax-view</label>
+<input type = "text" id="ajax_view" placeholder=""></p>
+<h4>Style du bouton d'appel du contenu ajax</h4>
+<p><label for="btn-label" title="texte sur le bouton appel">btn-label</label>
+<input type = "text" name="btn-label" placeholder="en=load content;fr=charger le contenu"></p>
+<p><label for="btn-style" title="style et classe du bouton appel">btn-style</label>
+<input type = "text" name="btn-style" placeholder="btn btn-primary"></p>
+<p><label for="btn-tag" title="balise principale">btn-tag</label>
+<input type = "text" name="btn-tag"class="w10"  placeholder="div"></p>
+<h4>Demande de mot de passe</h4>
+<p><label for="password" title="mot de passe pour t&eacute;l&eacute;charger le fichier">password</label>
+<input type = "text" name="password"class="w20"  placeholder=""></p>
+<h4>options secondaires</h4>
+<p><label for="HTML" title="0= aucun traitement, 1=affiche le code, ou liste des tags &agrave; garder (ex: img,a)">HTML</label>
+<input type = "text" name="HTML" placeholder="0"></p>
+<p><label for="EOL" title="forcer un retour &agrave; la ligne">EOL</label>
+<select name="EOL" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<p><label for="ext-images" title="les extensions des fichiers images autoris&eacute;s">ext-images</label>
+<input type = "text" name="ext-images" placeholder="jpg,png,gif,webp"></p>
+<h4>Style</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-tag" title="balise principale">main-tag</label>
+<input type = "text" name="main-tag"class="w10"  placeholder="div"></p>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="r&egrave;gles CSS d&eacute;finies par le webmaster (ajout dans le head)">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

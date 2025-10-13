@@ -1,0 +1,9 @@
+Pour créer une galerie :
+1 - préparez un dossier avec un nom décrivant le contenu
+2 - copier toutes les images dans ce dossier
+3 - renommez les images pour définir leur libellé
+    # les underscores sont convertis en tirets
+    # les tirets simples sont remplacés par des espaces.
+    # les tirets doubles deviennent des tirets simples.
+    # 3 tirets ou plus seront convertis en " -- "
+4 - copiez ce dossier dans le dossier "images" ou dans le sous-dossier d'un groupe de galeries

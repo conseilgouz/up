@@ -1,0 +1,55 @@
+/*color*/
+//------------------------------------------------
+// COLORATION TEXTE, FOND, BORDURE
+//................................................
+// Il faut déclarer les couleurs du template dans
+// les variables, puis lancer le mixin par :
+// .mixin_up_color(rouge, $rouge)
+// Il va créer les classes :
+// .up-rouge
+// .up-hover-rouge
+// .up-text-rouge
+//------------------------------------------------
+
+
+@mixin up_color($colorname, $colorname2, $colorval) {
+    // background
+    .bg-#{$colorname},
+    .bg-hover-#{$colorname}:hover,
+    .bg-#{$colorname2},
+    .bg-hover-#{$colorname2}:hover {
+        background-color: $colorval !important;
+        color: colorContraste($colorval);
+    }
+    // texte
+    .t-#{$colorname},
+    .t-hover-#{$colorname}:hover,
+    .t-#{$colorname2},
+    .t-hover-#{$colorname2}:hover {
+        color: $colorval !important
+    }
+    // bordures
+    .bd-#{$colorname},
+    .bd-hover-#{$colorname}:hover,
+    .bd-#{$colorname2},
+    .bd-hover-#{$colorname2}:hover {
+		border-color: $colorval !important
+    }
+}
+
+@each $colorname, $colorname2, $colorval in $colorlist {
+	@include up_color($colorname, $colorname2, $colorval);
+}
+:root{
+@each $colorname, $colorname2, $colorval in $colorlist {
+	--#{$colorname}:#{$colorval};
+	--#{$colorname2}:#{$colorval};
+}
+}
+// === fond opalescent
+.bg-30, .bg-hover-30:hover {background-color:rgba(256,256,256,.3) !important}
+.bg-50, .bg-hover-50:hover {background-color:rgba(256,256,256,.5) !important}
+.bg-80, .bg-hover-80:hover {background-color:rgba(256,256,256,.8) !important}
+
+// === OMBRAGE
+// voir _base

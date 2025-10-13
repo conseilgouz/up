@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>page_search - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-page-search" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Cherche un mot dans la page courante
+</p>
+<p>syntaxe <code><b>{</b>up page-search<b>}</b></code></p>
+
+
+</div >
+<p><label for="page_search" title="s&eacute;lecteur CSS du bloc o&ugrave; rechercher. J3=.article-details OU J4=.com-content-article__body">page-search</label>
+<input type = "text" id="page_search"class="w40"  title="body" placeholder="body" list="combo_page_search"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_page_search">
+<option value=""></option>
+<option value=".article-details">.article-details</option>
+<option value=".com-content-article__body">.com-content-article__body</option>
+</datalist></p>
+<h4>Position de la zone de recherche</h4>
+<p><label for="search-top" title="position verticale de la zone de recherche. positif: top, n&eacute;gatif: bottom">search-top (px)</label>
+<input type = "number" name="search-top"class="w10"  min="-200" max="200" step="10" unit="px" placeholder="80px"></p>
+<p><label for="search-left" title="position horizontale de la zone de recherche. positif=left, n&eacute;gatif= right">search-left (px)</label>
+<input type = "number" name="search-left"class="w10"  min="-200" max="200" step="10" unit="px" placeholder="80px"></p>
+<h4>Icone et texte de la zone de recherche</h4>
+<p><label for="search-icon" title="image pour le bouton. Si le chemin n&#039;est pas indiqu&eacute;, l&#039;image est dans le dossier de l&#039;action.">search-icon</label>
+<input type = "text" name="search-icon"class="w60"  title="loupe-64-red.png" placeholder="loupe-64-red.png" list="combo_search-icon"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_search-icon">
+<option value=""></option>
+<option value="loupe.svg">loupe.svg</option>
+<option value="loupe-left.svg">loupe-left.svg</option>
+<option value="loupe-64-red.png">loupe-64-red.png</option>
+</datalist></p>
+<p><label for="search-text" title="texte indice dans la zone de recherche (Placeholder)">search-text</label>
+<input type = "text" name="search-text" placeholder="lang[en=Search;fr=Rechercher]"></p>
+<h4>Mise en évidence du résultat</h4>
+<p><label for="highlight-bg" title="couleur de surlignage des mots trouv&eacute;s">highlight-bg</label>
+<input type = "color" name="highlight-bg" title="#yellow" value="#yellow"></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="id gen&eacute;r&eacute;e automatiquement par UP">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="classe(s) ajout&eacute;es au bloc principal">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline ajout&eacute; au bloc principal">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

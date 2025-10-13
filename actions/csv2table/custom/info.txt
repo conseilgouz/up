@@ -1,0 +1,2 @@
+Les colonnes sont séparées par des point-virgules. 
+Mettre le contenu d'une colonne entre guillemets s'il contient un point virgule

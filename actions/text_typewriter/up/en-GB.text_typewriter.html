@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>text_typewriter - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-text-typewriter" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Display several sentences with a typewriter effect</p>
+<p>syntax 1 : <code><b>{</b>up text-typewriter=sentence1, sentence2, ..., sentenceN<b>}</b></code><br>syntaxe 2 : <code><b>{</b>up text-typewriter<b>}</b></code> alternatives in childrens blocks <code><b>{</b>/up text-typewriter<b>}</b></code></p>
+
+
+</div >
+<p><label for="text_typewriter" title="comma separated list of words">text-typewriter</label>
+<input type = "text" id="text_typewriter" placeholder=""></p>
+<h4>Style CSS</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class(es) for block">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="inline style for block">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style added in the HEAD of the page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+<h4>JS parameters: display speed</h4>
+<p><label for="typeSpeed" title="typing speed in ms">typeSpeed</label>
+<input type = "number" name="typeSpeed"class="w5"  min="0" placeholder="0"></p>
+<p><label for="startDelay" title="delay in ms before each series">startDelay</label>
+<input type = "number" name="startDelay"class="w5"  min="0" placeholder="0"></p>
+<p><label for="backSpeed" title="backspace speed in milliseconds">backSpeed</label>
+<input type = "number" name="backSpeed"class="w5"  min="0" placeholder="0"></p>
+<p><label for="backDelay" title="time before backspacing in milliseconds">backDelay</label>
+<input type = "number" name="backDelay"class="w5"  min="0" placeholder="700"></p>
+<h4>JS parameters: fade management for transition</h4>
+<p><label for="fadeOut" title="Fade out instead of backspace">fadeOut</label>
+<select name="fadeOut" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="true">true</option>
+<option value="false" selected>false</option>
+</select></p>
+<p><label for="fadeOutClass" title="class for fade animation">fadeOutClass</label>
+<input type = "text" name="fadeOutClass" placeholder="typed-fade-out"></p>
+<p><label for="fadeOutDelay" title="Fade out delay in milliseconds">fadeOutDelay</label>
+<input type = "number" name="fadeOutDelay"class="w5"  min="0" placeholder="500"></p>
+<h4>JS parameters: loop display</h4>
+<p><label for="loop" title="loop strings">loop</label>
+<select name="loop" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="true">true</option>
+<option value="false" selected>false</option>
+</select></p>
+<p><label for="loopCount" title="amount of loops">loopCount</label>
+<input type = "text" name="loopCount" title="Infinity" placeholder="Infinity" list="combo_loopCount"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_loopCount">
+<option value=""></option>
+<option value="infinity">infinity</option>
+</datalist></p>
+<h4>JS parameters: miscellaneous</h4>
+<p><label for="smartBackspace" title="deletes only what does not match the previous string">smartBackspace</label>
+<select name="smartBackspace" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+<p><label for="shuffle" title="shuffle the strings">shuffle</label>
+<select name="shuffle" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="true">true</option>
+<option value="false" selected>false</option>
+</select></p>
+<p><label for="showCursor" title="show cursor">showCursor</label>
+<select name="showCursor" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+<p><label for="cursorChar" title="character for the cursor">cursorChar</label>
+<input type = "text" name="cursorChar"class="w5"  placeholder="|"></p>
+<p><label for="autoInsertCss" title="insert the CSS for the cursor and fadeOut in the HTML &lt;head&gt;.">autoInsertCss</label>
+<select name="autoInsertCss" title="true" placeholder="true" value="true">
+<option value=""></option>
+<option value="true" selected>true</option>
+<option value="false">false</option>
+</select></p>
+<p><label for="attr" title="attribute for input. Ex: input placeholder, value, or just HTML text">attr</label>
+<input type = "text" name="attr" placeholder="null"></p>
+<p><label for="bindInputFocusEvents" title="bind to focus and blur if el is text input">bindInputFocusEvents</label>
+<select name="bindInputFocusEvents" title="false" placeholder="false" value="false">
+<option value=""></option>
+<option value="true">true</option>
+<option value="false" selected>false</option>
+</select></p>
+<p><label for="contentType" title="&#039;html&#039; or &#039;null&#039; for plaintext">contentType</label>
+<select name="contentType" title="html" placeholder="html" value="html">
+<option value=""></option>
+<option value="html" selected>html</option>
+<option value="null">null</option>
+</select></p>
+</body>
+</html >

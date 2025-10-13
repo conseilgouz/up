@@ -1,0 +1,11 @@
+; this is an INI file
+[test]
+image="images/actions-demo/bg/gauche.png;images/actions-demo/bg/droite.png;linear-gradient(to bottom, transparent 40%,rgba(42,176,237,0.4) 100%);images/actions-demo/bg/trois-mats.jpg;"
+bg-position = "left; right; none; 80% 50%"
+bg-size = "contain; contain; none; cover"
+bg-attachment="fixed; fixed; fixed; fixed"
+bg-color = "#bbb"
+bg-overlay="40"
+path="images/actions-demo/"
+page-selector="#sp-main-body > .container"
+page-overlay="80"

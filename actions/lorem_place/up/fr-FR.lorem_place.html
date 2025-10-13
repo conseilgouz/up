@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lorem_place - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-lorem-place" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Affiche une image aux dimensions indiquées
+</p>
+<p>Affiche une image aux dimensions indiquées avec ou sans texte personnalisé.<br />La couleur  du fond et du texte peut être spécifiée par son code hexadecimal ou son nom<br />syntaxe <code><b>{</b>up lorem-place=250x150 | text=... | bg-color=gold | text-color=333<b>}</b></code></p>
+
+
+</div >
+<p><label for="lorem_place" title="dimension de l&#039;image largeur x hauteur">lorem-place</label>
+<input type = "text" id="lorem_place"class="w30 important"  placeholder=""></p>
+<p><label for="width" title="largeur de l&#039;image en pixels">width</label>
+<input type = "number" name="width" min="20" max="4000" step="25" placeholder="300"></p>
+<p><label for="height" title="hauteur de l&#039;image en pixels">height</label>
+<input type = "number" name="height" min="20" max="4000" step="25" placeholder="300"></p>
+<p><label for="bg-color" title="Couleur de fond. Code hexa ou nom.">bg-color</label>
+<input type = "text" name="bg-color"class="w30 important"  placeholder="CCC"></p>
+<p><label for="text-color" title="Couleur du texte. Code hexa ou nom.">text-color</label>
+<input type = "text" name="text-color"class="w30 important"  placeholder="333"></p>
+<p><label for="text" title="texte affich&eacute;. 56 caract&egrave;res maxi. Saut de ligne BR: \n">text</label>
+<input type = "text" name="text" placeholder=""></p>
+<p><label for="font" title="police : Lato,Montserrat,Oswald,PT Sans,Roboto,Lora,Open Sans,Playfair Display,Raleway,Source Sans Pro">font</label>
+<select name="font" title="Lato" placeholder="Lato" value="Lato">
+<option value=""></option>
+<option value="Lato" selected>Lato</option>
+<option value="Montserrat">Montserrat</option>
+<option value="Oswald">Oswald</option>
+<option value="PT Sans">PT Sans</option>
+<option value="Roboto">Roboto</option>
+<option value="Lora">Lora</option>
+<option value="Open Sans">Open Sans</option>
+<option value="Playfair Display">Playfair Display</option>
+<option value="Raleway">Raleway</option>
+<option value="Source Sans Pro">Source Sans Pro</option>
+</select></p>
+<p><label for="format" title="svg, png, jpeg, gif ou Webp.">format</label>
+<select name="format" title="svg" placeholder="svg" value="svg">
+<option value=""></option>
+<option value="svg" selected>svg</option>
+<option value="png">png</option>
+<option value="jpeg">jpeg</option>
+<option value="gif or Webp.">gif or Webp.</option>
+</select></p>
+<h4>gestion du cache</h4>
+<p><label for="cache-delai" title="dur&eacute;e de validit&eacute; du cache. 0:aucun, 1:une heure, -1:illimit&eacute;">cache-delai</label>
+<input type = "text" name="cache-delai"class="w20"  title="- 1" placeholder="- 1" list="combo_cache-delai"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_cache-delai">
+<option value=""></option>
+<option value="-1">illimited</option>
+<option value="0">no cache</option>
+<option value="1">number of hours</option>
+</datalist></p>
+<p><label for="cache-reset" title="efface TOUS les fichiers dans le cache">cache-reset</label>
+<select name="cache-reset" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>style</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10"  placeholder=""></p>
+<p><label for="class" title="classe(s) et style pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="classe(s) et style pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

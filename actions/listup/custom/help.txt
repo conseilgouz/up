@@ -1,0 +1,1 @@
+Attention pour <b>up-default</b> & <b>ol-default</b> : chacune des valeurs indiquées devient une valeur par défaut

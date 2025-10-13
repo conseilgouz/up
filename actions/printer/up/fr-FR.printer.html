@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>printer - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-printer" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Ajoute un bouton pour proposer l'impression d'une partie de la page
+</p>
+<p>syntaxe <code><b>{</b>up printer=texte bouton<b>}</b></code> le contenu à imprimer <code><b>{</b>/up printer<b>}</b></code></p>
+
+
+</div >
+<p><label for="printer" title="texte du bouton">printer</label>
+<input type = "text" id="printer"class="important"  placeholder="&amp;#x2399; Imprimer"></p>
+<p><label for="selector" title="s&eacute;lecteur CSS du bloc &agrave; imprimer">selector</label>
+<input type = "text" name="selector"class="w30"  placeholder=""></p>
+<h4>Position du bouton</h4>
+<p><label for="btn-before" title="le bouton est apr&egrave;s le contenu &agrave; imprimer">btn-before</label>
+<select name="btn-before" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Avant le contenu</option>
+<option value="0">Après le contenu</option>
+</select></p>
+<p><label for="btn-display-on-print" title="0 = masque le bouton sur l&#039;impression">btn-display-on-print</label>
+<select name="btn-display-on-print" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Oui</option>
+<option value="0" selected>Non</option>
+</select></p>
+<h4>Divers</h4>
+<p><label for="filename" title="nom du document si impression PDF">filename</label>
+<input type = "text" name="filename" placeholder=""></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w20 hr-top"  placeholder=""></p>
+<h4>Style CSS du bouton</h4>
+<p><label for="class" title="classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style inline pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

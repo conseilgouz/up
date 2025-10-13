@@ -1,0 +1,14 @@
+#thumbnail-preview {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    border: 1px solid #ccc;
+    background: #fff;
+    padding: 4px;
+    box-shadow: 2px 2px 8px #888;
+    max-width: 200px;
+    max-height: 200px;
+}
+.thumbnail {
+   border-bottom:1px dashed #444;
+}

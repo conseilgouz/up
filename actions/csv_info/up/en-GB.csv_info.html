@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>csv_info - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-csv-info" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Returns the raw value of an element (row/column) of CSV file</p>
+<p>syntaxe <code><b>{</b>up csv-info=chemin-fichier | col=x | line=x<b>}</b></code></p>
+
+
+</div >
+<p><label for="csv_info" title="URL or path and name of a local file">csv-info</label>
+<input type = "text" id="csv_info" placeholder=""></p>
+<p><label for="separator" title="column separator">separator</label>
+<input type = "text" name="separator"class="w10"  placeholder=";"></p>
+<p><label for="line" title="Title in the 1st column or number of the line where the information is found. a negative number search from the end">line</label>
+<input type = "text" name="line"class="w10"  placeholder="-1"></p>
+<p><label for="col" title="Title of the column in the first row or column number of the information. Negative from the end">col</label>
+<input type = "text" name="col"class="w10"  placeholder="1"></p>
+<p><label for="default" title="value returned in case of error">default</label>
+<input type = "text" name="default" placeholder="[b class=&quot;t-red&quot;]###[/b]"></p>
+</body>
+</html >

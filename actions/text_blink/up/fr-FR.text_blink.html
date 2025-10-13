@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>text_blink - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-text-blink" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Faire clignoter un texte
+</p>
+<p>syntaxe 1 : <code><b>{</b>up text-blink<b>}</b></code>content<code><b>{</b>/up text-blink<b>}</b></code> // clignotement simple<br />syntaxe 2 : <code><b>{</b>up text-blink=color:red<b>}</b></code>content<code><b>{</b>/up text-blink<b>}</b></code> // style de l'alternance<br />syntaxe 3 : <code><b>{</b>up text-blink=prefset<b>}</b></code>content<code><b>{</b>/up text-blink<b>}</b></code> // jeu d'options<br />syntaxe 4 : <code><b>{</b>up text-blink=css_class<b>}</b></code>content<code><b>{</b>/up text-blink<b>}</b></code> // classe CSS</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>red-blue</u> : </b> <b>text_blink</b>=color:red;background:orange<b> | </b><b>style</b>=color:blue
+</div >
+<p><label for="text_blink" title="rien, prefset, classe ou style(s) CSS">text-blink</label>
+<input type = "text" id="text_blink" title="" placeholder="" list="combo_text_blink"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_text_blink">
+<option value=""></option>
+<option value="red-blue">red-blue</option>
+</datalist></p>
+<p><label for="speed" title="dur&eacute;e de l&#039;animation">speed</label>
+<input type = "number" name="speed" placeholder="1.5"></p>
+<p><label for="function" title="ease, ease-in, ease-out, ease-in-out, linear, ...">function</label>
+<input type = "text" name="function" title="ease-in-out" placeholder="ease-in-out" list="combo_function"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_function">
+<option value=""></option>
+<option value="ease">ease</option>
+<option value="ease-in">ease-in</option>
+<option value="ease-out">ease-out</option>
+<option value="ease-in-out">ease-in-out</option>
+<option value="linear">linear</option>
+</datalist></p>
+<p><label for="count" title="nombre de cycle ou infinite pour clignotement permanent">count</label>
+<input type = "number" name="count" placeholder="infinite"></p>
+<p><label for="id" title="">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-tag" title="balise HTML pour le bloc retourn&eacute;">main-tag</label>
+<input type = "text" name="main-tag"class="W10"  placeholder="span"></p>
+<p><label for="class" title="style et classe(s) pour bloc">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style et classe(s) pour bloc">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+</body>
+</html >

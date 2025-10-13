@@ -1,0 +1,81 @@
+/* 
+    Created on : 16 oct. 2019, 08:03:29
+    Author     : LOIC
+*/
+
+/* https://codepen.io/eode9/pen/twkKm
+    ruban angle body
+*/
+.corner-ribbon{
+    width: 200px;
+    background: #e43;
+    position: absolute;
+    top: 25px;
+    left: -50px;
+    text-align: center;
+    line-height: 50px;
+    letter-spacing: 1px;
+    color: #f0f0f0;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+/* Custom styles */
+
+.corner-ribbon.sticky{
+    position: fixed;
+}
+
+.corner-ribbon.shadow{
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+}
+
+/* Different positions */
+
+.corner-ribbon.top-left{
+    top: 25px;
+    left: -50px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.corner-ribbon.top-right{
+    top: 25px;
+    right: -50px;
+    left: auto;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.corner-ribbon.bottom-left{
+    top: auto;
+    bottom: 25px;
+    left: -50px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.corner-ribbon.bottom-right{
+    top: auto;
+    right: -50px;
+    bottom: 25px;
+    left: auto;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+/* https://codepen.io/alexmccabe/pen/zrlpd 
+   en angle top-left d'un bloc
+*/
+
+.arrow-right {
+    background-color: #444;
+    box-shadow: 0 0 3px 2px rgba(0,0,0,0.8);
+    height: 100px;
+    left: -50px;
+    position: absolute;
+    top: -50px;
+    width: 100px;
+
+    -webkit-transform: rotate(-45deg);
+}

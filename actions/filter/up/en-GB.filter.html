@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>filter - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-filter" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>displays the content if all conditions are true</p>
+<p>SYNTAX 1 (condition as option):<br> <code><b>{</b>upfilter | datemax=20171225<b>}</b></code> content if true <code><b>{</b>====<b>}</b></code> content if false <code><b>{</b>/up filter<b>}</b></code><br> The content if false is optional. It must be after the content if true and separated by <code><b>{</b>===<b>}</b></code> (at least 3 equal signs)<br><br> SYNTAX 2 (condition as main argument):<br> <code><b>{</b>up filter=datemax:20171225<b>}</b></code> content if true <code><b>{</b>====<b>}</b></code> content if false <code><b>{</b>/up filter<b>}</b></code><br><br> SYNTAX 3 (mono-shortcode):<br> <code><b>{</b>upfilter | guest=0 | return-true=REGISTER | return-false=GUEST<b>}</b></code><br> --> guest=0 is true if a user is logged in<br> --> the returned value is entered as an option<br><br> SYNTAX 4 (multi-conditions):<br> <code><b>{</b>upfilter=day:2,3; hperiod:0900-1200,1500-1900 | return-true=OPEN | return-false=CLOSED<b>}</b></code><br> --> true if Monday or Tuesday between 9am-12pm or 3-7pm</p>
+
+
+</div >
+<p><label for="filter" title="no argument OR condition in the form cond1:val1,val2; cond2:val1,val2">filter</label>
+<input type = "text" id="filter"class="w10 inactif"  placeholder=""></p>
+<h4>Conditions</h4>
+<p><label for="datemax" title="true until that date YYYYMMDDHHMM">datemax</label>
+<input type = "text" name="datemax"class="w30"  placeholder=""></p>
+<p><label for="datemin" title="true from that date YYYYMMDDHHMM">datemin</label>
+<input type = "text" name="datemin"class="w30"  placeholder=""></p>
+<p><label for="period" title="true between these dates YYYYMMDDHHMM,YYYYMMDDHHMM">period</label>
+<input type = "text" name="period"class="w50"  placeholder=""></p>
+<p><label for="day" title="list of authorized days. 1=Monday, 7=Sunday">day</label>
+<input type = "text" name="day"class="w30"  placeholder=""></p>
+<p><label for="month" title="list of authorized months. 1=January,...">month</label>
+<input type = "text" name="month"class="w30"  placeholder=""></p>
+<p><label for="hmax" title="true up to that time HHMM">hmax</label>
+<input type = "text" name="hmax"class="w20"  placeholder=""></p>
+<p><label for="hmin" title="true from this time HHMM">hmin</label>
+<input type = "text" name="hmin"class="w20"  placeholder=""></p>
+<p><label for="hperiod" title="true between these hours HHMM-HHMM,HHMM-HHMM,...">hperiod</label>
+<input type = "text" name="hperiod"class="w30"  placeholder=""></p>
+<p class="hr-top"><label for="guest" title="true if guest user">guest</label>
+<select name="guest"class="hr-top"  title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="admin" title="true if admin logged in">admin</label>
+<select name="admin" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="user" title="list of authorized userid. e.g: 700,790">user</label>
+<input type = "text" name="user"class="w20"  placeholder=""></p>
+<p><label for="username" title="list of authorized username. e.g: admin,lomart">username</label>
+<input type = "text" name="username"class="w50"  placeholder=""></p>
+<p><label for="group" title="list of authorized usergroups. e.g: 8,12">group</label>
+<input type = "text" name="group"class="w20"  placeholder=""></p>
+<p><label for="lang" title="list of authorized languages. e.g: en,ca">lang</label>
+<input type = "text" name="lang"class="w20"  placeholder=""></p>
+<p class="hr-top"><label for="mobile" title="true if displayed on a mobile phone">mobile</label>
+<select name="mobile"class="hr-top"  title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p><label for="homepage" title="true if displayed on the home page">homepage</label>
+<select name="homepage" title="" placeholder="" value="">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0">No</option>
+</select></p>
+<p class="hr-top"><label for="server-host" title="true if the server domain contains one of the terms in the list">server-host</label>
+<input type = "text" name="server-host"class="w50 hr-top"  placeholder=""></p>
+<p><label for="server-ip" title="true if the server&#039;s IP address in the list">server-ip</label>
+<input type = "text" name="server-ip"class="w50"  placeholder=""></p>
+<p class="hr-top"><label for="artid" title="true if the current article ID is in the list">artid</label>
+<input type = "text" name="artid"class="w40 hr-top"  placeholder=""></p>
+<p><label for="catid" title="true if the category ID of common article is in the list">catid</label>
+<input type = "text" name="catid"class="w40"  placeholder=""></p>
+<p><label for="menuid" title="true if the active menu ID is in the list">menuid</label>
+<input type = "text" name="menuid"class="w40"  placeholder=""></p>
+<p><label for="equal" title="vrai si op1 = op2 no case sensitive">equal</label>
+<input type = "text" name="equal" placeholder=""></p>
+<p><label for="smaller" title="vrai si op1 &gt; op2 no case sensitive">smaller</label>
+<input type = "text" name="smaller" placeholder=""></p>
+<p><label for="bigger" title="vrai si op1 &lt; op2 no case sensitive">bigger</label>
+<input type = "text" name="bigger" placeholder=""></p>
+<h4>For mono-shortcode version</h4>
+<p><label for="return-true" title="value returned if true and no content">return-true</label>
+<input type = "text" name="return-true" placeholder="1"></p>
+<p><label for="return-false" title="value returned if false and no content">return-false</label>
+<input type = "text" name="return-false" placeholder="0"></p>
+<h4>Various</h4>
+<p><label for="info" title="Displays the current values ​​of the arguments for the conditions">info</label>
+<select name="info" title="0" placeholder="0" value="0">
+<option value=""></option>
+<option value="1">Yes</option>
+<option value="0" selected>No</option>
+</select></p>
+<p class="hr-top"><label for="id" title="identifiant">id</label>
+<input type = "text" name="id"class="w10 hr-top"  placeholder=""></p>
+</body>
+</html >

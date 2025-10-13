@@ -1,0 +1,12 @@
+.blink-rainbow{
+font-weight: bold;
+padding-left:4px;
+padding-right:4px;
+animation:rainbow 10s linear infinite;}
+@keyframes rainbow{
+0% {background: Red; color:#fff;}
+25% {background: Gold; color:#fff;}
+50% {background: Lime; color:RoyalBlue;}
+75% {background: RoyalBlue; color:#eee;}
+100% {background: DarkViolet; color:#eee;}
+}

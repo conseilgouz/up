@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>sql - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-sql" target="_blank">Voir le site de demo</a></p>
+<div class="upbtn-doc">
+<p>Requête SQL avec mise en forme et tri
+</p>
+<p>syntaxe <code><b>{</b>up sql=nom_table | ...<b>}</b></code><br />Terminologie:<br />row : ligne de la table<br />col : cellule. Colonne de la table<br />tag ou motclé : ##nomcol##</p>
+
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>modules-site</u> : </b> <b>table</b>=modules<b> | </b><b>where</b>=position = &#039;cpanel&#039;<b> | </b><b>template</b>=##title## (id: ##id##) ##publish_up##<b> | </b><b>publish_up-format</b>=date[%e %B %Y]<b> | </b><b>id-model</b>=id: %s<br><b><u>modules-admin</u> : </b> <b>table</b>=modules<b> | </b><b>id-model</b>=id: %s<br><b><u>info-resp-com</u> : </b> <b>sql</b>=#__users<b> | </b><b>select</b>=#__users.name<b> | </b><b>innerjoin</b>=#__user_usergroup_map ON #__user_usergroup_map.user_id = #__users.id<b> | </b><b>where</b>=#__user_usergroup_map.group_id=##variable-1##<b> | </b><b>setlimit</b>=1
+</div >
+<p><label for="sql" title="nom de la table">sql</label>
+<input type = "text" id="sql"class="w20 important"  title="" placeholder="" list="combo_sql"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_sql">
+<option value=""></option>
+<option value="modules-site">modules-site</option>
+<option value="modules-admin">modules-admin</option>
+<option value="info-resp-com">info-resp-com</option>
+</datalist></p>
+<p><label for="select" title="listes des colonnes">select</label>
+<input type = "text" name="select" placeholder="*"></p>
+<p class="hr-top"><label for="where" title="commande SQL : where">where</label>
+<input type = "text" name="where"class="hr-top"  placeholder=""></p>
+<p><label for="order" title="commande SQL : order">order</label>
+<input type = "text" name="order" placeholder=""></p>
+<p><label for="group" title="commande SQL : group">group</label>
+<input type = "text" name="group" placeholder=""></p>
+<p><label for="innerjoin" title="commande SQL : innerjoin">innerjoin</label>
+<input type = "text" name="innerjoin" placeholder=""></p>
+<p><label for="outerjoin" title="commande SQL : outerjoin">outerjoin</label>
+<input type = "text" name="outerjoin" placeholder=""></p>
+<p><label for="leftjoin" title="commande SQL : leftjoin">leftjoin</label>
+<input type = "text" name="leftjoin" placeholder=""></p>
+<p><label for="rightjoin" title="commande SQL : rightjoin">rightjoin</label>
+<input type = "text" name="rightjoin" placeholder=""></p>
+<p><label for="setlimit" title="commande SQL : setlimit">setlimit</label>
+<input type = "text" name="setlimit" placeholder=""></p>
+<p><label for="variable-*" title="remplace ##variable-X## dans les options ci-dessus">variable-*</label>
+<input type = "text" name="variable-*" placeholder=""></p>
+<h4>informations sur la base de données</h4>
+<p><label for="dbinfos" title="vide= la liste des tables OU nom_table = la liste des colonnes">dbinfos</label>
+<input type = "text" name="dbinfos" placeholder=""></p>
+<p><label for="no-prefix-auto" title="utiliser le nom de la table sans ajouter le prefix #__">no-prefix-auto</label>
+<input type = "text" name="no-prefix-auto" placeholder="0"></p>
+<h4>mise en forme du résultat</h4>
+<p class="hr-top"><label for="presentation" title="pr&eacute;sentation du r&eacute;sultat : list,table,div ou 0">presentation</label>
+<select name="presentation"class="hr-top"  title="table" placeholder="table" value="table">
+<option value=""></option>
+<option value="table" selected>table</option>
+<option value="list">list</option>
+<option value="div">div</option>
+<option value="0">0</option>
+</select></p>
+<p><label for="template" title="mod&egrave;le mise en page">template</label>
+<input type = "text" name="template" placeholder=""></p>
+<p><label for="header" title="pour presentation table : 1 ou vide pour utiliser les mots-cl&eacute;s, sinon titres s&eacute;par&eacute;s par des points-virgules">header</label>
+<input type = "text" name="header" placeholder=""></p>
+<p><label for="overflow" title="pour presentation table : O n&#039;encapsuler pas la table dans un bloc div pour ajout d&#039;un overflow. Utile si utilisation de table-fixe">overflow</label>
+<input type = "text" name="overflow" placeholder="1"></p>
+<p><label for="sort" title="type de tri par colonne sous la forme: i,3-f-s. i:int, s:string, f:float. ,3 indique un tri secondaire sur la 3e colonne">sort</label>
+<input type = "text" name="sort" placeholder=""></p>
+<p><label for="sort-first" title="nom ou position de la colonne tri&eacute;e en premier">sort-first</label>
+<input type = "text" name="sort-first"class="w20"  placeholder=""></p>
+<p><label for="col" title="alignement et largeur des colonnes sous la forme x-D-C5-100 pour rien-droite-centre 5%-100% (voir doc)">col</label>
+<input type = "text" name="col"class="w20"  placeholder=""></p>
+<p><label for="no-content-html" title="essage si echec requete">no-content-html</label>
+<input type = "text" name="no-content-html" placeholder="aucun résultat"></p>
+<h4>Style CSS pour afficher le résultat</h4>
+<p><label for="id" title="identifiant">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="main-class" title="classe(s) pour bloc">main-class</label>
+<input type = "text" name="main-class" placeholder="up"></p>
+<p><label for="main-style" title="style inline pour bloc">main-style</label>
+<input type = "text" name="main-style" placeholder=""></p>
+<p class="hr-top"><label for="item-class" title="classe(s) pour ligne">item-class</label>
+<input type = "text" name="item-class"class="hr-top"  placeholder=""></p>
+<p><label for="item-style" title="style inline pour ligne">item-style</label>
+<input type = "text" name="item-style" placeholder=""></p>
+<p class="hr-top"><label for="css-head" title="style ajout&eacute; dans le HEAD de la page">css-head</label>
+<input type = "text" name="css-head"class="hr-top"  placeholder=""></p>
+</body>
+</html >

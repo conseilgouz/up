@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>div - editor button</title>
+<meta charset = "UTF-8">
+<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p class="upbtn-demo"><a href="https://up.lomart.fr/demo/action-div" target="_blank">See the demo site</a></p>
+<div class="upbtn-doc">
+<p>Facilitates the entry of an inline DIV block with a wysiwyg editor</p>
+<p>syntax <code><b>{</b>up div=class_and_style<b>}</b></code>content<code><b>{</b>/up div<b>}</b></code></p>
+<div><b>&#x1F199; WEBMASTER NOTES</b></div><div>Ne pas oublier de séparer les classes et styles par des points-virgules</div>
+<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>2-cols-gris</u> : </b> <b>class</b>=text-col-2 tj bd-gris p1 mv1<b> | </b><b>style</b>=column-rule:#666 1px solid
+</div >
+<p><label for="div" title="classes and style (separator: semicolon)">div</label>
+<input type = "text" id="div" title="" placeholder="" list="combo_div"><span class="combo-indicator">&#x25bc;</span>
+<datalist id="combo_div">
+<option value=""></option>
+<option value="2-cols-gris">2-cols-gris</option>
+</datalist></p>
+<p><label for="id" title="if specified, the ID attribute is added to the DIV tag">id</label>
+<input type = "text" name="id" class="w10" placeholder=""></p>
+<p><label for="class" title="class traditional method ">class</label>
+<input type = "text" name="class" placeholder=""></p>
+<p><label for="style" title="style traditional method">style</label>
+<input type = "text" name="style" placeholder=""></p>
+<p><label for="css-head" title="style added in the page HEAD">css-head</label>
+<input type = "text" name="css-head" placeholder=""></p>
+<p><label for="xxx" title="couple attribut-valeur. ex: title=le titre, href=//google.fr">xxx</label>
+<input type = "text" name="xxx" placeholder="yyy"></p>
+</body>
+</html >

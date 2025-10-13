@@ -1,0 +1,102 @@
+/* table */
+
+table.up {
+    // toutes les tables occupent toute la largeur
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid $grey;
+    td, th {
+        border: 1px solid $grey;
+        padding:5px;
+        vertical-align:top;
+    }
+    thead, tfoot {
+        background: $paleGrey;
+        font-weight: bold;
+    }
+
+}
+
+// table avec uniquement un trait horizontal pour séparer les lignes
+.up.line {
+    // bordure haute et basse de la table
+    border: none;
+    border-top   : solid 2px $grey;
+    border-bottom: solid 2px $grey;
+    th, td {
+        border: none;
+        padding-left: 5px; 
+        padding-right: 5px;
+        border-bottom: solid 1px $grey;
+    }
+    thead, tfoot {
+        background: $lightGrey;
+        color :$darkGrey;
+    }
+}
+
+// =================================================
+/* model = blue */
+// =================================================
+.up.blue {
+    border: 1px solid $white;
+    border-collapse: collapse;
+    td, th {
+        border: 1px solid $white;
+        padding: 3px 5px;
+    }
+    tr:nth-child(even) {
+        background: lighten($paleBlue,5);
+    }
+    thead tr, tfoot tr {
+        background: $blue;
+        font-weight: bold;
+        color: $white;
+        text-align: center;
+    }
+}
+
+// =================================================
+/* model = green */
+// =================================================
+
+.up.green {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: 0;
+    tr {
+        background: $paleGrey;
+        border:none;
+        &:nth-of-type(odd) {
+            background: darken($paleGrey,10);
+        }
+    }
+    td, th {
+        border: 0; 
+    }
+    thead tr {
+        font-weight: bold;
+        color: $white;
+        background: $green !important;
+    }
+    tfoot tr {
+        border-top:2px solid $grey
+    }
+}
+
+
+// OLD - table avec uniquement un trait horizontal pour séparer les lignes
+.up-table-line {
+  border: none;
+  th, td {padding-left: 5px; padding-right: 5px;}
+  td {
+      border-bottom: solid 1px $grey;
+      vertical-align: top;
+    padding: 5px;
+  }
+  thead {
+      border-bottom: solid 2px $grey;
+  }
+  border-top   : solid 2px $grey;
+  border-bottom: solid 2px $grey;
+}
+

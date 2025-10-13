@@ -1,0 +1,13 @@
+[2blocs]
+desktop=2
+tablet=2
+mobile=1
+class="fg-gap"
+bloc-style="border:1px solid #444; padding:0 10px"
+
+[3blocs]
+desktop=3
+tablet=2
+mobile=1
+class="fg-gap"
+bloc-style="border:1px solid green; padding:0 10px"
