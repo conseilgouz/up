@@ -22,6 +22,8 @@ use Joomla\CMS\Version;
 class plgContentUP extends CMSPlugin
 {
     public $upPath = 'plugins/content/up/';
+    private $githubapikey = null;
+    private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
 
     public function __construct(&$subject, $params)
     {
@@ -69,12 +71,11 @@ class plgContentUP extends CMSPlugin
         // Chargement systematique de la feuile de style
         if ($this->params->def('loadcss', '1')) {
             $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
-            try{ // conflit avec RegularLbas
+            try { // conflit avec RegularLbas
                 $wa->registerAndUseStyle('upcss', 'plugins/content/up/assets/up.css');
             } catch (\Joomla\CMS\WebAsset\Exception\InvalidActionException $e) {
                 // ignore
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 // ignore
             }
         }
@@ -251,6 +252,32 @@ class plgContentUP extends CMSPlugin
                 $text = '';
                 // le chemin du script
                 $actionfile = 'actions/' . $actionClassName . '/' . $actionClassName . '.php';
+                // Mini UP : chargement des actions au 1er appel
+                if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
+                    $this->githubapikey = $this->get_action_pref('github-key');
+                    if (!$this->getGithubActionRec('actions/'.$actionClassName)) {
+                        continue;  // error  ignore it
+                    }
+                    // exceptions : appel croisé dans les actions
+                    if (($actionClassName == 'pdf_gallery')
+                        || ($actionClassName == 'pdf')
+                        || ($actionClassName == 'file_explorer')
+                        || ($actionClassName == '_upgesterror')) {
+                        if (!is_file($this->upPath.'actions/modal/modal.php')) {
+                            if (!$this->getGithubActionRec('actions/modal')) {
+                                continue;  // error  ignore it
+                            }
+                        }
+                    }
+                    if ($actionClassName == 'pdf_gallery') {
+                        if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
+                            if (!$this->getGithubActionRec('actions/pdf')) {
+                                continue;  // error  ignore it
+                            }
+                        }
+                    }
+
+                }
 
                 // CHRONOMETRAGE ACTIONS // 5.2
                 if (false) {
@@ -419,6 +446,20 @@ class plgContentUP extends CMSPlugin
     public function onAjaxUp()
     {
         $input = Factory::getApplication()->getInput();
+        // Vérifie que l'action existe, sinon la charger (appel par upbtn.js)
+        $exist = $input->get('exist', '', 'string');
+        if ($exist) { // check plugin loaded
+            $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
+            // Mini UP : chargement des actions au 1er appel
+            if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
+                $this->githubapikey = $this->get_action_pref('github-key');
+                if (!$this->getGithubActionRec('actions/'.$exist, '../')) {
+                    return true;  // error  ignore it
+                }
+            }
+            return true;
+        }
+        // autres appels ajax
         $data = $input->get('data', '', 'string');
         parse_str($data, $output);
         if (! isset($output['action'])) {
@@ -435,6 +476,93 @@ class plgContentUP extends CMSPlugin
             return 'err : ' . $text;
         }
     }
+    /*
+    * ==== getGithubActionRec
+    * chargement d'une action avec ses sous-répertoires
+    */
+    private function getGithubActionRec($dir, $admin = '')
+    {
+        if (!$response = $this->getGithubAction($dir)) {
+            $msg = 'Action '.$dir.' -> Erreur appel Github';
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $action = json_decode($response);
+        if (isset($action->message)) { // message d'erreur de github
+            $msg = 'Action '.$dir.' -> '.$action->message;
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $actionDir = $admin.$this->upPath.$dir;
+        if (!is_dir($actionDir)) {
+            mkdir($actionDir);
+        }
+        foreach ($action as $one) {
+            if ($one->download_url) {
+                $url = $one->download_url;
+                try {
+                    // ignorer les fichiers existants
+                    if (!is_file($actionDir.'/'.$one->name)) {
+                        copy($url, $actionDir.'/'.$one->name);
+                    }
+                } catch (\Exception $e) {
+                }
+            } else {// subdir
+                $this->getGithubActionRec($one->path, $admin);
+            }
+        }
+        return true;
+    }
+    /*
+    * ==== getGithubAction
+    * chargement d'un répertoire de github
+    */
+    private function getGithubAction($dir)
+    {
+        $url = $this->githuburl.$dir;
+        try {
+            $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+            curl_setopt($curl, CURLOPT_NOBODY, 0);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            if ($this->githubapikey) {
+                curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                            "Authorization: token ".$this->githubapikey,
+                            "User-Agent: PHP"
+                ]);
+            }
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+            return $response;
+        } catch (\RuntimeException $e) {
+            return null;
+        }
+    }
+    /*
+     * ==== get_action_pref
+     * Retourne la valeur pour une préf action (ex: apikey)
+     * @param [string] $key le mot-clé
+     * @return [string] valeur ou vide
+    */
+    private function get_action_pref($key, $default = null)
+    {
+        $regex = '#' . $key . ' *\= *(.*)\n#';
+        if (preg_match($regex, $this->params->get('actionprefs'). PHP_EOL, $val) == 1) {
+            return trim($val[1]);
+        } elseif (! is_null($default)) {
+            return $default;
+        }
+        return false;
+
+    }
+
 }
 
 // class

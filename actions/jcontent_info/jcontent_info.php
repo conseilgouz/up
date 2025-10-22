@@ -32,26 +32,24 @@
  * - ajout motclé ##tags-link## pour récupérer les tags avec un lien vers la liste des articles avec le tag (Merci Deny)
  * - ajout motclé ##upnb## : nbre actions UP dans la page et ##uplist## : nbre par actions
  * v3.1 - ajout custom-field + nouvelle gestion keyword
- * 
+ * v5.3.3 - Joomla 6 : remplacement de getInstance
+ *
  */
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\Categories\Categories;
 use Joomla\Database\DatabaseInterface;
 
 class jcontent_info extends upAction
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         $this->set_demopage();
@@ -111,10 +109,8 @@ class jcontent_info extends upAction
             // if ($version == "4") { // Joomla 4.0
             // $model = new ArticlesModel(array('ignore_request' => true));
             // } else { // Joomla 3.x
-            JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
-            $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-                'ignore_request' => true
-            ));
+            // JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
+            $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
             // }
             // ---
             $appParams = $app->getParams();
@@ -123,14 +119,16 @@ class jcontent_info extends upAction
             $model->setState('filter.article_id', $artid);
 
             $items = $model->getItems();
-            if (count($items) == 0)
+            if (count($items) == 0) {
                 return '';
+            }
             $item = $items[0];
         }
 
         // v2.9 - pour eviter exe si clic sur un lien tag (bizarre)
-        if (empty($item->title))
+        if (empty($item->title)) {
             return '';
+        }
 
         // ======> Style général et par article
         $main_attr['id'] = $options['id'];
@@ -260,8 +258,9 @@ class jcontent_info extends upAction
             ) as $key => $keyword) {
                 $img_src = $images[$key];
                 $img_alt = $images[$key . '_alt'];
-                if (empty($img_alt))
+                if (empty($img_alt)) {
                     $img_alt = $this->link_humanize($img_src);
+                }
                 $img_legend = $images[$key . '_caption'];
                 $img = ($img_src) ? '<img src="' . $img_src . '" alt="' . $img_alt . '">' : '';
                 // $tmpl = str_ireplace('##' . $keyword . '##', $img, $tmpl);
@@ -287,8 +286,9 @@ class jcontent_info extends upAction
                 $url = '';
                 $attr['href'] = $urls['url' . $key];
                 $url_text = $urls['url' . $key . 'text'];
-                if (empty($url_text))
+                if (empty($url_text)) {
                     $url_text = $attr['href'];
+                }
                 if (! empty($attr['href'])) {
                     switch ($urls['target' . $key]) {
                         case 1: // new
@@ -340,7 +340,7 @@ class jcontent_info extends upAction
 
         // les custom fields (v2.3)
         if (strpos($tmpl, '##') !== false) { // 3.1
-            require_once ($this->upPath . '/assets/lib/kw_custom_field.php');
+            require_once($this->upPath . '/assets/lib/kw_custom_field.php');
             kw_cf_replace($tmpl, $item);
         }
 
@@ -362,27 +362,30 @@ class jcontent_info extends upAction
      * path-order => 'asc',
      * path-link => '1',
      */
-    function get_catpath($catid, $options)
+    public function get_catpath($catid, $options)
     {
         $tag = ($options['path-link']) ? 'a' : 'span';
-        $categories = Categories::getInstance('Content');
+        $categories = Factory::getApplication()->bootComponent('com_content')->getCategory();
         $cat = $categories->get($catid);
         // mise en forme catégorie courante
         $this->get_attr_style($attr_current, $options['path-current-class']);
-        if ($options['path-link'])
+        if ($options['path-link']) {
             $attr_current['href'] = Route::_('index.php?option=com_content&view=category&layout=blog&id=' . $cat->id);
+        }
         $out[] = $this->set_attr_tag($tag, $attr_current, $cat->title);
         $cat = $cat->getParent();
         // les catégories parentes
         $this->get_attr_style($attr_parent, $options['path-parent-class']);
         while ($cat->id !== 'root') {
-            if ($options['path-link'])
+            if ($options['path-link']) {
                 $attr_parent['href'] = 'index.php?option=com_content&view=category&layout=blog&id=' . $cat->id;
+            }
             $out[] = $this->set_attr_tag($tag, $attr_parent, $cat->title);
             $cat = $cat->getParent();
         }
-        if (strtoupper($options['path-order']) == 'ASC')
+        if (strtoupper($options['path-order']) == 'ASC') {
             $out = array_reverse($out);
+        }
 
         $sep = $this->get_bbcode($options['path-separator']);
         return implode($sep, $out);
@@ -393,7 +396,7 @@ class jcontent_info extends upAction
      * retourne le fil d'ariane (menu) mis en forme
      *
      */
-    function get_navpath($options)
+    public function get_navpath($options)
     {
         $tag = ($options['path-link']) ? 'a' : 'span';
         // ==== Get the PathWay object from the application
@@ -405,20 +408,23 @@ class jcontent_info extends upAction
         // ==== Mise en forme
         // mise en forme catégorie courante
         $this->get_attr_style($attr_current, $options['path-current-class']);
-        if ($options['path-link'] && isset($items[0]->link))
+        if ($options['path-link'] && isset($items[0]->link)) {
             $attr_current['href'] = Route::_($items[0]->link);
+        }
         $out[] = $this->set_attr_tag($tag, $attr_current, $items[0]->name);
 
         // les menus parents
         $this->get_attr_style($attr_parent, $options['path-parent-class']);
-        for ($i = 1; $i < $count; $i ++) {
-            if ($options['path-link'])
+        for ($i = 1; $i < $count; $i++) {
+            if ($options['path-link']) {
                 $attr_parent['href'] = Route::_($items[$i]->link);
+            }
             $out[] = $this->set_attr_tag($tag, $attr_parent, $items[$i]->name);
         }
 
-        if (strtoupper($options['path-order']) == 'ASC')
+        if (strtoupper($options['path-order']) == 'ASC') {
             $out = array_reverse($out);
+        }
 
         $sep = $this->get_bbcode($options['path-separator']);
         return implode($sep, $out);
@@ -426,8 +432,3 @@ class jcontent_info extends upAction
 }
 
 // class
-
-
-
-
-

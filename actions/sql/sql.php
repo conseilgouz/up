@@ -22,6 +22,7 @@
  * v5.1 : ajout option variable-*
  * v5.2 : ajout option overflow
  * v5.3 : fix xxx-format=img[60] in set_type function
+ * v5.3.3 : suppression notice si champ vide
  */
 defined('_JEXEC') or die();
 
@@ -409,6 +410,9 @@ class sql extends upAction
                 } else {
                     if (! empty($attr_col['class'])) {
                         $val = $this->set_attr_tag($col_tag, $attr_col, $val);
+                    }
+                    if (!$val) { // pas de valeur pour un tag : on le cache
+                        $val = "";
                     }
                     $out = str_ireplace($tag['tag'], $val, $out);
                 }

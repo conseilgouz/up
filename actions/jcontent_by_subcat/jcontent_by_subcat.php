@@ -32,12 +32,13 @@
  * @license <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags     Joomla
  */
+/**
+* v5.3.3 - Joomla 6 : remplacement de getInstance
+*/
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Router\Route;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
 
@@ -165,7 +166,7 @@ class jcontent_by_subcat extends upAction
          * RECUP DES CATEGORIES dans $this->catItems
          * --------------------------------------------------
          */
-        $this->cat_model = Categories::getInstance('Content');
+        $this->cat_model = Factory::getApplication()->bootComponent('com_content')->getCategory();
 
         // recuperer les sous-catégories
         $this->catItems = array();
@@ -313,9 +314,8 @@ class jcontent_by_subcat extends upAction
      */
     public function set_art_common_params()
     {
-        $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-            'ignore_request' => true
-        ));
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }

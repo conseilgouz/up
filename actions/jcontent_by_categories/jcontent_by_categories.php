@@ -36,12 +36,11 @@
  * - prise en charge des mots -clés pour les customs-fields
  * v5.1 - ajout option featured
  * v5.2 - ajout motclé ##date-max## et options new-date
+ * v5.3.3 - Joomla 6 : remplacement de getInstance
  */
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Router\Route;
@@ -176,7 +175,7 @@ class jcontent_by_categories extends upAction
             // toutes les catégories = liste cat de niveau 1 - v2.6
             $catid = '';
             if ($this->J4) {
-                $this->categories = Categories::getInstance('com_content');
+                $this->categories = Factory::getApplication()->bootComponent('com_content')->getCategory();
                 $catniv1 = $this->categories->get()->getChildren();
                 foreach ($catniv1 as $cat) {
                     $catid .= $cat->id . ',';
@@ -189,9 +188,7 @@ class jcontent_by_categories extends upAction
 
         // =====> RECUP DES DONNEES
         // Get an instance of the generic articles model
-        $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-            'ignore_request' => true
-        ));
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }

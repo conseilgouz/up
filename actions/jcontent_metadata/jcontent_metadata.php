@@ -2,7 +2,7 @@
 
 /**
  * pour contrôle des metadonnées
- * 
+ *
  * liste des articles d'une ou plusieurs catégories avec mise en évidence des informations pour référencement
  *
  * syntaxe 1 : {up jcontent-metadata=id-categorie(s) | template=##title-link##}
@@ -16,9 +16,9 @@
  * ##author## ##note## ##cat## ##cat-link## ##new## ##featured##  ##hits## ##tags-list##
  * ##upnb## : nbre actions UP dans la page - ##uplist## : nbre par actions
  * ##date-publish## ##date-publish-end## ##date-featured## ##date-featured-end##
- * ##meta-index## ##meta-follow## ##meta-title## ##meta-desc## ##meta-key## 
+ * ##meta-index## ##meta-follow## ##meta-title## ##meta-desc## ##meta-key##
  * ##robots-cfg## ##robots-cat## ##robots-art##
- * Les clés des champs JSON 
+ * Les clés des champs JSON
  * ##attribs.key## ##metadata.key## ##images.key## ##urls.key##
  *
  * @author   LOMART
@@ -26,26 +26,28 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags     Joomla
  */
+/*
+ * v5.3.3 - Joomla 6 : remplacement de getInstance
+ *
+ */
+
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
-use Joomla\CMS\Categories\Categories;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Database\DatabaseInterface;
 
 class jcontent_metadata extends upAction
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         $this->set_demopage();
@@ -123,8 +125,9 @@ class jcontent_metadata extends upAction
         $options['no-content-html'] = $this->get_bbcode($options['no-content-html'], false);
         // les niveaux d'accés autorisés. 0=tous
         $nivaccess = array();
-        if (! empty($options['nivaccess']))
+        if (! empty($options['nivaccess'])) {
             $nivaccess = array_map('trim', explode(',', $options['nivaccess']));
+        }
 
         // ======> verif template (modéle de mise en page)
         // en priorité : le sontenu entre shortcode
@@ -174,8 +177,9 @@ class jcontent_metadata extends upAction
             $query->from($db->quoteName('#__viewlevels'));
             $db->setQuery($query);
             $results = $db->loadObjectList();
-            foreach ($results as $res)
+            foreach ($results as $res) {
                 $nivacces[$res->id] = $res->title;
+            }
         }
 
         // =====> liste des catégories
@@ -213,7 +217,7 @@ class jcontent_metadata extends upAction
             // toutes les catégories = liste cat de niveau 1 - v2.6
             $catid = '';
             if ($this->J4) {
-                $this->categories = Categories::getInstance('com_content');
+                $this->categories = Factory::getApplication()->bootComponent('com_content')->getCategory();
                 $catniv1 = $this->categories->get()->getChildren();
                 foreach ($catniv1 as $cat) {
                     $catid .= $cat->id . ',';
@@ -223,9 +227,7 @@ class jcontent_metadata extends upAction
         $catid = explode(',', $catid);
 
         // =====> RECUP DES DONNEES
-        $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-            'ignore_request' => true
-        ));
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }
@@ -283,8 +285,9 @@ class jcontent_metadata extends upAction
 
         $items = $model->getItems();
 
-        if (count($items) == 0)
+        if (count($items) == 0) {
             return ($options['no-content-html'] == '0') ? '' : $options['no-content-html'];
+        }
 
         // ======> Style général et par article
         $main_attr['id'] = $options['id'];
@@ -302,16 +305,18 @@ class jcontent_metadata extends upAction
             $html[] = $this->set_attr_tag($options['main-tag'], $main_attr);
         }
         foreach ($items as $item) {
-            if (! empty($nivaccess) && ! in_array($item->access, $nivaccess))
+            if (! empty($nivaccess) && ! in_array($item->access, $nivaccess)) {
                 continue;
-            $nblign ++;
+            }
+            $nblign++;
             // --- Bloc article
-            if ($options['item-tag'] != '0')
+            if ($options['item-tag'] != '0') {
                 $html[] = $this->set_attr_tag($options['item-tag'], $sItem_attr);
+            }
             $sItem = $tmpl; // reinit pour nouvel article
-                            // --- lien vers l'article
+            // --- lien vers l'article
             $url = '';
-            $slug = ($item->alias) ? ($item->id . ':' . $item->alias) : $itemid;
+            $slug = ($item->alias) ? ($item->id . ':' . $item->alias) : $item->id;
             $catslug = ($item->category_alias) ? ($item->catid . ':' . $item->category_alias) : $item->catid;
             $route = RouteHelper::getArticleRoute($slug, $catslug);
             $url = Route::_($route);
@@ -382,10 +387,12 @@ class jcontent_metadata extends upAction
 
             if (stripos($sItem, '##meta-index##') !== false || stripos($sItem, '##meta-follow##') !== false) {
                 $robots = ($metadata->robots ?? ''); // ceux de l'article en priorité
-                if ($robots == '')
-                    $robots = $robots_default[$item->catid]; // ceux de la catégorie
-                if ($robots == '')
-                    $robots = $robots_default[0]; // à défaut, ceux de configuration.php
+                if ($robots == '') {
+                    $robots = $robots_default[$item->catid];
+                } // ceux de la catégorie
+                if ($robots == '') {
+                    $robots = $robots_default[0];
+                } // à défaut, ceux de configuration.php
 
                 $tmp = (stripos($robots, 'noindex') !== false) ? '<span class="t-rouge">no-index</span>' : '<span class="t-vertFonce">index</span>';
                 $this->kw_replace($sItem, 'meta-index', $tmp);
@@ -504,8 +511,9 @@ class jcontent_metadata extends upAction
                 $intro = trim(strip_tags($intro));
                 if (isset($tag[1]) && $tag[1]) {
                     $len = (int) $tag[2];
-                    if (strlen($intro) > $len)
+                    if (strlen($intro) > $len) {
                         $intro = mb_substr($intro, 0, $len) . '...';
+                    }
                 }
                 $this->kw_replace($sItem, $tag[1], $intro);
             }
@@ -555,14 +563,17 @@ class jcontent_metadata extends upAction
 
             // --- fin article
             $html[] = $sItem;
-            if ($options['item-tag'] != '0')
+            if ($options['item-tag'] != '0') {
                 $html[] = '</' . $options['item-tag'] . '>';
+            }
         }
-        if ($options['main-tag'] != '0')
+        if ($options['main-tag'] != '0') {
             $html[] = '</' . $options['main-tag'] . '>';
+        }
 
-        if ($nblign == 0)
+        if ($nblign == 0) {
             return ($options['no-content-html'] == '0') ? '' : $options['no-content-html'];
+        }
 
         return implode(PHP_EOL, $html);
     }
@@ -571,9 +582,3 @@ class jcontent_metadata extends upAction
 }
 
 // class
-
-
-
-
-
-

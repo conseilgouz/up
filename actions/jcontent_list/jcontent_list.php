@@ -15,29 +15,27 @@
 
 /*
  * v2.6 -  fix toutes les catégories pour J4
+ * v5.3.3 - Joomla 6 : remplacement de getInstance
  */
 
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
-use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Access\Access;
 use Joomla\Database\DatabaseInterface;
 
 class jcontent_list extends upAction
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         $this->set_demopage();
@@ -130,7 +128,7 @@ class jcontent_list extends upAction
             // toutes les catégories = liste cat de niveau 1 - v2.6
             $catid = '';
             if ($this->J4) {
-                $this->categories = Categories::getInstance('com_content');
+                $this->categories = Factory::getApplication()->bootComponent('com_content')->getCategory();
                 $catniv1 = $this->categories->get()->getChildren();
                 foreach ($catniv1 as $cat) {
                     $catid .= $cat->id . ',';
@@ -141,9 +139,7 @@ class jcontent_list extends upAction
 
         // =====> RECUP DES DONNEES
         // Get an instance of the generic articles model
-        $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-            'ignore_request' => true
-        ));
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }
@@ -169,7 +165,7 @@ class jcontent_list extends upAction
                 $model->setState('filter.author_id', $this->article->created_by);
                 break;
             case 'current': // l'utilisateur connecté
-                $userid =Factory::getApplication()->getIdentity()->id;
+                $userid = Factory::getApplication()->getIdentity()->id;
                 $model->setState('filter.author_id', $userid);
                 break;
             default:
@@ -184,8 +180,9 @@ class jcontent_list extends upAction
 
         // Category filter
         // $model->setState('filter.category_id', array($catid));
-        if ($catid !== 'all')
+        if ($catid !== 'all') {
             $model->setState('filter.category_id', $catid);
+        }
 
         // Filter by language
         $model->setState('filter.language', $app->getLanguageFilter());
@@ -196,8 +193,9 @@ class jcontent_list extends upAction
 
         $items = $model->getItems();
 
-        if (count($items) == 0)
+        if (count($items) == 0) {
             return '';
+        }
 
         // css-head
         $this->load_css_head($options['css-head']);
@@ -207,7 +205,7 @@ class jcontent_list extends upAction
         if (count($items)) {
             foreach ($items as $item) {
                 $url = '';
-                $slug = ($item->alias) ? ($item->id . ':' . $item->alias) : $itemid;
+                $slug = ($item->alias) ? ($item->id . ':' . $item->alias) : $item->id;
                 $catslug = ($item->category_alias) ? ($item->catid . ':' . $item->category_alias) : $item->catid;
                 $route = RouteHelper::getArticleRoute($slug, $catslug);
                 $url = Route::_($route);

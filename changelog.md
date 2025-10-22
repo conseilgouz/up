@@ -1,3 +1,19 @@
+## 22/10/2025 - version 5.3.3
+
+#### Modification interne
+
+- package sans les actions, qui seront téléchargées quand nécessaires à partir de github
+
+#### Modifications internes des actions
+
+- jcontent_by_categories : compatibilité Joomla 6 : remplacement de getInstance()
+- jcontent_by_subcat : compatibilité Joomla 6 : remplacement de getInstance()
+- jcontent_in_content : compatibilité Joomla 6 : remplacement de getInstance()
+- jcontent_info : compatibilité Joomla 6 : remplacement de getInstance()
+- jcontent_list : compatibilité Joomla 6 : remplacement de getInstance()
+- jcontent_metadata : compatibilité Joomla 6 : remplacement de getInstance()
+- sql : suppression notice si champ vide
+
 ## 12/09/2025 - version 5.3.2
 
 #### Modifications actions

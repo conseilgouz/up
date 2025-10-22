@@ -25,11 +25,11 @@
  * v3.1
  * - ajout option 'content-plugin'
  * - prise en charge des mots -clés pour les customs-fields
+ * v5.3.3 - Joomla 6 : remplacement de getInstance
  */
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -37,10 +37,8 @@ use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
-
 class jcontent_in_content extends upAction
 {
-
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
@@ -88,10 +86,8 @@ class jcontent_in_content extends upAction
         }
         $tmpl = $this->get_bbcode($tmpl, '+hr|pre');
         // =====> RECUP DES DONNEES
-        JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
-        $model = BaseDatabaseModel::getInstance('Articles', 'ContentModel', array(
-            'ignore_request' => true
-        ));
+        // JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }
@@ -133,7 +129,7 @@ class jcontent_in_content extends upAction
             $html[] = $this->set_attr_tag($options['main-tag'], $sItem_attr);
         }
         $sItem = $tmpl; // reinit pour nouvel article
-                        // --- lien vers l'article
+        // --- lien vers l'article
         $url = '';
         $slug = ($item->alias) ? ($item->id . ':' . $item->alias) : $itemid;
         $catslug = ($item->category_alias) ? ($item->catid . ':' . $item->category_alias) : $item->catid;
@@ -178,10 +174,12 @@ class jcontent_in_content extends upAction
         }
         // prise en charge plugins contenu v31
         if ($options['content-plugin']) {
-            if (stripos($sItem, '##intro') !== false)
-                $item->introtext = $this->import_content($item->introtext); // v31
-            if (stripos($sItem, '##content##') !== false)
+            if (stripos($sItem, '##intro') !== false) {
+                $item->introtext = $this->import_content($item->introtext);
+            } // v31
+            if (stripos($sItem, '##content##') !== false) {
                 $item->fulltext = $this->import_content($item->fulltext);
+            }
         }
 
         // {intro} : texte d'introduction en HTML
@@ -196,7 +194,8 @@ class jcontent_in_content extends upAction
         // {cat} : nom catégorie
         $this->kw_replace($sItem, 'cat', $item->category_title);
         // {tags} : liste des tags
-        if (stripos($sItem, '##tag##') !== false) {}
+        if (stripos($sItem, '##tag##') !== false) {
+        }
         // {featured} : en vedette
         if (stripos($sItem, '##featured##') !== false) {
             $tmp = ($item->featured == '1') ? $options['featured-html'] : '';
@@ -242,7 +241,7 @@ class jcontent_in_content extends upAction
 
         // les custom fields (v3.1)
         if (strpos($sItem, '##') !== false) { // 3.1
-            require_once ($this->upPath . '/assets/lib/kw_custom_field.php');
+            require_once($this->upPath . '/assets/lib/kw_custom_field.php');
             kw_cf_replace($sItem, $item);
         }
 
