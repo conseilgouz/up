@@ -257,8 +257,10 @@ class plgContentUP extends CMSPlugin
                 $text = '';
                 // le chemin du script
                 $actionfile = 'actions/' . $actionClassName . '/' . $actionClassName . '.php';
-                // contrôle de version de l'action
-                $this->checkactionsha256($actionClassName);
+                if ($this->params->def('checkgithub', 0)) {
+                    // contrôle de version de l'action sur github
+                    $this->checkactionsha256($actionClassName);
+                }
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = $this->get_action_pref('github-key');

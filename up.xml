@@ -2,7 +2,7 @@
 <extension version="3.4" type="plugin" group="content" method="upgrade">
     <name>Content - UP</name>
     <author>LOMART</author>
-    <creationDate>23/10/2025</creationDate>
+    <creationDate>2025-10-25</creationDate>
     <copyright>Copyright (c) 2025 LOMART. All rights reserved.</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
@@ -118,6 +118,16 @@
                     description="UP_MSGCSS_DESC"
                     size="4"
                 />
+				<field
+					name="checkgithub"
+					type="radio"
+					class="btn-group"
+					default="0"
+					label="UP_CHECKGITHUB_LABEL"
+					description="UP_CHECKGITHUB_DESC" >
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
             </fieldset>
         </fields>
     </config>
