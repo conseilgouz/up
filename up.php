@@ -594,7 +594,7 @@ class plgContentUP extends CMSPlugin
         }
     }
     /*
-    *  Vérifie la version du fichier <action>.php par rapport
+    *  Vérifie la version du fichier <action>.php par rapport au fichier version des actions
     */
     private function checkactionsha256($action)
     {
@@ -610,6 +610,9 @@ class plgContentUP extends CMSPlugin
             }
         }
     }
+    /*
+    *  récupération de la version de UP
+    */
     private function _up_version()
     {
         $vers = '?';
@@ -620,6 +623,8 @@ class plgContentUP extends CMSPlugin
         }
         return $vers;
     }
+    /* from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
+    */
     private function delete_directory($dir)
     {
         if (!file_exists($dir)) {
