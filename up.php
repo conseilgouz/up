@@ -9,16 +9,15 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  *
  * */
- /*
- v5.3.3 : php 8.4 compatibility
- */
+/*
+v5.3.3 : php 8.4 compatibility
+*/
 
 // namespace up;
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Version;
 
 // #[AllowDynamicProperties] // php 8.4
@@ -28,10 +27,13 @@ class plgContentUP extends CMSPlugin
     public $upPath = 'plugins/content/up/';
     private $githubapikey = null;
     private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
+    private $actionsha256 = [];
+
     public function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
         $this->LoadLanguage();
+        $this->loadActionsSha256();
     }
 
     public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
@@ -255,6 +257,8 @@ class plgContentUP extends CMSPlugin
                 $text = '';
                 // le chemin du script
                 $actionfile = 'actions/' . $actionClassName . '/' . $actionClassName . '.php';
+                // contrôle de version de l'action
+                $this->checkactionsha256($actionClassName);
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = $this->get_action_pref('github-key');
@@ -564,6 +568,73 @@ class plgContentUP extends CMSPlugin
         }
         return false;
 
+    }
+    /*
+    *  Vérifie si UP-list-actions-version-v<versionUP>.txt existe
+    */
+    private function loadActionsSha256()
+    {
+        $file = $this->upPath.'/assets/UP-list-actions-version-v'.$this->_up_version().'.txt';
+        if (!is_file($file)) {
+            return false;
+        }
+        $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
+        $outBuffer = '';
+        if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
+            return '';
+        }
+        $cgLines = false;
+        foreach ($readBuffer as $line) {
+            $one = explode(':', $line);
+            if (sizeof($one) > 1) {
+                $this->actionsha256[$one[0]] = $one[1];
+            }
+        }
+    }
+    /*
+    *  Vérifie la version du fichier <action>.php par rapport
+    */
+    private function checkactionsha256($action)
+    {
+        $dir = $this->upPath.'actions/' . $action;
+        $file = $dir. '/' . $action . '.php';
+        if (!is_dir($dir) || !is_file($file)) { // non trouvé : do nothing
+            return;
+        }
+        $hash = hash_file('sha256', $file);
+        if (array_key_exists($action, $this->actionsha256)) {
+            if ($this->actionsha256[$action] != $hash) { // différent : suppression du répertoire
+                $this->delete_directory($dir);
+            }
+        }
+    }
+    private function _up_version()
+    {
+        $vers = '?';
+        $fic = $this->upPath . 'up.xml';
+        if (file_exists($fic)) {
+            $xml = simplexml_load_file($fic);
+            $vers = $xml->version;
+        }
+        return $vers;
+    }
+    private function delete_directory($dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..' || $item == 'custom') {
+                continue;
+            }
+            if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+        return rmdir($dir);
     }
 
 }

@@ -3,6 +3,7 @@
 #### Modification interne
 
 - package sans les actions, qui seront téléchargées quand nécessaires à partir de github
+- vérification des versions des actions et rechargement depuis github si différence
 
 #### Modifications internes des actions
 
