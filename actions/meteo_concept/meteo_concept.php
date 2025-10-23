@@ -51,12 +51,14 @@
  */
  /*
  v31 - fix message si hors période
+ v5.3.3 : php 8.4 compatibility
  */
 defined('_JEXEC') or die();
 
 class meteo_concept extends upAction
 {
-
+    public $synonym;
+    public $wcity,$wdata ;
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action

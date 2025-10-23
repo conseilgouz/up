@@ -15,11 +15,15 @@
  * v2.61 - fix min/maj pour les noms de couleurs
  * v2.8 - php8
  * v3 - fix si autres tags que UL/OL dans les LI
+ * v5.3.3 : php 8.4 compatibility
  */
 defined('_JEXEC') or die();
 
 class listup extends upAction
 {
+    public $kwc_formula = [];
+    public $kwc_pref = [];
+
     public function init()
     {
         $this->load_file('listup.css');

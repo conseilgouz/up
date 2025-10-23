@@ -52,10 +52,16 @@
  * @tags    Widget
  *
  * */
+/*
+ v5.3.3 : php 8.4 compatibility
+ */
+ 
 defined('_JEXEC') or die;
 
 class mapael extends upAction
 {
+    public $params_defaultPlot,$params_legend,$params_slice,$ctrl_params,$legendClass;
+    
     /**
      * charger les ressources communes a toutes les instances de l'action
      * cette fonction n'est lancee qu'une fois pour la premiere instance

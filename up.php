@@ -9,6 +9,10 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  *
  * */
+ /*
+ v5.3.3 : php 8.4 compatibility
+ */
+
 // namespace up;
 defined('_JEXEC') or die('Restricted access');
 
@@ -17,14 +21,13 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Version;
 
-#[AllowDynamicProperties]
+// #[AllowDynamicProperties] // php 8.4
 
 class plgContentUP extends CMSPlugin
 {
     public $upPath = 'plugins/content/up/';
     private $githubapikey = null;
     private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
-
     public function __construct(&$subject, $params)
     {
         parent::__construct($subject, $params);
