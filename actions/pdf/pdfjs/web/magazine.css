@@ -81,11 +81,12 @@
 .icon-center-holder {
     position: absolute;
     z-index: 1000;
-    width: 100px;
+    width: auto;
     bottom: 0%;
     left: 45%;
 	display: inline-flex;
 	height:27px;
+    padding: 0 10px;
 }
 .icon-center-holder  .next-button{
 	background-image: url(images/arrows.png);
@@ -104,11 +105,12 @@
 .icon-holder {
     position: absolute;
     z-index: 1000;
-    width: 100px;
+    width: auto;
     bottom: 0%;
-    right: 5px;
+    right: 50px;
 	display: inline-flex;
 	height:27px;
+    padding: 0 10px;
 }
 
 .exit-icon {

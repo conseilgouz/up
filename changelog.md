@@ -1,5 +1,9 @@
 ## 22/10/2025 - version 5.3.3
 
+#### Modifications actions
+
+- pdf : ajout de l'option bgbtns : magazine : couleur arrière-plan des boutons
+
 #### Modification interne
 
 - package sans les actions, qui seront téléchargées quand nécessaires à partir de github
