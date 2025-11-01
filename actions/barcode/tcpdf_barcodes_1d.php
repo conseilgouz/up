@@ -6,6 +6,7 @@
 // Last Update : 2020-03-21 : Pascal PHP 7.4 : Array and string offset access syntax with curly braces is deprecated 
 //               2020-03-23 : Pascal : PNG output and SVG output = return instead of echo 
 //               2020-03-24 : Pascal : add $align parameter to getBarcodeHTML function
+//               2025-11-01 : Pascal : PHP 8.5 : imagedestroy deprecated
 // Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
 // License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 // -------------------------------------------------------------------
@@ -243,7 +244,6 @@ class TCPDFBarcode {
 			ob_start();
 			imagepng($png);
 			$imagedata = ob_get_clean();
-			imagedestroy($png);
 			return $imagedata;
 		}
 	}

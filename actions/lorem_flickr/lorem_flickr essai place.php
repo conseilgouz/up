@@ -19,6 +19,7 @@
  * v2.9 : - remplacement de feu lorempixel.com par https://loremflickr.com/
  * - ajout options tag et color
  * v5.1 : reprise totale de l'action a cause de l'API flick
+ * v5.3.3 : php 8.5 : imagedestroy deprecated
  */
 defined('_JEXEC') or die();
 
@@ -256,11 +257,6 @@ class lorem_flickr extends upAction
 
         // Sauvegarder l'image redimensionnée et recadrée
         imagejpeg($croppedImage, $destinationPath);
-
-        // Libérer la mémoire
-        imagedestroy($sourceImage);
-        imagedestroy($resizedImage);
-        imagedestroy($croppedImage);
 
         return true;
     }

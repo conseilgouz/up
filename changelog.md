@@ -9,7 +9,7 @@
 #### Modifications internes des actions
 
 - compatibilité PHP 8.4 : définition des variables dans upAction.php
-- compatibilité PHP 8.5 : curl_close deprecated
+- compatibilité PHP 8.5 : deprecated curl_close, imagedestroy 
 - jcontent_by_categories : compatibilité Joomla 6 : remplacement de getInstance()
 - jcontent_by_subcat : compatibilité Joomla 6 : remplacement de getInstance()
 - jcontent_in_content : compatibilité Joomla 6 : remplacement de getInstance()
