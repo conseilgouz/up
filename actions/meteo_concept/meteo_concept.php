@@ -51,7 +51,7 @@
  */
  /*
  v31 - fix message si hors période
- v5.3.3 : php 8.4 compatibility
+ v5.3.3 : php 8.4/8.5 compatibility
  */
 defined('_JEXEC') or die();
 
@@ -218,8 +218,6 @@ class meteo_concept extends upAction
             }
         }
 
-        if ($curl)
-            curl_close($ch);
         // -- c'est fini
         return $this->set_attr_tag('_' . $options['tag'], $attr_main, $this->out);
         

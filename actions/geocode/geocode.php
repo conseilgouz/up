@@ -13,6 +13,10 @@
  * @tags    Groupe pour bouton editeur
  *
  */
+/*
+ v5.3.3 : php 8.5 compatibility
+ */
+ 
 defined('_JEXEC') or die;
 
 class geocode extends upAction
@@ -74,8 +78,6 @@ class geocode extends upAction
 
             // Exécuter la requête et obtenir la réponse
             $response = curl_exec($ch);
-            // Fermer la session cURL
-            curl_close($ch);
 
             // on sauve la réponse dans un fichier cache
             if (!empty($response)) {

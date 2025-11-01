@@ -2,7 +2,7 @@
 <extension version="3.4" type="plugin" group="content" method="upgrade">
     <name>Content - UP</name>
     <author>LOMART</author>
-    <creationDate>2025-10-25</creationDate>
+    <creationDate>2025-11-01</creationDate>
     <copyright>Copyright (c) 2025 LOMART. All rights reserved.</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
