@@ -36,11 +36,11 @@ use ScssPhp\ScssPhp\Compiler;
 
 class upscsscompiler extends upAction
 {
-    protected $options;
+    public $options;
 
-    protected $basePath;
+    public $basePath;
 
-    protected $formatter;
+    public $formatter;
 
     public function init()
     {
