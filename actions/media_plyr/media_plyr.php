@@ -23,6 +23,9 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags    Media
  */
+ /* 
+ * v5.3.4 : audio : hide html5 player
+ */
 defined('_JEXEC') or die();
 
 class media_plyr extends upAction
@@ -33,7 +36,7 @@ class media_plyr extends upAction
         $this->load_file('plyr.css'); // v 2.0.13
         $this->load_file('plyr.js'); // v 2.0.13
 
-        $js_code = 'var instances = plyr.setup({ debug: true });';
+        $js_code = 'var instances = plyr.setup({ debug: false });';
         $this->load_jquery_code($js_code);
 
         return true;
@@ -116,7 +119,7 @@ class media_plyr extends upAction
                 break;
 
             case 'audio':
-                $out = '<audio controls>';
+                $out = '<audio controls style="opacity:0">';
                 $out .= '<source src="' . $options['mp3'] . '" type="audio/mp3">';
                 $out .= ($options['ogg'] > '') ? '<source src="' . $options['ogg'] . '" type="audio/ogg">' : '';
                 $out .= '</audio>';

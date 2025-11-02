@@ -21,6 +21,7 @@
 - jcontent_list : compatibilité Joomla 6 : remplacement de getInstance()
 - jcontent_metadata : compatibilité Joomla 6 : remplacement de getInstance()
 - sql : suppression notice si champ vide
+- media_plyr : suppression du mode debug sur le js, caché l'audio player html5
 
 ## 12/09/2025 - version 5.3.2
 
