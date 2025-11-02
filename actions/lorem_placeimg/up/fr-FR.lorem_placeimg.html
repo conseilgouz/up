@@ -11,22 +11,17 @@
 <p>affiche une image aleatoire
 </p>
 <p>Syntaxe :<br /><code><b>{</b>up lorem-placeimg=catégorie | width=xx | height=xx | grayscale | sepia <b>}</b></code><br />--> catégorie = any, animals, arch, nature, people, tech</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>lorem_placeimg</b>=tech<b> | </b><b>height</b>=100<b> | </b><b>width</b>=200<b> | </b><b>class</b>=bd-rouge
 </div >
 <p><label for="lorem_placeimg" title="type d&#039;image: any, animals, arch, nature, people, tech">lorem-placeimg</label>
-<input type = "text" id="lorem_placeimg"class="w10 important"  title="tech" placeholder="tech" list="combo_lorem_placeimg"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_lorem_placeimg">
-<option value=""></option>
-<option value=""></option>
+<select id="lorem_placeimg"class="w10 important"  title="tech" placeholder="tech" value="tech">
 <option value=""></option>
 <option value="any">any</option>
 <option value="animals">animals</option>
 <option value="arch">arch</option>
 <option value="nature">nature</option>
 <option value="people">people</option>
-<option value="tech">tech</option>
-</datalist></p>
+<option value="tech" selected>tech</option>
+</select></p>
 <p class="hr-top"><label for="height" title="hauteur image t&eacute;l&eacute;charg&eacute;e">height (px)</label>
 <input type = "number" name="height"class="w10 hr-top"  unit="px" placeholder="100"></p>
 <p><label for="width" title="largeur image t&eacute;l&eacute;charg&eacute;e">width (px)</label>

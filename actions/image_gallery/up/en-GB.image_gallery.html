@@ -10,24 +10,9 @@
 <div class="upbtn-doc">
 <p>Displays one or more images in a lightbox</p>
 <p>with adaptation of the image size to the device and legends<br>syntax 1 <code><b>{</b>up image-gallery=images/image.jpg | alt=text<b>}</b></code><br>syntax 2 <code><b>{</b>up image-gallery=path folder<b>}</b></code><br>syntax 3 <code><b>{</b>up image-gallery<b>}</b></code> content with images<code><b>{</b>/up image-gallery<b>}</b></code></p>
-<div><b>&#x1F199; WEBMASTER NOTES</b></div><div>Pour créer une galerie :<br />
-1 - préparez un dossier avec un nom décrivant le contenu<br />
-2 - copier toutes les images dans ce dossier<br />
-3 - renommez les images pour définir leur libellé<br />
-    # les underscores sont convertis en tirets<br />
-    # les tirets simples sont remplacés par des espaces.<br />
-    # les tirets doubles deviennent des tirets simples.<br />
-    # 3 tirets ou plus seront convertis en " -- "<br />
-4 - copiez ce dossier dans le dossier "images" ou dans le sous-dossier d'un groupe de galeries<br />
-</div>
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>srcset-dir</b>=tmp/up-img
 </div >
 <p><label for="image_gallery" title="image file, gallery folder or widths of the images contained">image-gallery</label>
-<input type = "text" id="image_gallery" title="" placeholder="" list="combo_image_gallery"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_image_gallery">
-<option value=""></option>
-<option value=""></option>
-</datalist></p>
+<input type = "text" id="image_gallery" placeholder=""></p>
 <p><label for="layout" title="layout for gallery : grid-x-x-x-x, masonry-x-x-x-x, none-x-x-x-x">layout</label>
 <input type = "text" name="layout" title="masonry-3-2-1" placeholder="masonry-3-2-1" list="combo_layout"><span class="combo-indicator">&#x25bc;</span>
 <datalist id="combo_layout">

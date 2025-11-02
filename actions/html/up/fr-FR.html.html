@@ -11,8 +11,6 @@
 <p>permet de créer une entité HTML (balise) avec classe(s), style et attribut sans passer en mode code
 </p>
 <p><b>Syntaxe 1 :</b><br /><code><b>{</b>up html=div | class=foo | id=x123<b>}</b></code>contenu<code><b>{</b>/up html<b>}</b></code><br />--> < div id="x123" class="foo">contenu< /div><br /><b>Syntaxe 2 :</b><br /><code><b>{</b>up html=img | class=foo;border:1px red solid | src=images/img.jpg<b>}</b></code><br />--> < img class="foo" style="1px red solid" src="images/img.jpg" ><br />note: toutes les options sont considérées comme des attributs de la balise<br /><b>Syntaxe 3 :</b><br /><code><b>{</b>up html=h1.foo.xx<b>}</b></code> équivaut à <code><b>{</b>up html=h1 | class=foo xx<b>}</b></code></p>
-
-
 </div >
 <p><label for="html" title="balise html">html</label>
 <input type = "text" id="html"class="w20"  placeholder="div"></p>

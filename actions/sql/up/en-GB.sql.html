@@ -10,17 +10,9 @@
 <div class="upbtn-doc">
 <p>SQL query with formatting and sorting</p>
 <p>syntax : <code><b>{</b>up sql=tablename | ...<b>}</b></code></p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>modules-site</u> : </b> <b>table</b>=modules<b> | </b><b>where</b>=position = &#039;cpanel&#039;<b> | </b><b>template</b>=##title## (id: ##id##) ##publish_up##<b> | </b><b>publish_up-format</b>=date[%e %B %Y]<b> | </b><b>id-model</b>=id: %s<br><b><u>modules-admin</u> : </b> <b>table</b>=modules<b> | </b><b>id-model</b>=id: %s<br><b><u>info-resp-com</u> : </b> <b>sql</b>=#__users<b> | </b><b>select</b>=#__users.name<b> | </b><b>innerjoin</b>=#__user_usergroup_map ON #__user_usergroup_map.user_id = #__users.id<b> | </b><b>where</b>=#__user_usergroup_map.group_id=##variable-1##<b> | </b><b>setlimit</b>=1
 </div >
 <p><label for="sql" title="table name">sql</label>
-<input type = "text" id="sql"class="w20 important"  title="" placeholder="" list="combo_sql"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_sql">
-<option value=""></option>
-<option value="modules-site">modules-site</option>
-<option value="modules-admin">modules-admin</option>
-<option value="info-resp-com">info-resp-com</option>
-</datalist></p>
+<input type = "text" id="sql"class="w20 important"  placeholder=""></p>
 <p><label for="select" title="column lists">select</label>
 <input type = "text" name="select" placeholder="*"></p>
 <p class="hr-top"><label for="where" title="where condition">where</label>

@@ -11,18 +11,10 @@
 <p>affiche une boite avec un tite, sous-titre, image, contenu et action
 </p>
 <p>syntaxe: <code><b>{</b>up box=model | title=title<b>}</b></code>contenu HTML<code><b>{</b>/up box<b>}</b></code><br />##title## ##title-link## ##subtitle## ##subtitle-link## ##title-subtitle## ##title-subtitle-link##<br />##link## ##target##<br />##image## ##image-link## ##image-css## ##image-css-xxx##<br />##action-link## ##action-text##<br />##content##<br />##head## & ##/head## : une balise DIV avec les attributs définis par head-class & head-style<br />##body## & ##/body##</p>
-<div><b>&#x1F199; WEBMASTER NOTES</b></div><div>Liste des modèles disponibles : info, trombi, pricelist</div>
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>error</u> : </b> <b>title</b>=ERREUR<b> | </b><b>image</b>=images/actions-demo/box/error.png<b> | </b><b>image-class</b>=left<b> | </b><b>class</b>=bd2 bd-arrondi bd-rouge bg-jauneClair<b> | </b><b>title-class</b>=m0 bg-rouge t-jaune b raz notoc<b> | </b><b>title-style</b>=padding: 0 10px 5px<b> | </b><b>body-style</b>=padding: 0 10px<b> | </b><b>template</b>=##image## ##title## ##body## ##content## ##/body##<br><b><u>lomart-chip</u> : </b> <b>box</b>=chip<b> | </b><b>title</b>=Lomart<b> | </b><b>image</b>=images/lomart.jpg<b> | </b><b>link</b>=//lomart.fr<b> | </b><b>link-target</b>=_blank<b> | </b><b>title-link-class</b>=t-blanc t-hover-jaune<b> | </b><b>class</b>=bg-brun t-blanc<b> | </b><b>image-class</b>=bd-blanc bd2 bd-hover-jaune<br><b><u>up-news</u> : </b> <b>box</b>=image<b> | </b><b>class</b>=mb1<b> | </b><b>title-class</b>=raz<b> | </b><b>image-class</b>=maxh100<b> | </b><b>action-style</b>=border:none<b> | </b><b>action</b>=En savoir +<br><b><u>action-lign</u> : </b> <b>template</b>=[div class=&#039;fg-row fg-gap&#039;][div class=&#039;fg-c10 fg-cs12&#039;]##content##[/div][a class=&#039;fg-c2 fg-cs12 fg-row fg-center fg-vcenter btn btn-primary&#039; style=&#039;display:grid&#039; href=&quot;##link##&quot; target=&#039;##target##&#039;]##action-text##[/a][/div]<b> | </b><b>action</b>=Ex&eacute;cuter<b> | </b><b>link-target</b>=_blank<br><b><u>img-right-bando-site-up</u> : </b> <b>box</b>=img-right-bando<b> | </b><b>title-tag</b>=h2<b> | </b><b>head-class</b>=bg-jauneClair;border:2px solid #333
 </div >
 <p><label for="box" title="model [danger, info] ou prefset">box</label>
 <input type = "text" id="box" title="" placeholder="" list="combo_box"><span class="combo-indicator">&#x25bc;</span>
 <datalist id="combo_box">
-<option value=""></option>
-<option value="error">error</option>
-<option value="lomart-chip">lomart-chip</option>
-<option value="up-news">up-news</option>
-<option value="action-lign">action-lign</option>
-<option value="img-right-bando-site-up">img-right-bando-site-up</option>
 <option value="badge">badge</option>
 <option value="bg-image-only">bg-image-only</option>
 <option value="chip">chip</option>

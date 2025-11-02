@@ -11,15 +11,9 @@
 <p>Affiche des informations sur l'article courant
 </p>
 <p>syntaxe 1 : <code><b>{</b>up jcontent-info=nom_info<b>}</b></code><br />syntaxe 2 : <code><b>{</b>up jcontent_info<b>}</b></code>&lt;b&gt;une info :&lt;/b&gt; ##nom_info##<code><b>{</b>/up jcontent_info<b>}</b></code><br />syntaxe 3 : <code><b>{</b>up jcontent_info | template=<b>[</b>b]une info :<b>[</b>/b] ##nom_info##<b>}</b></code><br />Les mots-clés :<br />##id## ##title## ##subtitle##<br />##image## ##image-src## ##image-alt## ##image-legend##<br />##image-full## ##image-full-src## ##image-full-alt## ##image-full-legend##<br />##date-crea## ##crea_by## ##date-modif## ##modif_by##<br />##url-a## ##url-b## ##url-c##<br />##date-publish## ##date-unpublish##<br />##note## ##cat## ##catid## ##breadcrumbs##<br />##featured## ##hits## ##tags## ##tags-link## ##author##<br />##CF_id_or_name## : valeur brute du custom field</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>up-usage</u> : </b> <b>template</b>=Pour info, &lt;b&gt;cette page utilise ##upnb## action(s)&lt;/b&gt; : &lt;br&gt;##uplist##<b> | </b><b>class</b>=box-note i
 </div >
 <p><label for="jcontent_info" title="le nom d&#039;un &eacute;l&eacute;ment ou rien">jcontent-info</label>
-<input type = "text" id="jcontent_info" title="" placeholder="" list="combo_jcontent_info"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_jcontent_info">
-<option value=""></option>
-<option value="up-usage">up-usage</option>
-</datalist></p>
+<input type = "text" id="jcontent_info" placeholder=""></p>
 <h4>Modèle de présentation</h4>
 <p><label for="template" title="mod&egrave;le de mise en page. Si vide le mod&egrave;le est le contenu. BBCode accept&eacute;">template</label>
 <input type = "text" name="template" placeholder="##content##"></p>

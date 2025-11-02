@@ -10,16 +10,10 @@
 <div class="upbtn-doc">
 <p>INTERNAL - list of UP actions with information and parameters</p>
 <p><code><b>{</b>up upactionslist<b>}</b></code> all actions<br><code><b>{</b>up upactionslist=action1, action2<b>}</b></code> one or more actions<br><code><b>{</b>up upactionslist | md<b>}</b></code> marknote file<br><code><b>{</b>up upactionslist | csv<b>}</b></code> CSV file</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>without-custom</b>=1
 </div >
 <h4>Selection of actions listed</h4>
 <p><label for="upactionslist" title="list of actions to be recovered. all by default">upactionslist</label>
-<input type = "text" id="upactionslist" title="" placeholder="" list="combo_upactionslist"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_upactionslist">
-<option value=""></option>
-<option value=""></option>
-</datalist></p>
+<input type = "text" id="upactionslist" placeholder=""></p>
 <p class="hr-top"><label for="exclude-prefix" title="prefix of unlisted actions. Separator = comma">exclude-prefix</label>
 <input type = "text" name="exclude-prefix"class="w50 hr-top"  placeholder="_,x_"></p>
 <p><label for="without-custom" title="displays the custom folder info of the action. 1 to hide them">without-custom</label>

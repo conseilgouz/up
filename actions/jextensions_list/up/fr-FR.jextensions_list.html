@@ -11,22 +11,9 @@
 <p>liste des extensions installées sur le site
 </p>
 <p>syntaxe : <code><b>{</b>up jextensions-list=prefset ou type(s)<b>}</b></code><br />MOTS-CLES:<br />##id## ##client## ##type## ##name-link## ##name## ##author## ##version## ##note## ##folder## ##state##</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>composant</u> : </b> <b>jextensions_list</b>=component<b> | </b><b>client</b>=2<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=name<br><b><u>module-site</u> : </b> <b>jextensions_list</b>=module<b> | </b><b>client</b>=0<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=name<br><b><u>module-admin</u> : </b> <b>jextensions_list</b>=module<b> | </b><b>client</b>=1<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=name<br><b><u>plugin</u> : </b> <b>jextensions_list</b>=plugin<b> | </b><b>client</b>=2<b> | </b><b>template</b>=&lt;small&gt;##folder##&lt;/small&gt; &lt;span class=##state##&gt;##name##&lt;/span&gt; &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>model-folder</b>=%s<b> | </b><b>sort</b>=folder,name<br><b><u>extensions-site</u> : </b> <b>client</b>=0<b> | </b><b>template</b>=&lt;small&gt;##type####folder##&lt;/small&gt; ##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=folder,type,name<br><b><u>extensions-admin</u> : </b> <b>client</b>=1<b> | </b><b>template</b>=&lt;small&gt;##type####folder##&lt;/small&gt; ##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=folder,type,name<br><b><u>template-site</u> : </b> <b>jextensions_list</b>=template<b> | </b><b>client</b>=0<b> | </b><b>template</b>=##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>minimal-id</b>=0<br><b><u>tous</u> : </b> <b>jextensions_list</b>=<b> | </b><b>client</b>=2<b> | </b><b>template</b>=&lt;small&gt;##client## ##type####folder##&lt;/small&gt; ##name## &lt;small&gt;##version## (id:##id##) ##author## &lt;/small&gt; ##note##<b> | </b><b>sort</b>=client,folder,type,name<b> | </b><b>minimal-id</b>=0
 </div >
 <p><label for="jextensions_list" title="nom d&#039;un prefset ou un des types suivants : component,module,plugin,template">jextensions-list</label>
-<input type = "text" id="jextensions_list"class="important"  title="component,module,plugin" placeholder="component,module,plugin" list="combo_jextensions_list"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_jextensions_list">
-<option value=""></option>
-<option value="composant">composant</option>
-<option value="module-site">module-site</option>
-<option value="module-admin">module-admin</option>
-<option value="plugin">plugin</option>
-<option value="extensions-site">extensions-site</option>
-<option value="extensions-admin">extensions-admin</option>
-<option value="template-site">template-site</option>
-<option value="tous">tous</option>
-</datalist></p>
+<input type = "text" id="jextensions_list"class="important"  placeholder="component,module,plugin"></p>
 <p><label for="type-exclude" title="1= tous les types sauf ceux pass&eacute;s en param&egrave;tre principal">type-exclude</label>
 <select name="type-exclude" title="0" placeholder="0" value="0">
 <option value=""></option>

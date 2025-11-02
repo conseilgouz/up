@@ -11,8 +11,6 @@
 <p>comptabilise le nombre d'appel de cette action et affiche le nombre de visite
 </p>
 <p>syntaxe :<br /><code><b>{</b>up site-stats<b>}</b></code> : incrémente le fichier dir-logs/id-alias_article.log<br /><code><b>{</b>up site-stats=*<b>}</b></code> : Calcule et affiche les stats pour TOUS les fichiers<br /><code><b>{</b>up site-stats=0<b>}</b></code> : Calcule et affiche les stats pour l'article courant<br /><code><b>{</b>up site-stats=12<b>}</b></code> : Calcule et affiche les stats pour l'article d'ID=12<br /><code><b>{</b>up site-stats=mask<b>}</b></code> : affiche les stats des fichiers correspondant au mask<br />L'affichage est réalisé à l'aide de templates et de mots clés :<br />--- tmpl-lign : résultat pour un fichier log (un article)<br />##count##  : nombre total de visites uniques pour un article<br />##id##, ##alias##, ##title##, ##created##, ##updated## : données de l'article<br />##catid##, ##catalias## : id et alias de la catégorie de l'article<br />##detail## : affiche le détail des visites par année, mois, langue<br />--- tmpl-detail-period : modèle pour une période de ##detail##<br />Les mots clés pour les sous-templates de ##detail##<br />Détail par articles : ##PERIOD##, ##TOTAL##, ##LANG##<br />Motif répété pour ##LANG## : ##LANG##, ##COUNT##<br />Détail par nombre de pges vues par un visteur : ##PERIOD##, ##TOTAL##, ##PAGES-VISITORS##<br />Motif répété pour ##PAGES-VISITORS## : ##NBPAGES##, ##NBVISITORS## :</p>
-
-
 </div >
 <h4>Options pour enregistrement du suivi</h4>
 <p><label for="site_stat" title="vide : enregistre l&#039;acc&egrave;s, sinon masque= *:tous, 1:courant, ID article ou masque fichiers (id-alias)">site-stat</label>

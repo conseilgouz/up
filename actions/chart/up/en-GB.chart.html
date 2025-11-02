@@ -10,15 +10,10 @@
 <div class="upbtn-doc">
 <p>Statistical graphs with GoogleChart</p>
 <p>syntaxe= : <code><b>{</b>up chart=type_chart<b>}</b></code>... data ...<code><b>{</b>/up chart<b>}</b></code></p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>pie-max</u> : </b> <b>chart</b>=pie<b> | </b><b>maximized</b>=1<b> | </b><b>colors</b>=red,green<b> | </b><b>donut</b>=30
 </div >
 <p><label for="chart" title="type of chart : area, bar,bubble,column,combo,line,pie,scatter,SteppedArea">chart</label>
-<input type = "text" id="chart"class="important"  title="" placeholder="" list="combo_chart"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_chart">
-<option value=""></option>
-<option value="pie-max">pie-max</option>
-<option value=""></option>
+<select id="chart"class="important"  title="" placeholder="" value="">
+<option value="" selected></option>
 <option value="area">area</option>
 <option value="bar">bar</option>
 <option value="bubble">bubble</option>
@@ -28,7 +23,7 @@
 <option value="pie">pie</option>
 <option value="scatter">scatter</option>
 <option value="SteppedArea">SteppedArea</option>
-</datalist></p>
+</select></p>
 <p><label for="separator" title="separator for values in the list">separator</label>
 <input type = "text" name="separator"class="w5"  title="" placeholder="" list="combo_separator"><span class="combo-indicator">&#x25bc;</span>
 <datalist id="combo_separator">

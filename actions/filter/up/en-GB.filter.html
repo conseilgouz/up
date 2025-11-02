@@ -10,8 +10,6 @@
 <div class="upbtn-doc">
 <p>displays the content if all conditions are true</p>
 <p>SYNTAX 1 (condition as option):<br> <code><b>{</b>upfilter | datemax=20171225<b>}</b></code> content if true <code><b>{</b>====<b>}</b></code> content if false <code><b>{</b>/up filter<b>}</b></code><br> The content if false is optional. It must be after the content if true and separated by <code><b>{</b>===<b>}</b></code> (at least 3 equal signs)<br><br> SYNTAX 2 (condition as main argument):<br> <code><b>{</b>up filter=datemax:20171225<b>}</b></code> content if true <code><b>{</b>====<b>}</b></code> content if false <code><b>{</b>/up filter<b>}</b></code><br><br> SYNTAX 3 (mono-shortcode):<br> <code><b>{</b>upfilter | guest=0 | return-true=REGISTER | return-false=GUEST<b>}</b></code><br> --> guest=0 is true if a user is logged in<br> --> the returned value is entered as an option<br><br> SYNTAX 4 (multi-conditions):<br> <code><b>{</b>upfilter=day:2,3; hperiod:0900-1200,1500-1900 | return-true=OPEN | return-false=CLOSED<b>}</b></code><br> --> true if Monday or Tuesday between 9am-12pm or 3-7pm</p>
-
-
 </div >
 <p><label for="filter" title="no argument OR condition in the form cond1:val1,val2; cond2:val1,val2">filter</label>
 <input type = "text" id="filter"class="w10 inactif"  placeholder=""></p>

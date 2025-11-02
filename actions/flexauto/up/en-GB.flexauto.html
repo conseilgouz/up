@@ -10,25 +10,9 @@
 <div class="upbtn-doc">
 <p>a responsive grid on several columns</p>
 <p> syntax 1 :  <code><b>{</b>up flexauto=x_desktop | tablet=x_tablet | mobile=x_mobile <b>}</b></code>content<code><b>{</b>/up flexauto<b>}</b></code><nb>syntax 2 :  <code><b>{</b>up flexauto=x_desktop-x_tablet-x_mobile <b>}</b></code>contenu<code><b>{</b>/up flexauto<b>}</b></code><br>x=1 à 12 is the number of columns on large screen and tablet. 4 on mobile.</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>class</b>=fg-gap<br><b><u>2blocs</u> : </b> <b>flexauto</b>=2<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<br><b><u>3blocs</u> : </b> <b>flexauto</b>=3<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<br><b><u>2blocs-gris</u> : </b> <b>flexauto</b>=2<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>3blocs-gris</u> : </b> <b>flexauto</b>=3<b> | </b><b>tablet</b>=2<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>4blocs-gris</u> : </b> <b>flexauto</b>=4<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>5blocs-gris</u> : </b> <b>flexauto</b>=5<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px solid #999; padding:10px<br><b><u>fonticon</u> : </b> <b>flexauto</b>=4<b> | </b><b>tablet</b>=3<b> | </b><b>mobile</b>=2<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=border:1px #999 solid; padding:5px<b> | </b><b>css-head</b>=#id&gt;div&gt;div:first-child[width:50px;height:100%;text-align:center;float:left;margin-right:10px;]
-#id .fa, #id .fab [font-size:2.5rem; width:3rem;color:#069]
-#id .fab[color:darkviolet]
-#id b[color:skyblue]i[color:royalblue]
-#id .icomoon[display:block;font-size:90%;color:darkred]
 </div >
 <p><label for="flexauto" title="number of columns on large screen OR  ou desktop-tablet-mobile">flexauto</label>
-<input type = "text" id="flexauto"class="w10 important"  title="3" placeholder="3" list="combo_flexauto"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_flexauto">
-<option value=""></option>
-<option value="2blocs">2blocs</option>
-<option value="3blocs">3blocs</option>
-<option value="2blocs-gris">2blocs-gris</option>
-<option value="3blocs-gris">3blocs-gris</option>
-<option value="4blocs-gris">4blocs-gris</option>
-<option value="5blocs-gris">5blocs-gris</option>
-<option value="fonticon">fonticon</option>
-</datalist></p>
+<input type = "text" id="flexauto"class="w10 important"  placeholder="3"></p>
 <p><label for="tablet" title="number of columns on medium screen">tablet</label>
 <input type = "number" name="tablet" min="1" max="6" placeholder="2"></p>
 <p><label for="mobile" title="number of columns on a small screen">mobile</label>

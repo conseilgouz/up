@@ -11,8 +11,6 @@
 <p>affiche du contenu si toutes les conditions sont remplies
 </p>
 <p><i>Reprise du plugin <a href="https://lomart.fr/extensions/lm-filter">LM-Filter</a> de Lomart</i><br />SYNTAXE 1 (condition comme option):<br /><code><b>{</b>up filter | datemax=20171225<b>}</b></code> contenu si vrai  <code><b>{</b>====<b>}</b></code> contenu si faux <code><b>{</b>/up filter<b>}</b></code><br />Le contenu si faux est optionnel. Il doit être après le contenu si vrai et séparé par <code><b>{</b>===<b>}</b></code> (au minima 3 signes égal)<br />SYNTAXE 2 (condition comme argument principal):<br /><code><b>{</b>up filter=datemax:20171225<b>}</b></code> contenu si vrai  <code><b>{</b>====<b>}</b></code> contenu si faux <code><b>{</b>/up filter<b>}</b></code><br />SYNTAXE 3 (mono-shortcode):<br /><code><b>{</b>up filter | guest=0  | return-true=REGISTER  | return-false=GUEST<b>}</b></code><br />--> guest=0 est vrai si un utilisateur est connecté<br />--> la valeur retournée est saisie comme option<br />SYNTAXE 4 (multi-conditions et négation):<br /><code><b>{</b>up filter=!day:1,7 ; hperiod:0900-1200,1500-1900 | return-true=OUVERT  | return-false=FERME<b>}</b></code><br />--> vrai si pas lundi ou dimanche et entre 9-12h ou 15-19h</p>
-
-
 </div >
 <p><label for="filter" title="condition sous la forme cond1:val1,val2 ; cond2:val1,val2">filter</label>
 <input type = "text" id="filter"class="w10 inactif"  placeholder=""></p>

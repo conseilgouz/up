@@ -10,17 +10,9 @@
 <div class="upbtn-doc">
 <p>allows you to execute PHP code in an article.</p>
 <p>Examples :<br>current date: <code><b>{</b>up php=echo date('d-m-Y H:i:s');<b>}</b></code><br>language: <code><b>{</b>up php=echo JFactory::getLanguage()getTag(); <b>}</b></code><br>name user : <code><b>{</b>up php=$user = Factory::getApplication()->getIdentity();echo  ($user->guest!=1) ? $user->username : 'guest';<b>}</b></code></p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>date</u> : </b> <b>php</b>=echo date(&#039;d-m-Y H:i:s&#039;);<b> | </b><b>class</b>=bd-violet tc display-inline<br><b><u>navigateur</u> : </b> <b>php</b>=$client = JFactory::getApplication()-&gt;client;echo $client-&gt;userAgent;echo ($client-&gt;mobile) ? &#039; sur mobile petit &eacute;cran&#039; : &#039; sur grand &eacute;cran&#039;;<br><b><u>user</u> : </b> <b>php</b>=$user = JFactory::getUser();echo  ($user-&gt;guest!=1) ? $user-&gt;name : &#039;invit&eacute;&#039;;
 </div >
 <p><label for="php" title=" the PHP code">php</label>
-<input type = "text" id="php"class="important"  title="" placeholder="" list="combo_php"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_php">
-<option value=""></option>
-<option value="date">date</option>
-<option value="navigateur">navigateur</option>
-<option value="user">user</option>
-</datalist></p>
+<input type = "text" id="php"class="important"  placeholder=""></p>
 <p><label for="authorized-functions" title="liste des exemptions &agrave; la liste des fonctions bannies. s&eacute;parateur virgule">authorized-functions</label>
 <input type = "text" name="authorized-functions" placeholder=""></p>
 <h4>Style CSS</h4>

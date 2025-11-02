@@ -10,19 +10,9 @@
 <div class="upbtn-doc">
 <p>displays child blocks in a responsive FLEXBOX grid</p>
 <p>syntax 1 : <code><b>{</b>up flexbox=x1-x2<b>}</b></code>content with several child blocks<code><b>{</b>/up flexbox<b>}</b></code><br>syntax 2 : <code><b>{</b>up flexbox=x1-x2<b>}</b></code>content block-1 <code><b>{</b>======<b>}</b></code> content block-2<code><b>{</b>/up flexbox<b>}</b></code><br>x1-x2 are the relative widths of the columns<br>example : col=4-8 or col=33-66 for 2 columns (equivalent: span4 and span8)</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>options (default)</u> : </b> <b>class</b>=fg-gap<br><b><u>2-10</u> : </b> <b>flexbox</b>=2-10<b> | </b><b>tablet</b>=3-9<b> | </b><b>mobile</b>=4-8<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>4-8</u> : </b> <b>flexbox</b>=4-8<b> | </b><b>tablet</b>=2-10<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>3-6-3</u> : </b> <b>flexbox</b>=3-6-3<b> | </b><b>tablet</b>=4-4-4<b> | </b><b>mobile</b>=1<b> | </b><b>class</b>=fg-vspace-between-1 m-child-raz-1 fg-gap<b> | </b><b>bloc-style</b>=padding:0 10px<br><b><u>4-8-gris</u> : </b> <b>flexbox</b>=4-8<b> | </b><b>tablet</b>=2-10<b> | </b><b>mobile</b>=12<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:10px 10px 0;border:1px solid #999<br><b><u>8-4-gris</u> : </b> <b>flexbox</b>=8-4<b> | </b><b>tablet</b>=8-4<b> | </b><b>mobile</b>=12<b> | </b><b>class</b>=fg-gap<b> | </b><b>bloc-style</b>=padding:10px 10px 0;border:1px solid #999
 </div >
 <p><label for="flexbox" title="number of columns">flexbox</label>
-<input type = "text" id="flexbox"class="w50 important"  title="" placeholder="" list="combo_flexbox"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_flexbox">
-<option value=""></option>
-<option value="2-10">2-10</option>
-<option value="4-8">4-8</option>
-<option value="3-6-3">3-6-3</option>
-<option value="4-8-gris">4-8-gris</option>
-<option value="8-4-gris">8-4-gris</option>
-</datalist></p>
+<input type = "text" id="flexbox"class="w50 important"  placeholder=""></p>
 <p><label for="tablet" title="number of columns on medium screen">tablet</label>
 <input type = "text" name="tablet"class="w50 important"  placeholder=""></p>
 <p><label for="mobile" title="number of columns on a small screen">mobile</label>

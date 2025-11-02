@@ -11,8 +11,6 @@
 <p>comptabilise le nombre d'appel de cette action et affiche le nombre de visite
 </p>
 <p>syntaxe :<br /><code><b>{</b>up site-visit<b>}</b></code> : incrémente le fichier log-path/alias_article.stat<br /><code><b>{</b>up site-visit=nom<b>}</b></code> : incrémente le fichier log-path/nom.stat<br /><code><b>{</b>up site-visit | info<b>}</b></code> : liste le contenu de tous les fichiers .stat dans log-path<br /><code><b>{</b>up site-visit | info=xxx<b>}</b></code> : liste le contenu de tous les fichiers action-xxx.stat dans log-path<br />Les données sauvées dans xxx.stat sont ##alias##  : le nom du fichier, puis dans l'ordre :<br />##counter##  : le cumul des visites<br />##lastdate## : la date dernère consultation<br />##id##, ##alias##, ##title##, ##created##, ##updated## : données de l'article<br />##catid##, ##catalias## : id et alias de la catégorie de l'article<br />##detail## : affiche le détail des visites par année, mois, langue</p>
-
-
 </div >
 <h4>Options principales</h4>
 <p><label for="site_visit" title="nom du compteur, si vide = alias article (si info=0)">site-visit</label>

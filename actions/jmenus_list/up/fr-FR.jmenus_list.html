@@ -11,17 +11,9 @@
 <p>liste des menus
 </p>
 <p>syntaxe : <code><b>{</b>up jmenus-list=menutype<b>}</b></code><br />MOTS-CLES MENUTYPE:<br />##id## ##menutype## ##title## ##description##<br />MOTS-CLES ITEM MENU:<br />##id## ##title## ##link## ##title-link## ##note## ##access## ##language## ##component##<br />##level## ##image## / v51<br />##hidden## / 5.3</p>
-
-<b>&#x1f7e9; upbtn-makefile PREFS.INI</b> : <br><b><u>image-6colonnes</u> : </b> <b>main-class</b>=fg-row fg-auto-6 fg-gap tc<b> | </b><b>template</b>={image-link}&lt;br&gt;{title-link}<br><b><u>template</u> : </b> <b>image-seule</b>={image-link}<b> | </b><b>image+tag</b>={image}{tags-list}{new}&lt;div&gt;{title}&lt;/div&gt;<br><b><u>demo</u> : </b> <b>template-menutype</b>=&lt;h4 class=notoc&gt;##title## (id:##id##)&lt;/h4&gt; ##description## / ##menutype##
 </div >
 <p><label for="jmenus_list" title="prefset, nom menutype ou vide pour tous">jmenus-list</label>
-<input type = "text" id="jmenus_list"class="w30 important"  title="" placeholder="" list="combo_jmenus_list"><span class="combo-indicator">&#x25bc;</span>
-<datalist id="combo_jmenus_list">
-<option value=""></option>
-<option value="image-6colonnes">image-6colonnes</option>
-<option value="template">template</option>
-<option value="demo">demo</option>
-</datalist></p>
+<input type = "text" id="jmenus_list"class="w30 important"  placeholder=""></p>
 <p><label for="menuid" title="ID menu parent pour limiter &agrave; cette branche">menuid</label>
 <input type = "number" name="menuid"class="w10"  placeholder=""></p>
 <h4>Balise et style du bloc principal</h4>
