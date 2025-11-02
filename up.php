@@ -545,7 +545,8 @@ class plgContentUP extends CMSPlugin
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             if (!$this->githubapikey) { // pas de clé définie, on prend la clé par défaut
-                $this->githubapikey = $this->api_token;
+                $this->githubapikey = $this->api_token_1.$this->api_token_2.$this->api_token_3;
+                $this->githubapikey = str_replace('#','_',$this->githubapikey);
             }
             curl_setopt($curl, CURLOPT_HTTPHEADER, [
                         "Authorization: token ".$this->githubapikey,
