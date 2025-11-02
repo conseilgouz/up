@@ -314,7 +314,9 @@ class jcontent_by_subcat extends upAction
      */
     public function set_art_common_params()
     {
-        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+            'ignore_request' => true
+        ));
 
         if (is_bool($model)) {
             return 'Aucune catégorie';

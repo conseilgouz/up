@@ -227,7 +227,9 @@ class jcontent_metadata extends upAction
         $catid = explode(',', $catid);
 
         // =====> RECUP DES DONNEES
-        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+            'ignore_request' => true
+        ));
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }

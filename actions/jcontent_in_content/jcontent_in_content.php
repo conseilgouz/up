@@ -87,7 +87,9 @@ class jcontent_in_content extends upAction
         $tmpl = $this->get_bbcode($tmpl, '+hr|pre');
         // =====> RECUP DES DONNEES
         // JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
-        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+            'ignore_request' => true
+        ));
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }

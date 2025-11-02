@@ -139,7 +139,9 @@ class jcontent_list extends upAction
 
         // =====> RECUP DES DONNEES
         // Get an instance of the generic articles model
-        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+            'ignore_request' => true
+        ));
         if (is_bool($model)) {
             return 'Aucune catégorie';
         }

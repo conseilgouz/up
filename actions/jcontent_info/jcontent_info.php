@@ -110,7 +110,9 @@ class jcontent_info extends upAction
             // $model = new ArticlesModel(array('ignore_request' => true));
             // } else { // Joomla 3.x
             // JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
-            $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles');
+            $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+            'ignore_request' => true
+            ));
             // }
             // ---
             $appParams = $app->getParams();
