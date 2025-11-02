@@ -11,6 +11,7 @@
  * */
 /*
 v5.3.3 : php 8.4/8.5 compatibility
+v5.3.3 : check/load actions from github 
 */
 
 // namespace up;
@@ -27,6 +28,7 @@ class plgContentUP extends CMSPlugin
     public $upPath = 'plugins/content/up/';
     private $githubapikey = null;
     private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
+    private $api_token = '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'; // default api key
     private $actionsha256 = [];
 
     public function __construct(&$subject, $params)
@@ -540,12 +542,13 @@ class plgContentUP extends CMSPlugin
             curl_setopt($curl, CURLOPT_TIMEOUT, 10);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            if ($this->githubapikey) {
-                curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                            "Authorization: token ".$this->githubapikey,
-                            "User-Agent: PHP"
-                ]);
+            if (!$this->githubapikey) { // pas de clé définie, on prend la clé par défaut
+                $this->githubapikey = $this->api_token;
             }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                        "Authorization: token ".$this->githubapikey,
+                        "User-Agent: PHP"
+            ]);
 
             $response = curl_exec($curl);
             return $response;
