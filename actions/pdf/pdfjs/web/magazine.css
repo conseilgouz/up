@@ -86,7 +86,8 @@
     left: 45%;
 	display: inline-flex;
 	height:27px;
-    padding: 0 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
 }
 .icon-center-holder  .next-button{
 	background-image: url(images/arrows.png);
@@ -107,10 +108,11 @@
     z-index: 1000;
     width: auto;
     bottom: 0%;
-    right: 50px;
+    right: 40px;
 	display: inline-flex;
 	height:27px;
-    padding: 0 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
 }
 
 .exit-icon {
