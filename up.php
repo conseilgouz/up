@@ -28,7 +28,8 @@ class plgContentUP extends CMSPlugin
     public $upPath = 'plugins/content/up/';
     private $githubapikey = null;
     private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
-    private $api_token_1 = 'github#pat#';
+    private $api_token_1 = 'github';
+    private $api_token_1b = '#pat#';
     private $api_token_3 = 'xpcct9Slv3f4sbPunduH78IVD1SvLDcXDZDGQLR8eiTWIIH4OUTD0XDeWPD'; // default api key
     private $api_token_2 = '11AEUI53Q0qMOms450fdUF#';
     private $actionsha256 = [];
