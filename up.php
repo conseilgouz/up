@@ -577,20 +577,52 @@ class plgContentUP extends CMSPlugin
 
     }
     /*
+    * ==== getGithubFile
+    * chargement d'un fichier à partir de github
+    */
+    private function getGithubFile($file, $admin = '')
+    {
+        if (!$response = $this->getGithubAction($file)) {
+            $msg = 'Fichier '.$file.' -> Erreur appel Github';
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $action = json_decode($response);
+        if (isset($action->message)) { // message d'erreur de github
+            $msg = 'File '.$file.' -> '.$action->message;
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        if ($action->download_url) {
+            $url = $action->download_url;
+            try {
+                if (is_file($this->upPath.$file)) {
+                    unlink($this->upPath.$file);
+                }
+                copy($url, $this->upPath.$file);
+            } catch (\Exception $e) {
+            }
+        }
+        return true;
+    }
+
+    /*
     *  Vérifie si UP-list-actions-version-v<versionUP>.txt existe
     */
     private function loadActionsSha256()
     {
-        $file = $this->upPath.'/assets/UP-list-actions-version-v'.$this->_up_version().'.txt';
+        if ($this->params->def('checkgithub', 0)) {
+        // récupération du dernier fichier sur github
+            $this->getGithubFile('assets/UP-list-actions-version.txt');
+        }
+        $file = $this->upPath.'/assets/UP-list-actions-version.txt';
         if (!is_file($file)) {
             return false;
         }
         $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
-        $outBuffer = '';
         if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
             return '';
         }
-        $cgLines = false;
         foreach ($readBuffer as $line) {
             $one = explode(':', $line);
             if (sizeof($one) > 1) {
@@ -615,20 +647,10 @@ class plgContentUP extends CMSPlugin
             }
         }
     }
-    /*
-    *  récupération de la version de UP
-    */
-    private function _up_version()
-    {
-        $vers = '?';
-        $fic = $this->upPath . 'up.xml';
-        if (file_exists($fic)) {
-            $xml = simplexml_load_file($fic);
-            $vers = $xml->version;
-        }
-        return $vers;
-    }
-    /* from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
+    /* 
+    * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
+    *
+    * supprime les fichiers d'une action, sauf le répertoire custom
     */
     private function delete_directory($dir)
     {
