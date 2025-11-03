@@ -354,7 +354,7 @@ class jcontent_by_categories extends upAction
             $this->kw_replace($sItem, 'content', $item->fulltext);
             if (stripos($sItem, '##note##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('note')
                     ->from('#__content')
                     ->where('id = ' . $item->id);
@@ -373,7 +373,7 @@ class jcontent_by_categories extends upAction
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')

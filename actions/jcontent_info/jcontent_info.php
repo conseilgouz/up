@@ -176,7 +176,7 @@ class jcontent_info extends upAction
         // === NOTE
         if (stripos($tmpl, '##note') !== false) {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('note')
                 ->from('#__content')
                 ->where('id = ' . $item->id);
@@ -199,7 +199,7 @@ class jcontent_info extends upAction
         if (stripos($tmpl, '##tags') !== false) {
             $this->get_attr_style($tags_list_attr, $options['tags-list-style']);
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('t.title')
                 ->from('#__tags as t')
                 ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')
@@ -223,7 +223,7 @@ class jcontent_info extends upAction
         if (stripos($tmpl, '##tags-link') !== false) {
             $this->get_attr_style($tags_list_attr, $options['tags-list-style']);
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('t.title, t.alias, t.id, t.language')
                 ->from('#__tags as t')
                 ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')

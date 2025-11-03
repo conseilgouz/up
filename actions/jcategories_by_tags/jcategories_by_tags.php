@@ -100,7 +100,7 @@ class jcategories_by_tags extends upAction
             $id = (int) $options[__class__];
         } else {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('t.id')
                 ->from('#__tags as t')
                 ->where('t.title like "' . $options[__class__] . '"');
@@ -134,7 +134,7 @@ class jcategories_by_tags extends upAction
         // ---> creation requete
 
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('c.title, c.id, c.alias, c.description, c.path, c.params, c.created_time, c.modified_time, c.hits')
             ->from('#__contentitem_tag_map as m ')
             ->innerJoin('#__categories as c on c.id = m.content_item_id')
@@ -177,7 +177,7 @@ class jcategories_by_tags extends upAction
             $sItem = $tmpl; // reinit pour nouvel article
                             // --- lien vers le blog de la catégorie
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select(array(
                 'COUNT(*)'
             ))
@@ -228,7 +228,7 @@ class jcategories_by_tags extends upAction
             if (stripos($sItem, '##tags-list##') !== false) {
                 // ##### TODO #####
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('t.title')
                     ->from('#__contentitem_tag_map as m ')
                     ->innerJoin('#__categories as c on c.id = m.content_item_id')

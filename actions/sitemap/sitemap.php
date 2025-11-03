@@ -88,7 +88,7 @@ class sitemap extends upAction
         // ==== les catégories
         // $this->catIndex[catid] = true si robots index pour la catégorie
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('id, metadata, title');
         $query->from($db->quoteName('#__categories'));
         // $foo = $query->__toString();
@@ -110,7 +110,7 @@ class sitemap extends upAction
         // ==============================================================
 
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $query->select($db->quoteName(array(
             'id',
@@ -205,7 +205,7 @@ class sitemap extends upAction
 
         // ==== TOUS LES ARTICLES PUBLIQUEs AVEC ROBOTS:INDEX
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $query->select($db->quoteName(array(
             'a.id',

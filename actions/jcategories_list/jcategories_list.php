@@ -66,7 +66,7 @@ class jcategories_list extends upAction
 
         // === RECUP NIVEAU ACCES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__viewlevels'));
         $db->setQuery($query);

@@ -1,3 +1,13 @@
+## 04/11/2025 - version 5.4.1
+
+#### Modifications actions
+
+- pdf : suppression de l'option bgbtns, prise en charge du fichier custom/custom.css
+
+#### Modifications internes des actions
+
+- Joomla 6 : remplacement $db->getQuery(true) par $db->createQuery()
+
 ## 03/11/2025 - version 5.4
 
 #### Modifications actions

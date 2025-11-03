@@ -151,7 +151,7 @@ class jcontent_metadata extends upAction
             $robots_default[] = $app->getCfg('robots', 'index, follow');
             // les catégories
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('id, metadata');
             $query->from($db->quoteName('#__categories'));
             $db->setQuery($query);
@@ -172,7 +172,7 @@ class jcontent_metadata extends upAction
         // === RECUP NIVEAU ACCES
         if (stripos($tmpl, '##nivaccess##') !== false) {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('*');
             $query->from($db->quoteName('#__viewlevels'));
             $db->setQuery($query);
@@ -432,7 +432,7 @@ class jcontent_metadata extends upAction
             // {note} : note sur l'article
             if (stripos($sItem, '##note##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('note')
                     ->from('#__content')
                     ->where('id = ' . $item->id);
@@ -450,7 +450,7 @@ class jcontent_metadata extends upAction
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')

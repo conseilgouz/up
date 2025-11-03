@@ -1401,7 +1401,7 @@ class upAction extends plgContentUP
     {
         list($k, $v) = explode('=', $where);
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select($db->quoteName($select))
             ->from($db->quoteName('#__' . $table))
             ->where($db->quoteName($k) . '="' . $v . '"');

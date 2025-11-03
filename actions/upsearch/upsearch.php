@@ -254,7 +254,7 @@ class upsearch extends upAction
         if ($this->options['module']) {
             // --- recup
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('*');
             $query->from($db->quoteName('#__modules'));
             // uniquement module site

@@ -77,7 +77,7 @@ class jmenus_list extends upAction
 
         // === RECUP NIVEAU ACCES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__viewlevels'));
         $db->setQuery($query);
@@ -88,7 +88,7 @@ class jmenus_list extends upAction
         
         // === liste des menutypes
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__menu_types'));
         $db->setQuery($query);

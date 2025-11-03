@@ -109,7 +109,7 @@ class jcontent_by_tags extends upAction
             $id = (int) $options[__class__];
         } else {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('t.id')
                 ->from('#__tags as t')
                 ->where('t.title like "' . $options[__class__] . '"');
@@ -143,7 +143,7 @@ class jcontent_by_tags extends upAction
         // ---> creation requete
 
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('c.id, c.title, c.introtext, c.fulltext, c.state, c.catid, c.created, c.modified, c.publish_up, c.images, c.hits, c.featured, c.alias, cat.alias as category_alias, cat.title as category_title')
             ->from('#__contentitem_tag_map as m ')
             ->innerJoin('#__content as c on c.id = m.content_item_id')
@@ -246,7 +246,7 @@ class jcontent_by_tags extends upAction
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = $db->getQuery(true);
+                $query = $db->createQuery();
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')

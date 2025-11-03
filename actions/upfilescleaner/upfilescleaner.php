@@ -477,7 +477,7 @@ class upfilescleaner extends upAction
             }
 
             // Construire la requête
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select($cols);
             $query->from($db->qn('#__'.$table));
 

@@ -95,14 +95,6 @@ var MagazineView = {
 
         $("#magazine").show();
         
-		if(window.location.hash.indexOf('bgbtns=') > -1) { // background buttons color
-			ix = window.location.toString().indexOf('bgbtns=') + 7;
-			col = '#'+window.location.toString().substring(ix,ix+6);
-			$('.icon-holder').css('background-color',col);
-			$('.icon-center-holder').css('background-color',col);
-            $('.flashy-close').css('background-color',col);
-		}
-
         var pages = [1];
 		MagazineView.layout =  isPhone ? 'single' : 'double';
 		var turnHeight = (divWidth * 1) / (MagazineView.layout == 'double' ? 2 : 1);

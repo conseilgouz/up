@@ -86,7 +86,7 @@ class jextensions_list extends upAction
 
         // === RECUP EXTENSION
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__extensions'));
         if ($type) {

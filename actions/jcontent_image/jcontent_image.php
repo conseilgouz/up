@@ -274,7 +274,7 @@ class jcontent_image extends upAction
         $images = json_encode($images);
 
         $db = Factory::getContainer()->get('DatabaseDriver');
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $query->update($db->quoteName('#__content'))
             ->set($db->quoteName('images') . ' = ' . $db->quote($images))

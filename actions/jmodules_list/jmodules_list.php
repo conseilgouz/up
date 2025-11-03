@@ -99,7 +99,7 @@ class jmodules_list extends upAction
 
         // === RECUP MODULES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__modules'));
         if ($options[__class__])

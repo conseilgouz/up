@@ -98,7 +98,7 @@ class jmenus_metadata extends upAction
 
         // === RECUP NIVEAU ACCES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__viewlevels'));
         $db->setQuery($query);
@@ -112,7 +112,7 @@ class jmenus_metadata extends upAction
 
         // --- robots pour les catégories (si global, on prend $robots_config)
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('id, metadata');
         $query->from($db->quoteName('#__categories'));
         $db->setQuery($query);
@@ -204,7 +204,7 @@ class jmenus_metadata extends upAction
     function getMenutypes()
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select('*');
         $query->from($db->quoteName('#__menu_types', 'mt'));
         $query->where($db->quoteName('mt.client_id') . '=0');
@@ -233,7 +233,7 @@ class jmenus_metadata extends upAction
     function getMenus($menutype)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $query->select($db->quoteName(array(
             'id',
@@ -269,7 +269,7 @@ class jmenus_metadata extends upAction
     function getArticles($menulink)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
 
         $query->select($db->quoteName(array(
             'a.id',

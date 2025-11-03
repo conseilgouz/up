@@ -35,6 +35,7 @@ class pdf extends upAction
 {
     public function init()
     {
+        $this->load_file('pdf.css');
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
@@ -70,7 +71,6 @@ class pdf extends upAction
             'close-left' => 0, // 1=croix de fermeture en haut à gauche. 0=haut-droite par défaut
             'flip' => 0, // activer le mode flipbook uniquement si PDFJS
             'background' => '', // couleur fond perdu du PDF au format #rrggbb
-            'bgbtns' => '', // couleur de fond des boutons magazine
             'zoom' => '', // zoom par défaut (100%)
             'pdfjs-model' => 'web', // ou mobile (non opérationnel)
             /* [st-css] Style CSS */
@@ -86,7 +86,6 @@ class pdf extends upAction
         $this->ctrl_unit($options['width'], '%,vw');
         $this->ctrl_unit($options['height'], 'px,vh,rem');
         $options['background'] = ltrim($options['background'], ' #');
-        $options['bgbtns'] = ltrim($options['bgbtns'], ' #');
         $options['zoom'] = ltrim($options['zoom'], ' ');
         // === CSS-HEAD v2.9
         $this->load_css_head($options['css-head']);
@@ -103,11 +102,6 @@ class pdf extends upAction
         if ($options['background']) {
             $color = $options['flip'] ? '&' : '#';
             $color .= 'background=' . $options['background'];
-        }
-        $bgbtns = '';
-        if ($options['bgbtns']) {
-            $bgbtns = $options['flip'] ? '&' : '#';
-            $bgbtns .= 'bgbtns=' . $options['bgbtns'];
         }
         $zoom = '';
         if ($options['zoom']) {
@@ -237,7 +231,7 @@ class pdf extends upAction
                     $css .= '.flashy-overlay .flashy-prev.flashy-show, .flashy-overlay .flashy-next.flashy-show {display:none}';
                     $this->load_css_head($css);
                 }
-                $attr_btn['href'] = $this->actionPath . 'pdfjs/web/viewer.html?file=' . $pdf_url . $flip . $color . $bgbtns;
+                $attr_btn['href'] = $this->actionPath . 'pdfjs/web/viewer.html?file=' . $pdf_url . $flip . $color;
                 $html[] = $this->set_attr_tag('a', $attr_btn, $link_text);
                 $html[] = $this->load_jquery_code('if ($(".flashy").length > 0) $(".flashy").flashy({overlayClose:1})');
             }

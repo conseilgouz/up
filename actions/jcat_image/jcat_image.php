@@ -48,7 +48,7 @@ class jcat_image extends upAction
 
         // === récup image categorie
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query
             ->select(array('cat.params', 'cat.id'))
             ->from($db->quoteName('#__content', 'art'))

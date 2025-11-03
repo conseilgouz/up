@@ -1,0 +1,3 @@
+/* Custom.css à appliquer lors de l'affichage du pdf */
+.icon-holder,.icon-center-holder{background-color:#2f90d5}
+#toolbarViewer {background-color:#2f90d5}

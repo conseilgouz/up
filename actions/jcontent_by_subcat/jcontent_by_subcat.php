@@ -597,7 +597,7 @@ class jcontent_by_subcat extends upAction
         $this->kw_replace($tmpl, 'content', $artItem->fulltext);
         if (stripos($tmpl, '##note##') !== false) {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('note')
                 ->from('#__content')
                 ->where('id = ' . $artItem->id);
@@ -611,7 +611,7 @@ class jcontent_by_subcat extends upAction
         // {tags-list} : liste des tags
         if (stripos($tmpl, '##tags-list##') !== false) {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $query->select('t.title')
                 ->from('#__tags as t')
                 ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')

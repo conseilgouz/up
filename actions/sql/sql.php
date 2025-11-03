@@ -110,7 +110,7 @@ class sql extends upAction
         if (isset($this->options_user['dbinfos'])) {
             $out = '';
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             if ($options[__class__] == '') {
                 $db->setQuery('SHOW TABLES');
                 $rows = $db->loadRowList();
@@ -152,7 +152,7 @@ class sql extends upAction
         // ================
 
         $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->getQuery(true);
+        $query = $db->createQuery();
         $query->select($options['select']);
         $query->from($options[__class__]);
         if ($options['innerjoin']) {
@@ -218,7 +218,7 @@ class sql extends upAction
         // si template=vide : on affiche toutes les colonnes et limite les champs texte à 100 car
         if ($options['template'] == '') {
             $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->getQuery(true);
+            $query = $db->createQuery();
             $db->setQuery('DESCRIBE ' . $db->quoteName($options[__class__]));
             $tmp = $db->loadAssocList();
             foreach ($tmp as $col) {
