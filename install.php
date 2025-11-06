@@ -124,6 +124,8 @@ class plgContentUpInstallerScript {
 			copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');
 			$app->enqueueMessage('<p>Le fichier "assets/custom/_variables.scss" est inchangé.</p>');
 		}
+		$cache = Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)->createCacheController();
+        $cache->clean('_system');
     }
 
 }

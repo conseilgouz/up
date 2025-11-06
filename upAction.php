@@ -4,11 +4,11 @@
  * UP - Universal Plugin
  * Fonctions utilitaires pour les actions
  * @author    Lomart
- * @version   1.0
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  */
  /*
  v5.3.3 : php 8.4 compatibility
+ v5.4.1 : variables publiques dans up.php
  */
 
 defined('_JEXEC') or die();
@@ -24,26 +24,6 @@ use Joomla\Database\DatabaseInterface;
 
 class upAction extends plgContentUP
 {
-    public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
-    public $basepath;
-    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg;
-    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico;
-    public $ext_types;
-    public $filepath,$firstInstance,$folders_exclude;
-    public $inedit,$inprod;
-    public $J4;
-    public $level,$link;
-    public $main_class,$multicpt;
-    public $name,$nivacces;
-    public $options,$options_user,$out;
-    public $replace_len,$replace_deb,$result;
-    public $srcset_path, $styles_main;
-    public $tags_list_attr,$tarteaucitron,$tradaction,$tradup,$trimA0;
-    public $upPath = 'plugins/content/up/';
-    public $urlhelpsite,$usehelpsite;
-    public $valid_type,$varStyle,$varStyleString;
-
-
     public function __construct($name)
     {
         $this->name = $name;

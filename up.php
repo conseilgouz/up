@@ -3,7 +3,6 @@
 /**
  *
  * @package plg_UP for Joomla! 3.0+
- * @version $Id: up.php 2025-11-01 $
  * @author Lomart
  * @copyright (c) 2025 Lomart
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
@@ -12,6 +11,7 @@
 /*
 v5.3.3 : php 8.4/8.5 compatibility
 v5.3.3 : check/load actions from github 
+v5.4.1 : variables publiques dans up.php
 */
 
 // namespace up;
@@ -20,12 +20,31 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Version;
+use Joomla\Filesystem\Folder;
 
 // #[AllowDynamicProperties] // php 8.4
 
 class plgContentUP extends CMSPlugin
 {
     public $upPath = 'plugins/content/up/';
+    public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
+    public $basepath;
+    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg;
+    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico;
+    public $ext_types;
+    public $filepath,$firstInstance,$folders_exclude;
+    public $inedit,$inprod;
+    public $J4;
+    public $level,$link;
+    public $main_class,$multicpt;
+    public $name,$nivacces;
+    public $options,$options_user,$out;
+    public $replace_len,$replace_deb,$result;
+    public $srcset_path, $styles_main;
+    public $tags_list_attr,$tarteaucitron,$tradaction,$tradup,$trimA0;
+    public $urlhelpsite,$usehelpsite;
+    public $valid_type,$varStyle,$varStyleString;
+
     private $githubapikey = null;
     private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
     private $api_token_1 = 'github#pat#';
@@ -79,7 +98,7 @@ class plgContentUP extends CMSPlugin
 
         // Chargement systematique de la feuile de style
         if ($this->params->def('loadcss', '1')) {
-            $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+            $wa = $app->getDocument()->getWebAssetManager();
             try { // conflit avec RegularLbas
                 $wa->registerAndUseStyle('upcss', 'plugins/content/up/assets/up.css');
             } catch (\Joomla\CMS\WebAsset\Exception\InvalidActionException $e) {
@@ -577,11 +596,58 @@ class plgContentUP extends CMSPlugin
 
     }
     /*
+    *  vérification sur github une fois par jour
+    *  création d'un fichier up_checkfile.<date+heure prochaine vérification>
+    */
+    private function createcheckfile() {
+        
+        $folder = JPATH_SITE.'/plugins/content/up/assets';
+        $chkfile = 'up_checkfile';
+        $dayssecs = 0;
+        $dayssecs = strtotime(date('Y-m-d').' '.$dayssecs);
+        if (!$dayssecs) {
+            $dayssecs = 0;
+        } else {
+            $dayssecs -= strtotime(date('Y-m-d'));
+        }
+        $time = time();
+        $round = strtotime(date('Y-m-d', $time));
+        $uptime = $round + $dayssecs;
+        $xdays = 1;
+        $interval = $xdays * 86400;
+        if ($uptime < $time) {
+            $uptime += 86400;
+        }
+        $fname = $folder .'/'. $chkfile.'.'.$uptime;
+        if (!touch($fname)) {
+            return;
+        }
+        $f = fopen($fname, 'w');
+        fputs($f, 'w'.$interval);
+        fclose($f);
+    }
+    /*
     * ==== getGithubFile
     * chargement d'un fichier à partir de github
     */
     private function getGithubFile($file, $admin = '')
     {
+        /* la vérification sur github est faite une fois par jour */
+        $folder = JPATH_SITE.'/plugins/content/up/assets';
+        $chkfile = 'up_checkfile';
+        $fnames = Folder::files($folder, $chkfile.'.*');
+        $fname = array_pop($fnames);
+        if (!$fname) { // fichier non trouvé : on le crée 
+            $this->createcheckfile();
+        } else {
+            $uptime = substr($fname, -10, 10);
+            $time = time();
+            if ($time < $uptime) { // moins d'un jour depuis la dernière vérification ?
+                return; // pas de vérification, on sort
+            }
+             $this->createcheckfile();
+        }
+        // recherche sur github de la nouvelle version du fichier
         if (!$response = $this->getGithubAction($file)) {
             $msg = 'Fichier '.$file.' -> Erreur appel Github';
             Factory::getApplication()->enqueueMessage($msg);
@@ -611,6 +677,9 @@ class plgContentUP extends CMSPlugin
     */
     private function loadActionsSha256()
     {
+        if (Factory::getApplication()->isClient('administrator')) {
+            return false;
+        }
         if ($this->params->def('checkgithub', 0)) {
         // récupération du dernier fichier sur github
             $this->getGithubFile('assets/UP-list-actions-version.txt');

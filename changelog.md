@@ -1,4 +1,4 @@
-## 04/11/2025 - version 5.4.1
+## 06/11/2025 - version 5.4.1
 
 #### Modifications actions
 
@@ -7,6 +7,13 @@
 #### Modifications internes des actions
 
 - Joomla 6 : remplacement $db->getQuery(true) par $db->createQuery()
+
+#### Modifications internes
+
+- modification install.php : force cache clean à l'installation/mise à jour de UP
+- contrôle du fichier version sur github une fois par jour si verif. github activé
+- ajout de l'affichage du no de version sur les paramètres du plugin
+- déplacement des variables publiques dans up.php
 
 ## 03/11/2025 - version 5.4
 
