@@ -96,8 +96,18 @@ class plgContentUpInstallerScript {
 				}
 			}
 		}
+		$xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
+		$previous_version = $xml->version;
+        
 		if ($type =='update'){ // clean up updated actions
-            $actionsList = ['pdf'];
+            if ($previous_version <= '5.4.1') {
+                $actionsList = ['jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_categories','jcontent_by_subcat'
+                               ,'jcontent_by_tags','jcontent_image','jcontent_in_content','jcontent_info','jcontent_metadata'
+                               ,'jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','pdf','php','sitemap','sql'
+                               ,'upfilescleaner','upsearch'];
+            } else { // version 5.4.2
+                $actionsList = ['pdf'];
+            }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $this->delete_directory($dir);
