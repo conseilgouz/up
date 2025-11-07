@@ -164,15 +164,23 @@ class plgContentUpInstallerScript {
         if (!is_dir($dir)) {
             return unlink($dir);
         }
+        $empty = true;
         foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..' || $item == 'custom') {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+            if ($item == 'custom') { // keep custom folder
+                $empty = false;
                 continue;
             }
             if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
         }
-        return rmdir($dir);
+        if ($empty){
+            rmdir($dir);
+        } 
+        return true;
     }
 
 }
