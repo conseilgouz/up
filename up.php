@@ -12,6 +12,7 @@
 v5.3.3 : php 8.4/8.5 compatibility
 v5.3.3 : check/load actions from github 
 v5.4.1 : variables publiques dans up.php
+v5.4.2 : cleanup checkfiles
 */
 
 // namespace up;
@@ -645,7 +646,8 @@ class plgContentUP extends CMSPlugin
             if ($time < $uptime) { // moins d'un jour depuis la dernière vérification ?
                 return; // pas de vérification, on sort
             }
-             $this->createcheckfile();
+            unlink($folder.'/'.$fname); // remove previous checkfile
+            $this->createcheckfile();
         }
         // recherche sur github de la nouvelle version du fichier
         if (!$response = $this->getGithubAction($file)) {
