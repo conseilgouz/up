@@ -96,6 +96,13 @@ class plgContentUpInstallerScript {
 				}
 			}
 		}
+		if ($type =='update'){ // clean up updated actions
+            $actionsList = ['pdf'];
+            foreach ($actionsList as $action) {
+                $dir = $path.'actions/' . $action;
+                $this->delete_directory($dir);
+            }
+        }
     }
 
     /**
@@ -133,6 +140,29 @@ class plgContentUpInstallerScript {
 		}
 		$cache = Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)->createCacheController();
         $cache->clean('_system');
+    }
+    /* 
+    * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
+    *
+    * supprime les fichiers d'une action, sauf le répertoire custom
+    */
+    private function delete_directory($dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..' || $item == 'custom') {
+                continue;
+            }
+            if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+        return rmdir($dir);
     }
 
 }
