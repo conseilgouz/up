@@ -26,6 +26,8 @@
  * v 5.2 - fix dossier wasm, viewer.ftl dans dossiers 'locale'. fix zoom (Pascal)
  *       - embed à la place de pdfjs sous Windows-8
  * v 5.3.3 - nouveau parametre bgbtns : couleur arrière-plan des boutons en mode magazine
+ * v 5.4.1 - suppression parametre bgbtns, remplacer par chargement custom.css
+ * v 5.4.2 - minificiation des fichiers .mjs 
  */
 defined('_JEXEC') or die();
 

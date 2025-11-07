@@ -1,3 +1,9 @@
+## 07/11/2025 - version 5.4.2
+
+#### Modifications internes des actions
+
+- pdf : minification des fichiers .mjs, suppression de la librairie wasm, suppression répertoire mobile (inutilisé)
+
 ## 06/11/2025 - version 5.4.1
 
 #### Modifications actions
