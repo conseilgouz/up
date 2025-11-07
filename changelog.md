@@ -2,7 +2,7 @@
 
 #### Modifications internes des actions
 
-- pdf : minification des fichiers .mjs, suppression de la librairie wasm, suppression répertoire mobile (inutilisé)
+- pdf : minification des fichiers .mjs, suppression de la librairie wasm, suppression répertoire mobile (inutilisé), use Joomla JQuery
 
 #### Modification interne
 
