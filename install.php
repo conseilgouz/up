@@ -119,6 +119,13 @@ class plgContentUpInstallerScript {
                     $app->enqueueMessage('suppression : ' . $file);
             }
         }
+        // nettoyage des fichiers checkfile
+        $filelist = glob($path .'assets/up_checkfile.*');
+        foreach ($filelist AS $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
         // on ecrase le fichier (vide) _variables.scss par celui sauvegardé
 		if (file_exists($path . $ficVariablesBak)===true && $type != 'uninstall') {
 			copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');

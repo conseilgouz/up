@@ -7,6 +7,7 @@
 #### Modification interne
 
 - up.php :  cleanup checkfiles
+- install.php : cleanup checkfiles
 
 ## 06/11/2025 - version 5.4.1
 
