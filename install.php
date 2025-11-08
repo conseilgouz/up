@@ -98,16 +98,17 @@ class plgContentUpInstallerScript {
 		}
 		$xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
 		$previous_version = $xml->version;
-        
+        $actionsList = [];
 		if ($type =='update'){ // clean up updated actions
-            if ($previous_version <= '5.4.1') {
+            if ($previous_version <= '5.4.0') {
                 $actionsList = ['jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_categories','jcontent_by_subcat'
                                ,'jcontent_by_tags','jcontent_image','jcontent_in_content','jcontent_info','jcontent_metadata'
                                ,'jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','pdf','php','sitemap','sql'
                                ,'upfilescleaner','upsearch'];
-            } else { // version 5.4.2
+            } else if ($previous_version == '5.4.1') { // on était en version 5.4.1
                 $actionsList = ['pdf'];
             }
+            // note : version 5.4.3 : pas de modification dans les actions
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $this->delete_directory($dir);
@@ -148,13 +149,21 @@ class plgContentUpInstallerScript {
 			copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');
 			$app->enqueueMessage('<p>Le fichier "assets/custom/_variables.scss" est inchangé.</p>');
 		}
-		$cache = Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)->createCacheController();
-        $cache->clean('_system');
+        // nettoyage du cache
+        $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+        $cache = $cacheModel->getCache() ??null;
+        if ($cache) {
+            foreach ($cache->getAll() as $group) {
+                $cache->clean($group->group);
+            }
+            $app->enqueueMessage('<p>Cache nettoyé.</p>');
+        }
+        return;
     }
     /* 
     * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
     *
-    * supprime les fichiers d'une action, sauf le répertoire custom
+    * supprime les fichiers d'un répertoire, sauf le répertoire custom pour les actions 
     */
     private function delete_directory($dir)
     {

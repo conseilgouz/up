@@ -1,3 +1,9 @@
+## 08/11/2025 - version 5.4.3
+
+#### Modification interne
+
+- install.php : nettoyage du cache après installation
+
 ## 07/11/2025 - version 5.4.2
 
 #### Modifications internes des actions
