@@ -37,6 +37,7 @@
  * v5.1 - ajout option featured
  * v5.2 - ajout motclé ##date-max## et options new-date
  * v5.3.3 - Joomla 6 : remplacement de getInstance
+ * v5.4.5 : caché l'article en cours et article en cours indéterminé : essayer de le récupérer par getInput 
  */
 defined('_JEXEC') or die();
 
@@ -143,6 +144,7 @@ class jcontent_by_categories extends upAction
         // =====> liste des catégories
         $catid = $options[__class__];
         $artid = '';
+        
         if ($catid == '') {
             // la catégorie de l'article en cours
             if (isset($this->article->catid)) {
@@ -186,9 +188,15 @@ class jcontent_by_categories extends upAction
         }
         $catid = explode(',', $catid);
 
+        $app = Factory::getApplication();
+        if (!$artid && $options['current'] != '1') {
+        // on veut exclure/inclure l'article courant et il n'est pas déterminé : on essaie de le récupérer
+        // à partir de la ligne de commande
+            $artid = $app->getInput()->get('id', 0); 
+        }
         // =====> RECUP DES DONNEES
         // Get an instance of the generic articles model
-        $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
+        $model = $app->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
             'ignore_request' => true
         ));
         if (is_bool($model)) {
@@ -196,7 +204,6 @@ class jcontent_by_categories extends upAction
         }
 
         // Set application parameters in model
-        $app = Factory::getApplication();
         $appParams = $app->getParams();
         $model->setState('params', $appParams);
 

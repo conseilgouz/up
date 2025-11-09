@@ -54,16 +54,6 @@ class plgContentUpInstallerScript {
     }
 
     /**
-     * Method to update the extension
-     * $parent is the class calling this method
-     *
-     * @return void
-     */
-    public function update($parent) {
-        $app = Factory::getApplication();
-    }
-
-    /**
      * Method to run before an install/update/uninstall method
      * $parent is the class calling this method
      * $type is the type of change (install, update or discover_install)

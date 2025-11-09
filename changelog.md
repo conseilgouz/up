@@ -1,4 +1,10 @@
-## 08/11/2025 - version 5.4.3
+## 10/11/2025 - version 5.4.5
+
+#### Modifications actions
+
+- jcontent_by_categories : caché l'article en cours et article en cours indéterminé : essayer de le récupérer par getInput
+
+## 08/11/2025 - version 5.4.4
 
 #### Modification interne
 
