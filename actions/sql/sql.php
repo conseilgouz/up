@@ -23,6 +23,8 @@
  * v5.2 : ajout option overflow
  * v5.3 : fix xxx-format=img[60] in set_type function
  * v5.3.3 : suppression notice si champ vide
+ * v5.3.3 : suppression notice si champ vide
+ * v5.4.5 : ajout du paramètre perpage => pagination, position de pagination pospage => bottom/top
  */
 defined('_JEXEC') or die();
 
@@ -56,6 +58,8 @@ class sql extends upAction
             'leftjoin' => '', // commande SQL : leftjoin
             'rightjoin' => '', // commande SQL : rightjoin
             'setlimit' => '', // commande SQL : setlimit
+            'perpage'  => '', // pagination : nb d'elements par page
+            'pospage'  => 'bottom', // pagination : position bottom ou top
             'variable-*' => '', // remplace ##variable-X## dans les options ci-dessus
             /* [st-info] informations sur la base de données */
             'dbinfos' => '', // vide= la liste des tables OU nom_table = la liste des colonnes
@@ -174,7 +178,39 @@ class sql extends upAction
             $query->order($options['order']);
         }
         if ($options['setlimit']) {
-            $query->setLimit($options['setlimit']);
+            if (is_numeric($options['setlimit'])) { // numerique
+                $query->setLimit($options['setlimit']);
+            } else { // une requête sql
+                $querycnt = $db->createQuery();
+                $db->setQuery($options['setlimit']);
+                $limit = $db->loadResult();
+                $options['setlimit'] = $limit;
+            }
+        }
+        $lapagination = "";
+        if ($options['perpage']) {
+            $nb = 0;
+            $input = Factory::getApplication()->getInput();
+            if ($input->get('upstart')) {
+                $nb = $input->get('upstart');
+            }
+            $query->setLimit($options['perpage'],$nb);
+            $pagination = new Joomla\CMS\Pagination\Pagination($options['setlimit'], $nb, $options['perpage']);
+            $lapagination = $pagination->getPagesLinks($this->params);
+            $lapagination = str_replace('?start=','?upstart=',$lapagination);
+            // nettoyage du cache et ne pas mettre la page en cache
+            Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)
+            ->createCacheController('callback', ['defaultgroup' => 'com_content', 'caching' => false]);
+            /** @var CallbackController $cache */
+            $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+            $cache = $cacheModel->getCache() ??null;
+            if ($cache) {
+                foreach ($cache->getAll() as $group) {
+                    if ($group->group == 'com_content') {
+                        $cache->clean($group->group);
+                    }
+                }
+            }
         }
         if ($options['group']) {
             $query->group($options['group']);
@@ -429,9 +465,15 @@ class sql extends upAction
 
         // === FOOTER
         $html[] = $close_main;
-
         // code en retour
         $ret = implode(PHP_EOL, $html);
+        if ($lapagination) {
+            if ($options['pospage'] == "top") { // top
+                echo $lapagination ;
+            } else { // bottom
+                $ret .= '<div style="width:100% !important">'.$lapagination.'</div>' ;
+        }
+        }
         return $ret;
         // run
     }
