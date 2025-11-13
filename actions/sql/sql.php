@@ -25,10 +25,13 @@
  * v5.3.3 : suppression notice si champ vide
  * v5.3.3 : suppression notice si champ vide
  * v5.4.5 : ajout du paramètre perpage => pagination, position de pagination pospage => bottom/top
+ * v5.4.5 : ajout de route-format : calcul du lien vers un article
  */
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
 
 class sql extends upAction
@@ -503,6 +506,7 @@ class sql extends upAction
                 case 'min':
                 case 'max':
                 case 'regex':
+                case 'route': 
                     // list[1:un, 2:deux]
                     $out[$type] = $this->strtoarray($arg, ',', ':', false);
                     break;
@@ -585,6 +589,9 @@ class sql extends upAction
                         $size .= '="' . key($arg) . 'px"';
                     }
                     $out = '<img src="' . $val . '" alt="' . $this->link_humanize($val) . '"' . $size . '>';
+                    break;
+                case 'route':
+                    $out = Route::_(RouteHelper::getArticleRoute($val));
                     break;
             }
         }
