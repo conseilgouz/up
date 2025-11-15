@@ -189,6 +189,16 @@ class upbtn_makefile extends upAction
         $html[] = '<script type = "text/javascript" src = "upbtn.js"></script>';
         $html[] = '</head>';
         $html[] = '<body>';
+        // v5.4.5 mini up : ajout d'un affichage d'attente pendant le chargement d'une action
+        $html[] = '<div class="page-load-status" id="page-load-status">';
+        $html[] = '<div class="loader-ellips infinite-scroll-request">';
+        $html[] = '<span class="loader-ellips__dot"></span>';
+        $html[] = '<span class="loader-ellips__dot"></span>';
+        $html[] = '<span class="loader-ellips__dot"></span>';
+        $html[] = '<span class="loader-ellips__dot"></span>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '<div id="upbtns">';
         // filtrage v5.2
         $html[] = '<form id="upbtn-filter">';
         $html[] = '<label for="upbtn-filter">' . $this->trad('FILTER_LABEL') . '</label>';
@@ -232,6 +242,7 @@ class upbtn_makefile extends upAction
         $html[] = '<input type="hidden" id="upbtn-lang" value="' . $lang . '" />';
         $html[] = '</section>';
         $html[] = '</form>';
+        $html[] = '</div>'; // 5.4.5
         $html[] = '</body>';
         $html[] = '</html>';
 

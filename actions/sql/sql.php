@@ -60,7 +60,7 @@ class sql extends upAction
             'outerjoin' => '', // commande SQL : outerjoin
             'leftjoin' => '', // commande SQL : leftjoin
             'rightjoin' => '', // commande SQL : rightjoin
-            'setlimit' => '', // commande SQL : setlimit
+            'setlimit' => '', // commande SQL : setlimit, peut contenir un nombre ou une requête sql
             'perpage'  => '', // pagination : nb d'elements par page
             'pospage'  => 'bottom', // pagination : position bottom ou top
             'variable-*' => '', // remplace ##variable-X## dans les options ci-dessus
@@ -208,8 +208,9 @@ class sql extends upAction
             $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
             $cache = $cacheModel->getCache() ??null;
             if ($cache) {
+                $arr_cache = ['com_content','com_plugins','mod_custom','page']; // cache list to clean
                 foreach ($cache->getAll() as $group) {
-                    if ($group->group == 'com_content') {
+                    if (in_array($group->group,$arr_cache)) {
                         $cache->clean($group->group);
                     }
                 }

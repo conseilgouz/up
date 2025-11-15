@@ -5,6 +5,11 @@
 - jcontent_by_categories : caché l'article en cours et article en cours indéterminé : essayer de le récupérer par getInput
 - sql : ajout pagination, setlimit accepte un nombre ou une requête sql
 - sql : ajout de route-format : calcul du lien vers un article
+- upbtn_makefile : ajout de 
+
+#### Modification interne
+
+- upbtn : chargement d'une action si elle n'est pas encore chargée
 
 ## 08/11/2025 - version 5.4.4
 

@@ -1,6 +1,6 @@
 /**
  * @package upbtn 
- * @version 5.2 - 18/04/2025
+ * @version 5.4 - 14/11/2025
  * @author Lomart
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 **/
@@ -14,7 +14,7 @@
 
 'use strict';
 
-var httpRequest;
+var httpRequest, waitaction, waitlang;
 
 /**
 * Construit et insère le(s) shortcodes
@@ -102,6 +102,46 @@ function showReponse() {
         if (ajaxOptions) ajaxOptions.innerHTML = httpRequest.responseText;
         if (optionsContainer) optionsContainer.style.display = 'block';
         if (footerContainer) footerContainer.style.display = 'block';
+    } else if (httpRequest.status === 404) {// mini UP 
+        let btns = document.getElementById('upbtns');
+        let wait = document.getElementById('page-load-status');
+        btns.style.display ='none';
+        wait.style.display='block';
+        let tmpurl = httpRequest.responseURL.split('/');
+        let actionpart = tmpurl[tmpurl.length - 1].split('.');
+        waitaction = actionpart[1];
+        waitlang = actionpart[0];
+        let loc = window.location.pathname.split('/');
+        let url = window.location.origin+'/'+loc[1]+'/administrator/index.php?option=com_ajax&group=content&plugin=up&exist='+waitaction+'&format=json';
+        httpRequest = new XMLHttpRequest();
+        httpRequest.open('GET',url,true);
+        httpRequest.onload = loadReponse;
+        httpRequest.onerror = () => {
+            console.error(`Network error while trying to load options for action: ${waitaction}`);
+            alert('Network error occurred. Please try again.');
+        };
+        httpRequest.send();
+    } else {
+        console.error(`Error: File not found at ${httpRequest.responseURL}`);
+        alert(`Error: File not found at ${httpRequest.responseURL}`);
+    }
+}
+// reponse from UP on a action load request
+function loadReponse() {
+    if (httpRequest.readyState !== XMLHttpRequest.DONE) return;
+
+    let btns = document.getElementById('upbtns');
+    let wait = document.getElementById('page-load-status');
+    wait.style.display ='none';
+    btns.style.display= 'block';
+
+    if (httpRequest.status === 200) {
+        let resp = JSON.parse(httpRequest.response);
+        if (resp.data[0]) {
+            loadOptionsAction(waitaction,waitlang);
+        } else {
+            alert(`Error: not found ${waitaction}`);
+        }
     } else {
         console.error(`Error: File not found at ${httpRequest.responseURL}`);
         alert(`Error: File not found at ${httpRequest.responseURL}`);

@@ -487,7 +487,7 @@ class plgContentUP extends CMSPlugin
             if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
                 $this->githubapikey = $this->get_action_pref('github-key');
                 if (!$this->getGithubActionRec('actions/'.$exist, '../')) {
-                    return true;  // error  ignore it
+                    return false; // non trouvé : erreur
                 }
             }
             return true;
