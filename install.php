@@ -140,7 +140,7 @@ class plgContentUpInstallerScript {
             foreach ($cache->getAll() as $group) {
                 $cache->clean($group->group);
             }
-            $app->enqueueMessage('<p>Cache nettoyé.</p>');
+            $app->enqueueMessage('<p>Cache OK.</p>');
         }
         return;
     }
