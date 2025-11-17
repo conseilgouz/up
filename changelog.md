@@ -10,11 +10,6 @@
 #### Modification interne
 
 - upbtn : chargement d'une action si elle n'est pas encore chargée
-
-## 08/11/2025 - version 5.4.4
-
-#### Modification interne
-
 - install.php : nettoyage du cache après installation
 
 ## 07/11/2025 - version 5.4.2
