@@ -25,7 +25,8 @@
  * v5.3.3 : suppression notice si champ vide
  * v5.3.3 : suppression notice si champ vide
  * v5.4.5 : ajout du paramètre perpage => pagination, position de pagination pospage => bottom/top
- * v5.4.5 : ajout de route-format : calcul du lien vers un article
+ *          ajout de route-format : calcul du lien vers un article
+ *          suppression du cache si pagination
  */
 defined('_JEXEC') or die();
 
@@ -201,18 +202,15 @@ class sql extends upAction
             $pagination = new Joomla\CMS\Pagination\Pagination($options['setlimit'], $nb, $options['perpage']);
             $lapagination = $pagination->getPagesLinks($this->params);
             $lapagination = str_replace('?start=','?upstart=',$lapagination);
-            // nettoyage du cache et ne pas mettre la page en cache
+            // ne pas mettre la page en cache et nettoyage du cache
             Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)
             ->createCacheController('callback', ['defaultgroup' => 'com_content', 'caching' => false]);
             /** @var CallbackController $cache */
             $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
             $cache = $cacheModel->getCache() ??null;
             if ($cache) {
-                $arr_cache = ['com_content','com_plugins','mod_custom','page']; // cache list to clean
                 foreach ($cache->getAll() as $group) {
-                    if (in_array($group->group,$arr_cache)) {
-                        $cache->clean($group->group);
-                    }
+                    $cache->clean($group->group);
                 }
             }
         }

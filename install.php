@@ -90,15 +90,9 @@ class plgContentUpInstallerScript {
 		$previous_version = $xml->version;
         $actionsList = [];
 		if ($type =='update'){ // clean up updated actions
-            if ($previous_version <= '5.4.0') {
-                $actionsList = ['jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_categories','jcontent_by_subcat'
-                               ,'jcontent_by_tags','jcontent_image','jcontent_in_content','jcontent_info','jcontent_metadata'
-                               ,'jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','pdf','php','sitemap','sql'
-                               ,'upfilescleaner','upsearch'];
-            } else if ($previous_version == '5.4.1') { // on était en version 5.4.1
-                $actionsList = ['pdf'];
+            if ($previous_version >= '5.4.1') { // on était en version 5.4.1 ou avant
+                $actionsList = ['pdf']; // il y a eu du nettoyage dans les librairies pdf, donc suppression de l'action pdf
             }
-            // note : version 5.4.3 : pas de modification dans les actions
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $this->delete_directory($dir);
