@@ -3,7 +3,6 @@
 /**
  * Affiche le contenu d'un fichier JSON, XML ou CSV sous forme d'une liste
  *
- *
  * syntaxe {up data2list=data_source}
  *
  * @version  UP-3.0  

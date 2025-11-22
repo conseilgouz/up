@@ -3,7 +3,6 @@
 /**
  * Retourne des champs d'une source de données selon un template de mise en forme
  *
- *
  * syntaxe {up data-info=data_source | template=##nom_champ##}
  *
  * @version  UP-3.0  

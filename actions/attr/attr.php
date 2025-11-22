@@ -3,7 +3,6 @@
 /**
  * Ajoute des attributs à la première balise interne
  *
- *
  * syntaxe {up attr | class=bg-yellow}< p>texte< /p>{/up attr}
  * syntaxe {up attr | class=bg-yellow | tag=img}<p>< img src="image.jpg" ></p>{/up attr}
  *

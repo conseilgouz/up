@@ -3,7 +3,6 @@
 /**
  * affiche un effet de loupe sur une image
  *
- *
  * syntaxe 1 {up image-magnify=petite image | imgzoom=grande image pour zoom}
  * syntaxe 2 {up image-magnify=image pour vignette et zoom}
  *
