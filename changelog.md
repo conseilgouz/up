@@ -1,9 +1,10 @@
-## 22/11/2025 - version 5.4.6
+## 22/11/2025 - version 5.4.7
 
 #### Modification interne
 
 - upbtn : chargement d'une action si elle n'est pas encore chargée 
 - upbtn : suppression des commentaires en trop dans les descriptions des actions générant des *
+- mise à jour du fichier des versions des actions
 
 ## 22/11/2025 - version 5.4.5
 

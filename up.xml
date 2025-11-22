@@ -7,7 +7,7 @@
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
 	<authorEmail>lomart@lomart.fr</authorEmail>
-    <version>5.4.6</version>
+    <version>5.4.7</version>
     <description>PLG_CONTENT_UP_DESC</description>
     <files>
         <filename plugin="up">up.php</filename>
