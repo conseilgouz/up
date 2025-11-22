@@ -1,6 +1,6 @@
 /**
  * @package upbtn 
- * @version 5.4.6 - 22/11/2025
+ * @version 5.4.8 - 22/11/2025
  * @author Lomart
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
 **/
@@ -113,7 +113,7 @@ function showReponse() {
         waitlang = actionpart[0];
         let loc = window.location.pathname.split('/');
         let base = window.location.origin;
-        if (base.indexOf('://localhost')) base += '/'+loc[1];
+        if (base.indexOf('://localhost') > 0 ) base += '/'+loc[1];
         let url = base+'/administrator/index.php?option=com_ajax&group=content&plugin=up&exist='+waitaction+'&format=json';
         httpRequest = new XMLHttpRequest();
         httpRequest.open('GET',url,true);
