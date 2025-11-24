@@ -1,3 +1,9 @@
+## 24/11/2025 - version 5.4.9
+
+#### Modification interne
+
+- changement de serveur de mise à jour : vers github
+
 ## 22/11/2025 - version 5.4.8
 
 #### Modification interne
