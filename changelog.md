@@ -1,3 +1,9 @@
+## 26/11/2025 - version 5.4.10
+
+#### Modification interne
+
+- modif get_url_absolute : garder le nom du host s'il est fourni
+
 ## 24/11/2025 - version 5.4.9
 
 #### Modification interne

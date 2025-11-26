@@ -9,6 +9,7 @@
  /*
  v5.3.3 : php 8.4 compatibility
  v5.4.1 : variables publiques dans up.php
+ v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
  */
 
 defined('_JEXEC') or die();
@@ -323,9 +324,9 @@ class upAction extends plgContentUP
     {
         $url = trim($url);
         $url = str_replace('\\', '/', $url);
-        // if (strpos($url, '//') === false) { // 5.1
-        $url = Uri::root() . $url;
-        // }
+        if (strpos($url, '//') === false) { // 5.4.10
+            $url = Uri::root() . $url;
+        }
         if ($urlencode) {
             $url = urlencode($url);
         }
