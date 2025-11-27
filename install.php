@@ -90,7 +90,7 @@ class plgContentUpInstallerScript {
 		$previous_version = $xml->version;
         $actionsList = [];
 		if ($type =='update'){ // clean up updated actions
-            if ($previous_version >= '5.4.1') { // on était en version 5.4.1 ou avant
+            if ($previous_version <= '5.4.1') { // on était en version 5.4.1 ou avant
                 $actionsList = ['pdf']; // il y a eu du nettoyage dans les librairies pdf, donc suppression de l'action pdf
             }
             foreach ($actionsList as $action) {
