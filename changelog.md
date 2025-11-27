@@ -1,3 +1,9 @@
+## 27/11/2025 - version 5.4.11
+
+#### Bouton UP dans l'éditeur
+
+- remise en ligne de l'action pdf.
+
 ## 26/11/2025 - version 5.4.10
 
 #### Modification interne
