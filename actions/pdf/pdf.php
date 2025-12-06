@@ -28,6 +28,7 @@
  * v 5.3.3 - nouveau parametre bgbtns : couleur arrière-plan des boutons en mode magazine
  * v 5.4.1 - suppression parametre bgbtns, remplacer par chargement custom.css
  * v 5.4.2 - minificiation des fichiers .mjs 
+ * v 5.4.12 - update pdfjs 5.4.449 (Pascal)
  */
 defined('_JEXEC') or die();
 

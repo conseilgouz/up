@@ -1,3 +1,10 @@
+## 06/12/2025 - version 5.4.12
+
+#### Modification interne
+
+- site-stat : suppression notice "zone $dirLogs non définie"
+- pdf : librairie pdfjs version 5.4.449
+
 ## 27/11/2025 - version 5.4.11
 
 #### Bouton UP dans l'éditeur

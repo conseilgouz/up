@@ -42,6 +42,8 @@ use Joomla\Database\DatabaseInterface;
 
 class site_stat extends upAction
 {
+    public $dirLogs;
+    
     public function init()
     {
         return true;
