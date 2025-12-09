@@ -2,7 +2,7 @@
 
 /**
  *
- * @package plg_UP for Joomla! 3.0+
+ * @package plg_UP for Joomla!
  * @author Lomart
  * @copyright (c) 2025 Lomart
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
