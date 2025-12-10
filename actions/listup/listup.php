@@ -19,14 +19,16 @@
  */
 defined('_JEXEC') or die();
 
-class listup extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class listup extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public $kwc_formula = [];
     public $kwc_pref = [];
 
     public function init()
     {
-        $this->load_file('listup.css');
+        UpHelper::load_file($this,'listup.css');
         return true;
     }
 
@@ -34,12 +36,12 @@ class listup extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // style des puces (séparateur point-virgule) par niveaux (markers) (séparateur virgule)
@@ -71,7 +73,7 @@ class listup extends upAction
         // --- les bullets définis par le webmaster
         $pref_user_file = $this->actionPath . 'custom/prefs.ini';
         if (file_exists($pref_user_file)) {
-            $pref_user = $this->load_inifile($this->actionPath . 'custom/prefs.ini', true);
+            $pref_user = UpHelper::load_inifile($this,$this->actionPath . 'custom/prefs.ini', true);
             if ($pref_user !== false && isset($pref_user['bullets'])) {
                 $this->kwc_pref = array_merge($this->kwc_pref, $pref_user['bullets']);
             }
@@ -122,7 +124,7 @@ class listup extends upAction
         );
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // les types autorisés par laa classe upli-type
         $this->valid_type = array_map('trim', explode(',', $this->options['valid-type']));
@@ -141,7 +143,7 @@ class listup extends upAction
         // $this->styles_main = array_pad(explode(',', $this->options[__class__]), 8, '');
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // le contenu
         require_once($this->upPath . '/assets/lib/simple_html_dom.php');
@@ -177,7 +179,7 @@ class listup extends upAction
             }
             $attr['id'] = $this->options['id'];
             $this->main_class = $attr['class'];
-            $this->get_attr_style($attr, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this,$attr, $this->options['class'], $this->options['style']);
             $this->multicpt = (strpos($attr['style'], 'counters') !== false);
             if ($this->options['start']) {
                 if (strpos($attr['class'], 'upli-type') !== false) {
@@ -287,7 +289,7 @@ class listup extends upAction
                         $v = trim($v, '\'\"');
                         $varcss[$k] = '\'' . $v . '\'';
                     } else {
-                        $this->msg_error('ERR_STYLE', $k);
+                        UpHelper::msg_error($this,'ERR_STYLE', $k);
                     }
                 } elseif (strpos($info, '.') !== false) {
                     // une image (par defaut dans le dossier icon de l'action)
@@ -320,7 +322,7 @@ class listup extends upAction
                     $varcss['type'] = $info_min;
                     $varcss['content'] = '';
                 } else {
-                    $this->msg_error('ERR_ATTRIBUT : '. $info); // v52
+                    UpHelper::msg_error($this,'ERR_ATTRIBUT : '. $info); // v52
                 }
             }
         } while (count($args) > 0);

@@ -24,7 +24,9 @@
  */
 defined('_JEXEC') or die();
 
-class flexauto extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class flexauto extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -33,11 +35,11 @@ class flexauto extends upAction
 
     public function run()
     {
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -64,7 +66,7 @@ class flexauto extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $colname = $options['class-col'];
         $rowname = $options['class-row'];
@@ -95,11 +97,11 @@ class flexauto extends upAction
                 $css .= '#id .col-' . ($i + 1) . '[' . $options['style-' . ($i + 1)] . ']';
             }
         }
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // -- ajout options utilisateur dans la div principale
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, 'fg-row fg-auto-' . $options[__class__], 'fg-auto-m' . $options['tablet'], 'fg-auto-s' . $options['mobile'], $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, 'fg-row fg-auto-' . $options[__class__], 'fg-auto-m' . $options['tablet'], 'fg-auto-s' . $options['mobile'], $options['class'], $options['style']);
 
         // -- ajout des styles pour les colonnes
         // note: le style général est toujours appliqué
@@ -117,10 +119,10 @@ class flexauto extends upAction
         // ================================================================================
 
         $Content_OK = false;
-        $this->content = $this->supertrim($this->content);  //v5.1.1
-        if ($this->ctrl_content_parts($this->content) === true) {
+        $this->content = UpHelper::supertrim($this,$this->content);  //v5.1.1
+        if (UpHelper::ctrl_content_parts($this,$this->content) === true) {
             $Content_OK = ($options['bloc-tag'] == 1);
-            $allcoltxt = $this->get_content_parts($this->content);
+            $allcoltxt = UpHelper::get_content_parts($this,$this->content);
             $this->content = '';
             $i = 0;
             foreach ($allcoltxt as $coltxt) {
@@ -181,9 +183,9 @@ class flexauto extends upAction
         // le code HTML en retour
         // ================================================================================
         if (empty($this->content)) {
-            $out = $this->msg_inline($options['no-content-html']);
+            $out = UpHelper::msg_inline($this,$options['no-content-html']);
         } else {
-            $out = $this->set_attr_tag('div', $attr_main, $this->content);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main, $this->content);
         }
         return $out;
     }

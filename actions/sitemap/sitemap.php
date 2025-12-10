@@ -22,8 +22,9 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class sitemap extends upAction
+class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -50,7 +51,7 @@ class sitemap extends upAction
         );
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // === CRON : exécution périodique
         if ($this->cron_ok($this->options['cron']) !== true) {
@@ -65,11 +66,11 @@ class sitemap extends upAction
         $this->priority = ($this->options['priority']) ? '<priority>' . $this->options['priority'] . '</priority>' : '';
 
         // ==== l'option principale peut contenir les menutypes a exclure
-        $this->options['menutype-exclude'] = $this->str_append($this->options['menutype-exclude'], $this->options[__class__], ',');
+        $this->options['menutype-exclude'] = UpHelper::str_append($this,$this->options['menutype-exclude'], $this->options[__class__], ',');
         $menus = array_map('trim', explode(',', $this->options['menutype-exclude']));
         $menutypeExclus = '';
         foreach ($menus as $menu) {
-            $this->add_str($menutypeExclus, $menu, ',', '"', '"');
+            UpHelper::add_str($this,$menutypeExclus, $menu, ',', '"', '"');
         }
 
         // ==== Variables globales
@@ -84,7 +85,7 @@ class sitemap extends upAction
         $okk = stripos($app->getCfg('robots', 'index, follow'), 'noindex');
         $cfgIndex = (stripos($app->getCfg('robots', 'index, follow'), 'noindex') === false);
         if ($this->options['info'])
-            $this->info .= '<br>' . $this->trad_keyword('VAL_CONFIG_INDEX', (($cfgIndex) ? 'index' : 'no-index'));
+            $this->info .= '<br>' . UpHelper::trad_keyword($this,'VAL_CONFIG_INDEX', (($cfgIndex) ? 'index' : 'no-index'));
         // ==== les catégories
         // $this->catIndex[catid] = true si robots index pour la catégorie
         $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -101,7 +102,7 @@ class sitemap extends upAction
             } else {
                 $this->catIndex[$res->id] = (stripos($meta['robots'], 'noindex') === false);
                 if (! $this->catIndex[$res->id] && $this->options['info'])
-                    $this->info .= '<br>' . $this->trad_keyword('VAL_CAT_INDEX', $res->id, $res->title);
+                    $this->info .= '<br>' . UpHelper::trad_keyword($this,'VAL_CAT_INDEX', $res->id, $res->title);
             }
         }
 

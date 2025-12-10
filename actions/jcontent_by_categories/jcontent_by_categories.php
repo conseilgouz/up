@@ -47,8 +47,9 @@ use Joomla\CMS\Access\Access;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcontent_by_categories extends upAction
+class jcontent_by_categories extends Lomart\Plugin\Content\Up\Extension\Up 
 {
     public function init()
     {
@@ -59,7 +60,7 @@ class jcontent_by_categories extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // ID(s) catégorie(s) séparé(s) avec virgule, vide pour celle de l'article actuel ou 0 pour toutes
@@ -114,32 +115,32 @@ class jcontent_by_categories extends upAction
             }
         }
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
-        $options['template'] = $this->get_bbcode($options['template'], '+hr|pre');
-        $options['new-html'] = $this->get_bbcode($options['new-html']);
-        $options['no-content-html'] = $this->get_bbcode($options['no-content-html']);
+        $options['template'] = UpHelper::get_bbcode($this,$options['template'], '+hr|pre');
+        $options['new-html'] = UpHelper::get_bbcode($this,$options['new-html']);
+        $options['no-content-html'] = UpHelper::get_bbcode($this,$options['no-content-html']);
         // ======> verif template (modèle de mise en page)
         // en priorité : le sontenu entre shortcode
         // en second : le model dans prefs.ini
         if ($this->content) {
-            $tmpl = $this->get_bbcode($this->content, '+hr|pre');
+            $tmpl = UpHelper::get_bbcode($this,$this->content, '+hr|pre');
         } else {
             $tmpl = $options['template'];
         }
         if (! $tmpl) {
-            $this->msg_error($this->trad_keyword('NO_CONTENT'));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_CONTENT'));
             return false;
         }
 
         // ======> contrôle clé de tri
         $list_sortkey = 'title, ordering, created, modified, publish_up, id, hits, random';
-        $options['sort-by'] = $this->ctrl_argument($options['sort-by'], $list_sortkey);
+        $options['sort-by'] = UpHelper::ctrl_argument($this,$options['sort-by'], $list_sortkey);
 
         // =====> liste des catégories
         $catid = $options[__class__];
@@ -280,21 +281,21 @@ class jcontent_by_categories extends upAction
         $main_attr['id'] = $options['id'];
         $sItem_attr = array();
         $tags_list_attr = array();
-        $this->get_attr_style($main_attr, $options['main-class'], $options['main-style']);
-        $this->get_attr_style($sItem_attr, $options['item-class'], $options['item-style']);
-        $this->get_attr_style($tags_list_attr, $options['tags-list-style']);
+        UpHelper::get_attr_style($this,$main_attr, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$sItem_attr, $options['item-class'], $options['item-style']);
+        UpHelper::get_attr_style($this,$tags_list_attr, $options['tags-list-style']);
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ======> mise en forme résultat
         if ($options['main-tag'] != '0') {
-            $html[] = $this->set_attr_tag($options['main-tag'], $main_attr);
+            $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $main_attr);
         }
         foreach ($items as $item) {
             // --- Bloc article
             if ($options['item-tag'] != '0') {
-                $html[] = $this->set_attr_tag($options['item-tag'], $sItem_attr);
+                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $sItem_attr);
             }
             $sItem = $tmpl; // reinit pour nouvel article
             // --- lien vers l'article
@@ -321,44 +322,44 @@ class jcontent_by_categories extends upAction
             // prise en charge plugins contenu v31
             if ($options['content-plugin']) {
                 if (stripos($sItem, '##intro') !== false) {
-                    $item->introtext = $this->import_content($item->introtext);
+                    $item->introtext = UpHelper::import_content($this,$item->introtext);
                 } // v31
                 if (stripos($sItem, '##content##') !== false) {
-                    $item->fulltext = $this->import_content($item->fulltext);
+                    $item->fulltext = UpHelper::import_content($this,$item->fulltext);
                 }
             }
             // ==== les remplacements
             // {id} : ID de l'article
-            $this->kw_replace($sItem, 'id', $item->id);
+            UpHelper::kw_replace($this,$sItem, 'id', $item->id);
             // {link} : lien vers l'article - a mettre dans balise a
-            $this->kw_replace($sItem, 'link', $url);
+            UpHelper::kw_replace($this,$sItem, 'link', $url);
             // {title-link} : titre de l'article
-            $this->kw_replace($sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
+            UpHelper::kw_replace($this,$sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
             // {title} : titre de l'article
-            $this->kw_replace($sItem, 'title', $title);
+            UpHelper::kw_replace($this,$sItem, 'title', $title);
             // {subtitle} : sous-titre de l'article (partie après tilde du titre)
-            $this->kw_replace($sItem, 'subtitle', $subtitle);
+            UpHelper::kw_replace($this,$sItem, 'subtitle', $subtitle);
             // {maintitle} : titre principal de l'article (avant tilde) v3.0
-            $this->kw_replace($sItem, 'maintitle', $maintitle);
+            UpHelper::kw_replace($this,$sItem, 'maintitle', $maintitle);
             // {alias} : alias de l'article v1.8
-            $this->kw_replace($sItem, 'alias', $item->alias);
+            UpHelper::kw_replace($this,$sItem, 'alias', $item->alias);
             // {date-crea} : date de création
-            $this->kw_replace($sItem, 'date-crea', $this->up_date_format($item->created, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this,$sItem, 'date-crea', UpHelper::up_date_format($this,$item->created, $options['date-format'], $options['date-locale']));
             // {date-modif} : date de modification
-            $this->kw_replace($sItem, 'date-modif', $this->up_date_format($item->modified, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this,$sItem, 'date-modif', UpHelper::up_date_format($this,$item->modified, $options['date-format'], $options['date-locale']));
             // {date-publish} : date de publication
-            $this->kw_replace($sItem, 'date-publish', $this->up_date_format($item->publish_up, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this,$sItem, 'date-publish', UpHelper::up_date_format($this,$item->publish_up, $options['date-format'], $options['date-locale']));
             // date significative. Dans l'ordre modif, publication, création
             if (stripos($sItem, '##date-max') !== false) {
                 $datemax = max($item->publish_up, $item->modified, $item->created);
-                $datemax = $this->up_date_format($datemax, $options['date-format'], $options['date-locale']);
-                $this->kw_replace($sItem, 'date-max', $datemax);
+                $datemax = UpHelper::up_date_format($this,$datemax, $options['date-format'], $options['date-locale']);
+                UpHelper::kw_replace($this,$sItem, 'date-max', $datemax);
             }
             // {author} : auteur
-            $this->kw_replace($sItem, 'author', $item->author);
+            UpHelper::kw_replace($this,$sItem, 'author', $item->author);
             // {intro} : texte d'introduction en HTML
-            $this->kw_replace($sItem, 'intro', $item->introtext);
-            $this->kw_replace($sItem, 'content', $item->fulltext);
+            UpHelper::kw_replace($this,$sItem, 'intro', $item->introtext);
+            UpHelper::kw_replace($this,$sItem, 'content', $item->fulltext);
             if (stripos($sItem, '##note##') !== false) {
                 $db = Factory::getContainer()->get(DatabaseInterface::class);
                 $query = $db->createQuery();
@@ -368,14 +369,14 @@ class jcontent_by_categories extends upAction
                 $db->setQuery($query);
                 $result = $db->loadResult();
                 //$sItem = str_ireplace('##note##', $result, $sItem); // v51
-                $this->kw_replace($sItem, 'note', $result);
+                UpHelper::kw_replace($this,$sItem, 'note', $result);
             }
             // {cat} : nom catégorie
-            $this->kw_replace($sItem, 'cat', $item->category_title);
+            UpHelper::kw_replace($this,$sItem, 'cat', $item->category_title);
             //
             if (strpos($sItem, '##cat-link##')) {
                 $caturl = Route::_(RouteHelper::getCategoryRoute($catslug));
-                $this->kw_replace($sItem, 'cat-link', '<a href="' . $caturl . '">' . $item->category_title . '</a>');
+                UpHelper::kw_replace($this,$sItem, 'cat-link', '<a href="' . $caturl . '">' . $item->category_title . '</a>');
             }
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
@@ -391,17 +392,17 @@ class jcontent_by_categories extends upAction
                 $tmpTag = array();
                 foreach ($listTags as $tag) {
                     if ($options['tags-list-style'] != '') {
-                        $tmpTag[] = $this->set_attr_tag('span', $tags_list_attr, $tag->title);
+                        $tmpTag[] = UpHelper::set_attr_tag($this,'span', $tags_list_attr, $tag->title);
                     } else {
                         $tmpTag[] = $tag->title;
                     }
                 }
-                $this->kw_replace($sItem, 'tags-list', implode($options['tags-list-separator'], $tmpTag));
+                UpHelper::kw_replace($this,$sItem, 'tags-list', implode($options['tags-list-separator'], $tmpTag));
             }
             // {featured} : en vedette
             if (stripos($sItem, '##featured##') !== false) {
                 $tmp = ($item->featured == '1') ? $options['featured-html'] : '';
-                $this->kw_replace($sItem, 'featured', $tmp);
+                UpHelper::kw_replace($this,$sItem, 'featured', $tmp);
             }
             // {new} : badge
             if (stripos($sItem, '##new##') !== false) {
@@ -421,10 +422,10 @@ class jcontent_by_categories extends upAction
                         $new = ($item->publish_up > $max) ? $options['new-html'] : '';
                 }
 
-                $this->kw_replace($sItem, 'new', $new);
+                UpHelper::kw_replace($this,$sItem, 'new', $new);
             }
             // {hits}
-            $this->kw_replace($sItem, 'hits', $item->hits);
+            UpHelper::kw_replace($this,$sItem, 'hits', $item->hits);
             // {image-xxx} : l'image d'intro, sinon celle dans l'introtext
             // {image} : la balise img complete
             // {image-src} et {image-alt} : uniquement src et alt d'une balise img existante
@@ -436,17 +437,17 @@ class jcontent_by_categories extends upAction
                     $img_src = $images->image_intro;
                     $img_alt = $images->image_intro_alt;
                 } else {
-                    $imgTag = $this->preg_string('#(\<img .*\>)#Ui', $item->introtext);
+                    $imgTag = UpHelper::preg_string($this,'#(\<img .*\>)#Ui', $item->introtext);
                     if ($imgTag) {
-                        $imgAttr = $this->get_attr_tag($imgTag, 'alt');
+                        $imgAttr = UpHelper::get_attr_tag($this,$imgTag, 'alt');
                         $img_src = $imgAttr['src'];
                         $img_alt = $imgAttr['alt'];
                     }
                 }
                 $img_tag = '<img src="' . $img_src . '" alt="' . $img_alt . '">';
-                $this->kw_replace($sItem, 'image', $img_tag);
-                $this->kw_replace($sItem, 'image-src', $img_src);
-                $this->kw_replace($sItem, 'image-alt', $img_alt);
+                UpHelper::kw_replace($this,$sItem, 'image', $img_tag);
+                UpHelper::kw_replace($this,$sItem, 'image-src', $img_src);
+                UpHelper::kw_replace($this,$sItem, 'image-alt', $img_alt);
             }
 
             // --- tags avec param
@@ -454,7 +455,7 @@ class jcontent_by_categories extends upAction
             preg_match('#\#\#(intro-text\s*,?\s*([0-9]*)\s*)\#\##Ui', $sItem, $tag);
             if (isset($tag[1])) {
                 $intro = ($item->introtext) ? $item->introtext : $item->fulltext;
-                $intro = $this->import_content($intro);
+                $intro = UpHelper::import_content($this,$intro);
                 $intro = trim(strip_tags($intro));
                 $intro = str_replace(PHP_EOL, ' ', $intro); // v51 ote les saut de ligne pour affcihage dans tableau
                 if (isset($tag[1]) && $tag[1]) {
@@ -463,12 +464,12 @@ class jcontent_by_categories extends upAction
                         $intro = mb_substr($intro, 0, $len) . '...';
                     }
                 }
-                $this->kw_replace($sItem, $tag[1], $intro);
+                UpHelper::kw_replace($this,$sItem, $tag[1], $intro);
             }
 
             // {upnb} : nombre d'actions UP utilisées dans article
             $fulltext = (empty($item->fulltext)) ? $item->introtext : $item->fulltext;
-            $this->kw_replace($sItem, 'upnb', substr_count($fulltext, '{up '));
+            UpHelper::kw_replace($this,$sItem, 'upnb', substr_count($fulltext, '{up '));
             // {uplist} : nombre d'occurence de chaque action
             $fulltext = (empty($item->fulltext)) ? $item->introtext : $item->fulltext;
             if (stripos($sItem, '##uplist##') !== false) {
@@ -480,7 +481,7 @@ class jcontent_by_categories extends upAction
                         $tmp .= $k . '&nbsp;(' . $v . ') ';
                     }
                 }
-                $this->kw_replace($sItem, 'uplist', $tmp);
+                UpHelper::kw_replace($this,$sItem, 'uplist', $tmp);
             }
 
             // les custom fields (v3.1)

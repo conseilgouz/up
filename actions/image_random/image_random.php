@@ -20,7 +20,9 @@
  */
 defined('_JEXEC') or die();
 
-class image_random extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_random extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -32,7 +34,7 @@ class image_random extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // dossier des images
@@ -45,41 +47,41 @@ class image_random extends upAction
         );
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // === on récupère
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
 
         if ($this->content) {
-            if ($this->ctrl_content_parts($this->content)) {
-                $imgList = $this->get_content_parts($this->content);
+            if (UpHelper::ctrl_content_parts($this,$this->content)) {
+                $imgList = UpHelper::get_content_parts($this,$this->content);
                 $num = rand(0, count($imgList) - 1);
-                return $this->set_attr_tag('div', $attr_main, $imgList[$num]); // ajout classes et style dans a ?????
+                return UpHelper::set_attr_tag($this,'div', $attr_main, $imgList[$num]); // ajout classes et style dans a ?????
             } else {
                 // ==========> les images (avec/sans liens) indiquées entre les shortcodes
                 $regex = '#(?:<a .*>)?<img.*>(?:</a>)?#i';
                 if (preg_match_all($regex, $this->content, $imglist)) {
                     foreach ($imglist[0] as $img) {
                         preg_match('#(<a.*>)?(<img .*>)(</a>)?#iU', $img, $matches);
-                        $tmp = $this->get_attr_tag($matches[2], 'alt');
+                        $tmp = UpHelper::get_attr_tag($this,$matches[2], 'alt');
                         if ($tmp['alt'] == '') {
                             $imgname = $tmp['src'];
                             if (isset($this->options['zoom-suffix']))
                                 $imgname = str_ireplace($this->options['zoom-suffix'] . '.', '.', $imgname);
-                            $tmp['alt'] = $this->link_humanize($imgname);
+                            $tmp['alt'] = UpHelper::link_humanize($this,$imgname);
                         }
                         $matches[3] = ($matches[1]) ? '</a>' : ''; // lien ouvrant et fermant
-                        $imgList[] = $matches[1] . $this->set_attr_tag('img', $tmp) . $matches[3];
+                        $imgList[] = $matches[1] . UpHelper::set_attr_tag($this,'img', $tmp) . $matches[3];
                     }
                 }
                 $num = rand(0, count($imgList) - 1);
                 if ($this->options['path-only'])
                     return $imgList[$num];
-                return $this->set_attr_tag('div', $attr_main, $imgList[$num]); // ajout classes et style dans a ?????
+                return UpHelper::set_attr_tag($this,'div', $attr_main, $imgList[$num]); // ajout classes et style dans a ?????
             }
         } else {
             // === Récupération images d'un dossier
@@ -90,7 +92,7 @@ class image_random extends upAction
             }
             $imgList = glob($pattern, GLOB_BRACE | GLOB_NOSORT);
             if (empty($imgList)) {
-                return $this->info_debug($this->trad_keyword('NOT_FOUND'));
+                return UpHelper::info_debug($this,UpHelper::trad_keyword($this,'NOT_FOUND'));
             }
             // --- selection de l'image
             $num = rand(0, count($imgList) - 1);
@@ -103,17 +105,17 @@ class image_random extends upAction
             // --- attributs du bloc image
             $attr_img['id'] = $this->options['id'];
             $attr_img['src'] = $imgList[$num];
-            $attr_img['alt'] = $this->link_humanize($imgList[$num]);
-            $this->get_attr_style($attr_img, $this->options['class'], $this->options['style']);
+            $attr_img['alt'] = UpHelper::link_humanize($this,$imgList[$num]);
+            UpHelper::get_attr_style($this,$attr_img, $this->options['class'], $this->options['style']);
             // bloc image
-            $out = $this->set_attr_tag('img', $attr_img);
+            $out = UpHelper::set_attr_tag($this,'img', $attr_img);
 
             // existe-t-il un fichier link
             if (file_exists($imgpath . '/link.ini')) {
-                $links = $this->load_inifile($imgpath . '/link.ini');
+                $links = UpHelper::load_inifile($this,$imgpath . '/link.ini');
                 if (isset($links[$imgname])) {
                     $attr_link['href'] = $links[$imgname];
-                    $out = $this->set_attr_tag('a', $attr_link, $out);
+                    $out = UpHelper::set_attr_tag($this,'a', $attr_link, $out);
                 }
             }
         }

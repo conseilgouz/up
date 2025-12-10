@@ -58,7 +58,9 @@
  
 defined('_JEXEC') or die;
 
-class mapael extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class mapael extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public $params_defaultPlot,$params_legend,$params_slice,$ctrl_params,$legendClass;
     
@@ -69,11 +71,11 @@ class mapael extends upAction
      */
     public function init()
     {
-        $this->load_file('mapael.css');
-        $this->load_file('//cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js');
-        $this->load_file('//cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js');
-        $this->load_file('//cdnjs.cloudflare.com/ajax/libs/jquery-mapael/2.2.0/js/jquery.mapael.min.js');
-        $this->load_file('//cdn.jsdelivr.net/npm/jquery-mapael@2.2.0/js/jquery.mapael.min.js');
+        UpHelper::load_file($this,'mapael.css');
+        UpHelper::load_file($this,'//cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js');
+        UpHelper::load_file($this,'//cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js');
+        UpHelper::load_file($this,'//cdnjs.cloudflare.com/ajax/libs/jquery-mapael/2.2.0/js/jquery.mapael.min.js');
+        UpHelper::load_file($this,'//cdn.jsdelivr.net/npm/jquery-mapael@2.2.0/js/jquery.mapael.min.js');
         return true;
     }
 
@@ -85,7 +87,7 @@ class mapael extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur parametres par défaut (sauf JS)
         $options_def = array(
@@ -315,20 +317,20 @@ class mapael extends upAction
         $this->legendClass = array();
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // ctrl shortcodes secondaires
         $SCOK = array('default-area', 'default-plot', 'default-link', 'area', 'plot', 'link', 'legend-area', 'legend-plot', 'legend-slice',);
-        $SC_all = $this->get_content_shortcode($this->content);
+        $SC_all = UpHelper::get_content_shortcode($this,$this->content);
         foreach ($SC_all as $SC) {
             $key = array_key_first($SC);
             if (!in_array($key, $SCOK)) {
-                $this->msg_error($this->trad_keyword('ERR_SUBKEY', $key));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ERR_SUBKEY', $key));
             }
         }
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // --- charger la carte
         $map = $this->options[__class__];
@@ -336,7 +338,7 @@ class mapael extends upAction
             $map = '/' . $this->actionPath . 'maps/' . $map;
         }
         $map = (strrchr($map, '.') == '.js') ? $map : $map . '.js';
-        $this->load_file($map);
+        UpHelper::load_file($this,$map);
         // le nom seul pour le code js (sans .min eventuel)
         $map = preg_replace('#(.min.js|.js)#', '', basename($map));
 
@@ -350,7 +352,7 @@ class mapael extends upAction
         $js_code .= $this->make_params_main($params_main);
         // options en dernier pour ecraser option identique
         //        if ($this->options['options'])
-        //            $js_code .= ',' . $this->get_code($this->options['options']);
+        //            $js_code .= ',' . UpHelper::get_code($this,$this->options['options']);
         // ----------- DefaultArea
         $js_code .= $this->make_params('defaultArea', 'default-area', $params_common);
         $js_code .= $this->make_params('defaultPlot', 'default-plot', $params_common, $this->params_defaultPlot);
@@ -372,17 +374,17 @@ class mapael extends upAction
             array(',', ',', ',', '{', '{', '}'),
             $js_code
         );
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
 
         // attribut HTML
-        //        $attr_main = $this->get_attr_style($attr_array, 'mapcontainer', $this->options['class'], $this->options['style']);
+        //        $attr_main = UpHelper::get_attr_style($this,$attr_array, 'mapcontainer', $this->options['class'], $this->options['style']);
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         if ($this->options['make-html']) {
             $html[] = '<div class="' . $this->options['map-class'] . '">';
             $html[] = '<span>Alternative content for the map</span>';
@@ -416,7 +418,7 @@ class mapael extends upAction
         $ret_code .= $this->get_params_recurse('', $this->options_user, $defParam);
         // options en dernier pour ecraser option identique
         if ($this->options['options']) {
-            $ret_code .= ',' . $this->get_code($this->options['options']);
+            $ret_code .= ',' . UpHelper::get_code($this,$this->options['options']);
         }
         return $ret_code;
     }
@@ -437,7 +439,7 @@ class mapael extends upAction
         }
         //--- si $upParams est une chaine, c'est le nom du shortcode secondaire
         if (is_array($upParams) === false) {
-            $upParams = $this->get_content_shortcode($this->content, $upParams);
+            $upParams = UpHelper::get_content_shortcode($this,$this->content, $upParams);
         }
 
         //--- si vide, on retourne rien
@@ -456,7 +458,7 @@ class mapael extends upAction
             }
             // appel code manuel en fin
             if (!empty($upParam['options'])) {
-                $ret_code .= ',' . $this->get_code($upParam['options']);
+                $ret_code .= ',' . UpHelper::get_code($this,$upParam['options']);
             }
             $ret_code .= ($subkey === true) ? '' : '}';
             $comma = ',';
@@ -473,14 +475,14 @@ class mapael extends upAction
     public function make_params_legend($params_common)
     {
         $ret_code = '';
-        $upOptions = $this->get_content_shortcode($this->content, 'legend.*');
+        $upOptions = UpHelper::get_content_shortcode($this,$this->content, 'legend.*');
         if (empty($upOptions)) {
             return;
         }
 
         // on y va !
-        $nb_legend['plot'] = count($this->get_content_shortcode($this->content, 'legend-plot'));
-        $nb_legend['area'] = count($this->get_content_shortcode($this->content, 'legend-area'));
+        $nb_legend['plot'] = count(UpHelper::get_content_shortcode($this,$this->content, 'legend-plot'));
+        $nb_legend['area'] = count(UpHelper::get_content_shortcode($this,$this->content, 'legend-area'));
 
         $ret_code .= ',legend:{';
         $cpt_legend['plot'] = 0;
@@ -523,7 +525,7 @@ class mapael extends upAction
                     $ret_code .= $this->get_params_recurse('', $upOption, $this->params_legend);
                     $ret_code .= $this->get_params_recurse('', $upOption, $params_common);
                     if (!empty($upOption['options'])) {
-                        $ret_code .= $this->get_code($upOption['options']);
+                        $ret_code .= UpHelper::get_code($this,$upOption['options']);
                     }
 
                     $legendTypeCurrent = $legendType;
@@ -539,7 +541,7 @@ class mapael extends upAction
                     $ret_code .= $this->get_params_recurse('', $upOption, $this->params_defaultPlot);
                     $ret_code .= $this->get_params_recurse('', $upOption, $this->params_slice);
                     if (isset($upOption['options'])) {
-                        $ret_code .= $this->get_code($upOption['options']);
+                        $ret_code .= UpHelper::get_code($this,$upOption['options']);
                     }
                     $cptSlice++;
                     break;
@@ -581,7 +583,7 @@ class mapael extends upAction
                     $ret_code .= ($h) ? ',height:' . $h : '';
                 }
                 if (!empty($upParams['src'])) {
-                    $ret_code .= ',url:"' . $this->get_url_relative($upParams['src']) . '"';
+                    $ret_code .= ',url:"' . UpHelper::get_url_relative($this,$upParams['src']) . '"';
                 }
                 break;
             case 'svg':
@@ -599,7 +601,7 @@ class mapael extends upAction
                 // no break
             default:
                 if ($type != '') {
-                    $this->msg_error($type . $this->trad_keyword('NOT_OPTION'));
+                    UpHelper::msg_error($this,$type . UpHelper::trad_keyword($this,'NOT_OPTION'));
                 }
         }
         if (isset($upParams['coord'])) {
@@ -645,7 +647,7 @@ class mapael extends upAction
     public function quote($arg)
     {
         if (!(is_numeric($arg) && $arg[0] != '{')) {
-            return '"' . $this->get_bbcode($arg) . '"';
+            return '"' . UpHelper::get_bbcode($this,$arg) . '"';
         } else {
             return $arg;
         }
@@ -809,7 +811,7 @@ class mapael extends upAction
                 }
                 break;
             case 'image':
-                $ret_code .= ',url:"' . $this->get_url_relative($val) . '"';
+                $ret_code .= ',url:"' . UpHelper::get_url_relative($this,$val) . '"';
                 break;
             case 'svg':
                 $ret_code .= ',path:"' . $val . '"';
@@ -837,14 +839,14 @@ class mapael extends upAction
                 $out .= ',{' . $this->get_coord('', $tmp[2] . ',' . $tmp[3]) . '}';
                 break;
             default:
-                $this->msg_error($this->trad_keyword('BETWEEN'));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'BETWEEN'));
         }
         return ',between:[' . $out . ']';
     }
 
     public function get_image_path($key, $val)
     {
-        return ',' . $key . ':"' . $this->get_url_relative($val) . '"';
+        return ',' . $key . ':"' . UpHelper::get_url_relative($this,$val) . '"';
     }
 
     /*
@@ -859,7 +861,7 @@ class mapael extends upAction
         }
 
         $out = (empty($key)) ? '' : ',' . $key . ':';
-        return ',' . $out . $this->get_code($val);
+        return ',' . $out . UpHelper::get_code($this,$val);
     }
 
     public function ctrl_param($jsKey, $upKey, $val)
@@ -876,7 +878,7 @@ class mapael extends upAction
                     if (in_array($val, $tmp)) {
                         $out = ',' . $jsKey . ':"' . $val . '"';
                     } else {
-                        $this->msg_error($val . $this->trad_keyword('FORBIDDEN_VALUE') . $jsKey . ' - correct: ' . $arg);
+                        UpHelper::msg_error($this,$val . UpHelper::trad_keyword($this,'FORBIDDEN_VALUE') . $jsKey . ' - correct: ' . $arg);
                     }
                     break;
                 case 'fct' :
@@ -906,10 +908,10 @@ class mapael extends upAction
             $filename = $this->actionPath . '/map/' . $filename;
         }
         $filename = ltrim($filename, '/ ');
-        $csv = $this->get_html_contents($filename);
-        $csv = $this->get_content_csv($csv, false);
+        $csv = UpHelper::get_html_contents($this,$filename);
+        $csv = UpHelper::get_content_csv($this,$csv, false);
         if (empty($csv)) {
-            $this->msg_error('File not found :' . $filename);
+            UpHelper::msg_error($this,'File not found :' . $filename);
             return '';
         }
         // recherche du modele
@@ -917,15 +919,15 @@ class mapael extends upAction
         $model = $this->options['csv-' . $key . '-model'];
         if ($model != '') {
             // decrytage du model
-            $model = $this->get_code($model);
-            $model = $this->get_bbcode($model);
+            $model = UpHelper::get_code($this,$model);
+            $model = UpHelper::get_bbcode($this,$model);
         } else {
             // 2 - dans un fichier meme nom avec extension : .model
             $model = substr($filename, 0, strrpos($filename, '.')) . '.model';
             $model = file_get_contents($model);
         }
         if (empty($model)) {
-            $this->msg_error($this->trad_keyword('MODEL_NOT_FOUND') . $filename);
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'MODEL_NOT_FOUND') . $filename);
             return '';
         }
         // la 1ere ligne doit etre le nom des colonnes

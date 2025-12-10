@@ -19,7 +19,9 @@
 
 defined('_JEXEC') or die;
 
-class corner extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class corner extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
@@ -29,7 +31,7 @@ class corner extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // texte affiché dans le coin ou ruban
@@ -56,19 +58,19 @@ class corner extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options[__class__] = $this->get_bbcode($options[__class__], false);
-        $options['width'] = $this->ctrl_unit($options['width']);
-        $options['height'] = $this->ctrl_unit($options['height']);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options[__class__] = UpHelper::get_bbcode($this,$options[__class__], false);
+        $options['width'] = UpHelper::ctrl_unit($this,$options['width']);
+        $options['height'] = UpHelper::ctrl_unit($this,$options['height']);
 
         // === affichage limité dans le temps  ?
-        $corner_view = ($this->filter_ok($options['filter']) === true);
+        $corner_view = (UpHelper::filter_ok($this,$options['filter']) === true);
         // === affiché dans un bloc ou sur la page
         // sur la page si pas de contenu
         $onBody = ($this->content == '');
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === URL
         if ($options['url']) {
@@ -137,7 +139,7 @@ class corner extends upAction {
                 $pp = ($position == 'tr' || $position == 'br') ? 'left' : 'right';
                 $style[] = 'padding-' . $pp . ':' . $offset_padding . 'px';
             } else {
-                $this->msg_error($this->trad_keyword('ERR_ANGLE'));
+                UpHelper::msg_error($this,UpHelper::trad_keyword('ERR_ANGLE'));
             }
         }
 
@@ -167,36 +169,36 @@ class corner extends upAction {
         $style[] = 'line-height:20px';
         $style[] = 'letter-spacing: 1px';
 
-        $this->get_attr_style($attr_corner, implode(';', $style), $options['style']);
+        UpHelper::get_attr_style($this,$attr_corner, implode(';', $style), $options['style']);
         $attr_corner['class'] = $options['class'];
 
         // === attributs du bloc principal
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = $options['bloc-class'];
-        $this->get_attr_style($attr_main, 'position:relative;overflow: hidden;', $options['bloc-style']);
+        UpHelper::get_attr_style($this,$attr_main, 'position:relative;overflow: hidden;', $options['bloc-style']);
 
         // === code en retour
         // ==================
         if ($onBody && $corner_view) {
             // ajout classes à BODY
             if ($attr_main['class']) {
-                $this->load_jquery_code('$("body").addClass("' . $attr_main['class'] . '");');
+                UpHelper::load_jquery_code($this,'$("body").addClass("' . $attr_main['class'] . '");');
             }
             // charge le style pour le corner dans HEAD
             $css = '.' . $options['id'] . '{' . $attr_corner['style'] . '}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
             // Le code HTML pour le corner est mis au debut de BODY
             $code = '<div class=\'' . $options['id'] . '\'>' . $options[__class__] . '</div>';
             if (isset($attr_url)) {
-                $code = $this->set_attr_tag('a', $attr_url, $code, false);
+                $code = UpHelper::set_attr_tag($this,'a', $attr_url, $code, false);
             }
-            $html[] = $this->load_jquery_code('$("' . $code . '").prependTo("body");', false);
+            $html[] = UpHelper::load_jquery_code($this,'$("' . $code . '").prependTo("body");', false);
         } else {
-            $html[] = $this->set_attr_tag('div', $attr_main);
+            $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
             if ($corner_view) {
-                $code = $this->set_attr_tag('div', $attr_corner, '<span>' . $options[__class__] . '</span>');
+                $code = UpHelper::set_attr_tag($this,'div', $attr_corner, '<span>' . $options[__class__] . '</span>');
                 if (isset($attr_url)) {
-                    $code = $this->set_attr_tag('a', $attr_url, $code);
+                    $code = UpHelper::set_attr_tag($this,'a', $attr_url, $code);
                 }
                 $html[] = $code;
             }

@@ -13,11 +13,13 @@
  */
 defined('_JEXEC') or die;
 
-class iframe extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class iframe extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('up-iframe.css');
+        UpHelper::load_file($this,'up-iframe.css');
         return true;
     }
 
@@ -25,7 +27,7 @@ class iframe extends upAction {
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // URL site distant
@@ -46,7 +48,7 @@ class iframe extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $options['scrolling'] = ($options['scrolling'] == 'no') ? 'no' : 'yes';
         // === CSS-HEAD
@@ -70,7 +72,7 @@ class iframe extends upAction {
 
         // HEIGHT : permet de conserver une hauteur sur mobile pour les iframes l'acceptant
         if ($options['height']) {
-            $height = $this->ctrl_unit($options['height'], 'px,vh,rem,em');
+            $height = UpHelper::ctrl_unit($this,$options['height'], 'px,vh,rem,em');
             $css .= '#id.up-iframe-container{min-height:' . $height . '}';
         }
 
@@ -79,25 +81,25 @@ class iframe extends upAction {
             $css .= '#id.up-iframe-container{background:url("' . $options['preview'] . '") no-repeat;background-size:cover}';
         }
         // === LOAD CSS HEAD
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
 
         // === attributs container
         $attr_container['id'] = $options['id'];
         $attr_container['class'] = 'up-iframe-container';
-        $this->get_attr_style($attr_container, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_container, $options['class'], $options['style']);
 
         // === attributs iframe
         $attr_iframe['id'] = $options['id'];
         $attr_iframe['src'] = $options[__class__];
         $attr_iframe['class'] = 'up-iframe';
-        $this->get_attr_style($attr_iframe, $options['iframe-class'], $options['iframe-style']);
+        UpHelper::get_attr_style($this,$attr_iframe, $options['iframe-class'], $options['iframe-style']);
         $attr_iframe['allowfullscreen'] = $options['allowfullscreen'];
         $attr_iframe['scrolling'] = $options['scrolling'];
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_container);
-        $html[] = $this->set_attr_tag('iframe', $attr_iframe, 'iframe not supported');
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_container);
+        $html[] = UpHelper::set_attr_tag($this,'iframe', $attr_iframe, 'iframe not supported');
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

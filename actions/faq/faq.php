@@ -27,29 +27,31 @@
  */
 defined('_JEXEC') or die();
 
-class faq extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class faq extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // ===== Ajout dans le head (une seule fois)
-        $this->load_file('faq.css');
+        UpHelper::load_file($this,'faq.css');
 
         // -- le JS
-        $this->load_file('/plugins/content/up/assets/js/faq.js');
+        UpHelper::load_file($this,'/plugins/content/up/assets/js/faq.js');
     }
 
     function run()
     {
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // contenu obligatoire
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // ===== valeur paramétres par défaut (hors JS)
@@ -71,15 +73,15 @@ class faq extends upAction
             'filter' => '' // conditions. Voir doc action filter
         );
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === code spécifique à l'action
         // qui doit retourner le code pour remplacer le shortcode
@@ -91,11 +93,11 @@ class faq extends upAction
         // </div>
         // -- les styles
         $attr_title['class'] = 'upfaq-button';
-        $this->get_attr_style($attr_title, $options['title-class'], $options['title-style']);
+        UpHelper::get_attr_style($this,$attr_title, $options['title-class'], $options['title-style']);
         $attr_title_bak = $attr_title;
 
         $attr_content['class'] = 'upfaq-content';
-        $this->get_attr_style($attr_content, $options['content-class'], $options['content-style']);
+        UpHelper::get_attr_style($this,$attr_content, $options['content-class'], $options['content-style']);
         $attr_content_bak = $attr_content;
 
         // -- titre + contenu RESTE A REPRENDRE STYLE DU H4
@@ -112,8 +114,8 @@ class faq extends upAction
         for ($i = 0; $i < $nb; $i ++) {
             $attr_title['class'] .= ' upfaq-title-' . ($i + 1);
             $attr_content['class'] .= ' upfaq-content-' . ($i + 1);
-            $out .= $this->set_attr_tag($title_tag, $attr_title, $array_title[1][$i]);
-            $out .= $this->set_attr_tag('div', $attr_content, $array_txt[1][$i]);
+            $out .= UpHelper::set_attr_tag($this,$title_tag, $attr_title, $array_title[1][$i]);
+            $out .= UpHelper::set_attr_tag($this,'div', $attr_content, $array_txt[1][$i]);
             $attr_title = $attr_title_bak;
             $attr_content = $attr_content_bak;
         }

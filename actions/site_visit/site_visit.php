@@ -27,8 +27,9 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class site_visit extends upAction
+class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -41,7 +42,7 @@ class site_visit extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /*[st-main]Options principales*/
@@ -77,7 +78,7 @@ class site_visit extends upAction
         );
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // === actualiser ou compte-rendu ?
         if (empty($this->options['info'])) {
@@ -90,16 +91,16 @@ class site_visit extends upAction
             $content = $this->report(! empty($this->options['info-detailXXXXXXXXXXXXXXXXX']));
 
             // CSS-HEAD
-            $this->load_css_head($this->options['css-head']);
+            UpHelper::load_css_head($this,$this->options['css-head']);
 
             // attributs du bloc principal
             $attr_main = array();
             $attr_main['id'] = $this->options['id'];
-            $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
 
             // code en retour
 
-            return $this->set_attr_tag($this->options['main-tag'], $attr_main, $content);
+            return UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $content);
         }
     }
 
@@ -226,9 +227,9 @@ class site_visit extends upAction
     function report()
     {
         $dirLogs = JPATH_ROOT . '/' . trim($this->options['dir-logs'], '/') . '/';
-        $stat_tmpl = $this->get_bbcode($this->options['info-template']);
+        $stat_tmpl = UpHelper::get_bbcode($this,$this->options['info-template']);
         // le style
-        $this->get_attr_style($attr_item, $this->options['item-class'], $this->options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $this->options['item-class'], $this->options['item-style']);
         // on consolide les critères de tri. Il faut obligatoirement l'alias
         if (strpos($this->options['info-sort'], '##') !== false) {
             $sort_tmpl = $this->options['info-sort'];
@@ -262,14 +263,14 @@ class site_visit extends upAction
             }
             $str = $stat_tmpl;
             $str = str_replace('##counter##', $row[0], $str);
-            $str = str_replace('##lastdate##', $this->up_date_format($row[1], $this->options['date-format']), $str);
+            $str = str_replace('##lastdate##', UpHelper::up_date_format($this,$row[1], $this->options['date-format']), $str);
             $str = str_replace('##id##', $row[2], $str);
             $str = str_replace('##alias##', $row[3], $str);
             $str = str_replace('##title##', $row[4], $str);
             $str = str_replace('##catid##', $row[5], $str);
             $str = str_replace('##catalias##', $row[6], $str);
-            $str = str_replace('##created##', $this->up_date_format($row[7], $this->options['date-format']), $str);
-            $str = str_replace('##modified##', $this->up_date_format($row[8], $this->options['date-format']), $str);
+            $str = str_replace('##created##', UpHelper::up_date_format($this,$row[7], $this->options['date-format']), $str);
+            $str = str_replace('##modified##', UpHelper::up_date_format($this,$row[8], $this->options['date-format']), $str);
             if (strpos($str, '##detail##') != false) {
                 $str = str_replace('##detail##', $this->synthese($dirLogs . $row[3] . '.log'), $str);
             }
@@ -288,9 +289,9 @@ class site_visit extends upAction
                 if (strpos($sort, '##') !== false)
                     $sort = $row[3]; // alias
 
-                $html[$sort] = $this->set_attr_tag($this->options['item-tag'], $attr_item, $str);
+                $html[$sort] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_item, $str);
             } else {
-                $html[] = $this->set_attr_tag($this->options['item-tag'], $attr_item, $str);
+                $html[] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_item, $str);
             }
         }
 
@@ -395,7 +396,7 @@ class site_visit extends upAction
         $curr_period = '';
         $today = array();
         $attr_period = array();
-        $this->get_attr_style($attr_period, $this->options['detail-period-style']);
+        UpHelper::get_attr_style($this,$attr_period, $this->options['detail-period-style']);
         foreach ($stats as $key => $val) {
             list ($period, $lang) = explode('#', $key);
             if (strlen($key) > 10) {
@@ -412,7 +413,7 @@ class site_visit extends upAction
                 if ($period != $curr_period) {
                     if ($out)
                         $out .= ') ';
-                        $out .= $this->set_attr_tag('span', $attr_period, $period, true, $this->options['use-bbcode']) . ' (' . $lang . ':' . $val['total'] . '/' . $val['unique'];
+                        $out .= UpHelper::set_attr_tag($this,'span', $attr_period, $period, true, $this->options['use-bbcode']) . ' (' . $lang . ':' . $val['total'] . '/' . $val['unique'];
                     $curr_period = $period;
                 } else {
                     $out .= ' ' . $lang . ':' . $val['total'] . '/' . $val['unique'];
@@ -423,7 +424,7 @@ class site_visit extends upAction
             $out .= ') ';
         // Ajout visites du jour
         if (! empty($today)) {
-            $out .= $this->set_attr_tag('span', $attr_period, date('Y-m-d'), true, $this->options['use-bbcode']) . ' (';
+            $out .= UpHelper::set_attr_tag($this,'span', $attr_period, date('Y-m-d'), true, $this->options['use-bbcode']) . ' (';
             foreach ($today as $lang => $val) {
                 $out .= $lang . ':' . $val['total'] . '/' . $val['unique'];
             }

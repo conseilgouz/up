@@ -22,22 +22,24 @@
  */
 defined('_JEXEC') or die();
 
-class table_fixe extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class table_fixe extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('tableHeadFixer.js');
+        UpHelper::load_file($this,'tableHeadFixer.js');
         return true;
     }
 
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -56,21 +58,21 @@ class table_fixe extends upAction
         );
 
         // on fusionne avec celles dans shortcode
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $id = $options['id']; // l'id qui identifie le bloc action
 
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ==== ctrl thead
         if (stripos($this->content, '</thead>') === false) {
-            return $this->msg_inline($this->trad_keyword('THEAD_MISSING'));
+            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'THEAD_MISSING'));
         }
 
         // ===== Analyse et MAJ de la table
         // balise ouvrante de la table originale et array des attributs
         preg_match('#<table.*>#U', $this->content, $table_opentag_old);
         $table_opentag_old = (! empty($table_opentag_old)) ? $table_opentag_old[0] : '';
-        $table_attr = $this->get_attr_tag($table_opentag_old);
+        $table_attr = UpHelper::get_attr_tag($this,$table_opentag_old);
 
         // si l'user force l'id de la table, on la conserve
         if ($table_attr['id'] > '') {
@@ -79,19 +81,19 @@ class table_fixe extends upAction
         $table_attr['id'] = $id;
 
         // ==== actualisation attributs de la table
-        $table_opentag_new = $this->set_attr_tag('table', $table_attr);
+        $table_opentag_new = UpHelper::set_attr_tag($this,'table', $table_attr);
         $content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
         // ===== Bloc conteneur pour la table (outer)
         // preparer un array vide pour la div outer
-        $outer_attr = $this->get_attr_tag(null);
+        $outer_attr = UpHelper::get_attr_tag($this,null);
 
         if ($options['max-height']) {
-            $this->get_attr_style($outer_attr, 'max-height:' . $options['max-height']);
-            $this->get_attr_style($outer_attr, 'overflow:auto');
+            UpHelper::get_attr_style($this,$outer_attr, 'max-height:' . $options['max-height']);
+            UpHelper::get_attr_style($this,$outer_attr, 'overflow:auto');
         }
         // ajout paramétres user
-        $this->get_attr_style($outer_attr, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$outer_attr, $options['class'], $options['style']);
 
         // ==== action principale
         $code = '$("#' . $id . '").tableHeadFixer(';
@@ -99,11 +101,11 @@ class table_fixe extends upAction
             $code .= '{"left" :' . $options['col-left'] . '}';
         }
         $code .= ');';
-        $this->load_jquery_code($code);
+        UpHelper::load_jquery_code($this,$code);
 
         // ==== RETOUR HTML
         $out = '';
-        $out .= $this->set_attr_tag('div', $outer_attr);
+        $out .= UpHelper::set_attr_tag($this,'div', $outer_attr);
         $out .= $content;
         $out .= '</div>';
 

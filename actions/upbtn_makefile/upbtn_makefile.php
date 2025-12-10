@@ -24,7 +24,9 @@
  */
 defined('_JEXEC') or die();
 
-class upbtn_makefile extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class upbtn_makefile extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -35,7 +37,7 @@ class upbtn_makefile extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
         /* [st-sel] Sélection des actions listées */
@@ -50,7 +52,7 @@ class upbtn_makefile extends upAction
         );
 
         // ==== fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // controle options
         if (isset($this->options_user['export-folder'])) {
@@ -85,7 +87,7 @@ class upbtn_makefile extends upAction
             }
         }
         if (empty($actionsListSelect)) {
-            return $this->msg_error('Aucune action demandée / ');
+            return UpHelper::msg_error($this,'Aucune action demandée / ');
         }
         // ==== Controler la conformite des fichiers des actions
         // ==== Langues pour lesquelles créer les fichiers HTML
@@ -96,7 +98,7 @@ class upbtn_makefile extends upAction
         // le principe pour tester le formulaire par upbtn.js :
         // les options sauf la principale (le nom de l'action) ont un name pour
         foreach ($lang_list as $lang) {
-            $this->trad = array_change_key_case($this->load_inifile($lang), CASE_UPPER);
+            $this->trad = array_change_key_case(UpHelper::load_inifile($this,$lang), CASE_UPPER);
             $lang = pathinfo($lang, PATHINFO_FILENAME);
             $this->create_list_actions($actionsListSelect, $lang, $options);
             foreach ($actionsListSelect as $action) {
@@ -105,9 +107,9 @@ class upbtn_makefile extends upAction
         }
 
         // FINI
-        $msg = $this->msg_info($this->trad_keyword('MSG_RETURN'));
+        $msg = UpHelper::msg_info($this,UpHelper::trad_keyword($this,'MSG_RETURN'));
         if (isset($this->options_user['export-folder'])) {
-            $msg = $this->msg_info($this->trad_keyword('EXPORT_FOLDER_OK', $this->options_user['export-folder']));
+            $msg = UpHelper::msg_info($this,UpHelper::trad_keyword($this,'EXPORT_FOLDER_OK', $this->options_user['export-folder']));
         }
         return $msg;
     }
@@ -132,9 +134,9 @@ class upbtn_makefile extends upAction
             $top10 = array_map('trim', explode(',', $options['top10']));
             foreach ($top10 as $actionName) {
                 if (in_array($actionName, $actionsList)) {
-                    $actinfos = $this->up_action_infos($actionName, $lang);
+                    $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
                     if (is_string($actinfos)) {
-                        $this->msg_error($this->trad_keyword('UNKNOW_ACTION_TOP10', $actionName));
+                        UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOW_ACTION_TOP10', $actionName));
                     } else {
                         $top10_list[$top10_label][$actionName] = $actinfos['_shortdesc'];
                     }
@@ -143,11 +145,11 @@ class upbtn_makefile extends upAction
         }
         // --- les actions
         if (! empty($options['by-tags'])) {
-            $tags_prefs = $this->load_inifile($this->actionPath . 'custom/prefs.ini', true, false);
+            $tags_prefs = UpHelper::load_inifile($this,$this->actionPath . 'custom/prefs.ini', true, false);
             // --- préparation liste actions classées par famille
             foreach ($actionsList as $actionName) {
                 $notag_label = $this->trad('UP_NOTAG_LABEL');
-                $actinfos = $this->up_action_infos($actionName, $lang);
+                $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
                 $str_tags = '';
                 if (isset($actinfos['tags'])) {
                     $str_tags = $actinfos['tags'];
@@ -169,7 +171,7 @@ class upbtn_makefile extends upAction
             // toutes les actions sans tags
             foreach ($actionsList as $actionName) {
                 $notag_label = 'Actions';
-                $actinfos = $this->up_action_infos($actionName, $lang);
+                $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
                 $unsort_list[$notag_label][$actionName] = $actinfos['_shortdesc'];
             }
         }
@@ -259,7 +261,7 @@ class upbtn_makefile extends upAction
             }
             $ok = $ok && copy($file, $exportpath . '/' . $lang . '.actions-list.html');
             if (! $ok) {
-                $this->msg_error($this->trad_keyword('EXPORT_CUSTOM_ERR', $exportpath));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'EXPORT_CUSTOM_ERR', $exportpath));
             }
         }
     }
@@ -273,10 +275,10 @@ class upbtn_makefile extends upAction
     public function create_info_action($actionName, $lang)
     {
         // === récupération des infos et options
-        $actinfos = $this->up_action_infos($actionName, $lang);
+        $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
         // prevenir si l'action n'a pas de tags
         if (strpos($actinfos['_credit'], '@tags') === false) { // v2.8
-            $this->msg_error($this->trad_keyword('TAG_NOT_FOUND', $actionName));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'TAG_NOT_FOUND', $actionName));
         }
         $actoptions = $this->up_action_options($actionName, true, $lang);
         $this->update_default($actionName, $actoptions);
@@ -288,7 +290,7 @@ class upbtn_makefile extends upAction
             $optionsTypeFile = $this->upPath . 'actions/' . $actionName . '/up/upbtn-options.ini';
         }
         if (file_exists($optionsTypeFile)) {
-            $options_type = $this->load_inifile($optionsTypeFile);
+            $options_type = UpHelper::load_inifile($this,$optionsTypeFile);
         }
         if ($options_type === false) {
             return;
@@ -337,8 +339,8 @@ class upbtn_makefile extends upAction
         $html[] = '<p>' . $actinfos['_longdesc'] . '</p>';
         // --- documentation webmaster
         if ($this->withoutCustom === false) {
-            $html[] = $this->up_help_txt($actionName);
-            $html[] = $this->up_prefset_list($actionName);
+            $html[] = UpHelper::up_help_txt($this,$actionName);
+            $html[] = UpHelper::up_prefset_list($this,$actionName);
         }
         $html[] = '</div >';
 
@@ -373,7 +375,7 @@ class upbtn_makefile extends upAction
                 $arg = $this->get_argtype($options_type[$val['key']], $actionName);
             }
             // ajout unit dans le label
-            $unit = $this->preg_string('#unit="(.*)"#U', $arg['attr']);
+            $unit = UpHelper::preg_string($this,'#unit="(.*)"#U', $arg['attr']);
             $unit = ($unit) ? ' (' . $unit . ')' : '';
 
             // trait de séparation si class hr dans options.ini
@@ -454,7 +456,7 @@ class upbtn_makefile extends upAction
             }
             $ok = $ok && copy($filepath, $exportpath . '/' . $filename);
             if (! $ok) {
-                $this->msg_error($this->trad_keyword('EXPORT_CUSTOM_ERR', $exportpath));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'EXPORT_CUSTOM_ERR', $exportpath));
             }
         }
     }
@@ -483,7 +485,7 @@ class upbtn_makefile extends upAction
         if (! empty($attr)) {
             // par sécurité si utilisation du égal dans options.ini
             $attr = str_replace('=', ':', $attr);
-            $arr = $this->strtoarray($attr, ',', ':', false);
+            $arr = UpHelper::strtoarray($this,$attr, ',', ':', false);
             foreach ($arr as $k => $v) {
                 $out .= ' ' . $k . '="' . $v . '"';
             }
@@ -500,7 +502,7 @@ class upbtn_makefile extends upAction
         if ($this->withoutCustom === false) {
             $pref_user_file = $this->upPath . 'actions/' . $action_name . '/custom/prefs.ini';
             if (file_exists($pref_user_file)) {
-                $pref_user = $this->load_inifile($pref_user_file, true);
+                $pref_user = UpHelper::load_inifile($this,$pref_user_file, true);
                 // if (isset($pref_user['options']))
                 // unset($pref_user['options']);
                 if (isset($pref_user['tags'])) {
@@ -519,7 +521,7 @@ class upbtn_makefile extends upAction
     {
         $pref_user_file = $this->upPath . 'actions/' . $action_name . '/custom/prefs.ini';
         if (file_exists($pref_user_file)) {
-            $pref_user = $this->load_inifile($pref_user_file, true);
+            $pref_user = UpHelper::load_inifile($this,$pref_user_file, true);
             if (isset($pref_user['options'])) {
                 foreach ($actoptions as $k => $v) {
                     if (isset($pref_user['options'][$v['key']])) {
@@ -542,7 +544,7 @@ class upbtn_makefile extends upAction
 
         // v3.0 pour arg [lang dans list/combo
         if ($str[0] != '[' || strpos($str, ']') === false) {
-            $this->msg_error('Syntax error in ' . $action_name . '\up\options.ini (' . $str . ')');
+            UpHelper::msg_error($this,'Syntax error in ' . $action_name . '\up\options.ini (' . $str . ')');
             return $out;
         }
         $matches = explode(']', ltrim($str, '['), 2);

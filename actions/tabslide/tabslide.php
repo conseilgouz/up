@@ -21,16 +21,18 @@
  */
 defined('_JEXEC') or die();
 
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 use Joomla\CMS\Environment\Browser;
 
-class tabslide extends upAction
+class tabslide extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('up-tabSlideOut.css');
-        $this->load_file('jquery.tabSlideOut.min.js');
+        UpHelper::load_file($this,'up-tabSlideOut.css');
+        UpHelper::load_file($this,'jquery.tabSlideOut.min.js');
         return true;
     }
 
@@ -38,11 +40,11 @@ class tabslide extends upAction
     {
 
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -90,7 +92,7 @@ class tabslide extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // l'action hover n'est pas disponible sur mobile v5.1
         if (isset($this->options_user['action'])) {
@@ -101,29 +103,29 @@ class tabslide extends upAction
         }
 
         // les options saisis par l'utilisateur concernant le script JS
-        $js_options = $this->only_using_options($js_options_def);
-        $js_params = $this->json_arrtostr($js_options);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         // -- ajout code initialisation JS
         $js_code = '$("#' . $options['id'] . '").tabSlideOut(';
         $js_code .= $js_params;
         $js_code .= ');';
         // ajout du code dans head
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // ===== STYLER
 
         $attr_tab['class'] = 'handle';
-        $this->get_attr_style($attr_tab, $options['tab-class'], $options['tab-style']);
+        UpHelper::get_attr_style($this,$attr_tab, $options['tab-class'], $options['tab-style']);
 
         $attr_panel['id'] = $options['id'];
-        $this->get_attr_style($attr_panel, $options['panel-class'], $options['panel-style']);
+        UpHelper::get_attr_style($this,$attr_panel, $options['panel-class'], $options['panel-style']);
 
         // === code spécifique à l'action
         // qui doit retourner le code pour remplacer le shortcode
 
-        $out = $this->set_attr_tag('div', $attr_panel);
-        $out .= $this->set_attr_tag('a', $attr_tab);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_panel);
+        $out .= UpHelper::set_attr_tag($this,'a', $attr_tab);
         $out .= ($options[__class__] == 1) ? "" : $options[__class__];
         $out .= '</a>';
         $out .= '<div style="max-width:85vw">'.$this->content.'</div>';

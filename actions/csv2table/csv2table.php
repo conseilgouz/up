@@ -29,13 +29,15 @@
  */
 defined('_JEXEC') or die();
 
-class csv2table extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('csv2table.css');
-        // $this->load_file('xxxxx.js');
+        UpHelper::load_file($this,'csv2table.css');
+        // UpHelper::load_file($this,'xxxxx.js');
         return true;
     }
 
@@ -46,7 +48,7 @@ class csv2table extends upAction
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // URL ou chemin et nom d'un fichier local
@@ -76,7 +78,7 @@ class csv2table extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $id = '#' . $options['id'];
 
@@ -86,19 +88,19 @@ class csv2table extends upAction
         // 2 - le contenu d'un fichier
         $filename = $options[__class__];
         if ($content == '' and $filename != '') {
-            $content = $this->get_html_contents($filename);
+            $content = UpHelper::get_html_contents($this,$filename);
         }
 
         // retour sans prévenir, le contenu peut être envoyé par une autre action
         if ($content == '') {
             return '';
-            // $content = $this->info_debug('csv2table - content not found ' . $filename);
+            // $content = UpHelper::info_debug($this,'csv2table - content not found ' . $filename);
         }
 
         // === Analyse et nettoyage du contenu
         // ===================================
-        // $content = $this->get_content_csv($content, 'br,code'); // v2.9
-        $content = $this->get_content_csv($content, false); // v2.9.1 retour 2.8
+        // $content = UpHelper::get_content_csv($this,$content, 'br,code'); // v2.9
+        $content = UpHelper::get_content_csv($this,$content, false); // v2.9.1 retour 2.8
 
         // === analyse et nombre de colonnes du tableau
         $nbcol = 0;
@@ -133,7 +135,7 @@ class csv2table extends upAction
                 $csvHead = array_shift($csv);
                 break;
             default: // la valeur est le titre au format csv
-                $csvHead = str_getcsv($this->get_bbcode($options['header']), $options['separator'], '"', '\\');
+                $csvHead = str_getcsv(UpHelper::get_bbcode($this,$options['header']), $options['separator'], '"', '\\');
         }
 
         // === Recuperation des pieds de table (footer)
@@ -219,7 +221,7 @@ class csv2table extends upAction
 
         // ---------- Ajout CSS dans le head avec substitution de #id par le vrai
         if (isset($css)) {
-            $this->load_css_head(implode(PHP_EOL, $css));
+            UpHelper::load_css_head($this,implode(PHP_EOL, $css));
         }
 
         // MISE EN FORME (ajouté dans les balise du code HTML)
@@ -227,8 +229,8 @@ class csv2table extends upAction
         // -- balise TABLE
         $attr_table['id'] = $options['id'];
         $attr_table['class'] = 'csv2table';
-        $this->add_class($attr_table['class'], $options['model']);
-        $this->add_class($attr_table['class'], $options['class']);
+        UpHelper::add_class($this,$attr_table['class'], $options['model']);
+        UpHelper::add_class($this,$attr_table['class'], $options['class']);
         $attr_table['style'] = $options['style'];
 
         // -- balise THEAD TR
@@ -242,16 +244,16 @@ class csv2table extends upAction
         // CREATION DU CODE HTML en retour
         // ===============================
         // -- TABLE
-        $html[] = $this->set_attr_tag('table', $attr_table);
+        $html[] = UpHelper::set_attr_tag($this,'table', $attr_table);
         // -- THEAD
         if (isset($csvHead)) {
             $html[] = '<thead>';
-            $html[] = $this->set_attr_tag('tr', $attr_thead);
+            $html[] = UpHelper::set_attr_tag($this,'tr', $attr_thead);
 
             $max = $nbcol;
             for ($i = 0; $i < $max; $i++) {
                 $txt = (isset($csvHead[$i])) ? trim($csvHead[$i]) : '';
-                // $txt = $this->get_bbcode($txt); // v2.9
+                // $txt = UpHelper::get_bbcode($this,$txt); // v2.9
                 if (isset($txt[0]) && $txt[0] == '[') {
                     list($arg, $txt) = array_map('trim', explode(']', substr($txt, 1)));
                     $out = '';
@@ -278,7 +280,7 @@ class csv2table extends upAction
                 $html[] = '<tr>';
                 $max = $nbcol;
                 for ($i = 0; $i < $max; $i++) {
-                    $txt = (isset($lign[$i])) ? $this->supertrim($lign[$i]) : '';
+                    $txt = (isset($lign[$i])) ? UpHelper::supertrim($this,$lign[$i]) : '';
                     if ($txt && $txt[0] == '[') {
                         list($arg, $txt) = array_map('trim', explode(']', substr($txt, 1)));
                         $out = '';
@@ -303,7 +305,7 @@ class csv2table extends upAction
         // -- TFOOT
         if (isset($csvFoot)) {
             $html[] = '<tfoot>';
-            $html[] = $this->set_attr_tag('tr', $attr_tfoot);
+            $html[] = UpHelper::set_attr_tag($this,'tr', $attr_tfoot);
 
             $max = $nbcol;
             for ($i = 0; $i < $max; $i++) {

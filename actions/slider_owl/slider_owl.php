@@ -23,7 +23,9 @@
  */
 defined('_JEXEC') or die;
 
-class slider_owl extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class slider_owl extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -31,18 +33,18 @@ class slider_owl extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('owl.carousel.css');
-        $this->load_file('owl.theme.css');
-        $this->load_file('owl.carousel.min.js');
+        UpHelper::load_file($this,'owl.carousel.css');
+        UpHelper::load_file($this,'owl.theme.css');
+        UpHelper::load_file($this,'owl.carousel.min.js');
         if (file_exists($this->actionPath . 'custom.css')) {
-            $this->load_file('custom.css');
+            UpHelper::load_file($this,'custom.css');
         }
-//        $this->load_file('up_fit_center.js'); v3.1
+//        UpHelper::load_file($this,'up_fit_center.js'); v3.1
 
         $code = '.owl-item > div > *:first-child{margin-top:0} ';
         $code .= ' .owl-item > div > *:last-child{margin-bottom:0}';
 
-        $this->load_css_head($code);
+        UpHelper::load_css_head($this,$code);
         return true;
     }
 
@@ -53,7 +55,7 @@ class slider_owl extends upAction {
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -61,7 +63,7 @@ class slider_owl extends upAction {
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -99,34 +101,34 @@ class slider_owl extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
         $js_options['navigationText'] = explode(',', $options['navigationText']);
 
         // pour égaliser la hauteur de tous les blocs - v3.1
         if ($options['max-height'])
-            $this->load_file('up_fit_center.js');
+            UpHelper::load_file($this,'up_fit_center.js');
         
         // -- conversion en chaine Json
-        $js_params = $this->json_arrtostr($js_options, 3);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 3);
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").owlCarousel(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
         
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
         
         // === analyse structure HTML du content
         // ajout div pour égaliser hauteur, centrer en hauteur et supprimer marges enfants deb & fin
-        if ($this->ctrl_content_parts($this->content)) {
+        if (UpHelper::ctrl_content_parts($this,$this->content)) {
             // séparées par {====} : recup texte colonnes sans le tag P ajouté par éditeur
-            $allcoltxt = $this->get_content_parts($this->content);
+            $allcoltxt = UpHelper::get_content_parts($this,$this->content);
             // mise en forme
             $this->content = '';
 
@@ -141,11 +143,11 @@ class slider_owl extends upAction {
         // -- ajout options utilisateur dans la div principale
         $outer_div['id'] = $options['id'];
         $outer_div['class'] = 'owl-carousel owl-theme cell-row';
-        $this->add_class($outer_div['class'], $options['class']);
+        UpHelper::add_class($this,$outer_div['class'], $options['class']);
         $outer_div['style'] = $options['style'];
 
         // -- le code en retour
-        $out = $this->set_attr_tag('div', $outer_div);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
         $out .= $this->content;  // le contenu entre les shortcodes ouvrant et fermant
         $out .= '</div>';
 

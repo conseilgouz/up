@@ -17,12 +17,14 @@
  */
 defined('_JEXEC') or die;
 
-class csv2list extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class csv2list extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('csv2list.css');
+        UpHelper::load_file($this,'csv2list.css');
         return true;
     }
 
@@ -30,7 +32,7 @@ class csv2list extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin vers fichier à afficher
@@ -63,12 +65,12 @@ class csv2list extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $id = '#' . $options['id'];
 
         // === css-head
-        $this->load_css_head(str_ireplace('#id', $id, $options['css-head']));
+        UpHelper::load_css_head($this,str_ireplace('#id', $id, $options['css-head']));
 
         // ========================
         // === recup du contenu CSV
@@ -79,17 +81,17 @@ class csv2list extends upAction
         // 2 - le contenu d'un fichier
         $filename = $options[__class__];
         if ($content == '' and $filename != '') {
-            $content = $this->get_html_contents($filename);
+            $content = UpHelper::get_html_contents($this,$filename);
         }
         if ($content == '') {
-            $content = $this->msg_inline('csv2table - content not found ' . $filename);
+            $content = UpHelper::msg_inline($this,'csv2table - content not found ' . $filename);
         }
 
         // ============================
         // nettoyage et mise en tableau
         // ============================
-        //        $content = $this->get_content_csv($content, 'a,img,strong,em');
-        $content = $this->get_content_csv($content, false);
+        //        $content = UpHelper::get_content_csv($this,$content, 'a,img,strong,em');
+        $content = UpHelper::get_content_csv($this,$content, false);
 
         // === Contenu et style de la liste
         foreach ($content as $key => $val) {
@@ -101,7 +103,7 @@ class csv2list extends upAction
         $attr_main['id'] = $options['id'];
         $attr_main['style'] = $options['style'];
         $attr_main['class'] = 'csv2list';
-        $this->add_class($attr_main['class'], $options['model']);
+        UpHelper::add_class($this,$attr_main['class'], $options['model']);
         if ($options['leaders'] != '0') {
             $attr_main['class'] .= ' leaders';
             if ($options['leaders'] != '1') {
@@ -112,7 +114,7 @@ class csv2list extends upAction
                 $css[] = $id . '.leaders li:after {color:' . $options['leaders-color'] . '}';
             }
         }
-        $this->add_class($attr_main['class'], $options['class']);
+        UpHelper::add_class($this,$attr_main['class'], $options['class']);
 
         // -- LI
         if ($options['bgcolor']) {
@@ -152,7 +154,7 @@ class csv2list extends upAction
         }
         if (!is_null($csvHead)) {
             $attr_header['class'] = 'header';
-            $this->add_class($attr_header['class'], $options['header-class']);
+            UpHelper::add_class($this,$attr_header['class'], $options['header-class']);
             $attr_header['style'] = $options['header-style'];
             if ($options['header-bgcolor']) {
                 $css[] = $id . ' li.header,';
@@ -176,7 +178,7 @@ class csv2list extends upAction
         }
         if (isset($csvFoot)) {
             $attr_footer['class'] = 'footer';
-            $this->add_class($attr_footer['class'], $options['footer-class']);
+            UpHelper::add_class($this,$attr_footer['class'], $options['footer-class']);
             $attr_footer['style'] = $options['footer-style'];
             if ($options['footer-bgcolor']) {
                 $css[] = $id . ' li.footer,';
@@ -187,15 +189,15 @@ class csv2list extends upAction
 
         // -- envoi du CSS dans le head
         if (isset($css)) {
-            $this->load_css_head(implode(PHP_EOL, $css));
+            UpHelper::load_css_head($this,implode(PHP_EOL, $css));
         }
 
         // =================================================== formattage HTML
-        $html[] = $this->set_attr_tag('ul', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'ul', $attr_main);
 
         // -- entete liste
         if ($csvHead) {
-            $html[] = $this->set_attr_tag('li', $attr_header);
+            $html[] = UpHelper::set_attr_tag($this,'li', $attr_header);
             foreach ($csvHead as $col) {
                 $html[] = '<span>' . trim($col) . '</span>';
             }
@@ -226,7 +228,7 @@ class csv2list extends upAction
         //$html[] = '</div>';
         // -- pied de table
         if (isset($csvFoot)) {
-            $html[] = $this->set_attr_tag('li', $attr_footer);
+            $html[] = UpHelper::set_attr_tag($this,'li', $attr_footer);
             foreach ($csvFoot as $col) {
                 $html[] = '<span>' . trim($col) . '</span>';
             }

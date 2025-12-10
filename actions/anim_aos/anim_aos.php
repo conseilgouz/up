@@ -41,22 +41,23 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class anim_aos extends upAction
+class anim_aos extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('aos.css');
-        $this->load_file('aos.js');
-        $this->load_file('init_aos.js');
+        UpHelper::load_file($this,'aos.css');
+        UpHelper::load_file($this,'aos.js');
+        UpHelper::load_file($this,'init_aos.js');
         return true;
     }
 
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -77,11 +78,11 @@ class anim_aos extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ==== controle type de syntaxe shortcode
         if ($options['repeat'] == '') {
-            if (!$this->ctrl_content_exists()) {
+            if (!UpHelper::ctrl_content_exists($this)) {
                 return false;
             }
         }
@@ -96,7 +97,7 @@ class anim_aos extends upAction
         // === le code HTML
         // --- STYLES
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
         // l'options principale d'aos
         $attr_main['data-aos'] = $options[__class__];
         // toutes autres options d'aos
@@ -110,7 +111,7 @@ class anim_aos extends upAction
         if ($options['repeat'] != '') { // repeat effect on div/p/h2,...depending on repeat parameter
             // les memes attributs pour tous les tags cibles
             $attr_main['id'] = '';
-            $attrs = $this->set_attr_tag('', $attr_main);
+            $attrs = UpHelper::set_attr_tag($this,'', $attr_main);
             // on les affecte aux tags
             $repeat = str_replace(',', '|', $options['repeat']); // remplace , du parametre par |
             $regex = '/(?!.*data-aos)(?:<(' . $repeat . '))/'; // ne pas remplacer si data-aos present
@@ -125,7 +126,7 @@ class anim_aos extends upAction
             }
         } else {
             // si pas de repeat, on applique à tous le contenu
-            $out = $this->set_attr_tag('div', $attr_main, $this->content);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main, $this->content);
         }
         return $out;
     }

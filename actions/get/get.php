@@ -20,8 +20,9 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Version;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class get extends upAction
+class get extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -33,14 +34,14 @@ class get extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // motclé
          );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // recherche de l'info
         $request = strtolower($options[__class__]);
@@ -67,11 +68,11 @@ class get extends upAction
                 break;
             case 'user-name':
                 $user = Factory::getApplication()->getIdentity();
-                $info = ($user->guest != 1) ? $user->name : $this->lang('en=guest;fr=invité');
+                $info = ($user->guest != 1) ? $user->name : UpHelper::lang($this,'en=guest;fr=invité');
                 break;
             case 'user-username':
                 $user = Factory::getApplication()->getIdentity();
-                $info = ($user->guest != 1) ? $user->username : $this->lang('en=guest;fr=invité');
+                $info = ($user->guest != 1) ? $user->username : UpHelper::lang($this,'en=guest;fr=invité');
                 break;
             case 'site-root':
                 $info = Uri::root();
@@ -108,7 +109,7 @@ class get extends upAction
 
         // Non trouvé
         if (!isset($info)) {
-            $info = $this->msg_inline("Keyword not found : $request");
+            $info = UpHelper::msg_inline($this,"Keyword not found : $request");
         }
         return $info;
     }

@@ -26,14 +26,16 @@
  */
 defined('_JEXEC') or die();
 
-class masonry extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class masonry extends Lomart\Plugin\Content\Up\Extension\Up
 {
     /**
      * charger les ressources communes à toutes les instances de l'action
      */
     public function init()
     {
-        $this->load_file('macy.js');
+        UpHelper::load_file($this,'macy.js');
         return true;
     }
 
@@ -46,12 +48,12 @@ class masonry extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -69,10 +71,10 @@ class masonry extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // -- initialisation JS
         $js_code = 'var masonry = new Macy({';
@@ -89,11 +91,11 @@ class masonry extends upAction
         $js_code .= 'mobileFirst:1,';
         $js_code .= 'columns:1,';
         $js_code .= '});';
-        $js_code = $this->load_js_code($js_code, false);
+        $js_code = UpHelper::load_js_code($this,$js_code, false);
 
         // === Contrôle contenu
-        if ($this->ctrl_content_parts($this->content) !== false) {
-            $allcoltxt = $this->get_content_parts($this->content);
+        if (UpHelper::ctrl_content_parts($this,$this->content) !== false) {
+            $allcoltxt = UpHelper::get_content_parts($this,$this->content);
             $this->content = '';
             foreach ($allcoltxt as $coltxt) {
                 $this->content .= '<div>' . $coltxt . '</div>';
@@ -103,10 +105,10 @@ class masonry extends upAction
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         $html[] = $this->content;
         $html[] = '</div>';
         // ajout du script js
@@ -121,14 +123,14 @@ class masonry extends upAction
         if (empty($arg)) {
             return;
         }
-        $bps = $this->strtoarray($arg, ',', ':', false);
+        $bps = UpHelper::strtoarray($this,$arg, ',', ':', false);
         foreach ($bps as $bp => $val) {
             $val = array_map('trim', explode('*', $val, 2));
             if (count($val) == 1) {
                 $bpout[] = (int) $bp . ':' . trim($val[0]);
             } else {
                 $tmp = (int) $bp . ':{';
-                $tmp .= 'columns:' . $this->supertrim($val[0]) . ',';
+                $tmp .= 'columns:' . UpHelper::supertrim($this,$val[0]) . ',';
                 $tmp .= $this->get_margin($val[1]);
                 $tmp .= '}';
                 $bpout[] = $tmp;

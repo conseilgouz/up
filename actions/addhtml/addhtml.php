@@ -17,7 +17,9 @@
  */
 defined('_JEXEC') or die();
 
-class addhtml extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class addhtml extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -29,7 +31,7 @@ class addhtml extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        // if (! $this->ctrl_content_exists()) {
+        // if (! UpHelper::ctrl_content_exists($this)) {
         // return false;
         // }
 
@@ -37,7 +39,7 @@ class addhtml extends upAction
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - 0 pour cacher le lien vers demo car inexistante
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // Contenu HTML à ajouter. BBCode admis
@@ -50,16 +52,16 @@ class addhtml extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         // CSS dans le head
         if ($options['css-head'] != '') {
-            $this->load_css_head($options['css-head']);
+            UpHelper::load_css_head($this,$options['css-head']);
         }
 
         // === LE CONTENU
@@ -69,10 +71,10 @@ class addhtml extends upAction
             $content = $this->content;
         }
         if (empty($content)) {
-            $this->msg_error('Pas de contenu HTML à inserer');
+            UpHelper::msg_error($this,'Pas de contenu HTML à inserer');
             return;
         }
-        $content = $this->get_bbcode($content);
+        $content = UpHelper::get_bbcode($this,$content);
         $content = str_replace('"', '\'', $content);
 
         // === LE JAVASCRIPT POUR LE PARENT
@@ -91,13 +93,13 @@ class addhtml extends upAction
         }
 
         // === LE JAVASCRIPT POUR INSERER LE CONTENU
-        $selector = trim($parentSelector.' '.$this->get_code($options['selector']));
+        $selector = trim($parentSelector.' '.UpHelper::get_code($this,$options['selector']));
 
 
         $code .= 'document.querySelector("' . $selector . '")';
         $code .= '.insertAdjacentHTML("' . $position . '","' . $content . '");';
 
-        $out['after'] = $this->load_js_code($code, false); // en fin d'article
+        $out['after'] = UpHelper::load_js_code($this,$code, false); // en fin d'article
 
         // -- le code en retour
         return $out;

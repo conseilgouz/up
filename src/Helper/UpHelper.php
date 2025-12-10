@@ -11,7 +11,7 @@
  v5.4.1 : variables publiques dans up.php
  v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
  */
-
+namespace  Lomart\Plugin\Content\Up\Helper;
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Language\Text;
@@ -19,25 +19,12 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Environment\Browser;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Filesystem\Folder;
 
-class upAction extends plgContentUP
+class UpHelper
 {
-    public function __construct($name)
-    {
-        $this->name = $name;
-        $this->upPath = str_replace('/', DIRECTORY_SEPARATOR, $this->upPath);
-        $this->actionPath = $this->upPath . 'actions' . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-
-        if ($this->name == '') {
-            throw new \Exception('Programming error upAction.construct');
-        }
-
-        return true;
-    }
-
     /*
      * ===============================
      * FICHIERS & FLUX
@@ -51,9 +38,9 @@ class upAction extends plgContentUP
      * @param string $ficname : chemin, nom et extension du fichier
      * @return none
      */
-    public function load_file($ficpath, $options = array(), $attributes = array())
+    static public function load_file($up,$ficpath, $options = array(), $attributes = array())
     {
-        $ficpath = $this->get_asset_path($ficpath);
+        $ficpath = self::get_asset_path($up,$ficpath);
         if ($ficpath != false) {
             switch (strtolower(pathinfo($ficpath, PATHINFO_EXTENSION))) {
                 case 'css':
@@ -78,7 +65,7 @@ class upAction extends plgContentUP
                     return true;
 
                 default:
-                    $this->msg_error(Text::sprintf('UP_FIC_BAD_EXT', $ficpath));
+                    self::msg_error($up,Text::sprintf('UP_FIC_BAD_EXT', $ficpath));
                     return false;
             }
         }
@@ -92,7 +79,7 @@ class upAction extends plgContentUP
      * debute par / = chemin/fichier à partir racine site
      * sinon : chemin/fichier dans dossier action courante
      */
-    public function get_asset_path($url)
+    static public function get_asset_path($up,$url)
     {
         $url = str_replace('\\', '/', trim($url));
         if (strpos($url, '://') !== false or substr($url, 0, 2) == '//') {
@@ -102,15 +89,15 @@ class upAction extends plgContentUP
             // Chemin absolu, on supprime le slash de debut
             $url = ltrim($url, '/');
         } else {
-            if (file_exists($this->actionPath . 'custom/' . $url) == true) {
+            if (file_exists($up->actionPath . 'custom/' . $url) == true) {
                 // fichier dans dossier de l'action
-                $url = $this->actionPath . 'custom/' . $url;
+                $url = $up->actionPath . 'custom/' . $url;
             } else {
-                $url = $this->actionPath . $url;
+                $url = $up->actionPath . $url;
             }
         }
         if (file_exists($url) == false) {
-            $this->msg_error(Text::sprintf('UP_FIC_NOT_FOUND', $url));
+            self::msg_error($up,Text::sprintf('UP_FIC_NOT_FOUND', $url));
             return false;
         }
 
@@ -124,15 +111,17 @@ class upAction extends plgContentUP
      * @param string $ficpath : chemin, nom et extension du fichier
      * @return none
      */
-    public function load_js_file_body($ficpath)
+    static public function load_js_file_body($up,$ficpath)
     {
-        $ficpath = $this->get_asset_path($ficpath);
+        $ficpath = self::get_asset_path($up,$ficpath);
         if (strtolower(pathinfo($ficpath, PATHINFO_EXTENSION)) == 'js') {
             $out = '<script type="text/javascript" src="' . $ficpath . '" defer></script>';
-            $this->article->text .= $out;
+            if (isset($up->article)) {
+                $up->article->text .= $out;
+            }
             return true;
         } else {
-            $this->msg_error(Text::sprintf('UP_FIC_BAD_EXT', $ficpath));
+            self::msg_error($up,Text::sprintf('UP_FIC_BAD_EXT', $ficpath));
             return false;
         }
     }
@@ -141,9 +130,9 @@ class upAction extends plgContentUP
      * ==== load_js_code
      * Ajoute du code JS dans le head de la page
      */
-    public function load_js_code($code, $in_head = true)
+    static public function load_js_code($up,$code, $in_head = true)
     {
-        if (strlen($this->supertrim($code)) > 0) {
+        if (strlen(self::supertrim($up,$code)) > 0) {
             if ($in_head) {
                 // $doc = Factory::getDocument();
                 // $doc->addScriptDeclaration($code);
@@ -162,7 +151,7 @@ class upAction extends plgContentUP
      * Par défaut le code est ajouté dans le head ($in_head)
      * sinon, il sera à la position d'appel
      */
-    public function load_jquery_code($code, $in_head = true)
+    static public function load_jquery_code($up,$code, $in_head = true)
     {
         HTMLHelper::_('jquery.framework'); // v52
         $tmp = 'jQuery(document).ready(function($) {';
@@ -186,19 +175,19 @@ class upAction extends plgContentUP
      * ==== load_css_head
      * Ajoute du code CSS ($code) dans le head
      */
-    public function load_css_head($code, $id = null)
+    static public function load_css_head($up,$code, $id = null)
     {
         if (trim($code)) { // v1.2
             // ---- remplacement ID
             if (is_null($id)) { // v2.3
-                $id = isset($this->options_user['id']) ? '#' . $this->options_user['id'] : '';
+                $id = isset($up->options_user['id']) ? '#' . $up->options_user['id'] : '';
             }
             if ($id) { // v2.3
                 $id = '#' . ltrim($id, ' #');
             }
             $code = str_ireplace('#id', $id, $code); // v1.6
             // ---- supprime saut de ligne
-            if (empty($this->trimA0)) {
+            if (empty($up->trimA0)) {
                 $code = preg_replace('/[ \t\n\r\0\x0B\xA0]+/', ' ', $code);
             } else {
                 $code = preg_replace('/[ \t\n\r\0\x0B\xA0\xC2]+/', ' ', $code); // pb pour japon
@@ -219,7 +208,7 @@ class upAction extends plgContentUP
             if (preg_match_all($regex, $code, $matches)) {
                 foreach ($matches[1] as $classStyle) {
                     $classStyle = trim($classStyle, ';');
-                    $style = $this->replace_class2style($classStyle, 'css-head');
+                    $style = self::replace_class2style($up,$classStyle, 'css-head');
                     if ($classStyle != $style) {
                         $code = str_replace($classStyle, $style, $code);
                     }
@@ -244,9 +233,9 @@ class upAction extends plgContentUP
      * exemple :
      * <link href="https://fonts.googleapis.com/css?family=xxx" rel="stylesheet">
      */
-    public function load_custom_code_head($code)
+    static public function load_custom_code_head($up,$code)
     {
-        if (strlen($this->supertrim($code)) > 0) {
+        if (strlen(self::supertrim($up,$code)) > 0) {
             $doc = Factory::getApplication()->getDocument();
             $doc->addCustomTag($code);
             return true;
@@ -260,7 +249,7 @@ class upAction extends plgContentUP
      * @return [string] [le contenu recuperer]
      * NOTE : il peut être utile de fournir une URL encodée : urlencode($url)
      */
-    public function get_html_contents($url, $timeout = 10, $url2 = '')
+    static public function get_html_contents($up,$url, $timeout = 10, $url2 = '')
     {
         $ctx = stream_context_create(array(
             'http' => array(
@@ -279,7 +268,7 @@ class upAction extends plgContentUP
                     return $out;
                 }
             }
-            $this->msg_error(Text::sprintf('UP_TIMEOUT_FOR', $url));
+            self::msg_error($up,Text::sprintf('UP_TIMEOUT_FOR', $url));
             ini_set('display_errors', $niv);
             return '';
         } else {
@@ -296,7 +285,7 @@ class upAction extends plgContentUP
      * //unsite.fr/foo -> //unsite.fr/foo
      * ftp://foo.png -> ftp://foo.png
      */
-    public function get_url_relative($url, $urlencode = false)
+    static public function get_url_relative($up,$url, $urlencode = false)
     {
         $url = trim($url);
         $url = str_replace('\\', '/', $url);
@@ -320,7 +309,7 @@ class upAction extends plgContentUP
      * //unsite.fr/foo -> //unsite.fr/foo
      * ftp://foo.png -> ftp://foo.png
      */
-    public function get_url_absolute($url, $urlencode = false)
+    static public function get_url_absolute($up,$url, $urlencode = false)
     {
         $url = trim($url);
         $url = str_replace('\\', '/', $url);
@@ -336,7 +325,7 @@ class upAction extends plgContentUP
     /**
      * encoder les URL selon la RFC 3986.
      */
-    public function myUrlEncode($url)
+    static public function myUrlEncode($up,$url)
     {
         $entities = array(
             '%21',
@@ -387,7 +376,7 @@ class upAction extends plgContentUP
      * ==== on_server
      * Retourne TRUE si l'URL est sur le serveur
      */
-    public function on_server($url)
+    static public function on_server($up,$url)
     {
         $host = parse_url($url, PHP_URL_HOST);
         return ($_SERVER['HTTP_HOST'] == $host || $host == null);
@@ -398,10 +387,10 @@ class upAction extends plgContentUP
      * a appeller par la méthode init d'une action
      * pour forcer le chargement de la feuille de style de UP
      */
-    public function load_upcss()
+    static public function load_upcss($up)
     {
         $wa = Factory::getApplication()->getDocument()->getWebAssetManager();
-        $wa->registerAndUseStyle('upcss', $this->upPath . 'assets/up.css');
+        $wa->registerAndUseStyle('upcss', $up->upPath . 'assets/up.css');
         return true;
     }
 
@@ -413,10 +402,10 @@ class upAction extends plgContentUP
      * retourne chemin relatif complet vers le fichier
      * ou false si aucun des 2 fichiers n'existe
      */
-    public function get_custom_path($file, $path = null, $alert = true)
+    static public function get_custom_path($up,$file, $path = null, $alert = true)
     {
         if (is_null($path)) {
-            $path = $this->actionPath;
+            $path = $up->actionPath;
         }
         if (file_exists($path . 'custom/' . $file) === true) {
             return $path . 'custom/' . $file;
@@ -425,7 +414,7 @@ class upAction extends plgContentUP
         }
         // aucun fichier n'existe
         if ($alert) {
-            $this->msg_error(Text::sprintf('UP_FIC_NOT_FOUND', $path . $file));
+            self::msg_error($up,Text::sprintf('UP_FIC_NOT_FOUND', $path . $file));
         }
         return false;
     }
@@ -436,17 +425,17 @@ class upAction extends plgContentUP
      * $alert=false permet de tester l'existance silencieusement
      * Retour : un array vide ou avec le contenu du INI
      */
-    public function load_inifile($file, $sections = false, $alert = true)
+    static public function load_inifile($up,$file, $sections = false, $alert = true)
     {
         if (file_exists($file) === false) {
             if ($alert) {
-                $this->msg_error(Text::sprintf('UP_FIC_NOT_FOUND', $file));
+                self::msg_error($up,Text::sprintf('UP_FIC_NOT_FOUND', $file));
             }
             return array();
         }
         $out = parse_ini_file($file, $sections);
         if ($out === false) {
-            $this->msg_error(Text::sprintf('UP_SYNTAX_ERROR', $file));
+            self::msg_error($up,Text::sprintf('UP_SYNTAX_ERROR', $file));
             $out = array();
         }
         return $out;
@@ -470,7 +459,7 @@ class upAction extends plgContentUP
      * @param string $suffix texte après la chaine
      * @return string chaine completée
      */
-    public function str_append($str, $add, $sep = ' ', $prefix = '', $suffix = '')
+    static public function str_append($up,$str, $add, $sep = ' ', $prefix = '', $suffix = '')
     {
         $str = (is_null($str) ? '' : $str); // v2.9
         $add = (empty($add)) ? '' : trim($add);
@@ -485,21 +474,21 @@ class upAction extends plgContentUP
     }
 
     /* ==== versions raccourcies de str_append qui modifie directement la chaine d'origine */
-    public function add_str(&$str, $add, $sep = ' ', $prefix = '', $suffix = '')
+    static public function add_str($up,&$str, $add, $sep = ' ', $prefix = '', $suffix = '')
     {
-        $str = $this->str_append($str, $add, $sep, $prefix, $suffix);
+        $str = self::str_append($str, $add, $sep, $prefix, $suffix);
         return $str;
     }
 
-    public function add_class(&$str, $newclass, $prefix = '')
+    static public function add_class($up,&$str, $newclass, $prefix = '')
     {
-        $str = $this->str_append($str, $newclass, ' ', $prefix);
+        $str = self::str_append($up,$str, $newclass, ' ', $prefix);
         return $str;
     }
 
-    public function add_style(&$str, $property, $val)
+    static public function add_style($up,&$str, $property, $val)
     {
-        $str = (string) $this->str_append($str, $val, ';', $property . ':');
+        $str = (string) self::str_append($str, $val, ';', $property . ':');
         return $str;
     }
 
@@ -512,7 +501,7 @@ class upAction extends plgContentUP
      * ##keyword## : uniquement le keyword qui sera remplacé
      * ##keyword=condition # label:<b>%%</b>## : $keyword, condition et modèle. %% est l'emplacement remplacé
      */
-    public function kw_replace(&$tmpl, $keyword, $replace)
+    static public function kw_replace($up,&$tmpl, $keyword, $replace)
     {
         $regex = '/\#\#' . $keyword . '([ =!<>\[]?.*)\#\#/Ui';
         preg_match_all($regex, $tmpl ?? '', $matches);
@@ -546,7 +535,7 @@ class upAction extends plgContentUP
                             $replace_val = (! empty($replace_val) && strtolower($replace_val) < strtolower($compare_val)) ? $replace_val : '';
                             break;
                         case '[':
-                            $choix = $this->strtoarray(trim($compare_val, ']'), ',', ':', false);
+                            $choix = self::strtoarray($up,trim($compare_val, ']'), ',', ':', false);
                             $replace_val = (isset($choix[$replace_val])) ? $choix[$replace_val] : $replace_val;
                             break;
                         default: // la fin d'un motclé avec la même racine
@@ -575,7 +564,7 @@ class upAction extends plgContentUP
      * $unit liste des unités autorisées.
      * @return
      */
-    public function ctrl_unit(&$size, $unit = 'px,%,em,rem')
+    static public function ctrl_unit($up,&$size, $unit = 'px,%,em,rem')
     {
         if (empty(trim($size))) {
             return trim($size);
@@ -600,7 +589,7 @@ class upAction extends plgContentUP
      * $unit_target unité cible pour la conversion.
      * @return tableau avec [1] l'unité cible et [0] valeur dans cette unité
      */
-    public function convert_size($size, $unit_target = 'px')
+    static public function convert_size($up,$size, $unit_target = 'px')
     {
         $val = (int) $size;
         $unit = substr($size, strlen(strval(intval($size))));
@@ -628,7 +617,7 @@ class upAction extends plgContentUP
      * $capitalize [bool] 1ere lettre en majuscule
      * @return [string]
      */
-    public function link_humanize($unc, $capitalize = true)
+    static public function link_humanize($up,$unc, $capitalize = true)
     {
         $out = pathinfo($unc, PATHINFO_FILENAME);
         // les underscores en tirets
@@ -651,7 +640,7 @@ class upAction extends plgContentUP
      * ==== import_content($content)
      * retourne $content après prise en charge des plugins de contenu
      */
-    public function import_content($content)
+    static public function import_content($up,$content)
     {
         // recup content
         PluginHelper::importPlugin('content');
@@ -665,7 +654,7 @@ class upAction extends plgContentUP
      * ex: preg_string('#alt="(.*)"#i', '<img alt="label">');
      * retourne label
      */
-    public function preg_string($regex, $source)
+    static public function preg_string($up,$regex, $source)
     {
         if (preg_match($regex, $source, $match)) {
             return $match[1];
@@ -680,7 +669,7 @@ class upAction extends plgContentUP
      * v1.8 : ajout $quote (pour )eviter quote pour sql_select > format.list
      * v1.8 : ajout array_map('trim',..
      */
-    public function strtoarray($str, $row = ',', $col = ':', $quote = true)
+    static public function strtoarray($up,$str, $row = ',', $col = ':', $quote = true)
     {
         $arr = array();
         if (! empty($str)) {
@@ -703,7 +692,7 @@ class upAction extends plgContentUP
      * ==== supertrim
      * supprime tous les types d'espace aux extrémités d'une chaine
      */
-    public function supertrim($str, $add = '')
+    static public function supertrim($up,$str, $add = '')
     {
         if (empty($str)) { // 5.1
             return '';
@@ -714,7 +703,7 @@ class upAction extends plgContentUP
         if (stripos($str, '<br>') > strlen($str) - 5) {
             $str = str_ireplace('<br>', '', $str);
         }
-        if (empty($this->trimA0)) {
+        if (empty($up->trimA0)) {
             return trim($str, $add . " \t\n\r\0\x0B\xC2");
         } else {
             return trim($str, $add . " \t\n\r\0\x0B\xA0\xC2"); // pb pour japon
@@ -725,13 +714,13 @@ class upAction extends plgContentUP
      * ==== spaceNormalize 5.1
      * remplace tous les espaces par des espaces simples
      */
-    public function spaceNormalize($str, $add = '')
+    static public function spaceNormalize($up,$str, $add = '')
     {
         if (empty($str)) {
             return '';
         }
         $search = explode(',', "\t,\n,\r,\0,\x0B,\xC2" . $add);
-        if (! empty($this->trimA0)) {
+        if (! empty($up->trimA0)) {
             $search[] = "\xA0";
         }
         return str_replace($search, ' ', $str);
@@ -750,7 +739,7 @@ class upAction extends plgContentUP
      * ----------------------------------------------
      * Utilisation : modifier les attributs avant de reconstruire la balise
      */
-    public function get_attr_tag($tag, $force = 'id,class,style')
+    static public function get_attr_tag($up,$tag, $force = 'id,class,style')
     {
         if (empty($tag)) {
             return array();
@@ -781,7 +770,7 @@ class upAction extends plgContentUP
      * v2.5 : retourne $close si $tag='0'
      * *******************************
      */
-    public function set_attr_tag($tag, $attr, $close = false, $doublequote = true, $bbcode = false)
+    static public function set_attr_tag($up,$tag, $attr, $close = false, $doublequote = true, $bbcode = false)
     {
         // v2.5 si $tag=0 ou vide, on retourne le contenu sans tag et attributs
         if (empty($tag)) {
@@ -837,7 +826,7 @@ class upAction extends plgContentUP
      * utilisé par center pour passer les infos dans une seule option
      * get_attr_style($attr_inner, $options[__class__]);
      */
-    public function get_attr_style(&$attr_array, ...$args)
+    static public function get_attr_style($up,&$attr_array, ...$args)
     {
         foreach ($args as $arg) {
             // $infos = preg_split("/[\s;\xC2\xA0]+/", $arg);
@@ -861,7 +850,7 @@ class upAction extends plgContentUP
      * '1' : neutralise le code HTML qui devient lisible
      * liste des tags autorises sous la forme 'a,img,b'
      */
-    public function clean_HTML($content, $tags = false, $forceEOL = false)
+    static public function clean_HTML($up,$content, $tags = false, $forceEOL = false)
     {
         switch ($tags) {
             case '0': // aucun traitement
@@ -886,7 +875,7 @@ class upAction extends plgContentUP
      * saisie user : .foo[content:'\[red\]']
      * converti en : .foo{content:'[red]'}
      */
-    public function get_code($code, $quote = false)
+    static public function get_code($up,$code, $quote = false)
     {
         if ($quote) { // v51 pour passer code json
             $code = preg_replace('/[^a-zA-Z0-9:\[\]\,]/', '', $code);
@@ -938,7 +927,7 @@ class upAction extends plgContentUP
      * - xx|yy : uniquement les balises xx et yy
      * - +xx|yy : la liste par defaut + les balises xx et yy
      */
-    public function get_bbcode($arg, $tags = null)
+    static public function get_bbcode($up,$arg, $tags = null)
     {
         if (empty($arg)) { // v3
             return;
@@ -967,7 +956,7 @@ class upAction extends plgContentUP
                 $regex = '#src=[\'"]{1}(.*)[\'"]{1}#iUm';
                 preg_match_all($regex, $arg, $res);
                 foreach ($res[1] as $url) {
-                    str_replace($url, $this->get_url_absolute($url), $arg);
+                    str_replace($url, self::get_url_absolute($up,$url), $arg);
                 }
             }
         }
@@ -994,7 +983,7 @@ class upAction extends plgContentUP
      * Utilisation : tableau de toutes les options pretes a l'emploi
      * *******************************
      */
-    public function ctrl_options($options_def, $js_options_def = [], $optmask = '')
+    static public function ctrl_options($up,$options_def, $js_options_def = [], $optmask = '')
     {
         // === création options génériques
         $options_def['prefset'] = (isset($options_def['prefset'])) ? $options_def['prefset'] : '';
@@ -1024,22 +1013,22 @@ class upAction extends plgContentUP
             $out_lowercase[strtolower($key)] = $key;
         }
         // -- recherche prefs webmaster et prefset dans dossier custom de l'action
-        $pref_user_file = $this->get_custom_path('prefs.ini', null, false);
+        $pref_user_file = self::get_custom_path($up,'prefs.ini', null, false);
         if ($pref_user_file !== false) {
-            $pref_user = $this->load_inifile($pref_user_file, true);
+            $pref_user = self::load_inifile($up,$pref_user_file, true);
             if ($pref_user !== false) {
                 $sets = array(); // list prefset
                 // si option principale est le nom d'une section
-                if (isset($pref_user[$this->options_user[$this->name]])) {
-                    $sets[] = $this->options_user[$this->name];
-                    $this->options_user['prefset'] = $this->options_user[$this->name]; // pour debug
-                    $this->options_user[$this->name] = ''; // pour arret traitement
-                } elseif (isset($this->options_user['prefset'])) {
+                if (isset($pref_user[$up->options_user[$up->name]])) {
+                    $sets[] = $up->options_user[$up->name];
+                    $up->options_user['prefset'] = $up->options_user[$up->name]; // pour debug
+                    $up->options_user[$up->name] = ''; // pour arret traitement
+                } elseif (isset($up->options_user['prefset'])) {
                     // si prefset argumenté
-                    if (! isset($pref_user[$this->options_user['prefset']])) {
-                        $this->msg_error(Text::sprintf('UP_FIC_NOT_FOUND', $this->options_user['prefset']));
+                    if (! isset($pref_user[$up->options_user['prefset']])) {
+                        self::msg_error($up,Text::sprintf('UP_FIC_NOT_FOUND', $up->options_user['prefset']));
                     } else {
-                        $sets[] = $this->options_user['prefset'];
+                        $sets[] = $up->options_user['prefset'];
                     }
                 }
 
@@ -1056,29 +1045,29 @@ class upAction extends plgContentUP
                             $out[$k2] = $val;
                             // si prefset, on ajoute pour only_using_option
                             // v1.9.2 if ($set != 'options' && !array_key_exists(strtolower($key), $this->options_user)) {
-                            if (! array_key_exists(strtolower($key), $this->options_user)) {
-                                $this->options_user[strtolower($key)] = $val;
+                            if (! array_key_exists(strtolower($key), $up->options_user)) {
+                                $up->options_user[strtolower($key)] = $val;
                             }
                         } else {
                             if ($optmask && preg_match($optmask, $key) == 1) {
                                 // on affecte seulement si pas dans surchargé dans shortcode
-                                if (! isset($this->options_user[strtolower($key)])) {
-                                    $this->options_user[strtolower($key)] = $val;
+                                if (! isset($up->options_user[strtolower($key)])) {
+                                    $up->options_user[strtolower($key)] = $val;
                                 }
                                 $out[strtolower($key)] = $val;
                             } else {
-                                $this->msg_error(Text::sprintf('UP_PREFSET_NOT_FOUND', $key));
+                                self::msg_error($up,Text::sprintf('UP_PREFSET_NOT_FOUND', $key));
                             }
                         }
                     }
                 }
             } else {
-                $this->msg_error(Text::sprintf('UP_SYNTAX_ERROR', $pref_user_file));
+                self::msg_error($up,Text::sprintf('UP_SYNTAX_ERROR', $pref_user_file));
             }
         }
 
         // -- ajout des valeurs saisies par utilisateur
-        foreach ($this->options_user as $key => $val) {
+        foreach ($up->options_user as $key => $val) {
             if (array_key_exists($key, $out_lowercase)) {
                 $key = $out_lowercase[$key];
                 if (! is_bool($out[$key]) && is_string($val)) { // v3.0 admet true et false
@@ -1087,12 +1076,12 @@ class upAction extends plgContentUP
                     settype($val, gettype($out[$key]));
                 }
                 // egal valeur saisie sauf si key=nom action sans argument
-                if ($key != $this->name || $val != '') {
+                if ($key != $up->name || $val != '') {
                     $out[$key] = $val;
                 }
             } else {
                 if ($optmask && preg_match($optmask, $key) == 1) {
-                    $this->options_user[strtolower($key)] = $val;
+                    $up->options_user[strtolower($key)] = $val;
                     $out[strtolower($key)] = $val;
                 } else {
                     // on prévient si le motclé n'est pas géré
@@ -1101,8 +1090,8 @@ class upAction extends plgContentUP
                         '?',
                         'debug'
                     )) && substr($key, -1, 1) != '*') {
-                        $this->msg_error(Text::sprintf('UP_UNKNOWN_OPTION', $key . '=' . $val));
-                        $this->options_user['?'] = true; // force affichage aide (1 seule fois)
+                        self::msg_error($up,Text::sprintf('UP_UNKNOWN_OPTION', $key . '=' . $val));
+                        $up->options_user['?'] = true; // force affichage aide (1 seule fois)
                     }
                 }
             }
@@ -1110,27 +1099,27 @@ class upAction extends plgContentUP
         // -- traduction pour
         foreach ($out as $key => $val) {
             if (is_string($val) && $val) {
-                $out[$key] = $this->lang($val);
+                $out[$key] = self::lang($up,$val);
             }
         }
 
         // demande d'aide
-        if (array_key_exists('?', $this->options_user)) {
-            $info = $this->up_action_options($this->name);
-            $title = $this->name;
-            if ($this->usehelpsite > 0 && $this->demopage != '') {
-                $title .= ' [ <a href="' . $this->demopage . '"';
-                if ($this->usehelpsite == 2) {
+        if (array_key_exists('?', $up->options_user)) {
+            $info = self::up_action_options($up,$up->name);
+            $title = $up->name;
+            if ($up->usehelpsite > 0 && $up->demopage != '') {
+                $title .= ' [ <a href="' . $up->demopage . '"';
+                if ($up->usehelpsite == 2) {
                     $title .= ' target = "_blank"';
                 }
                 $title .= '>DEMO</a>]';
             }
             $txt = '<div>';
-            $infos = $this->up_action_infos($this->name); // mod v2.8
+            $infos = self::up_action_infos($up,$up->name); // mod v2.8
             $txt .= $infos['_shortdesc'] . '<br>';
             $txt .= $infos['_longdesc'];
-            $info_webmaster = $this->up_help_txt(); // v1.9.5
-            $info_webmaster .= $this->up_prefset_list(); // v1.9.5
+            $info_webmaster = self::up_help_txt($up); // v1.9.5
+            $info_webmaster .= self::up_prefset_list($up); // v1.9.5
             if ($info_webmaster) {
                 $txt .= '<hr>' . $info_webmaster;
             }
@@ -1143,10 +1132,10 @@ class upAction extends plgContentUP
                 }
             }
             $txt .= '</div>';
-            $this->msg_info($txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
+            self::msg_info($txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
         }
         // demande debug
-        if (array_key_exists('debug', $this->options_user)) {
+        if (array_key_exists('debug', $up->options_user)) {
             $debug = '<ul>';
             foreach ($out as $key => $val) {
                 if (is_array($val)) {
@@ -1155,9 +1144,9 @@ class upAction extends plgContentUP
                 $debug .= "<li><b>$key</b>&nbsp;=>&nbsp;" . htmlentities($val) . "</li>";
             }
             $debug .= '</ul>';
-            $debug .= $this->up_help_txt(); // v1.9.5
-            $debug .= $this->up_prefset_list();
-            $this->msg_info($debug, Text::sprintf('UP_INFOS_DEBUG', $this->actionUserName));
+            $debug .= self::up_help_txt($up); // v1.9.5
+            $debug .= self::up_prefset_list($up);
+            self::msg_info($debug, Text::sprintf('UP_INFOS_DEBUG', $up->actionUserName));
         }
 
         // -- on retourne un array avec les cles dans la case attendue par le script
@@ -1172,11 +1161,11 @@ class upAction extends plgContentUP
      * ------ exemple pour media_plyr
      * $this->set_option_user_if_true('mp4', $ficname . '.mp4');
      */
-    public function set_option_user_if_true($option, $val)
+    static public function set_option_user_if_true($up,$option, $val)
     {
-        if (isset($this->options_user[$option])) {
-            if ($this->options_user[$option] == 1 || $this->options_user[$option] == '') { // v2.7-php8
-                $this->options_user[$option] = $val;
+        if (isset($up->options_user[$option])) {
+            if ($up->options_user[$option] == 1 || $up->options_user[$option] == '') { // v2.7-php8
+                $up->options_user[$option] = $val;
             }
         }
     }
@@ -1188,12 +1177,12 @@ class upAction extends plgContentUP
      * - saisie par utlisateur
      * - optionnel: actualiser pour lecture dans $options
      */
-    public function js_actualise($actionName, $val, &$options, &$js_options_def)
+    static public function js_actualise($up,$actionName, $val, &$options, &$js_options_def)
     {
         $valnull = (is_numeric($val)) ? 9999999999 : '9999999999';
         $js_options_def[$actionName] = $valnull;
         $options[$actionName] = $val;
-        $this->options_user[strtolower($actionName)] = $val;
+        $up->options_user[strtolower($actionName)] = $val;
     }
 
     /*
@@ -1205,12 +1194,12 @@ class upAction extends plgContentUP
      * - isoler les parametres JS
      * - reduire la chaine json d'initialisation
      */
-    public function only_using_options($options_def, $options_user = null)
+    static public function only_using_options($up,$options_def, $options_user = null)
     {
         $out = [];
         // permet de tester un autre jeu d'options. ex: image_pannellum
         if (is_null($options_user)) {
-            $options_user = $this->options_user;
+            $options_user = $up->options_user;
         } else {
             // on force key en minuscule
             $options_user = array_change_key_case($options_user, CASE_LOWER);
@@ -1246,7 +1235,7 @@ class upAction extends plgContentUP
      * retourne l'argument ou le 1er si non trouvé
      * 12/07/18: teste valeur vide. ex: ',un,deux' ou 'un,,deux'
      */
-    public function ctrl_argument($arg, $autorized_list, $debug = true)
+    static public function ctrl_argument($up,$arg, $autorized_list, $debug = true)
     {
         $array_autorized_list = array_map('trim', explode(',', $autorized_list));
         foreach ($array_autorized_list as $val) {
@@ -1255,7 +1244,7 @@ class upAction extends plgContentUP
             }
         }
         if ($debug) {
-            $this->msg_error(Text::sprintf('UP_UNKNOWN_ARGUMENT', $arg, $autorized_list));
+            self::msg_error($up,Text::sprintf('UP_UNKNOWN_ARGUMENT', $arg, $autorized_list));
         }
         return $array_autorized_list[0]; // on force sur 1er pour éviter erreur
     }
@@ -1266,10 +1255,10 @@ class upAction extends plgContentUP
      * @param [string] $key le mot-clé
      * @return [string] valeur ou vide
      */
-    public function get_action_pref($key, $default = null)
+    static public function get_action_pref($up,$key, $default = null)
     {
         $regex = '#' . $key . ' *\= *(.*)\n#';
-        if (preg_match($regex, $this->actionprefs . PHP_EOL, $val) == 1) {
+        if (preg_match($regex, $up->actionprefs . PHP_EOL, $val) == 1) {
             return trim($val[1]);
         } elseif (! is_null($default)) {
             return $default;
@@ -1298,7 +1287,7 @@ class upAction extends plgContentUP
      * ou combiner avec les options JS
      * $js_params = array_merge($js_params, param_decode($str);
      */
-    public function params_decode($str, $sep_param = ',', $sep_key = ':', $quote = '"', $echap = '\\')
+    static public function params_decode($up,$str, $sep_param = ',', $sep_key = ':', $quote = '"', $echap = '\\')
     {
         $iskey = true; // on debute toujours par une key
         $yaquote = false; // test si entre guillemets
@@ -1332,7 +1321,7 @@ class upAction extends plgContentUP
                         }
                         // on traduit
                         if (substr(strtolower($s2), 0, 5) == 'lang[') {
-                            $s2 = $this->lang($s2);
+                            $s2 = self::lang($up,$s2);
                         }
                         // on ajoute au tableau resultat
                         $out[$key] = $s2;
@@ -1378,7 +1367,7 @@ class upAction extends plgContentUP
      * $where : condition sous la forme : nomChamp=valeur
      *
      */
-    public function get_db_value($select, $table, $where)
+    static public function get_db_value($up,$select, $table, $where)
     {
         list($k, $v) = explode('=', $where);
         $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -1401,16 +1390,16 @@ class upAction extends plgContentUP
      * ==== get_jsontoarray
      * retourne le contenu d'un fichier json dans un array
      */
-    public function get_jsontoarray($filename, $ficpath = '')
+    static public function get_jsontoarray($up,$filename, $ficpath = '')
     {
         if ($ficpath == '') {
-            $filename = $this->actionPath . $filename;
+            $filename = $up->actionPath . $filename;
         }
         if (file_exists($filename)) {
             $tmp = file_get_contents($filename);
             return json_decode($tmp, true);
         } else {
-            $this->msg_error(Text::sprintf('UP_FILE_NOT_FOUND', $filename));
+            self::msg_error($up,Text::sprintf('UP_FILE_NOT_FOUND', $filename));
             return false;
         }
     }
@@ -1423,7 +1412,7 @@ class upAction extends plgContentUP
      * mode:3 = fct php json_encode + suppression doubles crochets si array
      * bracket si on entoure d'accolade
      */
-    public function json_arrtostr($array, $mode = 1, $bracket = true)
+    static public function json_arrtostr($up,$array, $mode = 1, $bracket = true)
     {
         if (empty($array)) {
             return ($bracket) ? '{}' : '';
@@ -1491,10 +1480,10 @@ class upAction extends plgContentUP
      * teste si le shortode contient du contenu, affiche un message si besoin
      * @return [bool] [true si contenu]
      */
-    public function ctrl_content_exists()
+    static public function ctrl_content_exists($up)
     {
-        if (trim($this->content) == '') {
-            $this->msg_error(Text::_('UP_NO_CONTENT'));
+        if (trim($up->content) == '') {
+            self::msg_error($up,Text::_('UP_NO_CONTENT'));
             return false;
         }
         return true;
@@ -1504,7 +1493,7 @@ class upAction extends plgContentUP
      * ==== ctrl_content_parts
      * retourne vrai si $content contient différentes parties séparées par {===}
      */
-    public function ctrl_content_parts($content)
+    static public function ctrl_content_parts($up,$content)
     {
         $ok = strpos($content, '{===') !== false;
         return $ok;
@@ -1516,7 +1505,7 @@ class upAction extends plgContentUP
      * en supprimant les balises <p> mise par l'éditeur wysiwyg
      * v1.7: {=== texte } est permis. supprime partie vide
      */
-    public function get_content_parts($content)
+    static public function get_content_parts($up,$content)
     {
         $content_part = array();
         $tmp = preg_split('/(?:\<(?:p|div)\>)?\{\={3,}.*\}(?:\<\/(?:p|div)\>)?/iU', $content);
@@ -1533,7 +1522,7 @@ class upAction extends plgContentUP
                 $val = substr($val, 0, strlen($val) - 3);
             }
 
-            $content_part[] = $this->supertrim($val);
+            $content_part[] = self::supertrim($up,$val);
         }
         return $content_part;
     }
@@ -1546,7 +1535,7 @@ class upAction extends plgContentUP
      * [0] => Array ( [key] => 1 [opt] => xyz )
      * [1] => Array ( [key] => 2 [foo] => abc ) )
      */
-    public function get_content_shortcode($content, $keyword = '.*')
+    static public function get_content_shortcode($up,$content, $keyword = '.*')
     {
         $content = strip_tags($content);
         $regex = '#\{(' . $keyword . '[\s\=\|].*)\}#siU';
@@ -1557,7 +1546,7 @@ class upAction extends plgContentUP
                 $arr = explode('|', $item);
                 foreach ($arr as $sc) {
                     $tmp = preg_split("/=/", trim($sc), 2);
-                    $key = $this->supertrim($tmp[0]);
+                    $key = self::supertrim($up,$tmp[0]);
                     $key = strtolower($key); // v2.3
                     // sa valeur (true si aucune)
                     $value = (count($tmp) == 2) ? trim($tmp[1]) : true;
@@ -1582,7 +1571,7 @@ class upAction extends plgContentUP
      * ---
      * utilisation
      */
-    public function get_content_csv($content, $cleanTags = '', $bbcode = '')
+    static public function get_content_csv($up,$content, $cleanTags = '', $bbcode = '')
     {
         // === nettoyage éditeur wysiwyg
         if (str_contains($content, '<br')) { //5.2
@@ -1606,9 +1595,9 @@ class upAction extends plgContentUP
         // ===
         if ($bbcode !== false) {
             if ($bbcode === '') {
-                $content = $this->get_bbcode($content);
+                $content = self::get_bbcode($up,$content);
             } else {
-                $content = $this->get_bbcode($content, $bbcode);
+                $content = self::get_bbcode($up,$content, $bbcode);
             }
         }
         // === retourne un tableau des lignes
@@ -1624,13 +1613,13 @@ class upAction extends plgContentUP
      * v2.5 : $if_empty = retour si pas de conditions
      * v5.1 : ajout comparaison smaller, equal, bigger
      */
-    public function filter_ok($conditions, $if_empty = true)
+    static public function filter_ok($up,$conditions, $if_empty = true)
     {
         if (is_string($conditions)) {
             if (trim($conditions) == '') {
                 return $if_empty;
             }
-            $conditions = $this->params_decode($conditions, ';', ':');
+            $conditions = self::params_decode($up,$conditions, ';', ':');
         }
         date_default_timezone_set('Europe/Paris');
         $user = Factory::getApplication()->getIdentity();
@@ -1753,7 +1742,7 @@ class upAction extends plgContentUP
                     $app = Factory::getApplication();
                     $input = $app->getInput();
                     if ($input->getCmd('option') == 'com_content' && $input->getCmd('view') == 'article') {
-                        $cmodel   = new Joomla\Component\Content\Site\Model\ArticleModel(array('ignore_request' => true));
+                        $cmodel   = new \Joomla\Component\Content\Site\Model\ArticleModel(array('ignore_request' => true));
                         $app       = Factory::getApplication();
                         $appParams = $app->getParams();
                         $params = $appParams;
@@ -1802,14 +1791,14 @@ class upAction extends plgContentUP
      * v1.8 : si 0, upActionsList n'affiche pas la doc lors demande pour toutes les actions
      * uniquement pour l'action seule lors préparation de la page demo
      */
-    public function set_demopage($webpage = '')
+    static public function set_demopage($up,$webpage = '')
     {
         if ($webpage == '') {
             // on remplace les underscores du nom de la classe
             // par des tirets pour compatibilité avec les alias Joomla
-            $this->demopage = $this->urlhelpsite . '/demo/action-' . str_replace('_', '-', $this->name);
+            $up->demopage = $up->urlhelpsite . '/demo/action-' . str_replace('_', '-', $up->name);
         } else {
-            $this->demopage = $webpage;
+            $up->demopage = $webpage;
         }
     }
 
@@ -1817,7 +1806,7 @@ class upAction extends plgContentUP
      * ==== up_actions_list
      * @return [array] la liste des actions
      */
-    public function up_actions_list($exclude_prefix = '_,x_')
+    static public function up_actions_list($up,$exclude_prefix = '_,x_')
     {
         $actionsFolder = __DIR__ . DIRECTORY_SEPARATOR . 'actions' . DIRECTORY_SEPARATOR;
         $list = array(); // retour si vide
@@ -1843,15 +1832,15 @@ class upAction extends plgContentUP
      * ==== up_prefset_list (v1.7)
      * @return [string] liste des sections du prefs.ini
      */
-    public function up_prefset_list($action_name = null, $full = true)
+    static public function up_prefset_list($up,$action_name = null, $full = true)
     {
         if (is_null($action_name)) {
-            $pref_user_file = $this->actionPath . 'custom/prefs.ini';
+            $pref_user_file = $up->actionPath . 'custom/prefs.ini';
         } else {
-            $pref_user_file = $this->upPath . 'actions/' . $action_name . '/custom/prefs.ini';
+            $pref_user_file = $up->upPath . 'actions/' . $action_name . '/custom/prefs.ini';
         }
         if (file_exists($pref_user_file)) {
-            $pref_user = $this->load_inifile($pref_user_file, true);
+            $pref_user = self::load_inifile($up,$pref_user_file, true);
             if (isset($pref_user)) {
                 if ($full === false) {
                     $out = implode(', ', array_keys($pref_user));
@@ -1873,7 +1862,7 @@ class upAction extends plgContentUP
                 }
             }
         }
-        return (empty($out)) ? '' : '<b>&#x1f7e9; ' . $this->actionUserName . ' PREFS.INI</b> : ' . $out;
+        return (empty($out)) ? '' : '<b>&#x1f7e9; ' . $up->actionUserName . ' PREFS.INI</b> : ' . $out;
     }
 
     /*
@@ -1882,10 +1871,10 @@ class upAction extends plgContentUP
      * @param [string] $keyword [nom du mot clé]
      * @return [string] [synonyme sour la forme: 1,un,one,ein ]
      */
-    public function get_dico_synonym($keyword)
+    static public function get_dico_synonym($up,$keyword)
     {
         $out = array();
-        foreach ($this->dico as $key => $val) {
+        foreach ($up->dico as $key => $val) {
             if ($val == $keyword) {
                 $out[] = $key;
             }
@@ -1899,7 +1888,7 @@ class upAction extends plgContentUP
      * @param [string] $str [ligne à annalyser]
      * @return [string] [ligne avec shortcode neutralisé]
      */
-    public function shortcode2code($str)
+    static public function shortcode2code($up,$str)
     {
         $motif = '#(?:\&\#123;|\{)(.*)(?:\&\#125;|\})#U';
         $replace = '<code><b>{</b>$1<b>}</b></code>';
@@ -1915,9 +1904,9 @@ class upAction extends plgContentUP
      * @param [string] $keys les infos a chercher
      * @return [array] les infos de l'entete sous la forme : key => commentaire
      */
-    public function up_action_infos($action_name, $lang = null)
+    static public function up_action_infos($up,$action_name, $lang = null)
     {
-        $actionFolder = $this->upPath . 'actions/' . $action_name . '/';
+        $actionFolder = $up->upPath . 'actions/' . $action_name . '/';
         if (! file_exists($actionFolder . $action_name . '.php')) {
             return 'Action <b>' . $action_name . '</b> : erreur de structure des dossiers.';
         }
@@ -1944,8 +1933,8 @@ class upAction extends plgContentUP
                     } else {
                         // ligne description
                         if ($out['_shortdesc'] > '') {
-                            $lign = $this->shortcode2code($lign);
-                            $this->add_str($out['_longdesc'], $lign, '<br />');
+                            $lign = self::shortcode2code($up,$lign);
+                            self::add_str($up,$out['_longdesc'], $lign, '<br />');
                         } else {
                             $out['_shortdesc'] = $lign;
                         }
@@ -1962,12 +1951,12 @@ class upAction extends plgContentUP
         if (file_exists($actionFolder . 'up/' . $lang . '.ini')) {
             $filename = $actionFolder . 'up/' . $lang . '.ini';
             $str = file_get_contents($filename);
-            $infos_trad = $this->load_inifile($actionFolder . 'up/' . $lang . '.ini');
+            $infos_trad = self::load_inifile($up,$actionFolder . 'up/' . $lang . '.ini');
             if (isset($infos_trad['shortdesc'])) {
                 $out['_shortdesc'] = $infos_trad['shortdesc'];
             }
             if (isset($infos_trad['longdesc'])) {
-                $out['_longdesc'] = $this->shortcode2code($infos_trad['longdesc']);
+                $out['_longdesc'] = self::shortcode2code($up,$infos_trad['longdesc']);
             }
         }
 
@@ -1975,7 +1964,7 @@ class upAction extends plgContentUP
         $out['_demopage'] = '';
         if (preg_match('#\$this->set_demopage\([w"]?(.*)[w"]?\)#', $tmp, $arrtmp) === 1) {
             if ($arrtmp[1] == '') {
-                $out['_demopage'] = $this->urlhelpsite . '/demo/action-' . str_replace('_', '-', $action_name);
+                $out['_demopage'] = $up->urlhelpsite . '/demo/action-' . str_replace('_', '-', $action_name);
             } else {
                 $out['_demopage'] = $arrtmp[1];
             }
@@ -1989,10 +1978,10 @@ class upAction extends plgContentUP
      * @param [string] $action_name nom de l'action
      * @return [array] les options sous la forme: option=defaut => commentaire
      */
-    public function up_action_options($action_name, $to_csv = false, $lang = null)
+    static public function up_action_options($up,$action_name, $to_csv = false, $lang = null)
     {
         // on récupère le script php
-        $actionFolder = $this->upPath . 'actions/' . $action_name . '/';
+        $actionFolder = $up->upPath . 'actions/' . $action_name . '/';
         if (! file_exists($actionFolder . $action_name . '.php')) {
             return 'Action <b>' . $action_name . '</b> : erreur de structure des dossiers.';
         }
@@ -2004,7 +1993,7 @@ class upAction extends plgContentUP
         }
         $comment_trad = array();
         if (file_exists($actionFolder . 'up/' . $lang . '.ini')) {
-            $comment_trad = $this->load_inifile($actionFolder . 'up/' . $lang . '.ini');
+            $comment_trad = self::load_inifile($up,$actionFolder . 'up/' . $lang . '.ini');
         }
 
         // options définies
@@ -2020,7 +2009,7 @@ class upAction extends plgContentUP
             if (preg_match($regex, $tmp, $deflist)) {
                 $search = array(
                     '__class__',
-                    '$this->name'
+                    '$up->name'
                 );
                 $deflist = str_replace($search, '\'' . $action_name . '\'', $deflist[1]);
                 // les lignes avec une option
@@ -2035,7 +2024,7 @@ class upAction extends plgContentUP
                         list($val, $comment) = explode('//', $options[2][$i] . '//', 2);
                         $opt['key'] = $key;
                         $opt['val'] = htmlspecialchars(trim($val, ' ,\'/'));
-                        $opt['dico'] = $this->get_dico_synonym($key);
+                        $opt['dico'] = self::get_dico_synonym($up,$key);
                         $opt['comment'] = trim($comment, ' ,/');
                         if ($to_csv) {
                             if (isset($comment_trad[$optionName])) {
@@ -2043,8 +2032,8 @@ class upAction extends plgContentUP
                             }
                             $optlist[] = $opt;
                         } else {
-                            $this->add_str($key, $opt['dico'], ' ', '(', ')');
-                            $this->add_str($key, $opt['val'], ' = '); // option=defaut
+                            self::add_str($up,$key, $opt['dico'], ' ', '(', ')');
+                            self::add_str($up,$key, $opt['val'], ' = '); // option=defaut
                             if (isset($comment_trad[$optionName])) {
                                 $optlist[$key] = $comment_trad[$optionName]; // commentaire traduit
                             } else {
@@ -2078,17 +2067,17 @@ class upAction extends plgContentUP
      * up_help_txt
      * v1.9.5 - ajout infos webmaster
      */
-    public function up_help_txt($actionName = null)
+    static public function up_help_txt($up,$actionName = null)
     {
         $txt = '';
         if (is_null($actionName)) {
-            $infoFile = $this->actionPath . 'custom/help.txt';
+            $infoFile = $up->actionPath . 'custom/help.txt';
         } else {
-            $infoFile = $this->upPath . 'actions/' . $actionName . '/custom/help.txt';
+            $infoFile = $up->upPath . 'actions/' . $actionName . '/custom/help.txt';
         }
         if (file_exists($infoFile)) {
             $txt = file_get_contents($infoFile);
-            $txt = $this->get_bbcode($txt);
+            $txt = self::get_bbcode($up,$txt);
             // ajout saut de ligne si texte pur
             if (strpos($txt, '<p>') === false && strpos($txt, '<br>') === false) {
                 $txt = nl2br($txt);
@@ -2106,8 +2095,46 @@ class upAction extends plgContentUP
 
     /*
      * ==== lang
-     * pour info, cette méthode est en fin de up.php
+     * fonction utilitaire pour UP
+     * @param [string] $str [alternative de traduction sous la forme "en=apple;fr=pomme"]
+     * @return [string] [la traduction dans la langue]
      */
+    static public function lang($up,$str)
+    {
+        // l'argument doit faire au minimum 10 caractères (fr=xx;en=xx)
+        $out = trim($str);
+        if (strlen($out) <= 10) {
+            return $str;
+        }
+
+        // -- v1.6 : permettre l'arg commencant par lang[
+        if (substr(strtolower($out), 0, 5) == 'lang[') {
+            $out = (substr($out, -1, 1) == ']') ? substr($out, 5, - 1) : substr($out, 5);
+        }
+        // -- v3 : rétablir entité HTML (url)
+        $out = str_replace('&amp;', '&', $out);
+
+        // test langue uniquement sur les 2 premiers caractères
+        $codelang = substr(Factory::getApplication()->getLanguage()->getTag(), 0, 2);
+
+        // recherche du motif dans $str. Il faut au moins 2 langues
+        if (preg_match_all('#\b(\w\w)\s*=\s*(.*);#U', $out . ';', $tmp) > 1) {
+            if (isset($tmp[0][1])) {
+                $trad = array_combine($tmp[1], $tmp[2]);
+                if (isset($trad[$codelang])) {
+                    $out = $trad[$codelang]; // dans la langue
+                } elseif (isset($trad['en'])) {
+                    $out = $trad['en']; // sinon en anglais
+                } elseif ($str[2] == '=') {
+                    $out = $trad[$tmp[1][0]]; // sinon le premier
+                    // v1.8 - retour totalité car pb si url du type : index.php?option=com_content&amp;id=...
+                    // v1.9 - on retourne le 1er si le 3e caractère est le signe égal
+                }
+                $out = trim($out);
+            }
+        }
+        return $out;
+    }
 
     /*
      * ==== sreplace
@@ -2115,7 +2142,7 @@ class upAction extends plgContentUP
      * A utiliser à la place de sprintf ou Text::sprintf
      * qui retourne FALSE si erreur nombre d'argument
      */
-    public function sreplace($old, $new, $src, $nb = 1)
+    static public function sreplace($up,$old, $new, $src, $nb = 1)
     {
         $len = strlen($old);
         for ($i = 0; $i < $nb; $i++) {
@@ -2133,7 +2160,7 @@ class upAction extends plgContentUP
      * utilisé par les scripts action pour afficher des messages
      * note: les arguments doivent utiliser la syntaxe : fr=xx;en=xx ou lang[fr=xx;en=xx]
      */
-    public function trad_keyword($key, $str = '')
+    static public function trad_keyword($up,$key, $str = '')
     {
         // un mot clé ne contient pas d'espace
         if (strpos($key, ' ') !== false) {
@@ -2144,42 +2171,42 @@ class upAction extends plgContentUP
         $lang = Factory::getApplication()->getLanguage()->getTag();
 
         // les traductions globales à UP
-        if (! isset($this->tradup)) {
-            $this->tradup = array();
-            $inifile = $this->upPath . 'language/' . $lang . '/' . $lang . '.plg_content_up.ini';
+        if (! isset($options_user->tradup)) {
+            $up->tradup = array();
+            $inifile = $up->upPath . 'language/' . $lang . '/' . $lang . '.plg_content_up.ini';
             if (! file_exists($inifile)) {
-                $inifile = $this->upPath . 'language/en-GB/en-GB.plg_content_up.ini';
+                $inifile = $up->upPath . 'language/en-GB/en-GB.plg_content_up.ini';
             }
-            $this->tradup = $this->load_inifile($inifile);
+            $up->tradup = self::load_inifile($up,$inifile);
             // v31 custom
-            $inifile = $this->upPath . 'language/' . $lang . '/' . $lang . '.plg_content_up.custom.ini';
+            $inifile = $up->upPath . 'language/' . $lang . '/' . $lang . '.plg_content_up.custom.ini';
             if (! file_exists($inifile)) {
-                $inifile = $this->upPath . 'language/en-GB/en-GB.plg_content_up.custom.ini';
+                $inifile = $up->upPath . 'language/en-GB/en-GB.plg_content_up.custom.ini';
             }
             if (file_exists($inifile)) {
-                $this->tradup = array_merge($this->tradup, $this->load_inifile($inifile));
+                $up->tradup = array_merge($up->tradup, self::load_inifile($up,$inifile));
             }
         }
         // les traductions de l'action
-        if (! isset($this->tradaction)) {
-            $this->tradaction = array();
-            $inifile = $this->actionPath . 'up/' . $lang . '.ini';
+        if (! isset($up->tradaction)) {
+            $up->tradaction = array();
+            $inifile = $up->actionPath . 'up/' . $lang . '.ini';
             if (! file_exists($inifile)) {
-                $inifile = $this->actionPath . 'up/en-GB.ini';
+                $inifile = $up->actionPath . 'up/en-GB.ini';
             }
             if (file_exists($inifile)) {
-                $this->tradaction = $this->load_inifile($inifile);
+                $up->tradaction = self::load_inifile($up,$inifile);
                 // v31 trad custom
-                $inifile = $this->actionPath . 'up/' . $lang . '.custom.ini';
+                $inifile = $up->actionPath . 'up/' . $lang . '.custom.ini';
                 if (! file_exists($inifile)) {
-                    $inifile = $this->actionPath . 'up/en-GB.custom.ini';
+                    $inifile = $up->actionPath . 'up/en-GB.custom.ini';
                 }
                 if (file_exists($inifile)) {
-                    $this->tradaction = array_merge($this->tradaction, $this->load_inifile($inifile));
+                    $up->tradaction = array_merge($up->tradaction, self::load_inifile($up,$inifile));
                 }
             }
         }
-        $tmp = array_merge($this->tradup, $this->tradaction);
+        $tmp = array_merge($up->tradup, $up->tradaction);
 
         $out = '';
         if (isset($tmp[$key])) {
@@ -2199,7 +2226,7 @@ class upAction extends plgContentUP
      * $tag : les codes langue séparés pr des virgules
      * si vide : le code de Joomla
      */
-    public function set_locale($tag = '')
+    static public function set_locale($up,$tag = '')
     {
         if (empty($tag)) {
             $tag = Factory::getApplication()->getLanguage()->getTag();
@@ -2215,13 +2242,13 @@ class upAction extends plgContentUP
      * $format : format sfrftime. Par défaut:%e %B %Y (ex: le %e %B %Y à %k:%M)
      * $locale : le code pays (en_US) ou NULL=celui en cours
      */
-    public function up_date_format($date, $format = null, $locale = '', $http = true)
+    static public function up_date_format($up,$date, $format = null, $locale = '', $http = true)
     {
         // phase 1 : récupérer le timestamp
         if (empty($date)) {
             $date = time();
         } else {
-            $date = $this->up_strtotime($date);
+            $date = self::up_strtotime($up,$date);
         }
         // le format d'affichage (conversion)
         if (! is_null($format)) {
@@ -2283,7 +2310,7 @@ class upAction extends plgContentUP
         }
 
         // le formatteur et retour
-        $fmt = datefmt_create($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, null, IntlDateFormatter::GREGORIAN, $format);
+        $fmt = datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, \IntlDateFormatter::GREGORIAN, $format);
         return datefmt_format($fmt, $date);
     }
 
@@ -2293,7 +2320,7 @@ class upAction extends plgContentUP
      * après traduction des termes dans la langue navigateur en anglais
      * ou mise au format AAAA-MM-JJ ou JJ-MM-AAAA
      */
-    public function up_strtotime($date)
+    static public function up_strtotime($up,$date)
     {
         // traduction inutile, car uniquement des chiffres. ex: '25122023'
         if (is_numeric($date)) {
@@ -2343,19 +2370,19 @@ class upAction extends plgContentUP
                 'november',
                 'december'
             );
-            if (! isset($this->date_terms)) {
+            if (! isset($up->date_terms)) {
                 // les termes dans la langue du site
-                $this->date_terms = $this->trad_keyword('DATE_TERMS');
-                $this->date_terms = str_replace(array(
+                $up->date_terms = self::trad_keyword($up,'DATE_TERMS');
+                $up->date_terms = str_replace(array(
                     "\n",
                     "\r"
-                ), '', $this->date_terms);
-                $this->date_terms = explode(',', $this->date_terms);
-                if (count($this->date_terms) != count($date_terms_en)) {
-                    $this->msg_error($this->trad_keyword('DATE_TERMS_ERROR'));
+                ), '', $up->date_terms);
+                $up->date_terms = explode(',', $up->date_terms);
+                if (count($up->date_terms) != count($date_terms_en)) {
+                    self::msg_error($up,self::trad_keyword($up,'DATE_TERMS_ERROR'));
                 }
             }
-            $date = str_ireplace($this->date_terms, $date_terms_en, $date);
+            $date = str_ireplace($up->date_terms, $date_terms_en, $date);
         } else {
             // remplacer espace et slash par des tirets
             // format date admis : AAAA-MM-JJ ou JJ-MM-AAAA ou AAAAMMJJ
@@ -2377,10 +2404,10 @@ class upAction extends plgContentUP
      * === mail2admin - v31
      * envoi un mail à l'admin du site
      */
-    public function mail2admin($suject, $text)
+    static public function mail2admin($up,$suject, $text)
     {
         try {
-            $mailer = Factory::getContainer()->get(Joomla\CMS\Mail\MailerFactoryInterface::class)->createMailer();
+            $mailer = Factory::getContainer()->get(\Joomla\CMS\Mail\MailerFactoryInterface::class)->createMailer();
             $config = Factory::getApplication()->getConfig();
             $mailto = $config->get('mailfrom');
             $site = $config->get('fromname');
@@ -2394,8 +2421,8 @@ class upAction extends plgContentUP
             $mailer->setBody($text);
 
             $status = $mailer->Send();
-        } catch (Exception $e) {
-            $this->msg_inline($e->getMessage());
+        } catch (\Exception $e) {
+            self::msg_inline($up,$e->getMessage());
         }
     }
 
@@ -2403,7 +2430,7 @@ class upAction extends plgContentUP
      * === msg_journal - v31
      * ajoute un fichier de suivi des erreurs
      */
-    public function msg_journal($text)
+    static public function msg_journal($up,$text)
     {
         $text = trim($text, '@');
         $filepath = JPATH_BASE . '/UP/error/';
@@ -2423,7 +2450,7 @@ class upAction extends plgContentUP
             '>'
         );
         $cleantext = str_replace($winchar, '-', $text);
-        $subject = $this->options_user['id'] . '--' . $this->actionUserName . '--' . $cleantext;
+        $subject = $up->options_user['id'] . '--' . $up->actionUserName . '--' . $cleantext;
         $filename = $filepath . trim(substr($subject, 0, 50)) . '.err';
         if (! file_exists($filename)) {
             $msg = date('Y-m-d H:i') . " " . Factory::getApplication()->getIdentity()->username;
@@ -2431,11 +2458,11 @@ class upAction extends plgContentUP
             $msg .= "\n------ MESSAGE ------";
             $msg .= "\n" . $text;
             $msg .= "\n------ OPTIONS ------";
-            foreach ($this->options_user as $key => $val) {
+            foreach ($up->options_user as $key => $val) {
                 $msg .= "\n" . $key . ' = ' . $val;
             }
             file_put_contents($filename, $msg);
-            $this->mail2admin($subject, $msg);
+            self::mail2admin($up,$subject, $msg);
         }
     }
 
@@ -2444,13 +2471,13 @@ class upAction extends plgContentUP
      * ajoute un message d'erreur dans la file des messages de Joomla
      * on affiche le nom de l'action tel que saisi par le rédacteur
      */
-    public function msg_error($text)
+    static public function msg_error($up,$text)
     {
-        if (! $this->inprod || ! empty($this->inedit)) {
+        if (! $up->inprod || ! empty($up->inedit)) {
             $app = Factory::getApplication();
-            $app->enqueueMessage('<b>[' . $this->options_user['id'] . ' ' . $this->actionUserName . ']</b> ' . $text, 'error');
+            $app->enqueueMessage('<b>[' . $up->options_user['id'] . ' ' . $up->actionUserName . ']</b> ' . $text, 'error');
         } else {
-            $this->msg_journal($text);
+            self::msg_journal($up,$text);
         }
     }
 
@@ -2458,10 +2485,10 @@ class upAction extends plgContentUP
      * ==== msg_info
      * ajoute un message d'information dans la file des messages de Joomla
      */
-    public function msg_info($text = ' ', $title = '')
+    static public function msg_info($up,$text = ' ', $title = '')
     {
         if ($text[0] == '@') {
-            $this->msg_journal($text);
+            self::msg_journal($up,$text);
             $text = substr($text, 1);
         }
 
@@ -2469,30 +2496,42 @@ class upAction extends plgContentUP
         if ($title) {
             $app->enqueueMessage('<b>[UP] ' . $title . '</b><br>' . $text, 'notice');
         } else {
-            $app->enqueueMessage('<b>[UP ' . $this->actionUserName . ']</b><br>' . $text, 'notice');
+            $app->enqueueMessage('<b>[UP ' . $up->actionUserName . ']</b><br>' . $text, 'notice');
         }
     }
 
-    /**
-     * ** pour info, info_debug est dans up.php ***
+    /*
+     * ==== info_debug
+     * utilisé pour indiquer une erreur à son emplacement dans la page
+     * $txt accepte la forme : en:hello;fr:bonjour
+     * exemple : argument de paramètre manquant
      */
+    static public function info_debug($up,$txt, $infoUP = true)
+    {
+        $txt = self::lang($up,$txt);
+        if ($infoUP) {
+            $txt = 'UP.' . $up->actionUserName . ' : ' . $txt;
+        }
+        return ' <span style="color:red;background:yellow;font-weight:bolder"> &#x279c; ' . $txt . '&nbsp;</span>';
+    }
+
     /*
      * ==== msg_inline
      * utilisé pour indiquer une erreur à son emplacement dans la page
      * $txt accepte la forme : en:hello;fr:bonjour
      */
-    public function msg_inline($text)
+    static public function msg_inline($up,$text)
     {
-        $text = trim($this->lang($text));
+        $text = trim(self::lang($up,$text));
         if (!empty($text)) { // v52
-            if ($text[0] == '@' && ($this->inprod || empty($this->inedit))) {
-                $this->msg_journal($text);
+            if ($text[0] == '@' && ($up->inprod || empty($up->inedit))) {
+                self::msg_journal($up,$text);
                 $text = substr($text, 1);
             }
             if ((str_starts_with($text, '<') && str_ends_with($text, '>')) === false) {
-                $reset = (! $this->inprod || ! empty($this->inedit)) ? 'display:inline' : '';
-                $this->get_attr_style($attr, $this->cssmsg, $reset);
-                $text = $this->set_attr_tag('span', $attr, $text);
+                $reset = (! $up->inprod || ! empty($up->inedit)) ? 'display:inline' : '';
+                self::get_attr_style($up,$attr, $up->cssmsg, $reset);
+                $text = self::set_attr_tag($up,'span', $attr, $text);
             }
         }
         return $text;
@@ -2502,7 +2541,7 @@ class upAction extends plgContentUP
     * subtitue les noms de classes par leurs propriétés
     */
 
-    public function replace_class2style($classAndStyle, $optionName = 'option_style')
+    static public function replace_class2style($up,$classAndStyle, $optionName = 'option_style')
     {
         $styleOnly = '';
         if ($classAndStyle) {
@@ -2510,12 +2549,12 @@ class upAction extends plgContentUP
             $parts = array_map('trim', explode(';', $classAndStyle));
             foreach ($parts as $part) {
                 if (!empty($part) && strpos($part, ':') === false) {
-                    if (!isset($this->class2style)) {
-                        $inifile = $this->get_custom_path('class2style.ini', $this->upPath . 'assets/lib/');
-                        $this->class2style = ($inifile !== false) ? parse_ini_file($inifile) : '';
+                    if (!isset($up->class2style)) {
+                        $inifile = self::get_custom_path($up,'class2style.ini', $up->upPath . 'assets/lib/');
+                        $up->class2style = ($inifile !== false) ? parse_ini_file($inifile) : '';
                     }
-                    if (isset($this->class2style[strtolower($part)])) {
-                        $part = $this->class2style[strtolower($part)];
+                    if (isset($up->class2style[strtolower($part)])) {
+                        $part = $up->class2style[strtolower($part)];
                     } else {
                         $msgerr .= $part .', ';
                     }
@@ -2523,7 +2562,7 @@ class upAction extends plgContentUP
                 $styleOnly .= ';'  . $part;
             }
             if ($msgerr) {
-                $this->msg_error(sprintf('Classe(s) invalide(s) dans %s : %s', $optionName, rtrim($msgerr, ' ,')));
+                self::msg_error($up,sprintf('Classe(s) invalide(s) dans %s : %s', $optionName, rtrim($msgerr, ' ,')));
             }
         }
         return trim($styleOnly, ';');
@@ -2532,23 +2571,1020 @@ class upAction extends plgContentUP
     /*
     * Chronométre les temps d'éxécution
     */
-    public function ctrl_timer($info = '')
+    static public function ctrl_timer($up,$info = '')
     {
-        if (empty($this->options_user['debug'])) {
+        if (empty($up->options_user['debug'])) {
             return;
         }
         $app = Factory::getApplication();
-        if (isset($this->timeStart)) {
-            $this->timeEnd = microtime(true);
-            $duration = ($this->timeEnd - $this->timeStart) * 1000;
-            $msg = sprintf('%8.2fs : %s %s', $duration, $this->name, $info);
+        if (isset($up->timeStart)) {
+            $up->timeEnd = microtime(true);
+            $duration = ($up->timeEnd - $up->timeStart) * 1000;
+            $msg = sprintf('%8.2fs : %s %s', $duration, $up->name, $info);
             $app->enqueueMessage($msg);
         } else {
-            $msg = sprintf('%8.2fs : %s %s', '00000000', $this->name, $info);
+            $msg = sprintf('%8.2fs : %s %s', '00000000', $up->name, $info);
             $app->enqueueMessage($msg);
-            $this->timeStart = microtime(true);
+            $up->timeStart = microtime(true);
         }
 
     }
-    // fin class upaction
+    /*
+     * ===============================
+     * FONCTIONS COMMUNES
+     * ===============================
+     */
+	
+	/*
+     * retourne le CSS pour le background sur mobile
+     * $opt_mobile peut contenir :
+     * - rien : on n'affiche pas la video, mais le fond prévu (poster bg-color)
+     * - une image
+     * - des propriétés css pour background : url(image.jpg) repeat-y
+     * - du css : background:...;color:...
+     */
+
+    static public function get_bg_mobile($up,$options) {
+        $opt_mobile = $options['mobile'];
+        if (is_file($opt_mobile)) {
+            // image existante
+            list($w, $h) = getimagesize($opt_mobile);
+            if (($w + $h) < 200) {
+                $out = 'background:url(\'' . $opt_mobile . '\') repeat ' . $options['bg-color'];
+            } else {
+                $out = 'background:url(\'' . $opt_mobile . '\') no-repeat ' . $options['bg-color'] . ' center/cover';
+            }
+        } else {
+            $out = (substr($opt_mobile, 0, 11) == 'background:') ? '' : 'background:';
+            $out .= $opt_mobile;
+        }
+
+        return $out;
+    }
+    /*
+     * get_overlay : retourne la valeur pour la propriété background d'un overley
+     * si $val se termine par .png : image répétée
+     * si $val est un nombre (70, 70%) : masque blanc transparent
+     * si $val commence par # (#FF9999 70%) : masque coloré transparent
+     * sinon $val est une règle CSS (linear-gradient ou radial-gradient)
+     */
+
+    static public function get_overlay($up,$val) {
+        if (strtolower(substr($val, strrpos($val, '.'))) == '.png') {
+            // si fichier PNG
+            if (dirname($val) == '.') {
+                $val = $up->upPath . 'assets/overlay/' . $val;
+                $val = str_replace('\\', '/', $val);
+            }
+            $val = 'url(\'' . Uri::root(true) . '/' . $val . '\') repeat';
+        } else if ($val[0] == '#') {
+            $rgba = self::hex2rgba($up,$val);
+            $val = 'linear-gradient(' . $rgba . ' 0%,' . $rgba . ' 100%)';
+        } else if ((float) $val > 0) {
+            // si 70 ou 70% -> rgba(256,256,256,.7)
+            $val = (float) $val;
+            $val = $val / 100;
+            $val = 'linear-gradient(rgba(240,240,240,' . $val . ') 0%,rgba(240,240,240,' . $val . ') 100%)';
+        }
+        // sinon, c'était une règle CSS
+        return $val;
+    }
+    /*
+     * hex2rgba : retourne une couleur au format #RRGGBBAA ou #RGBA au format rgba(r,g,b,a)
+     * opacité à 1 par défaut
+     */
+
+    static public function hex2rgba($up,$hex) {
+        // on retire le #
+        $hex = str_replace('#', '', $hex);
+        // si #RGBA ou #RGB : on double en forcant à FF si besoin
+        if (strlen($hex) <= 4) {
+            $hex .= $hex . 'FFFF';
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
+        }
+        // si >4 et <8, on force à FF
+        $hex = substr($hex . 'FFFF', 0, 8);
+        // conversion en décimal
+        $rgba = array_map('hexdec', str_split($hex, 2));
+        // canal alpha sous forme coeff
+        $rgba[3] = round($rgba[3] / 255, 1);
+        // retour
+        return 'rgba(' . implode(',', $rgba) . ')';
+    }
+
+    /*
+     * get_slide_info : retourne la chaine pour l'argument slide de vegas
+     * -------------------------------------------------
+     * LE PRINCIPE.
+     * les infos de cadrage permettent d'indiquer le point référence pour le recadrage
+     * elles sont ajoutées entre crochets à la fin du nom
+     * exemple maPhoto[100-100].jpg pour recadrer à partir du droit-bas (Right-Bottom)
+     * 1ere valeur = position horizontale en pourcentage. 0=gauche, 100=droite
+     * 2eme valeur = position verticale en pourcentage. 0=haut, 100=bas
+     * 3eme valeur = mode recouvrement : repeat, contain ou cover
+     * Cet ajout peut-être :
+     * - dans le nom du fichier pour les images passées par dossier
+     * - ajouté au nom du fichier dans l'option principale
+     * -------------------------------------------------
+     * $img : nom de l'image
+     * $is_dir : TRUE si les infos de cadrage existe dans le nom du fichier
+     * $path : chemin commun
+     */
+    static public function get_slide_info($up,$img, $is_dir, $path)
+    {
+        // recherche options dans nom du fichier
+        $regex = '#(.*)\[([\d]{0,3})\-?([\d]{0,3})\-?(.*)\]\.(.*)#i';
+        if (preg_match($regex, $img, $result) == 1) {
+            // $result[0] = $img
+            // $result[1] = chemin et nom image (sans extension)
+            // $result[2] = cadrage horizontal en %
+            // $result[3] = cadrage vertical en %
+            // $result[4] = mode size
+            // $result[5] = extension (sans le point)
+            if ($is_dir) {
+                $out = '{src:"' . self::get_url_relative($up,$img) . '" ';
+            } else {
+                $out = '{src:"' . self::get_url_relative($up,$path . $result[1] . '.' . $result[5]) . '" ';
+            }
+            self::add_str($up,$out, $result[2], ',', 'align:"', '%"');
+            self::add_str($up,$out, $result[3], ',', 'valign:"', '%"');
+            $arg = strtolower($result[4]);
+            switch ($arg) {
+                case 'cover':
+                    self::add_str($up,$out, 'cover:true', ',');
+                    break;
+                case 'contain':
+                    self::add_str($up,$out, 'cover:false', ',');
+                    break;
+                case 'repeat':
+                    self::add_str($up,$out, 'cover:"repeat"', ',');
+                    break;
+            }
+            $out .= '}';
+        } else {
+            $out = '{src:"' . self::get_url_relative($up,$path . $img) . '"}';
+        }
+
+        return $out;
+    }
+    /*
+     * get_subshortcode
+     * analyse des shortcodes secondaires
+     * retourne $out : array avec les options
+     * actualise $content
+     * v2.5 ajout \w dans regex pour ecarter les <b>{</b>
+     */
+    static public function get_subshortcode($up,&$content)
+    {
+        $out = array();
+        $search = array(
+            'image',
+            'link',
+            'subtitle',
+            'title',
+            'action'
+        );
+        $replace = array(
+            'src',
+            'href',
+            'text',
+            'text',
+            'text'
+        );
+        $regex = '#(?:<p>)?{(\w.*[\s\=\|].*)}(?:<\/p>)*?#siU';
+        if (preg_match_all($regex, $content, $matches) > 0) {
+            for ($i = 0; $i < count($matches[1]); $i++) {
+                $arr = explode('|', $matches[1][$i]);
+                $optname = '';
+                foreach ($arr as $tmp) {
+                    $tmp = preg_split("/=/", trim($tmp), 2);
+                    if ($optname == '') {
+                        $optname = $tmp[0];
+                        if (isset($out[$optname])) {
+                            break;
+                        }
+                        $tmp[0] = str_replace($search, $replace, $tmp[0]);
+                    }
+                    // sa valeur (true si aucune)
+                    $value = (count($tmp) == 2) ? trim($tmp[1]) : true;
+
+                    $out[$optname][$tmp[0]] = $value;
+                }
+                $content = str_replace($matches[0][$i], '', $content);
+            }
+        }
+        // nettoyage wisiwyg
+        $content = trim($content);
+        while (substr($content, 0, 6) == '<br />') {
+            $content = substr($content, 6);
+        }
+        while (substr($content, - 6, 6) == '<br />') {
+            $content = substr($content, 0, - 6);
+        }
+
+        return $out;
+    }
+    /*
+     * Charge le fichier CSS
+     * et initialise les options avec le fichier model.ini
+     * sauf si définies par user ou prefs.ini
+     */
+    static public function load_model($up,$model, &$options)
+    {
+        if (empty($model)) {
+            return;
+        }
+        // charge fichier CSS
+        self::load_file($up,'model/' . $model . '.css');
+        // surcharge des options par celle de model.ini
+        $inifile = self::get_custom_path($up,'model/' . $model . '.ini', null, false);
+        if ($inifile !== false) {
+            $modelini = self::load_inifile($up,$inifile, true);
+            if ($modelini !== false) {
+                foreach ($modelini as $key => $val) {
+                    $key = strtolower($key);
+                    if (isset($options[$key])) {
+                        if (! isset($up->options_user[$key])) {
+                            $options[$key] = $val;
+                        }
+                    } else {
+                        self::msg_error($up,self::trad_keyword($up,'OPTION_NOT_FOUND', $key, $inifile));
+                    }
+                }
+            }
+        }
+    }
+    // ajoute les clé-valeurs de $arr2 dans $arr1
+    // $arr1 contient les options du shortcode par type de mot-clé
+    // $arr2 contient les options saisie dans le contenu
+    // exemple :
+    // $a1['title'] = array('title'=>'TITRE','class'=>'foo')
+    // $a2['title'] = array('title'=>'TITRE-2','style'=>'color:red')
+    // return ['title'] = array('title'=>'TITRE-2','class'=>'foo','style'=>'color:red')
+    static public function options_merge($up,$arr1, $arr2)
+    {
+        if (! empty($arr2)) {
+            foreach ($arr2 as $arr2key => $arr2val) {
+                foreach ($arr2val as $key => $val) {
+                    if (! empty($val)) {
+                        if ($key == 'style' || $key == 'class' && $val[0] == '+') {
+                            $val[0] = ';';
+                            $arr1[$arr2key][$key] .= trim($val);
+                        } else {
+                            $arr1[$arr2key][$key] = trim($val);
+                        }
+                    }
+                }
+            }
+        }
+        return $arr1;
+    }
+    /*
+     * Supprime tous les dossiers et fichiers du répertoire indiqué
+     */
+    static public function deleteTree($up,$dir, $mask)
+    {
+        if (in_array($dir, $up->folders_exclude)) {
+            $up->debugMsg[] = self::trad_keyword($up,'FOLDER_EXCLUDE', $dir);
+            return;
+        }
+        foreach (glob($dir . $mask) as $file) {
+            $filename = basename($file);
+            if ($filename[0] != '.') {
+                $chmod1 = substr(sprintf('%o', fileperms($file)), - 4);
+                $ok = @chmod($file, 0777);
+                $chmod2 = substr(sprintf('%o', fileperms($file)), - 4);
+                if ($up->debug) {
+                    $msg = self::trad_keyword($up,'DEBUG_CHMOD', $chmod1 . '->' . $chmod2);
+                } else {
+                    $msg = (unlink($file)) ? '<i>[OK [' . $chmod2 . '] </i>' : '<i>NO [' . $chmod1 . '->' . $chmod2 . '] ';
+                }
+                $up->debugMsg[] = $msg . ' : ' . $file;
+            }
+        }
+        // suppression contenu sous-dossiers
+        foreach (glob($dir . '*', GLOB_ONLYDIR) as $subdir) {
+            if (! $up->debug)
+                self::deleteTree($up,$subdir . DIRECTORY_SEPARATOR, $mask); // On rappel la fonction deleteTree
+                $up->debugMsg[] = self::trad_keyword($up,'DELETE_TREE' ,$subdir);
+        }
+        // suppression dossier
+        if (empty(glob($dir . '*'))) {
+            $up->debugMsg[] = self::trad_keyword($up,'REMOVE_EMPTY_FOLDER', $dir);
+            $ok = rmdir($dir); // si le dossier est vide, on le supprime
+        }
+    }
+
+    /*
+     * remplace les séparateurs de chemin
+     */
+    static public function path_normalize($up,$path)
+    {
+        return str_replace(array(
+            '/',
+            '\\'
+        ), DIRECTORY_SEPARATOR, $path);
+    }
+    /*
+     * retourne la liste de tous les fichiers d'un dossier et sous-dossiers
+     * $regex_exclus : les fichiers exclus. ex: /*.dist\s|index.html/ (se terminant par .dist ou index.html)
+     * $root : la racine retirée pour chemin relatif
+     */
+    static public function scanSubdir($up,&$filelist, $folder, $regex_exclus = null, $root = '')
+    {
+        $tmp = glob(trim($folder, '/') . '/*');
+        foreach ($tmp as $file) {
+            if (is_dir($file)) {
+                self::scanSubdir($up,$filelist, $file, $regex_exclus, $root);
+            } else {
+                if ($root) {
+                    $rootSize = strlen($root);
+                    $file = substr($file, strlen($root));
+                }
+                if ($regex_exclus) {
+                    $foo = preg_match($regex_exclus, $file, $match);
+                    if (preg_match($regex_exclus, $file, $match)) {
+                        $file = '';
+                    }
+                }
+                if ($file) {
+                    $filelist[] = $file;
+                }
+            }
+        }
+    }
+
+    // }
+
+    /*
+     * copie d'une liste de fichiers vers un dossier
+     * $filelist : chemin relatif des fichiers
+     * $srcRoot : racine fichiers source
+     * $destRoot : racine fichiers dstination
+     */
+    static public function copyFilelist($up,$filelist, $srcRoot, $destRoot)
+    {
+        foreach ($filelist as $file) {
+            if (file_exists($srcRoot . $file)) {
+                if (! file_exists(dirname($destRoot . $file))) {
+                    mkdir(dirname($destRoot . $file), 0777, true);
+                }
+                if (! copy($srcRoot . $file, $destRoot . $file)) {
+                    self::msg_error($up,self::trad_keyword($up,'COPYFILE_ERR', $destRoot . $file));
+                }
+            }
+        }
+    }	
+	
+	static public function set_options($up,$option, $arg)
+    {
+        $out = '';
+        if (is_array($arg)) {
+            foreach ($arg as $key => $val) {
+                if ($val) {
+                    if (str_word_count($val, 0, '0123456789-_') == 1) {
+                        $val = '"' . $val . '"';
+                    } else {
+                        $val = '{' . $val . '}';
+                    }
+                    $out .= ($out) ? ',' : '';
+                    $out .= $key . ':' . $val;
+                }
+            }
+            if ($out) {
+                $out = $option . ':{' . $out . '},';
+            }
+        } else {
+            if (trim($arg)) {
+                if (strpos($arg, ':') === false) {
+                    $arg = '"' . $arg . '"';
+                } else {
+                    $arg = '{' . $arg . '}';
+                }
+                $out = $option . ':' . $arg . ',';
+            }
+        }
+        return $out;
+    }
+    /*
+     * function array_subtitle
+     * $parent_key : le nom du champ parent
+     * $key : le champ qui doit contenir un array
+     * $rowdata : le contenu de la ligne
+     * $options : liens sur les options user
+     */
+    static public function array_subtitle($up,$parent_key, $key, $rowdata, &$options)
+    {
+        $tmpl = $options['array-subtitle'][$parent_key];
+        foreach ($up->array_subtitle[$parent_key] as $field) {
+            $tmpdata = $rowdata;
+            $val = '###';
+            foreach (explode('/', $field) as $key) {
+                if (isset($tmpdata[$key])) {
+                    $val = $tmpdata[$key];
+                    $tmpdata = $tmpdata[$key];
+                }
+            }
+            $tmpl = str_ireplace('##' . $field . '##', $val, $tmpl);
+        }
+
+        return ($tmpl) ? $tmpl : $keys;
+    }
+
+    /*
+     * function make_list
+     * fonction récursive pour remplir la liste
+     * $data : le jeu de données
+     * &$options : liens sur les options user
+     * $parent_key : le nom du champ parent
+     */
+    static public function make_list($up,$data, &$options, $parent_key = 'root')
+    {
+        $up->result[] = '<ul>';
+        foreach ($data as $k => $v) {
+            if (($options['col-empty-invisible'] && $v == '') === false) {
+                // --- les colonnes exclues / inclues
+                if (! is_numeric($k)) {
+                    if (! empty($options['col-include'])) {
+                        if (in_array($k, $options['col-include']) === false)
+                            continue;
+                    }
+                    if (! empty($options['col-exclude'])) {
+                        if (in_array($k, $options['col-exclude']) === true)
+                            continue;
+                    }
+                }
+                if (is_array($v) && ! isset($options['col-type'][$k])) {
+                    // $k = ($niv == 0 && is_numeric($k)) ? $this->niv1_label($v, $options, $k) : $k;
+                    if (is_numeric($k) && isset($options['array-subtitle'][$parent_key]))
+                        $k = self::array_subtitle($up,$parent_key, $k, $v, $options);
+                    $up->result[] = '<li>' . $k;
+                    self::make_list($up,$v, $options, $k);
+                    $up->result[] = '</li>';
+                } else {
+                    $ret = get_col_value($k, $data, $options);
+                    if ($ret[0]) {
+                        $val = $ret[0];
+                    } else {
+                        $val = (isset($options['col-empty'][$k])) ? $options['col-empty'][$k] : '';
+                    }
+
+                    $class = ($ret[1]) ? ' class="' . $ret[1] . '"' : '';
+                    if (is_array($val)) {
+                        $str = '';
+                        array_to_string($str, $val);
+                        $val = $str;
+                    }
+
+                    $k = (isset($options['col-label'][$k])) ? $options['col-label'][$k] : $k;
+
+                    // $this->result[] = '<li' . $class . '>' . $k . ': ' . $val . '</li>';
+                    $out = str_ireplace('##LABEL##', $k, $options['template ']);
+                    $out = str_ireplace('##VALUE##', $val, $out);
+                    $up->result[] = '<li' . $class . '>' . $out . '</li>';
+                }
+            }
+        }
+
+        $up->result[] = '</ul>';
+    }
+    /*
+     * ---------------------------------------------------------------------
+     * make_table
+     * retourne le code HTML pour la table (thead & tbody)
+     * ---------------------------------------------------------------------
+     */
+    static public function make_table($up,$data, $title, $options)
+    {
+        // == thead
+        // profondeur sous-titres
+        $rowspan = '';
+        foreach ($title as $k => $v) {
+            if (is_array($v))
+                $rowspan = ' rowspan="2"';
+        }
+        //
+        $title1 = array();
+        $title2 = array();
+        $cols = array();
+        foreach ($title as $k => $v) {
+            $label = (isset($options['col-label'][$k])) ? $options['col-label'][$k] : $k;
+            if (is_array($v)) {
+                $nbcol = count($v);
+                $title1[] = '<th colspan="' . $nbcol . '">' . $label . '</th>';
+                foreach ($v as $k2 => $v2) {
+                    $label = (isset($options['col-label'][$k2])) ? $options['col-label'][$k2] : $k2;
+                    $title2[] = '<th>' . $label . '</th>';
+                    $cols[] = $k . '/' . $k2;
+                }
+            } else {
+                $title1[] = '<th' . $rowspan . '>' . $label . '</th>';
+                $cols[] = $k;
+            }
+        }
+        $html[] = '<thead>';
+        $html[] = '<tr>' . implode(PHP_EOL, $title1) . '</tr>';
+        if ($title2)
+            $html[] = '<tr>' . implode(PHP_EOL, $title2) . '</tr>';
+        $html[] = '</thead>';
+
+        // == tbody
+        $html[] = '<tbody>';
+        foreach ($data as $kdata => $vdata) {
+            $lign = '';
+            foreach ($cols as $col) {
+                $ret = get_col_value($col, $vdata, $options);
+                if ($ret[0]) {
+                    $val = $ret[0];
+                } else {
+                    $val = (isset($options['col-empty'][$col])) ? $options['col-empty'][$col] : '';
+                }
+                $class = ($ret[1]);
+                if (is_array($val)) {
+                    $str = '';
+                    array_to_string($str, $val);
+                    $val = $str;
+                }
+
+                $lign .= '<td' . $class . '>' . $val . '</td>';
+            }
+            $html[] = '<tr>' . $lign . '</tr>';
+        }
+        $html[] = '</tbody>';
+        // == fini
+        return $html;
+    }
+
+    /*
+     * ---------------------------------------------------------------------
+     * function get_title
+     * retourne un tableau dont les clés avec les titres de colonne
+     * $title['col1'] <- titre colonne 1er niveau
+     * $title['col1'][subcol1] <- sous-titre de la sous-colonne
+     * ---------------------------------------------------------------------
+     * Il est imperatif que le 1er niveau de data soit les lignes de la future table
+     */
+    static public function get_title($up,$data, $options)
+    {
+        foreach ($data as $krow => $vrow) { // les lignes
+
+            foreach ($vrow as $kcol => $vcol) {
+                // supprimer les champs exclus
+                if (in_array($kcol, $options['col-exclude'])) {
+                    unset($data[$kcol]);
+                    continue;
+                }
+                // conserver uniquement les champs inclus
+                if (! empty($options['col-include']) && ! in_array($kcol, $options['col-include'])) {
+                    unset($data[$kcol]);
+                    continue;
+                }
+                // les sous-titres de colonnes
+
+                if (is_array($vcol)) {
+                    if ((isset($options['col-type'][$kcol]) && $options['col-type'][$kcol] == 'compact') || empty($options['xml-attributes'])) {
+                        // 1 - titre attributes + contenu compact
+                        if (! isset($title[$kcol]))
+                            $title[$kcol] = '';
+                    } else {
+                        // 3 - titre attributes + sous-colonnes
+                        foreach ($vcol as $ksub => $vsub) {
+                            if (! is_array($vsub)) {
+                                if (! isset($title[$kcol][$ksub])) {
+                                    $title[$kcol][$ksub] = '';
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (! isset($title[$kcol]))
+                        $title[$kcol] = '';
+                }
+            }
+        }
+        return $title ?? '';
+    }
+	
+    static public function filesize($up,$file, $decimal = 0)
+    {
+        $size = filesize($file);
+        $units = array(
+            'Go',
+            'Mo',
+            'ko',
+            'o'
+        );
+        $divider = 1024 * 1024 * 1024;
+        foreach ($units as $unit) {
+            if (floor($size / $divider) > 0) {
+                return round($size / $divider, $decimal) . '&nbsp;' . $unit;
+            }
+            $divider /= 1024;
+        }
+        return '';
+    }
+
+    // filesize
+    static public function icon($up,$icon, $file)
+    {
+        if (strpos($icon, '.') !== false) {
+            // icone indiquée dans shortcode ou .info
+            if (strpos($icon, '/') === false) {
+                $icon = $up->filepath . $icon;
+            }
+            return '<img src="' . $icon . '"> ';
+        } else {
+            $slash = (URI::root(true)) ? URI::root(true) . '/' : '/';
+            // icone selon type fichier
+            $imgdir = $up->upPath . 'assets/img/file/' . $icon;
+            if (is_dir($imgdir)) {
+                $ficext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                $tmp = glob($imgdir . '/' . $ficext . '.{jpg,png,gif}', GLOB_BRACE);
+                if (empty($tmp) || $tmp === false) {
+                    return '<img src = "' . $slash . $imgdir . '/download.png"> ';
+                } else {
+                    return '<img src = "' . $slash . $tmp[0] . '"> ';
+                }
+            }
+        }
+        return '';
+    }
+    // icon
+    /*
+     * human_filesize
+     * --------------
+     */
+    static public function human_filesize($up,$file, $decimals = 2)
+    {
+        $bytes = filesize($file);
+        $sz = 'BKMGTP';
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+    }
+
+    static public function date_modif($file, $format = 'Y/m/d H:i')
+    {
+        return date($format, filemtime($file));
+    }
+
+    /*
+     * initialisation des types de contenu
+     * -----------------------------------
+     */
+    static public function init_ext_types($up,$type, $base)
+    {
+        $user_ext = self::supertrim($up,$up->options['ext-' . $type]);
+        if (! empty($base) && (empty($user_ext) || $user_ext[0] == '+')) {
+            foreach (array_map('trim', explode(',', $base)) as $ext) {
+                $up->ext_types[$ext] = $type;
+            }
+        }
+        $user_ext = trim($user_ext, '+');
+        if (! empty($user_ext)) {
+            foreach (array_map('trim', explode(',', $user_ext)) as $ext) {
+                $up->ext_types[$ext] = $type;
+            }
+        }
+    }
+
+    /*
+     * preview_ok()
+     * return TRUE si l'OS ou navigateur visiteur permet pdfjs
+     * XP: NT 5.1, W7: NT 6.1, W8: NT 6.2, W8.1: NT 6.3, W10: NT 10
+     */
+
+    static public function preview_ok($up)
+    {
+        $ok = true;
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $regex = '/Windows NT ([0-9.]*)/';
+        if (preg_match($regex, $userAgent, $version) == 1) {
+            $ok = (intval($version[1]) > 6);
+        }
+        return $ok;
+    }
+    /**
+     * check_timestamp($file)
+     * ----------------------
+     *
+     * @return : true si $file commence par AAAAMMJJHHMM-
+     */
+    static public function check_timestamp($up,$file)
+    {
+        $filename = basename($file);
+        // return (strlen($filename) > 12 && $filename[12] === '-' && checkdate(substr($filename, 4, 2), substr($filename, 6, 2), substr($filename, 0, 4)));
+        return (preg_match('#^20[0-9]{10}-#', $filename) === 1); // v2.9.1
+    }
+
+    /**
+     * add_timestamp($file)
+     * --------------------
+     * ajoute un timestamp à tous les fichiers de meme nom
+     */
+    static public function add_timestamp($up,$file)
+    {
+        $timestamp = date('YmdHi') . '-';
+        $pathinfo = pathinfo($file);
+        // tous les fichiers de meme nom
+        $filelist = glob($pathinfo['dirname'] . '/' . $pathinfo['filename'] . '.*', GLOB_BRACE);
+        for ($i = 0; $i < count($filelist); $i++) {
+            $pathinfo2 = pathinfo($filelist[$i]);
+            $newname = $pathinfo2['dirname'] . '/' . $timestamp . $pathinfo2['filename'] . '.' . $pathinfo2['extension'];
+            if (rename($filelist[$i], $newname) === false) {
+                self::msg_error($up,'Error rename : ' . $filelist[$i]);
+            }
+        }
+        // retour
+        $newname = $pathinfo['dirname'] . '/' . $timestamp . $pathinfo['filename'] . '.' . $pathinfo['extension'];
+        return $newname;
+    }
+    /**
+     * Normalise le contenu de grid-template-areas
+     *
+     * @param string $grid
+     * @return string
+     */
+    static public function normalize_grid_template_areas($up,$grid)
+    {
+        $grid = str_replace('\'', '"', $grid);
+        $grid = self::spaceNormalize($up,$grid);
+        $grid = preg_replace('/\s+/', ' ', $grid);
+        return $grid;
+    }
+
+    static public function propertyNoEmpty($up,$option, $bp = '')
+    {
+        $str = (!empty($up->options[$bp.$option])) ? $option.':' . $up->options[$bp.$option] . ';' : '';
+        return $str;
+    }
+
+    /**
+    * retourne le nombre de colonnes d'une grille
+    */
+    static public function get_nb_col($up,$grid)
+    {
+        $nbSpace = -1;
+        if (preg_match_all('/\"(.*)\"/U', $grid, $matches)) {
+            foreach ($matches[1] as $match) {
+                $nb = substr_count($match, ' ');
+                if ($nbSpace == -1) {
+                    $nbSpace = $nb;
+                } elseif ($nb != $nbSpace) {
+                    self::msg_error($up,'Le nombre de colonnes doit être identique pour tous les items');
+                }
+            }
+        }
+        return $nbSpace + 1;
+    }
+    /*
+     * Retourne TRUE si le fichier existe ou FALSE sinon
+     * Met à jour $file en ajoutant $path si nécessaire
+     */
+    static public function get_imgpath($up,&$file, $path) {
+        $ok = is_file($file);
+        if (!$ok && is_file($path . $file)) {
+            $file = $path . $file;
+            $ok = true;
+        }
+        return $ok;
+    }
+
+    /*
+     * retourne un tableau consolidé pour les propriétés multi-images
+     */
+
+    static function get_array_property($up,$options) {
+        $images = trim($options['bg_image'], ';\t\n\r\0');
+        $bg['url'] = array_map('trim', explode(';', $images));
+        $nb_images = count($bg['url']);
+        $properties = array('repeat' => 'no-repeat', 'size' => 'cover', 'position' => 'center', 'attachment' => 'scroll');
+        foreach ($properties AS $property => $default) {
+            $bg[$property] = array_map('trim', explode(';', trim($options['bg-' . $property] . ';' . $default, " ;")));
+            $bg[$property] = array_pad($bg[$property], $nb_images, end($bg[$property]));
+        }
+
+        return $bg;
+    }
+	
+    /*
+     * ===============================
+     * GESTION GITHUB
+     * ===============================
+     */
+    /*
+    * ==== getGithubActionRec
+    * chargement d'une action avec ses sous-répertoires
+    */
+    static public function getGithubActionRec($up,$dir, $admin = '')
+    {
+        if (!$response = self::getGithubAction($up,$dir)) {
+            $msg = 'Action '.$dir.' -> Erreur appel Github';
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $action = json_decode($response);
+        if (isset($action->message)) { // message d'erreur de github
+            $msg = 'Action '.$dir.' -> '.$action->message;
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $actionDir = $admin.$up->upPath.$dir;
+        if (!is_dir($actionDir)) {
+            mkdir($actionDir);
+        }
+        foreach ($action as $one) {
+            if ($one->download_url) {
+                $url = $one->download_url;
+                try {
+                    // ignorer les fichiers existants
+                    if (!is_file($actionDir.'/'.$one->name)) {
+                        copy($url, $actionDir.'/'.$one->name);
+                    }
+                } catch (\Exception $e) {
+                }
+            } else {// subdir
+                self::getGithubActionRec($up,$one->path, $admin);
+            }
+        }
+        return true;
+    }
+    /*
+    * ==== getGithubAction
+    * chargement d'un répertoire de github
+    */
+    static public function getGithubAction($up,$dir)
+    {
+        $url = $up->githuburl.$dir;
+        try {
+            $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_USERAGENT, $agent);
+            curl_setopt($curl, CURLOPT_NOBODY, 0);
+            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            if (!$up->githubapikey) { // pas de clé définie, on prend la clé par défaut
+                $up->githubapikey = $up->api_token_1.$up->api_token_2.$up->api_token_3;
+                $up->githubapikey = str_replace('#','_',$up->githubapikey);
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                        "Authorization: token ".$up->githubapikey,
+                        "User-Agent: PHP"
+            ]);
+
+            $response = curl_exec($curl);
+            return $response;
+        } catch (\RuntimeException $e) {
+            return null;
+        }
+    }
+    /*
+    *  vérification sur github une fois par jour
+    *  création d'un fichier up_checkfile.<date+heure prochaine vérification>
+    */
+    static public function createcheckfile($up) {
+        
+        $folder = JPATH_SITE.'/plugins/content/up/assets';
+        $chkfile = 'up_checkfile';
+        $dayssecs = 0;
+        $dayssecs = strtotime(date('Y-m-d').' '.$dayssecs);
+        if (!$dayssecs) {
+            $dayssecs = 0;
+        } else {
+            $dayssecs -= strtotime(date('Y-m-d'));
+        }
+        $time = time();
+        $round = strtotime(date('Y-m-d', $time));
+        $uptime = $round + $dayssecs;
+        $xdays = 1;
+        $interval = $xdays * 86400;
+        if ($uptime < $time) {
+            $uptime += 86400;
+        }
+        $fname = $folder .'/'. $chkfile.'.'.$uptime;
+        if (!touch($fname)) {
+            return;
+        }
+        $f = fopen($fname, 'w');
+        fputs($f, 'w'.$interval);
+        fclose($f);
+    }
+    /*
+    * ==== getGithubFile
+    * chargement d'un fichier à partir de github
+    */
+    static public function getGithubFile($up,$file, $admin = '')
+    {
+        /* la vérification sur github est faite une fois par jour */
+        $folder = JPATH_SITE.'/plugins/content/up/assets';
+        $chkfile = 'up_checkfile';
+        $fnames = Folder::files($folder, $chkfile.'.*');
+        $fname = array_pop($fnames);
+        if (!$fname) { // fichier non trouvé : on le crée 
+            self::createcheckfile($up);
+        } else {
+            $uptime = substr($fname, -10, 10);
+            $time = time();
+            if ($time < $uptime) { // moins d'un jour depuis la dernière vérification ?
+                return; // pas de vérification, on sort
+            }
+            unlink($folder.'/'.$fname); // remove previous checkfile
+            self::createcheckfile($up);
+        }
+        // recherche sur github de la nouvelle version du fichier
+        if (!$response = self::getGithubAction($up,$file)) {
+            $msg = 'Fichier '.$file.' -> Erreur appel Github';
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $action = json_decode($response);
+        if (isset($action->message)) { // message d'erreur de github
+            $msg = 'File '.$file.' -> '.$action->message;
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        if ($action->download_url) {
+            $url = $action->download_url;
+            try {
+                if (is_file($up->upPath.$file)) {
+                    unlink($up->upPath.$file);
+                }
+                copy($url, $up->upPath.$file);
+            } catch (\Exception $e) {
+            }
+        }
+        return true;
+    }
+
+    /*
+    *  Vérifie si UP-list-actions-version-v<versionUP>.txt existe
+    */
+    static public function loadActionsSha256($up)
+    {
+        if (Factory::getApplication()->isClient('administrator')) {
+            return false;
+        }
+        if ($up->params->def('checkgithub', 0)) {
+        // récupération du dernier fichier sur github
+            Self::getGithubFile($up,'assets/UP-list-actions-version.txt');
+        }
+        $file = $up->upPath.'/assets/UP-list-actions-version.txt';
+        if (!is_file($file)) {
+            return false;
+        }
+        $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
+        if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
+            return '';
+        }
+        foreach ($readBuffer as $line) {
+            $one = explode(':', $line);
+            if (sizeof($one) > 1) {
+                $up->actionsha256[$one[0]] = $one[1];
+            }
+        }
+    }
+    /*
+    *  Vérifie la version du fichier <action>.php par rapport au fichier version des actions
+    */
+    static public function checkactionsha256($up,$action)
+    {
+        $dir = $up->upPath.'actions/' . $action;
+        $file = $dir. '/' . $action . '.php';
+        if (!is_dir($dir) || !is_file($file)) { // non trouvé : do nothing
+            return;
+        }
+        $hash = hash_file('sha256', $file);
+        if (array_key_exists($action, $up->actionsha256)) {
+            if ($up->actionsha256[$action] != $hash) { // différent : suppression du répertoire
+                self::delete_directory($up,$dir);
+            }
+        }
+    }
+    /* 
+    * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
+    *
+    * supprime les fichiers d'une action, sauf le répertoire custom
+    */
+    static public function delete_directory($up,$dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..' || $item == 'custom') {
+                continue;
+            }
+            if (!self::delete_directory($up,$dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+        return rmdir($dir);
+    }    
+    // fin class UpHelper
 }

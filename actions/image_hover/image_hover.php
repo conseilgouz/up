@@ -17,21 +17,23 @@
  */
 defined('_JEXEC') or die;
 
-class image_hover extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_hover extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('hover-effects.css');
+        UpHelper::load_file($this,'hover-effects.css');
         return true;
     }
 
     function run() {
         // cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // nom de l'image
@@ -51,10 +53,10 @@ class image_hover extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // l'ajout de code CSS dans le head permet l'utilisation de pseudo-elements)
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === le code HTML
         // structure attendue
@@ -72,23 +74,23 @@ class image_hover extends upAction {
 
         $effect = ((int) $options['effect'] > 10) ? $options['effect'] : '11';
         $outer_div['class'] = 'port-' . $effect[0] . ' effect-' . $effect[1];
-        $this->get_attr_style($outer_div, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$outer_div, $options['class'], $options['style']);
 
         $img_div['class'] = 'image-box';
-        $this->get_attr_style($img_div, $options['img-class'], $options['img-style']);
+        UpHelper::get_attr_style($this,$img_div, $options['img-class'], $options['img-style']);
 
         $text_div['class'] = 'text-desc';
-        $this->get_attr_style($text_div, $options['text-class'], $options['text-style']);
+        UpHelper::get_attr_style($this,$text_div, $options['text-class'], $options['text-style']);
 
         $img_tag['src'] = $options[__class__];
-        $img_tag['alt'] = $this->link_humanize($options[__class__]); // TODO sans ext, ni tiret
+        $img_tag['alt'] = UpHelper::link_humanize($this,$options[__class__]); // TODO sans ext, ni tiret
         // -- le code en retour
         $out = '';
-        $out .= $this->set_attr_tag('div', $outer_div);
-        $out .= $this->set_attr_tag('div', $img_div);
-        $out .= $this->set_attr_tag('img', $img_tag);
+        $out .= UpHelper::set_attr_tag($this,'div', $outer_div);
+        $out .= UpHelper::set_attr_tag($this,'div', $img_div);
+        $out .= UpHelper::set_attr_tag($this,'img', $img_tag);
         $out .= '</div>';
-        $out .= $this->set_attr_tag('div', $text_div);
+        $out .= UpHelper::set_attr_tag($this,'div', $text_div);
         $out .= $this->content;
         $out .= '</div>';
         $out .= '</div>';

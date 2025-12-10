@@ -16,7 +16,9 @@
 
 defined('_JEXEC') or die;
 
-class image_pannellum extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_pannellum extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -24,8 +26,8 @@ class image_pannellum extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('pannellum.css');
-        $this->load_file('pannellum.js');
+        UpHelper::load_file($this,'pannellum.css');
+        UpHelper::load_file($this,'pannellum.js');
         return true;
     }
 
@@ -36,7 +38,7 @@ class image_pannellum extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -77,14 +79,14 @@ class image_pannellum extends upAction {
 
         // traiter language qui peut contenir des traductions avant nettoyage par ctrl_options
         if (isset($this->options_user['language'])) {
-            $tmp = $this->params_decode($this->options_user['language']);
+            $tmp = UpHelper::params_decode($this,$this->options_user['language']);
             //permettre la saisie de balise HTML inline
             $language = str_replace(array('[', ']'), array('<', '>'), $tmp);
             $this->options_user['language'] = '';
         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
         // --- conversion pseudo-BBcode
         $options['title'] = str_replace(array('[', ']'), array('<', '>'), $options['title']);
         $options['author'] = str_replace(array('[', ']'), array('<', '>'), $options['author']);
@@ -100,17 +102,17 @@ class image_pannellum extends upAction {
         );
         if ($this->content) {
             // si hotSpots interne, on les utilise
-            $hotSpots = $this->get_content_shortcode($this->content, 'hotspot');
+            $hotSpots = UpHelper::get_content_shortcode($this,$this->content, 'hotspot');
             foreach ($hotSpots AS $hotSpot) {
                 $hotSpot['text'] = str_replace(array('[', ']'), array('<', '>'), $hotSpot['hotspot']);
-                $js_hotspot[] = $this->only_using_options($spot_def, $hotSpot);
+                $js_hotspot[] = UpHelper::only_using_options($this,$spot_def, $hotSpot);
             }
         }
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // --- conversion pseudo-BBcode
         if (isset($js_options['title']))
@@ -124,7 +126,7 @@ class image_pannellum extends upAction {
         }
         // ajout des options
         if ($options['options']) {
-            $js_options = array_merge($js_options, $this->params_decode($options['options']));
+            $js_options = array_merge($js_options, UpHelper::params_decode($this,$options['options']));
         }
         // ajout des traductions
         if (isset($language)) {
@@ -133,7 +135,7 @@ class image_pannellum extends upAction {
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
 
         // -- initialisation
@@ -143,19 +145,19 @@ class image_pannellum extends upAction {
 
         // === les personnalisations CSS dans le head
         // #ID est remplace par l'id de l'instance
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
 //		$attr['id'] = 'panorama'; // $options['id'];
         $attr['id'] = $options['id'];
         $attr['class'] = $options['class'];
-        $attr['style'] = 'width:' . $this->ctrl_unit($options['width'], 'px,%');
-        $attr['style'] .= ';height:' . $this->ctrl_unit($options['height'], 'px,vh');
-        $this->add_str($attr['style'], $options['style'], ';');
+        $attr['style'] = 'width:' . UpHelper::ctrl_unit($this,$options['width'], 'px,%');
+        $attr['style'] .= ';height:' . UpHelper::ctrl_unit($this,$options['height'], 'px,vh');
+        UpHelper::add_str($this,$attr['style'], $options['style'], ';');
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr, true);
-        $html[] = $this->load_js_code($js_code, false);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr, true);
+        $html[] = UpHelper::load_js_code($this,$js_code, false);
 
         return implode(PHP_EOL, $html);
     }

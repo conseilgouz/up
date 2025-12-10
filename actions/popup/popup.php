@@ -15,7 +15,9 @@
  * */
 defined('_JEXEC') or die();
 
-class popup extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class popup extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     /**
@@ -23,8 +25,8 @@ class popup extends upAction
      */
     function init()
     {
-        $this->load_file('popup.css');
-        $this->load_file('popup.js');
+        UpHelper::load_file($this,'popup.css');
+        UpHelper::load_file($this,'popup.js');
         return true;
     }
 
@@ -37,12 +39,12 @@ class popup extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -75,14 +77,14 @@ class popup extends upAction
             'css-head' => '' // style ajouté dans le HEAD de la page
         );
 
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === doit-on exécuter ?
-        if ($this->filter_ok($options['filter']) !== true)
+        if (UpHelper::filter_ok($this,$options['filter']) !== true)
             return '';
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // =============================
         // =========== le code JS
@@ -115,11 +117,11 @@ class popup extends upAction
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         // -- initialisation
         $js_code = 'popup("#' . $options['id'] . '", ' . $js_params . ')';
-        $this->load_js_code($js_code);
+        UpHelper::load_js_code($this,$js_code);
 
         // =============================
         // =========== Le CSS
@@ -132,7 +134,7 @@ class popup extends upAction
         if ($options['popup-position']) {
             $pos = strtr(strtolower($options['popup-position']), 'hgd', 'tlr');
             $poslist = 'cc,tl,tc,tr,cl,cr,bl,bc,br';
-            $pos = $this->ctrl_argument($pos, $poslist);
+            $pos = UpHelper::ctrl_argument($this,$pos, $poslist);
 
             $align = array(
                 't' => 'flex-start',
@@ -145,7 +147,7 @@ class popup extends upAction
             $css .= 'align-items:' . $align[$pos[0]] . ';'; // Y
             $css .= 'justify-content:' . $align[$pos[1]] . ';'; // X
             $css .= ']';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
 
         // -- l'animation
@@ -158,23 +160,23 @@ class popup extends upAction
         $attr_main['style'] = 'display:none';
 
         $attr_overlay['class'] = 'popup-overlay';
-        $this->get_attr_style($attr_overlay, $options['overlay-style'], $animOverlay);
+        UpHelper::get_attr_style($this,$attr_overlay, $options['overlay-style'], $animOverlay);
 
         // -- le popup
         $attr_popup['class'] = 'popup-content';
-        $this->get_attr_style($attr_popup, $options['popup-style'], $animPopup);
+        UpHelper::get_attr_style($this,$attr_popup, $options['popup-style'], $animPopup);
 
         // -- le bouton close
         $attr_close['class'] = 'popup-close';
-        $this->get_attr_style($attr_close, $options['close-style']);
+        UpHelper::get_attr_style($this,$attr_close, $options['close-style']);
 
         // ======================================
         // ======== le code HTML en retoour
         // ======================================
-        $html[] = $this->set_attr_tag('div', $attr_main);
-        $html[] = $this->set_attr_tag('div', $attr_overlay);
-        $html[] = $this->set_attr_tag('div', $attr_popup);
-        $html[] = $this->set_attr_tag('div', $attr_close, $this->get_bbcode($options['close-label']));
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_overlay);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_popup);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_close, UpHelper::get_bbcode($this,$options['close-label']));
         $html[] = $this->content;
         $html[] = '</div>'; // popup
         $html[] = '</div>'; // overlay

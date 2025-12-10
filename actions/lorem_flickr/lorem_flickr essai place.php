@@ -23,7 +23,7 @@
  */
 defined('_JEXEC') or die();
 
-class lorem_flickr extends upAction
+class lorem_flickr extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -34,7 +34,7 @@ class lorem_flickr extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -60,7 +60,7 @@ class lorem_flickr extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $keyword = ($options[__class__]);
         $keyword = str_replace(array(
@@ -76,7 +76,7 @@ class lorem_flickr extends upAction
 
         $orientation = ($options['orientation'] === true) ? ' ' : strtoupper($options['orientation']);
         if (isset($this->options_user['orientation'])) {
-            $orientation = $this->ctrl_argument($orientation[0], ' ,H,V');
+            $orientation = UpHelper::ctrl_argument($this,$orientation[0], ' ,H,V');
         }
 
         $nb = $options['number'];
@@ -84,7 +84,7 @@ class lorem_flickr extends upAction
 
         // === nettoyage du cache
         if ($options['cache-reset']) {
-            $this->delTree($this->path_normalize(JPATH_BASE . '/tmp/up-flickr/'));
+            $this->delTree(UpHelper::path_normalize($this,JPATH_BASE . '/tmp/up-flickr/'));
         }
 
         // recupere image(s) dans cache
@@ -93,22 +93,22 @@ class lorem_flickr extends upAction
         $main_attr = array();
         if ($options['mode'] == 'img') {
             $img_attr = array();
-            $this->get_attr_style($img_attr, $options['class'], $options['style']);
+            UpHelper::get_attr_style($this,$img_attr, $options['class'], $options['style']);
             foreach ($images as $image) {
                 $img_attr['src'] = $image;
                 if (basename($image) == '00_error.jpg') {
                     // $img_attr['style'] = 'max-width:' . $wpx . ';max-height:' . $hpx . ';';
                     unset($img_attr['title']);
                 } else {
-                    $img_attr['title'] = 'Credit: ' . $this->link_humanize($image);
-                    // $img_attr['alt'] = 'Credit: '.$this->link_humanize($image) . ' <a href="//flickr.com">flickr.com</a>';
+                    $img_attr['title'] = 'Credit: ' . UpHelper::link_humanize($this,$image);
+                    // $img_attr['alt'] = 'Credit: '.UpHelper::link_humanize($this,$image) . ' <a href="//flickr.com">flickr.com</a>';
                 }
-                $imgout[] = $this->set_attr_tag('img', $img_attr);
+                $imgout[] = UpHelper::set_attr_tag($this,'img', $img_attr);
             }
             if ($options['align'] || $options['main-class']) {
                 $align = ($options['align']) ? 'text-align:' . $options['align'] . ';' : '';
-                $this->get_attr_style($main_attr, $options['main-class'], $align);
-                $out = $this->set_attr_tag($options['main-tag'], $main_attr, implode(PHP_EOL, $imgout));
+                UpHelper::get_attr_style($this,$main_attr, $options['main-class'], $align);
+                $out = UpHelper::set_attr_tag($this,$options['main-tag'], $main_attr, implode(PHP_EOL, $imgout));
             } else {
                 $out = implode(PHP_EOL, $imgout);
             }

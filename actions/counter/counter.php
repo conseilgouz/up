@@ -13,18 +13,20 @@
  */
 defined('_JEXEC') or die;
 
-class counter extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class counter extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('jQuerySimpleCounter.js');
+        UpHelper::load_file($this,'jQuerySimpleCounter.js');
         return true;
     }
 
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // min,max : valeurs de départ et de fin
@@ -52,18 +54,18 @@ class counter extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
-        $options['prefix'] = $this->get_bbcode($options['prefix']);
-        $options['suffix'] = $this->get_bbcode($options['suffix']);
+        $options['prefix'] = UpHelper::get_bbcode($this,$options['prefix']);
+        $options['suffix'] = UpHelper::get_bbcode($this,$options['suffix']);
 
         // unité de min-width
         if ($options['width'])
-            $options['width'] = $this->ctrl_unit($options['width'], 'px,em,rem');
+            $options['width'] = UpHelper::ctrl_unit($this,$options['width'], 'px,em,rem');
 
         // =========== le code JS
         // ventilation valeurs start-end saisies dans option principale
@@ -73,19 +75,19 @@ class counter extends upAction {
 
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options, 2);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 2);
 
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").jQuerySimpleCounter(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main['id'] = $options['id'];
@@ -93,10 +95,10 @@ class counter extends upAction {
             $attr_main['style'] = 'display:inline-block;text-align:center;min-width:' . $options['width'];
         if ($options['mono'])
             $attr_main['class'] = 'ff-mono';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $out = $this->set_attr_tag('span', $attr_main, true);
+        $out = UpHelper::set_attr_tag($this,'span', $attr_main, true);
 
         return $out;
     }

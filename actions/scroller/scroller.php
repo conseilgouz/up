@@ -20,13 +20,15 @@
  */
 defined('_JEXEC') or die;
 
-class scroller extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class scroller extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('scroller.css');
-        $this->load_file('jquery.bootstrap.newsbox.js');
+        UpHelper::load_file($this,'scroller.css');
+        UpHelper::load_file($this,'jquery.bootstrap.newsbox.js');
         return true;
     }
 
@@ -34,7 +36,7 @@ class scroller extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nombre d'éléments
@@ -76,41 +78,41 @@ class scroller extends upAction
             $this->options_user['newsperpage'] = $this->options_user[__class__];
         }
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         // -- initialisation
         $js_code = '$(".' . $options['id'] . '").bootstrapNews(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === Style du bloc principal
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = $options['id'];
         $attr_main['style'] = '';
-        $this->get_attr_style($attr_main, 'card', $options['style'], $options['class']);
+        UpHelper::get_attr_style($this,$attr_main, 'card', $options['style'], $options['class']);
 
         // === Contenu a scroller
         $content = '';
-        if ($this->ctrl_content_parts($this->content) === true) {
+        if (UpHelper::ctrl_content_parts($this,$this->content) === true) {
             // === on récupére les parties séparées par {====}
-            $parts = $this->get_content_parts($this->content);
+            $parts = UpHelper::get_content_parts($this,$this->content);
             foreach ($parts as $part) {
                 $content .= '<item>' . $part . '</item>';
             }
-            $content = $this->set_attr_tag('div', $attr_main, $content);
+            $content = UpHelper::set_attr_tag($this,'div', $attr_main, $content);
         } else {
             // analyse de la structure du contenu
             require_once($this->upPath . '/assets/lib/simple_html_dom.php');
@@ -127,7 +129,7 @@ class scroller extends upAction
                 foreach ($html->find('body', 0)->firstChild()->children() as $child) {
                     $content .= '<item class="new-item">' . $child->outertext . '</item>';
                 }
-                $content = $this->set_attr_tag('div', $attr_main, $content);
+                $content = UpHelper::set_attr_tag($this,'div', $attr_main, $content);
             } else {
                 $firstTag = $html->find('body', 0)->firstChild()->tag;
                 // on wrappe les blocs
@@ -135,7 +137,7 @@ class scroller extends upAction
                     $child->tag = $firstTag;
                     $content .= '<item class="new-item">' . $child->outertext . '</item>';
                 }
-                $content = $this->set_attr_tag('div', $attr_main, $content);
+                $content = UpHelper::set_attr_tag($this,'div', $attr_main, $content);
             }
             $html->clear();
         }

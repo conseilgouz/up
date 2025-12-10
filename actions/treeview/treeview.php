@@ -18,14 +18,16 @@
  */
 defined('_JEXEC') or die();
 
-class treeview extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class treeview extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('treeView.css');
-        $this->load_file('treeView.js');
+        UpHelper::load_file($this,'treeView.css');
+        UpHelper::load_file($this,'treeView.js');
         return true;
     }
 
@@ -33,12 +35,12 @@ class treeview extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // aucun argument
@@ -63,7 +65,7 @@ class treeview extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $id = $options['id'];
         // === CSS
@@ -81,26 +83,26 @@ class treeview extends upAction
 
         // icone noeud ouvert / ferme
         if (strlen($options['icon-folder']) > 2) {
-            $css .= '#id li.tv-close{background-image:url(' . $this->get_url_relative($this->actionPath . 'icons/' . $options["icon-folder"] . '-close.png') . ');}';
-            $css .= '#id li.tv-open{background-image:url(' . $this->get_url_relative($this->actionPath . 'icons/' . $options["icon-folder"] . '-open.png') . ');}';
+            $css .= '#id li.tv-close{background-image:url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $options["icon-folder"] . '-close.png') . ');}';
+            $css .= '#id li.tv-open{background-image:url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $options["icon-folder"] . '-open.png') . ');}';
         }
         // icone feuille
         if (strlen($options['icon-file']) > 2)
-            $css .= '#id li:not(.tv-close) {background-image: url(' . $this->get_url_relative($this->actionPath . 'icons/' . $options['icon-file'] . ".png") . ');}';
+            $css .= '#id li:not(.tv-close) {background-image: url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $options['icon-file'] . ".png") . ');}';
 
         foreach (explode(',', $options['custom-icon']) as $icon) {
             if (file_exists($this->actionPath . 'icons/' . $icon . '-close.png') !== false) {
                 // icônes pour dossier
-                $css .= '#id li.' . $icon . '.tv-close{background-image:url(' . $this->get_url_relative($this->actionPath . 'icons/' . $icon . '-close.png') . ');}';
-                $css .= '#id li.' . $icon . '.tv-open{background-image:url(' . $this->get_url_relative($this->actionPath . 'icons/' . $icon . '-open.png') . ');}';
+                $css .= '#id li.' . $icon . '.tv-close{background-image:url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $icon . '-close.png') . ');}';
+                $css .= '#id li.' . $icon . '.tv-open{background-image:url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $icon . '-open.png') . ');}';
             } elseif (file_exists($this->actionPath . 'icons/' . $icon . '.png') !== false) {
                 // icone pour feuille
-                $css .= '#id li.' . $icon . '{background-image:url(' . $this->get_url_relative($this->actionPath . 'icons/' . $icon . '.png') . ');}';
+                $css .= '#id li.' . $icon . '{background-image:url(' . UpHelper::get_url_relative($this,$this->actionPath . 'icons/' . $icon . '.png') . ');}';
             } elseif (strpos($icon, '.') !== false) {
-                $this->msg_error($icon . 'image not found in up/actions/treeview/icons');
+                UpHelper::msg_error($this,$icon . 'image not found in up/actions/treeview/icons');
             }
         }
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // === JS
         $js_params = '{';
@@ -113,24 +115,24 @@ class treeview extends upAction
             $js .= '$("' . $options['btn-open-selector'] . '").click(function(){$("#' . $id . '").treeView("expandAll");});';
         if ($options['btn-close-selector'])
             $js .= '$("' . $options['btn-close-selector'] . '").click(function(){$("#' . $id . '").treeView("collapseAll");});';
-        $this->load_jquery_code($js);
+        UpHelper::load_jquery_code($this,$js);
         // === Icone par item
         // si <li>[nomClasse]item 1 --> <li class="nomClasse">item 1
         $regex = '#\<li(.*)\>\[(.*)\]#U';
         while (preg_match($regex, $this->content, $matches)) {
-            $attr = $this->get_attr_tag($matches[0]);
+            $attr = UpHelper::get_attr_tag($this,$matches[0]);
             $attr['class'] .= ' ' . $matches[2];
-            $str = $this->set_attr_tag('li', $attr);
+            $str = UpHelper::set_attr_tag($this,'li', $attr);
             $this->content = preg_replace($regex, $str, $this->content, 1);
         }
 
         // attributs du bloc principal
         // structure UL principale
-        $main_tag_orig = $this->preg_string('#(<ul.*>)#U', $this->content);
-        $attr_main = $this->get_attr_tag($main_tag_orig);
+        $main_tag_orig = UpHelper::preg_string($this,'#(<ul.*>)#U', $this->content);
+        $attr_main = UpHelper::get_attr_tag($this,$main_tag_orig);
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, 'uptv', $options['class'], $options['style']);
-        $main_tag_new = $this->set_attr_tag('ul', $attr_main);
+        UpHelper::get_attr_style($this,$attr_main, 'uptv', $options['class'], $options['style']);
+        $main_tag_new = UpHelper::set_attr_tag($this,'ul', $attr_main);
         // code en retour
         $this->content = preg_replace('#' . $main_tag_orig . '#', $main_tag_new, $this->content, 1);
 

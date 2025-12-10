@@ -33,8 +33,9 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Image\Image; 	
 use Joomla\CMS\Language\Text; 	
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class osmap extends upAction
+class osmap extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     /**
@@ -45,17 +46,17 @@ class osmap extends upAction
      */
     function init()
     {
-        // $this->load_file('leaflet/leaflet.css');
-        // $this->load_file('leaflet/leaflet.js');
+        // UpHelper::load_file($this,'leaflet/leaflet.css');
+        // UpHelper::load_file($this,'leaflet/leaflet.js');
         $opt = array();
         $attr['crossorigin'] = '';
         $attr['referrerpolicy'] = 'no-referrer';
 		
         $attr['integrity'] = 'sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w==';
-        $this->load_file('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css', $opt, $attr);
+        UpHelper::load_file($this,'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css', $opt, $attr);
 
         $attr['integrity'] = 'sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg==';
-        $this->load_file('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js', $opt, $attr);
+        UpHelper::load_file($this,'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js', $opt, $attr);
 
         return true;
     }
@@ -69,7 +70,7 @@ class osmap extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -94,7 +95,7 @@ class osmap extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Variables de travail
         // pour utiliser id UP comme variable JS
@@ -104,7 +105,7 @@ class osmap extends upAction
         $css_code = '#' . $mapid . '{';
         $css_code .= '  height:' . $options['height'] . 'px;';
         $css_code .= '}';
-        $this->load_css_head($css_code);
+        UpHelper::load_css_head($this,$css_code);
 
         // === Préparation pour code JS
         $js = '';
@@ -128,23 +129,23 @@ class osmap extends upAction
                 '{',
                 '}'
             ), $options['tile-url']);
-            $tile_options = $this->strtoarray($options['tile-options']);
+            $tile_options = UpHelper::strtoarray($this,$options['tile-options']);
         } else {
             // sinon on utilise la définition json indiquée ou celle par défaut
             if ($options['tile'] == '')
                 $options['tile'] = 'osm-mapnik';
-            $tile = $this->get_jsontoarray('tiles/' . $options['tile'] . '.json');
+            $tile = UpHelper::get_jsontoarray($this,'tiles/' . $options['tile'] . '.json');
             if (is_array($tile)) {
                 $tile_url = $tile['url'];
                 $tile_options = $tile['settings'];
             }
         }
 
-        $tile_options = $this->json_arrtostr($tile_options);
+        $tile_options = UpHelper::json_arrtostr($this,$tile_options);
         // recherche clé
         $regex = '/\#(.*-key)\#/U';
         if (preg_match($regex, $tile_options, $pref)) {
-            $val = $this->get_action_pref($pref[1]);
+            $val = UpHelper::get_action_pref($this,$pref[1]);
             $tile_options = str_replace($pref[0], $val, $tile_options);
         }
         $js .= 'L.tileLayer("' . $tile_url . '",';
@@ -154,7 +155,7 @@ class osmap extends upAction
         // --- Markers & popups
         if ($this->content) {
             // si shortcode interne pour marker, on les utilise
-            $markers = $this->get_content_shortcode($this->content, 'marker');
+            $markers = UpHelper::get_content_shortcode($this,$this->content, 'marker');
         } else {
             // sinon met un marker au centre de la carte sauf marker=0
             $markers = [];
@@ -238,11 +239,11 @@ class osmap extends upAction
         }
 
         // -- le code en retour
-        $out = $this->set_attr_tag('div', $outer_div, true);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div, true);
         $out .= $gmap;
         $out .= '<script>' . $js . '</script>';
 
-//        $this->msg_info('code JS: '.trim($js));
+//        UpHelper::msg_info($this,'code JS: '.trim($js));
 
         return $out;
     }
@@ -285,7 +286,7 @@ class osmap extends upAction
                 $out .= $options;
             }
         } else {
-            $this->msg_error(Text::sprintf('UP_FILE_NOT_FOUND', Uri::ROOT() . $img));
+            UpHelper::msg_error($this,Text::sprintf('UP_FILE_NOT_FOUND', Uri::ROOT() . $img));
         }
 		
         return $out;

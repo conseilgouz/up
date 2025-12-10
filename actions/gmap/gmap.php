@@ -18,7 +18,9 @@
 
 defined('_JEXEC') or die;
 
-class gmap extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class gmap extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -29,7 +31,7 @@ class gmap extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ==== PARAMETRES
         $options_def = array(
@@ -45,11 +47,11 @@ class gmap extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['width'] = $this->ctrl_unit($options['width'], '%,px,rem,vw');
-        $options['height'] = $this->ctrl_unit($options['height'], 'px,rem,vh');
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['width'] = UpHelper::ctrl_unit($this,$options['width'], '%,px,rem,vw');
+        $options['height'] = UpHelper::ctrl_unit($this,$options['height'], 'px,rem,vh');
         // recup APIKEY dans les params de UP
-        $options['apikey'] = $this->get_action_pref('gmap-key');
+        $options['apikey'] = UpHelper::get_action_pref($this,'gmap-key');
 
         $main_attr['style'] = $options['style'];
         $main_attr['class'] = $options['class'];
@@ -58,7 +60,7 @@ class gmap extends upAction
         if ($options['apikey'] !== false) {
             $address = str_replace(' ', '+', $options[$this->name]);
             if ($this->tarteaucitron && $options['rgpd']) {
-                $out = $this->set_attr_tag('div', $main_attr);
+                $out = UpHelper::set_attr_tag($this,'div', $main_attr);
                 $out .= '<div';
                 $out .= ' class="googlemapssearch"';
                 $out .= ' data-search="' . $address . '"';
@@ -68,7 +70,7 @@ class gmap extends upAction
                 $out .= '"></div>';
                 $out .= '</div>';
             } else {
-                $out = $this->set_attr_tag('div', $main_attr);
+                $out = UpHelper::set_attr_tag($this,'div', $main_attr);
                 $out .= '<iframe';
                 $out .= ' class="googlemaps-canvas"';
                 $out .= ' width="' . $options['width'] . '"';

@@ -16,7 +16,9 @@
  */
 defined('_JEXEC') or die;
 
-class upclass2style extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class upclass2style extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -27,7 +29,7 @@ class upclass2style extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
         __class__ => '', // chemin du fichier CSS
@@ -37,12 +39,12 @@ class upclass2style extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         if (isset($this->options_user['list'])) {
             $compact = (soundex($options['list']) == 'C512');
             if ($compact) {
-                $this->load_css_head('#id span[white-space:nowrap]') ;
+                UpHelper::load_css_head($this,'#id span[white-space:nowrap]') ;
             }
             $inifile = 'plugins/content/up/assets/lib/custom/class2style.ini';
             if (file_exists($inifile) === false) {

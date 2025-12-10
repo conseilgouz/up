@@ -18,14 +18,15 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class upfilescleaner extends upAction
+class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        $this->load_file('ajax_upfilescleaner.js');
-        $this->load_file('tooltip.js');
-        $this->load_file('tooltip.css');
+        UpHelper::load_file($this,'ajax_upfilescleaner.js');
+        UpHelper::load_file($this,'tooltip.js');
+        UpHelper::load_file($this,'tooltip.css');
         return true;
     }
 
@@ -33,7 +34,7 @@ class upfilescleaner extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin du dossier à analyser
@@ -56,16 +57,16 @@ class upfilescleaner extends upAction
 
         // ==== FUSION ET CONTROLE DES OPTIONS ====
         // ========================================
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $source = trim($options[__class__], ' \//');
         if (empty($source || file_exists($source) === false || is_dir($source) === false)) {
-            return $this->msg_error($this->trad_keyword('NO_SOURCE'));
+            return UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_SOURCE'));
         }
 
         $folder_backup = trim($options['folder-backup'], ' /');
         if (empty($folder_backup)) {
-            $this->msg_error($this->trad_keyword('NO_BACKUP_PATH'));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_BACKUP_PATH'));
         }
         $folder_backup = JPATH_BASE .'/'. $folder_backup;
         if (! file_exists($folder_backup)) {
@@ -83,7 +84,7 @@ class upfilescleaner extends upAction
         // === CSS-HEAD
         $css = '.tooltip-size[width:100%;min-width:260px;margin:0;padding:10px]';
         $css .= $options['css-head'];
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // ==== RECUPERATION DU CONTENU DE LA BD ====
         // ==========================================
@@ -189,7 +190,7 @@ class upfilescleaner extends upAction
             $list_folder_move = array_diff($list_folder_move, $list_folder_used);
         }
         if (empty($list_folder_move)) {
-            return $this->msg_inline($this->trad_keyword('NO_FOLDER_MOVE'));
+            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NO_FOLDER_MOVE'));
         }
 
         // ==== 3 - RECHERCHE DES FICHIERS À DÉPLACER ====
@@ -265,22 +266,22 @@ class upfilescleaner extends upAction
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // commentaires dans liste
-        $comment_folder_exclude_by_user = $this->trad_keyword('FOLDER_EXCLUDE_BY_USER');
-        $comment_subfolder_used = $this->trad_keyword('SUBFOLDER_USED');
-        $comment_folder_used = $this->trad_keyword('FOLDER_USED');
-        $comment_file_exclude_by_user = $this->trad_keyword('FILE_EXCLUDE_BY_USER');
-        $comment_file_orange = $this->trad_keyword('FILE_ORANGE');
+        $comment_folder_exclude_by_user = UpHelper::trad_keyword($this,'FOLDER_EXCLUDE_BY_USER');
+        $comment_subfolder_used = UpHelper::trad_keyword($this,'SUBFOLDER_USED');
+        $comment_folder_used = UpHelper::trad_keyword($this,'FOLDER_USED');
+        $comment_file_exclude_by_user = UpHelper::trad_keyword($this,'FILE_EXCLUDE_BY_USER');
+        $comment_file_orange = UpHelper::trad_keyword($this,'FILE_ORANGE');
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
 
         $list_folder_used = array_diff($list_folder_used, $list_folder_exclude_by_user);
         $jnl = array_unique($jnl);
-        $out[] = $this->trad_keyword('LOG_TITLE', $source);
-        $out[] = $this->trad_keyword('LOG_COLOR');
+        $out[] = UpHelper::trad_keyword($this,'LOG_TITLE', $source);
+        $out[] = UpHelper::trad_keyword($this,'LOG_COLOR');
         $out[] = '<ul>';
         $nivBak = substr_count($jnl[0], '/');
         foreach ($jnl as $f) {
@@ -322,7 +323,7 @@ class upfilescleaner extends upAction
         // ============================================
         if (empty($files_a_deplacer)) {
             $html[] = '<div class="mt2 tc p1 bg-jauneClair bd-gris">';
-            $html[] = $this->trad_keyword('ACTION_NONE', $source);
+            $html[] = UpHelper::trad_keyword($this,'ACTION_NONE', $source);
             $html[] = '</div>';
             return implode(PHP_EOL, $html);
         }
@@ -339,18 +340,18 @@ class upfilescleaner extends upAction
         if (!empty($options['folder-purge'])) {
             $attr_btn['data-folder-purge'] = '1';
         }
-        $this->get_attr_style($attr_btn, $options['btn-style'], 'upfilescleaner-btn', $options['id']);
+        UpHelper::get_attr_style($this,$attr_btn, $options['btn-style'], 'upfilescleaner-btn', $options['id']);
 
         // bouton appel javascript et résultat
-        $btn_label = $this->trad_keyword('ACTION_BTN_LABEL', $options['folder-backup']);
-        $warning = $this->trad_keyword('ACTION_WARNING');
+        $btn_label = UpHelper::trad_keyword($this,'ACTION_BTN_LABEL', $options['folder-backup']);
+        $warning = UpHelper::trad_keyword($this,'ACTION_WARNING');
         $html[] = '<div class="mt2 tc bg-jauneClair p1 bd-gris">';
         $html[] = '<label class="upfilescleaner-warning mb1">  <input id="upfilescleaner-cb" type="checkbox">'.$warning.'</label>';
         $html[] = '<div class="tc">';
-        $html[] = $this->set_attr_tag('button', $attr_btn, $btn_label);
+        $html[] = UpHelper::set_attr_tag($this,'button', $attr_btn, $btn_label);
         $html[] = '</div>';
         $html[] = '<div class="upfilescleaner-result" style="display:none">';
-        $html[] = $this->trad_keyword('ACTION_RESULT', $options['folder-backup']);
+        $html[] = UpHelper::trad_keyword($this,'ACTION_RESULT', $options['folder-backup']);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -456,7 +457,7 @@ class upfilescleaner extends upAction
         $app = Factory::getApplication('site');
 
         $out = '';
-        $tables = $this->params_decode($bd_tables, ';');
+        $tables = UpHelper::params_decode($this,$bd_tables, ';');
         // Récupérer l'objet base de données
         $db = Factory::getContainer()->get(DatabaseInterface::class);
 

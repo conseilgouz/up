@@ -34,25 +34,27 @@
  */
 defined('_JEXEC') or die();
 
-class tab extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class tab extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('tab.css');
-        $this->load_file('jquery.ttpanel.js');
-        $this->load_file('jquery.multipurpose_tabcontent.min.js');
+        UpHelper::load_file($this,'tab.css');
+        UpHelper::load_file($this,'jquery.ttpanel.js');
+        UpHelper::load_file($this,'jquery.multipurpose_tabcontent.min.js');
         return true;
     }
 
     public function run()
     {
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         $options_def = array(
@@ -98,45 +100,45 @@ class tab extends upAction
             }
         }
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
 
         // =========== le code JS
         // les options saisis par l'utilisateur concernant le script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         $js_code = '$("#' . $options['id'] . '").champ(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // JS pour rotation auto
         $delay = (int) $options['auto'];
         if ($delay > 999) { // auto défilement des tabs
             $js_code = '$(function () {$("#' . $options['id'] . ' .tab_list").timerTabPanel({timeInterval:' . $delay . '});});';
-            $this->load_jquery_code($js_code);
+            UpHelper::load_jquery_code($this,$js_code);
         }
         // === le code HTML
         // --- STYLES
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'tab_wrapper';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         $attr_title['class'] = 'tab_list';
-        $this->get_attr_style($attr_title, $options['title-class'], $options['title-style']);
+        UpHelper::get_attr_style($this,$attr_title, $options['title-class'], $options['title-style']);
 
-        $this->get_attr_style($attr_content, $options['content-class'], $options['content-style']);
+        UpHelper::get_attr_style($this,$attr_content, $options['content-class'], $options['content-style']);
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // -- titre + contenu RESTE A REPRENDRE STYLE DU H4
 
@@ -149,19 +151,19 @@ class tab extends upAction
         $nb = count($array_title[0]);
 
         // ==== code retourne
-        $out = $this->set_attr_tag('div', $attr_main);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_main);
         // --- les onglets
-        $out .= $this->set_attr_tag('ul', $attr_title);
+        $out .= UpHelper::set_attr_tag($this,'ul', $attr_title);
         $active = ' class="active"';
         for ($i = 0; $i < $nb; $i++) {
-            $attr = $this->get_attr_tag($array_title[1][$i]);
+            $attr = UpHelper::get_attr_tag($this,$array_title[1][$i]);
             $attr['id'] = (empty($attr['id'])) ? 'tab_' . ($i + 1) : $attr['id'];
-            $out .= $this->set_attr_tag('li', $attr, $array_title[2][$i]);
+            $out .= UpHelper::set_attr_tag($this,'li', $attr, $array_title[2][$i]);
             $active = '';
         }
         $out .= '</ul>';
         // --- les contenus
-        $out .= $this->set_attr_tag('div', $attr_content);
+        $out .= UpHelper::set_attr_tag($this,'div', $attr_content);
         $active = ' active';
         for ($i = 0; $i < $nb; $i++) {
             $out .= '<div class="tab_content' . $active . '">';
@@ -178,7 +180,7 @@ class tab extends upAction
             $js = "var hash = window.location.hash;";
             $js .= "var anchor = $(hash);";
             $js .= "if (anchor.length >= 0){ $(anchor).click(); }";
-            $out .= $this->load_jquery_code($js, false);
+            $out .= UpHelper::load_jquery_code($this,$js, false);
         }
         return $out;
     }

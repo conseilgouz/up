@@ -16,13 +16,15 @@
  */
 defined('_JEXEC') or die();
 
-class printer extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class printer extends Lomart\Plugin\Content\Up\Extension\Up 
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('printer.js');
+        UpHelper::load_file($this,'printer.js');
         return true;
     }
 
@@ -30,7 +32,7 @@ class printer extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '&#x2399; Imprimer', // texte du bouton
@@ -48,18 +50,18 @@ class printer extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // si le selecteur CSS n'est pas indiqué, cette action doit avoir un contenu
         if ($options['selector'] == '') {
-            if (! $this->ctrl_content_exists()) {
+            if (! UpHelper::ctrl_content_exists($this)) {
                 return false;
             }
             $options['selector'] = '#' . $options['id'];
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $filename = ($options['filename']) ? ',\'' . $options['filename'] . '\'' : '';
@@ -68,18 +70,18 @@ class printer extends upAction
         if (! $options['btn-display-on-print']) {
             $attr_btn['class'] .= ' no-print';
             // si appel de l'exterieur de l'article
-            $this->load_css_head('@media print [.no-print[display:none;visibility:hidden]]');
+            UpHelper::load_css_head($this,'@media print [.no-print[display:none;visibility:hidden]]');
         }
-        $this->get_attr_style($attr_btn, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_btn, $options['class'], $options['style']);
 
         // code en retour
         if ($options['btn-before'])
-            $html[] = $this->set_attr_tag('button', $attr_btn, html_entity_decode($options[__class__]));
+            $html[] = UpHelper::set_attr_tag($this,'button', $attr_btn, html_entity_decode($options[__class__]));
         $html[] = '<div id=\'' . $options['id'] . '\'>';
         $html[] = $this->content;
         $html[] = '</div>';
         if (! $options['btn-before'])
-            $html[] = $this->set_attr_tag('button', $attr_btn, html_entity_decode($options[__class__]));
+            $html[] = UpHelper::set_attr_tag($this,'button', $attr_btn, html_entity_decode($options[__class__]));
         return implode(PHP_EOL, $html);
     }
 

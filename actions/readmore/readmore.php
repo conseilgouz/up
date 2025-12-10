@@ -22,13 +22,15 @@
  */
 defined('_JEXEC') or die();
 
-class readmore extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class readmore extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
-        $this->load_file('readmore.js');
-        $this->load_file('readmore.css');
+        UpHelper::load_file($this,'readmore.js');
+        UpHelper::load_file($this,'readmore.css');
         return true;
     }
 
@@ -36,11 +38,11 @@ class readmore extends upAction
     {
 
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -72,7 +74,7 @@ class readmore extends upAction
         // fusion et controle des options
         // ============================================
 
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         if ($options[__class__] != '') { // v2.9
             $options['textmore'] = $options[__class__];
@@ -90,34 +92,34 @@ class readmore extends upAction
         $options['style'] = ($options['style']=='1') ? '' : $options['style'];
         if ($options['class'] || $options['style']) {
             $attr_btns['class'] = 'uprm-btns';
-            $this->get_attr_style($attr_btns, $options['class'], $options['style']);
+            UpHelper::get_attr_style($this,$attr_btns, $options['class'], $options['style']);
         }
         // --- bouton MORE
-        $textmore = $this->get_bbcode($options['textmore']);
+        $textmore = UpHelper::get_bbcode($this,$options['textmore']);
         $attr_btn_more['class'] = 'uprm-btn-more';
         if ($options['textmore-class'] || $options['textmore-style']) {
             $attr_btnmore_span = array();
-            $this->get_attr_style($attr_btnmore_span, $options['textmore-class'], $options['textmore-style']);
-            $textmore = $this->set_attr_tag('span', $attr_btnmore_span, $textmore);
+            UpHelper::get_attr_style($this,$attr_btnmore_span, $options['textmore-class'], $options['textmore-style']);
+            $textmore = UpHelper::set_attr_tag($this,'span', $attr_btnmore_span, $textmore);
         }
 
         // --- bouton LESS
         $attr_btn_less['class'] = 'uprm-btn-less inactive';
-        $textless = $this->get_bbcode($options['textless']);
+        $textless = UpHelper::get_bbcode($this,$options['textless']);
         if ($options['textless-class'] || $options['textless-style']) {
             $attr_btnless_span = array();
-            $this->get_attr_style($attr_btnless_span, $options['textless-class'], $options['textless-style']);
-            $textless = $this->set_attr_tag('span', $attr_btnless_span, $textless);
+            UpHelper::get_attr_style($this,$attr_btnless_span, $options['textless-class'], $options['textless-style']);
+            $textless = UpHelper::set_attr_tag($this,'span', $attr_btnless_span, $textless);
         } else {}
 
         // --- PANEL
         $attr_panel['class'] = 'uprm-panel inactive';
-        $this->get_attr_style($attr_panel, $options['panel-style']);
+        UpHelper::get_attr_style($this,$attr_panel, $options['panel-style']);
         if ($options['panel-speed'])
-            $this->add_str($options['css-head'], '#id .uprm-panel[transition:height ' . (int) $options['panel-speed'] . 'ms ease-out;]');
+            UpHelper::add_str($this,$options['css-head'], '#id .uprm-panel[transition:height ' . (int) $options['panel-speed'] . 'ms ease-out;]');
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ============================================
         // === code JS
@@ -133,23 +135,23 @@ class readmore extends upAction
             }
         }
         $js_events= ',click,dblclick,mouseenter';
-        $js_options['panelEvent'] = $this->ctrl_argument($options['panel-actif'],$js_events);
+        $js_options['panelEvent'] = UpHelper::ctrl_argument($this,$options['panel-actif'],$js_events);
 
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         $js_code = 'readmore("#' . $options['id'] . '", ' . $js_params . ')';
-        $this->load_js_code($js_code);
+        UpHelper::load_js_code($this,$js_code);
 
         // === le contenu
         $overlay = '';
         if (! empty($options['panel-overlay'])) {
             $attr_overlay['class'] = 'uprm-overlay';
             if ($options['panel-overlay'] != '1')
-                $this->get_attr_style($attr_overlay, $options['panel-overlay']);
-            $overlay = $this->set_attr_tag('div', $attr_overlay, true);
+                UpHelper::get_attr_style($this,$attr_overlay, $options['panel-overlay']);
+            $overlay = UpHelper::set_attr_tag($this,'div', $attr_overlay, true);
         }
 
-        $panel = $this->set_attr_tag('div', $attr_panel);
+        $panel = UpHelper::set_attr_tag($this,'div', $attr_panel);
         $panel .= $overlay;
         $panel .= $this->content;
         $panel .= '</div>';
@@ -158,9 +160,9 @@ class readmore extends upAction
         $out = '<div id="' . $options['id'] . '">';
         if ($btnAfter)
             $out .= $panel;
-        $out .= $this->set_attr_tag('_div', ($attr_btns ?? [])); // si class pour btns
-        $out .= $this->set_attr_tag('a', $attr_btn_more, $textmore);
-        $out .= $this->set_attr_tag('a', $attr_btn_less, $textless);
+        $out .= UpHelper::set_attr_tag($this,'_div', ($attr_btns ?? [])); // si class pour btns
+        $out .= UpHelper::set_attr_tag($this,'a', $attr_btn_more, $textmore);
+        $out .= UpHelper::set_attr_tag($this,'a', $attr_btn_less, $textless);
         $out .= (isset($attr_btns)) ? '</div>' : '';  // si class pour btns
         if (! $btnAfter)
             $out .= $panel;

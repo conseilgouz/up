@@ -34,26 +34,27 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class image_gallery extends upAction
+class image_gallery extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
 
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('image_gallery.css');
-        $this->load_file('lib/PhotoSwipe/photoswipe.css');
-        $this->load_file('lib/PhotoSwipe/default-skin/default-skin.css');
-        $this->load_file('lib/PhotoSwipe/photoswipe.min.js');
-        $this->load_file('lib/PhotoSwipe/photoswipe-ui-default.min.js');
-        $this->load_file('lib/jqPhotoSwipe.js');
+        UpHelper::load_file($this,'image_gallery.css');
+        UpHelper::load_file($this,'lib/PhotoSwipe/photoswipe.css');
+        UpHelper::load_file($this,'lib/PhotoSwipe/default-skin/default-skin.css');
+        UpHelper::load_file($this,'lib/PhotoSwipe/photoswipe.min.js');
+        UpHelper::load_file($this,'lib/PhotoSwipe/photoswipe-ui-default.min.js');
+        UpHelper::load_file($this,'lib/jqPhotoSwipe.js');
         return true;
     }
 
     public function run()
     {
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // fichier image, dossier pour galerie ou largeurs des images contenues
@@ -112,12 +113,12 @@ class image_gallery extends upAction
         );
 
         // === fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === suppression des dossiers srcset
         if ($options['srcset-raz']) {
             $this->srcset_raz($options[__class__]);
-            return '<div class="box-info">' . $this->trad_keyword('msg-srcset-raz', $options[__class__]) . '</div>';
+            return '<div class="box-info">' . UpHelper::trad_keyword($this,'msg-srcset-raz', $options[__class__]) . '</div>';
         }
 
         // === le dossier racine pour srcset
@@ -137,7 +138,7 @@ class image_gallery extends upAction
 
         // CSS dans le head
         if ($options['css-head']) {
-            $this->load_css_head($options['css-head']);
+            UpHelper::load_css_head($this,$options['css-head']);
         }
 
         // =========================================
@@ -145,7 +146,7 @@ class image_gallery extends upAction
         // =========================================
         // --- style de la legende
 
-        $options['legend-type'] = $this->ctrl_argument($options['legend-type'], '2,0,1,3');
+        $options['legend-type'] = UpHelper::ctrl_argument($this,$options['legend-type'], '2,0,1,3');
         $main_legend_classes = array(
             '',
             'legend-hover legend-top',
@@ -157,7 +158,7 @@ class image_gallery extends upAction
         // === options diverses
         $options['similarity'] = $options['similarity'] / 100;
         if ($options['legend-template']) {
-            $options['legend-template'] = str_replace('"', '\'', $this->get_bbcode($options['legend-template']));
+            $options['legend-template'] = str_replace('"', '\'', UpHelper::get_bbcode($this,$options['legend-template']));
         }
 
         // =============================================
@@ -178,7 +179,7 @@ class image_gallery extends upAction
 
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = $options['class'];
-        $this->add_class($attr_main['class'], $options['main-legend-class']);
+        UpHelper::add_class($this,$attr_main['class'], $options['main-legend-class']);
         $attr_main['style'] = $options['style'];
 
         // =============================================
@@ -212,7 +213,7 @@ class image_gallery extends upAction
         // ==== code en retour
         // =============================================
 
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         $html[] = $this->content;
         $html[] = '</div>';
 
@@ -221,7 +222,7 @@ class image_gallery extends upAction
         $js[] = 'galleryOpen: function (gallery) {';
         $js[] = '}';
         $js[] = '});';
-        $after[] = $this->load_jquery_code(implode(PHP_EOL, $js), false);
+        $after[] = UpHelper::load_jquery_code($this,implode(PHP_EOL, $js), false);
 
         // on retourne
         $out['after'] = implode(PHP_EOL, $after);
@@ -231,7 +232,7 @@ class image_gallery extends upAction
             $debug = implode('#br#', $out);
             $debug = str_replace('<', '&lt;', $debug);
             $debug = str_replace('#br#', '<br>', $debug);
-            $this->msg_info($options['id'] . ' : <pre>' . $debug . '</pre>');
+            UpHelper::msg_info($this,$options['id'] . ' : <pre>' . $debug . '</pre>');
         }
 
         return $out;
@@ -253,7 +254,7 @@ class image_gallery extends upAction
             $img['class'] = '';
             $this->content = $this->img_get_code($img, $options);
         } elseif (isset($this->options_user['debug'])) { // v2.7
-            $this->msg_error('file not found : ' . $options[__class__]);
+            UpHelper::msg_error($this,'file not found : ' . $options[__class__]);
         }
     }
 
@@ -291,7 +292,7 @@ class image_gallery extends upAction
         }
 
         // recuperer les legendes
-        $legends = $this->load_inifile($this->str_append($folder, 'legend.ini', DIRECTORY_SEPARATOR), false, false);
+        $legends = UpHelper::load_inifile($this,UpHelper::str_append($this,$folder, 'legend.ini', DIRECTORY_SEPARATOR), false, false);
 
         // creation tableau attributs images
         $i = 0;
@@ -312,10 +313,10 @@ class image_gallery extends upAction
             if (isset($legends[$imgname])) {
                 $images[$i]['alt'] = $legends[$imgname];
             } elseif ($options['legend-template'] && strpos($imgname, '---') > 0) {
-                $legend = $this->legend_style($this->link_humanize($imgname), $options['legend-template']);
+                $legend = $this->legend_style(UpHelper::link_humanize($this,$imgname), $options['legend-template']);
                 $images[$i]['alt'] = $legend;
             } else {
-                $images[$i]['alt'] = $this->link_humanize($imgname);
+                $images[$i]['alt'] = UpHelper::link_humanize($this,$imgname);
             }
             $i++;
             if ($cpt && $i == $cpt) {
@@ -346,7 +347,7 @@ class image_gallery extends upAction
         $regeximg = '#<img .*>#U';
         preg_match_all($regeximg, $this->content, $images);
         foreach ($images[0] as $img) {
-            $imgattr = $this->get_attr_tag($img);
+            $imgattr = UpHelper::get_attr_tag($this,$img);
             $imgattr['alt'] = $this->img_get_legend($imgattr);
             $imgCode = $this->img_get_code($imgattr, $options);
 
@@ -365,7 +366,7 @@ class image_gallery extends upAction
         $regeximg = '#<img .*>#U';
         preg_match_all($regeximg, $this->content, $matches);
         foreach ($matches[0] as $i => $img) {
-            $imgattr = $this->get_attr_tag($img);
+            $imgattr = UpHelper::get_attr_tag($this,$img);
             $images[$i]['class'] = '';
             $images[$i]['src'] = $imgattr['src'];
             $images[$i]['alt'] = $this->img_get_legend($imgattr);
@@ -386,13 +387,13 @@ class image_gallery extends upAction
     public function get_folder($options)
     {
         $maindir = $options[__class__];
-        $this->load_file('lib/shuffle/shuffle.min.js');
-        $this->load_file('lib/shuffle/shuffle-init.js');
+        UpHelper::load_file($this,'lib/shuffle/shuffle.min.js');
+        UpHelper::load_file($this,'lib/shuffle/shuffle-init.js');
         $imgList = array();
         $legends = array();
         $directories = glob($maindir . '/*', GLOB_ONLYDIR);
         if (empty($directories)) {  // v5.1
-            $this->msg_error('no subfolders in "'. $maindir.'"');
+            UpHelper::msg_error($this,'no subfolders in "'. $maindir.'"');
             return false;
         }
         if ($options['shuffle-reverse'] != '') { // reverse order des boutons
@@ -414,9 +415,9 @@ class image_gallery extends upAction
                 }
             }
             // recuperer les legendes
-            $legend = $this->str_append($folder, 'legend.ini', DIRECTORY_SEPARATOR);
+            $legend = UpHelper::str_append($this,$folder, 'legend.ini', DIRECTORY_SEPARATOR);
             if (file_exists($legend)) {
-                $legends[$dirname] = $this->load_inifile($legend);
+                $legends[$dirname] = UpHelper::load_inifile($this,$legend);
             }
         }
         // creation tableau attributs images
@@ -435,7 +436,7 @@ class image_gallery extends upAction
         }
         $out[] = '<div class="btn-group filter-options display-block pl1 ' . $flex . '" ' . $random . '><button class="btn active" data-group="all">TOUT</button>';
         foreach ($imgList as $key => $dir) {
-            $out[] = '<button class="btn" data-group="' . $key . '" style="margin:2px auto">' . $this->link_humanize($key) . '</button>';
+            $out[] = '<button class="btn" data-group="' . $key . '" style="margin:2px auto">' . UpHelper::link_humanize($this,$key) . '</button>';
             foreach ($dir as $img) {
                 if ($options['infinite-start'] > 0) {
                     $options['infinite-start']--;
@@ -450,7 +451,7 @@ class image_gallery extends upAction
                 if (isset($legends[$key][$imgname])) {
                     $images[$i]['alt'] = $legends[$key][$imgname];
                 } else {
-                    $images[$i]['alt'] = $this->link_humanize($imgname);
+                    $images[$i]['alt'] = UpHelper::link_humanize($this,$imgname);
                 }
                 $i++;
             }
@@ -483,20 +484,20 @@ class image_gallery extends upAction
         switch ($grid[0]) {
             case 'masonry':
                 // -- js
-                $this->load_file('lib/masonry/masonry.pkgd.min.js');
+                UpHelper::load_file($this,'lib/masonry/masonry.pkgd.min.js');
                 if ($options['infinite-scroll'] > 0) {
-                    $this->load_file('lib/masonry/infinite-scroll.min.js'); // imagesloaded is in infinite-scroll.js
+                    UpHelper::load_file($this,'lib/masonry/infinite-scroll.min.js'); // imagesloaded is in infinite-scroll.js
                 } else {
-                    $this->load_file('lib/masonry/imagesloaded.pkgd.min.js');
+                    UpHelper::load_file($this,'lib/masonry/imagesloaded.pkgd.min.js');
                 }
-                $this->load_file('lib/masonry/masonry-init.js');
+                UpHelper::load_file($this,'lib/masonry/masonry-init.js');
                 // -- css
                 $select = '#' . $options['id'] . ' .masonry-grid-sizer,' . '#' . $options['id'] . ' figure';
                 $css = $select . '{width:' . (floor(100 / $grid[1])) . '%}';
                 $css .= '@media (max-width:768px){' . $select . '{width:' . (floor(100 / $grid[2])) . '%}}';
                 $css .= '@media (max-width:480px){' . $select . '{width:' . (floor(100 / $grid[3])) . '%}}';
 
-                $this->load_css_head($css);
+                UpHelper::load_css_head($this,$css);
 
                 // -- contenu
                 $out[] = '<div class="masonry-grid">';
@@ -510,7 +511,7 @@ class image_gallery extends upAction
                 if ($options['infinite-scroll'] > 0) { // add wait
                     $out[] = '<div class="page-load-status"><div class="loader-ellips infinite-scroll-request">
                               <span class="loader-ellips__dot"></span><span class="loader-ellips__dot"></span><span class="loader-ellips__dot"></span><span class="loader-ellips__dot"></span>
-                               </div><p class="infinite-scroll-last">' . $this->trad_keyword('end-of-content') . '</p><p class="infinite-scroll-error">' . $this->trad_keyword('no-more-page') . '</p></div>';
+                               </div><p class="infinite-scroll-last">' . UpHelper::trad_keyword($this,'end-of-content') . '</p><p class="infinite-scroll-error">' . UpHelper::trad_keyword($this,'no-more-page') . '</p></div>';
                 }
                 break;
             case 'shuffle':
@@ -520,7 +521,7 @@ class image_gallery extends upAction
                 $css .= '@media (max-width:768px){' . $select . '{width:' . (floor(100 / $grid[2])) . '%}}';
                 $css .= '@media (max-width:480px){' . $select . '{width:' . (floor(100 / $grid[3])) . '%}}';
 
-                $this->load_css_head($css);
+                UpHelper::load_css_head($this,$css);
 
                 // -- contenu
                 $out[] = '<div class="shuffle-grid">';
@@ -544,10 +545,10 @@ class image_gallery extends upAction
             default: // grid
                 if ($options['grid-ratio']) {
                     $css = '#id figure.upgallery img[object-fit:cover;]';
-                    $this->load_css_head($css);
-                    $this->load_file('lib/upgrid.js');
+                    UpHelper::load_css_head($this,$css);
+                    UpHelper::load_file($this,'lib/upgrid.js');
                     $js_code = 'upgrid("#' . $options['id'] . '", ' . $options['grid-ratio'] . ')';
-                    $this->load_js_code($js_code);
+                    UpHelper::load_js_code($this,$js_code);
                 }
                 $out[] = '<div class="fg-row fg-auto-' . $grid[1] . ' fg-auto-m' . $grid[2] . ' fg-auto-s' . $grid[3] . ' fg-gap">';
                 $cpt = ($options['nb-img'] < 1) ? sizeof($images) : $options['nb-img'];
@@ -572,7 +573,7 @@ class image_gallery extends upAction
         if (! file_exists($img_attr['src']) || ! (list($w, $h, $type) = getimagesize(JPATH_ROOT . '/' . $img_attr['src']))) {
             // ce n'est pas une image ou chemin incorrect
             if (isset($this->options_user['debug'])) { // v2.7
-                $this->msg_error($this->trad_keyword('UP_FIC_NOT_FOUND', $img_attr['src']));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UP_FIC_NOT_FOUND', $img_attr['src']));
             }
 
             return false;
@@ -581,7 +582,7 @@ class image_gallery extends upAction
         // === pas de prise en charge si class 'nogallery' ou image trop petite
         if (strpos($img_attr['class'], 'nogallery') !== false || $w < $options['wmin-image']) {
             if (isset($this->options_user['debug'])) { // v2.7
-                $this->msg_error($this->trad_keyword('image-too-small', $img_attr['src'], $w, $options['wmin-image']));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'image-too-small', $img_attr['src'], $w, $options['wmin-image']));
             }
 
             return false;
@@ -642,7 +643,7 @@ class image_gallery extends upAction
             $figure_attr['class'] = 'upgallery';
         }
         /* */
-        $this->add_class($figure_attr['class'], $options['img-class']);
+        UpHelper::add_class($this,$figure_attr['class'], $options['img-class']);
         $figure_attr['style'] = $options['img-style'];
         /* */
         // === FIGCAPTION = style pour legende
@@ -686,7 +687,7 @@ class image_gallery extends upAction
         // === IMG = image pour vignette
         $img_attr['alt'] = strip_tags($img_attr['alt']);
         // forcer la largeur à 100%
-        $this->get_attr_style($img_attr, $options['img-class'], $options['img-style']); // v2.7
+        UpHelper::get_attr_style($this,$img_attr, $options['img-class'], $options['img-style']); // v2.7
 
         // $img_attr['loading'] = "lazy";
 
@@ -706,16 +707,16 @@ class image_gallery extends upAction
         if ($thumb && ! $shuffle) {
             $out[] = '<div class="grid__item">';
         }
-        $out[] = $this->set_attr_tag('figure', $figure_attr);
+        $out[] = UpHelper::set_attr_tag($this,'figure', $figure_attr);
         if ($options['gallery']) {
-            $out[] = $this->set_attr_tag('a', $a_attr);
+            $out[] = UpHelper::set_attr_tag($this,'a', $a_attr);
         }
 
         if ($thumb) {
             $out[] = '<picture>';
-            $out[] = $this->set_attr_tag('source', $src_mobile_attr);
-            $out[] = $this->set_attr_tag('source', $src_tablet_attr);
-            $out[] = $this->set_attr_tag('img', $img_attr);
+            $out[] = UpHelper::set_attr_tag($this,'source', $src_mobile_attr);
+            $out[] = UpHelper::set_attr_tag($this,'source', $src_tablet_attr);
+            $out[] = UpHelper::set_attr_tag($this,'img', $img_attr);
             $out[] = '</picture></a>'; // 3.0
             if ($options['legend-type'] != 0) {
                 // --- code pour download
@@ -724,12 +725,12 @@ class image_gallery extends upAction
                     $attr_download['title'] = $options['download-title'];
                     $attr_download['href'] = $imgPath . 'srcset/' . $imgName . '-' . end($sizes) . $imgExt;
                     $attr_download['download'] = $imgName . $imgExt;
-                    $this->get_attr_style($attr_download, $options['download-style']);
-                    $download = '&nbsp;' . $this->set_attr_tag('a', $attr_download, $options['download-label']);
+                    UpHelper::get_attr_style($this,$attr_download, $options['download-style']);
+                    $download = '&nbsp;' . UpHelper::set_attr_tag($this,'a', $attr_download, $options['download-label']);
                 }
                 // if (strpos($legend, ' -- ') > 0)
                 // $legend = $this->legend_style($legend, $options['legend-template']);
-                $out[] = $this->set_attr_tag('figcaption', $figcaption_attr, $legend . $download);
+                $out[] = UpHelper::set_attr_tag($this,'figcaption', $figcaption_attr, $legend . $download);
             }
         }
 
@@ -783,13 +784,13 @@ class image_gallery extends upAction
         // 3 - le texte dans le fichier legend.ini
         $path = pathinfo($img['src']);
         if (file_exists($path['dirname'] . '/legend.ini')) {
-            $legends = $this->load_inifile($path['dirname'] . '/legend.ini');
+            $legends = UpHelper::load_inifile($this,$path['dirname'] . '/legend.ini');
             if (isset($legends[$path['basename']])) {
                 return $legends[$path['basename']];
             }
         }
         // 4 - par defaut, le nom du fichier humanisé
-        return $this->link_humanize($img['src']);
+        return UpHelper::link_humanize($this,$img['src']);
     }
 
     /*
@@ -802,7 +803,7 @@ class image_gallery extends upAction
         if ($typeSrc === 3) { // PNG
             $img = imagecreatefrompng($imgSrc);
             if ($img === false) {
-                $this->msg_error($this->trad_keyword('PNG-file-corrupt', $imgSrc));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'PNG-file-corrupt', $imgSrc));
                 return;
             }
             $imgNew = imagecreatetruecolor($wDest, $hDest);
@@ -838,7 +839,7 @@ class image_gallery extends upAction
             }
             imagejpeg($imgNew, $imgDest, $quality);
         } else {
-            $this->msg_error($this->trad_keyword('error-type-image', $typeSrc, $imgSrc));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-type-image', $typeSrc, $imgSrc));
         }
     }
 
@@ -933,7 +934,7 @@ class image_gallery extends upAction
                     unlink($file);
                 }
                 if (rmdir($dir) === false) {
-                    $this->msg_error($this->trad_keyword('error-delete-folder', $dir));
+                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-delete-folder', $dir));
                 }
             } else {
                 $this->srcset_raz($dir);

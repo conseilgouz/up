@@ -16,13 +16,15 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class ajax_view extends upAction
+class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('ajax_ajax_view.js');
+        UpHelper::load_file($this,'ajax_ajax_view.js');
         return true;
     }
 
@@ -30,7 +32,7 @@ class ajax_view extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // id article ou chemin vers fichier txt ou image
@@ -53,11 +55,11 @@ class ajax_view extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['btn-label'] = $this->get_bbcode($options['btn-label']);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['btn-label'] = UpHelper::get_bbcode($this,$options['btn-label']);
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // controle validite contenu
         $target = $options[__CLASS__];
@@ -71,7 +73,7 @@ class ajax_view extends upAction
             } elseif (in_array($ext, explode(',', 'txt,html,csv'))) {
                 $type = 'text';
             } else {
-                return $this->msg_inline($this->trad_keyword('unauthorized_file', $target)); //v31
+                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'unauthorized_file', $target)); //v31
             }
         }
 
@@ -95,20 +97,21 @@ class ajax_view extends upAction
         if (! empty($options['password'])) {
             $attr_btn['data-md5'] = password_hash($options['password'], PASSWORD_DEFAULT);
         }
-        $this->get_attr_style($attr_btn, $options['btn-style'], 'ajax-view-btn', $options['id']);
+        UpHelper::get_attr_style($this,$attr_btn, $options['btn-style'], 'ajax-view-btn', $options['id']);
 
         // attributs du bloc résultat (le principal)
         $attr_result = array();
-        $this->get_attr_style($attr_result, $options['class'], $options['style'], $options['id'], 'ajax-view-result;display:none');
+        UpHelper::get_attr_style($this,$attr_result, $options['class'], $options['style'], $options['id'], 'ajax-view-result;display:none');
 
         // code en retour
-        $html[] = $this->set_attr_tag($options['btn-tag'], $attr_btn, $options['btn-label']);
-        $html[] = $this->set_attr_tag($options['main-tag'], $attr_result, true);
+        $html[] = UpHelper::set_attr_tag($this,$options['btn-tag'], $attr_btn, $options['btn-label']);
+        $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_result, true);
 
         return implode(PHP_EOL, $html);
     }
-
+    
     // run
+
 }
 
 // class

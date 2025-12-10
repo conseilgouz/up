@@ -18,12 +18,14 @@
  */
 defined('_JEXEC') or die;
 
-class csv2def extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class csv2def extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('csv2def.css');
+        UpHelper::load_file($this,'csv2def.css');
         return true;
     }
 
@@ -31,7 +33,7 @@ class csv2def extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin vers fichier à afficher
@@ -59,7 +61,7 @@ class csv2def extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $id = '#' . $options['id'];
 
@@ -71,7 +73,7 @@ class csv2def extends upAction
         if ($this->content == '') {
             // le contenu est dans un fichier
             // sous la forme term="def" (sur 1 ligne pas de multi-term et multi-def)
-            $content = $this->get_html_contents($options[__class__]);
+            $content = UpHelper::get_html_contents($this,$options[__class__]);
             $content = nl2br(trim($content));
             $content = explode('<br />', $content);
             // === Contenu et style de la liste
@@ -79,7 +81,7 @@ class csv2def extends upAction
                 if (trim($val)) {
                     list($dt, $dd) = str_getcsv($val . $options['separator'], $options['separator'], '"', '\\');
                     $csv[$key]['dt'][] = $dt;
-                    $csv[$key]['dd'][] = $this->clean_HTML($dd, $options['HTML']);
+                    $csv[$key]['dd'][] = UpHelper::clean_HTML($this,$dd, $options['HTML']);
                 }
             }
         } else {
@@ -89,10 +91,10 @@ class csv2def extends upAction
             // 2 - le contenu d'un fichier
             $filename = $options[__class__];
             if ($content == '' and $filename != '') {
-                $content = $this->get_html_contents($filename);
+                $content = UpHelper::get_html_contents($this,$filename);
             }
             if ($content == '') {
-                $content = $this->msg_inline('csv2def - content not found ' . $filename);
+                $content = UpHelper::msg_inline($this,'csv2def - content not found ' . $filename);
             }
             // 3 - conversion en tableau par terme-definition
             // attention, on peut avoir term=]def</p>
@@ -104,7 +106,7 @@ class csv2def extends upAction
                 $str = strip_tags($res[$i], '<b><a><strong><i><em><u><mark><code><img><span>');
                 $csv[$key]['dt'] = str_getcsv($str, $options['separator'], '"', '\\');
                 // la definition
-                $str = $this->get_content_parts($res[$i + 1]);
+                $str = UpHelper::get_content_parts($this,$res[$i + 1]);
                 $csv[$key]['dd'] = $str;
                 $key++;
             }
@@ -115,7 +117,7 @@ class csv2def extends upAction
         $attr_main['id'] = $options['id'];
         $attr_main['style'] = $options['style'];
         $attr_main['class'] = 'csv2def ' . $options['model'];
-        $this->add_class($attr_main['class'], $options['class']);
+        UpHelper::add_class($this,$attr_main['class'], $options['class']);
 
         // -- DT
         $attr_dt['class'] = $options['term-class'];
@@ -148,39 +150,39 @@ class csv2def extends upAction
         }
         // -- envoi du CSS dans le head
         if (isset($css)) {
-            $this->load_css_head(implode(PHP_EOL, $css));
+            UpHelper::load_css_head($this,implode(PHP_EOL, $css));
         }
 
         // =================================================== formattage HTML
-        $html[] = $this->set_attr_tag('dl', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'dl', $attr_main);
 
         // -- contenu table
         foreach ($csv as $key => $lign) {
             switch (count($lign['dt'])) {
                 case 0:
-                    $html[] = $this->set_attr_tag('dt', $attr_dt, '');
+                    $html[] = UpHelper::set_attr_tag($this,'dt', $attr_dt, '');
                     break;
                 case 1:
-                    $html[] = $this->set_attr_tag('dt', $attr_dt, (string) $lign['dt'][0]);
+                    $html[] = UpHelper::set_attr_tag($this,'dt', $attr_dt, (string) $lign['dt'][0]);
                     break;
                 default:
-                    $html[] = $this->set_attr_tag('div', $attr_dt);
+                    $html[] = UpHelper::set_attr_tag($this,'div', $attr_dt);
                     foreach ($lign['dt'] as $dt) {
-                        $html[] = $this->set_attr_tag('dt', $attr_dt, $dt);
+                        $html[] = UpHelper::set_attr_tag($this,'dt', $attr_dt, $dt);
                     }
                     $html[] = '</div>';
             }
             switch (count($lign['dd'])) {
                 case 0:
-                    $html[] = $this->set_attr_tag('dd', $attr_dd, '');
+                    $html[] = UpHelper::set_attr_tag($this,'dd', $attr_dd, '');
                     break;
                 case 1:
-                    $html[] = $this->set_attr_tag('dd', $attr_dd, $lign['dd'][0]);
+                    $html[] = UpHelper::set_attr_tag($this,'dd', $attr_dd, $lign['dd'][0]);
                     break;
                 default:
-                    $html[] = $this->set_attr_tag('div', $attr_dd);
+                    $html[] = UpHelper::set_attr_tag($this,'div', $attr_dd);
                     foreach ($lign['dd'] as $dd) {
-                        $html[] = $this->set_attr_tag('dd', $attr_dd, $dd);
+                        $html[] = UpHelper::set_attr_tag($this,'dd', $attr_dd, $dd);
                     }
                     $html[] = '</div>';
             }

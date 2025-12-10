@@ -23,8 +23,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\HTMLHelper;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class addscript extends upAction
+class addscript extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -35,12 +36,12 @@ class addscript extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'head', // ou body pour insérer le code à la position du shortcode
@@ -49,10 +50,10 @@ class addscript extends upAction
             'id' => '' // identifiant
         );
 
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -67,7 +68,7 @@ class addscript extends upAction
             if ((stripos($fic, '://') == false) && (substr($fic, 0, 2) != '//')) {
                 $fic = Uri::root() . $fic;
             }
-            $this->load_file($fic); //HTMLHelper::script($fic);
+            UpHelper::load_file($this,$fic); //HTMLHelper::script($fic);
         } else {
             //v2.2 annuler les entites HTML creees par TinyMCE
             $content = html_entity_decode($this->content);
@@ -78,9 +79,9 @@ class addscript extends upAction
             $content = str_ireplace('<br />', '', $content);
             // ajout script
             if ($options['jquery']) { //v4
-                $out = $this->load_jquery_code($content, $inHead);
+                $out = UpHelper::load_jquery_code($this,$content, $inHead);
             } else {
-                $out = $this->load_js_code($content, $inHead);
+                $out = UpHelper::load_js_code($this,$content, $inHead);
             }
         }
 

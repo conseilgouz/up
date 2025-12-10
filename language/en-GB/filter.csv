@@ -1,0 +1,17 @@
+keyword;description;type value
+datemax; true until that date; YYYYMMDDHHMM
+datemin; true from that date; YYYYMMDDHHMM
+period; true between these dates; YYYYMMDDHHMM,YYYYMMDDHHMM<br>1224,01021000 = from December 24th midnight to January 2nd of the following year at 10am
+day; list of authorized days.; 1=monday, 7=sunday
+month; list of authorized months; 1=january, ...
+hmax; true until this time; HHMM
+hmin; true from this time; HHMM
+hperiod; true between these time slots (list possible); HHMM-HHMM
+guest; true if the Internet user is not identified (guest); 1|0
+admin; true if an admin is connected; 1|0
+user; list of authorized userid; ex: 8,12
+username; list of authorized username; ex: admin,lomart
+group; list of authorized usergroups; ex: 8,12
+lang; list of authorized languages. Only part of the code is required; ex: fr,ca
+mobile; true if the site is displayed on a mobile phone; 1|0
+homepage;true if the shortcode is displayed on the home page; 1|0

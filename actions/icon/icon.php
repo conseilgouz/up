@@ -32,7 +32,9 @@
  */
 defined('_JEXEC') or die();
 
-class icon extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class icon extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -42,7 +44,7 @@ class icon extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             $this->name => '', // jeu d'options ou src,color,size
@@ -63,12 +65,12 @@ class icon extends upAction
             'id' => '' // identificateur
         );
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ==== on charge prefs.ini
         $pref_user_file = $this->actionPath . 'custom/prefs.ini';
         if (file_exists($pref_user_file)) {
-            $pref_user = $this->load_inifile($this->actionPath . 'custom/prefs.ini', true);
+            $pref_user = UpHelper::load_inifile($this,$this->actionPath . 'custom/prefs.ini', true);
             if ($pref_user !== false) {
                 if (array_key_exists(strtolower($options[__class__]), $pref_user['icons'])) {
                     $options[__class__] = $pref_user['icons'][strtolower($options[__class__])];
@@ -86,7 +88,7 @@ class icon extends upAction
                 $icon = trim($tmp[0]);
                 for ($i = 1; $i < sizeof($tmp); $i++) {
                     if (intval($tmp[$i]) == 0) {
-                        $this->add_style($attr['style'], 'color', $tmp[$i]);
+                        UpHelper::add_style($this,$attr['style'], 'color', $tmp[$i]);
                     } else {
                         $size = $tmp[$i];
                     }
@@ -101,7 +103,7 @@ class icon extends upAction
                 return $out;
             } else {
                 // comme message d'info
-                $this->msg_info($out, $this->trad_keyword('ICONLIST_TITLE'));
+                UpHelper::msg_info($this,$out, UpHelper::trad_keyword($this,'ICONLIST_TITLE'));
             }
             // raz
             $attr = array();
@@ -125,7 +127,7 @@ class icon extends upAction
                             $options['color'] = $tmp[$i];
                         }
                     } else {
-                        $options['size'] = $this->str_append(trim($tmp[$i]), $options['size'], ',');
+                        $options['size'] = UpHelper::str_append($this,trim($tmp[$i]), $options['size'], ',');
                     }
                 }
             }
@@ -135,7 +137,7 @@ class icon extends upAction
             $attr['title'] = $options['title'];
         }
         // ==== controle options
-        // $size = $this->ctrl_unit($options['size'], 'px,em,rem');
+        // $size = UpHelper::ctrl_unit($this,$options['size'], 'px,em,rem');
         $size = $this->icon_size($options['size']);
         if (is_array($size)) {
             $attr['id'] = $options['id'];
@@ -145,8 +147,8 @@ class icon extends upAction
         // ==== Les styles
         if ($options['selector'] == '') {
             $attr['style'] = '';
-            $this->get_attr_style($attr, $options['style'], $options['class']);
-            $this->add_style($attr['style'], 'color', $options['color']);
+            UpHelper::get_attr_style($this,$attr, $options['style'], $options['class']);
+            UpHelper::add_style($this,$attr['style'], 'color', $options['color']);
 
             // color-hover est traité en javascript
             if ($options['color-hover']) {
@@ -179,19 +181,19 @@ class icon extends upAction
                 $this->make_css_fontsize($size, $id);
                 $size = '';
             } elseif ($size > 0) {
-                $this->add_style($attr['style'], 'font-size', $size);
+                UpHelper::add_style($this,$attr['style'], 'font-size', $size);
             }
-            $out = $this->set_attr_tag('span', $attr, $icon);
+            $out = UpHelper::set_attr_tag($this,'span', $attr, $icon);
         } elseif (strtolower(substr($icon, 0, 2)) == 'ux') {
             // $type = 'unicode';
             if (is_array($size)) {
                 $this->make_css_fontsize($size, $id);
                 $size = '';
             } elseif ($size > 0) {
-                $this->add_style($attr['style'], 'font-size', $size);
+                UpHelper::add_style($this,$attr['style'], 'font-size', $size);
             }
-            $out = $this->set_attr_tag('span', $attr, '&#x' . substr($icon, 2) . ';');
-        } elseif ($this->preg_string('#.(png|jpg|gif)#i', $icon)) {
+            $out = UpHelper::set_attr_tag($this,'span', $attr, '&#x' . substr($icon, 2) . ';');
+        } elseif (UpHelper::preg_string($this,'#.(png|jpg|gif)#i', $icon)) {
             // $type = 'image';
             $attr['src'] = $icon;
             list($w, $h) = getimagesize($icon);
@@ -199,28 +201,28 @@ class icon extends upAction
                 $this->make_css_imgsize($size, $w, $h, $id);
                 $size = '';
             } else {
-                $this->add_style($attr['style'], 'height', ($h >= $w) ? $size : 'auto');
-                $this->add_style($attr['style'], 'width', ($h < $w) ? $size : 'auto');
+                UpHelper::add_style($this,$attr['style'], 'height', ($h >= $w) ? $size : 'auto');
+                UpHelper::add_style($this,$attr['style'], 'width', ($h < $w) ? $size : 'auto');
             }
             $attr['alt'] = pathinfo($icon, PATHINFO_FILENAME);
-            $out = $this->set_attr_tag('img', $attr);
+            $out = UpHelper::set_attr_tag($this,'img', $attr);
         } else {
             // $type = 'fonticon';
             if (is_array($size)) {
                 $this->make_css_fontsize($size, $id);
                 $size = '';
             } elseif ($size > 0) {
-                $this->add_style($attr['style'], 'font-size', $size);
+                UpHelper::add_style($this,$attr['style'], 'font-size', $size);
             }
             if (str_starts_with($icon, 'icon-') || str_starts_with($icon, 'fa ')  || str_starts_with($icon, 'fab ')) { // v5.2
-                $this->add_class($attr['class'], $icon);
+                UpHelper::add_class($this,$attr['class'], $icon);
             } elseif (empty($prefix)) {
-                $this->add_class($attr['class'], 'icon-' . $icon);
+                UpHelper::add_class($this,$attr['class'], 'icon-' . $icon);
             } else {
-                $this->add_class($attr['class'], $prefix . $icon);
+                UpHelper::add_class($this,$attr['class'], $prefix . $icon);
             }
             $attr['aria-label'] = pathinfo($icon, PATHINFO_FILENAME);
-            $out = $this->set_attr_tag('i', $attr, true);
+            $out = UpHelper::set_attr_tag($this,'i', $attr, true);
         }
 
         return $out;
@@ -237,7 +239,7 @@ class icon extends upAction
             if ($size) {
                 $out .= ';font-size:' . $size;
             }
-        } elseif ($this->preg_string('#.(png|jpg|gif)#i', $icon)) {
+        } elseif (UpHelper::preg_string($this,'#.(png|jpg|gif)#i', $icon)) {
             // $type = 'image';
             $out = 'content:url("' . $icon . '") !important';
             if ($size) {
@@ -283,11 +285,11 @@ class icon extends upAction
         foreach ($sizes as $size) {
             if (strpos($size, ':') === false) {
                 $bp = '0';
-                $this->ctrl_unit($size, 'px,em,rem,%');
+                UpHelper::ctrl_unit($this,$size, 'px,em,rem,%');
             } else {
                 list($bp, $size) = explode(':', $size);
                 $bp = (int) $bp;
-                $this->ctrl_unit($size, 'px,em,rem,%');
+                UpHelper::ctrl_unit($this,$size, 'px,em,rem,%');
             }
             $rules[$bp] = $size;
         }
@@ -322,7 +324,7 @@ class icon extends upAction
                 $basesize = $size;
             }
         }
-        $this->load_css_head($out);
+        UpHelper::load_css_head($this,$out);
     }
 
     /*
@@ -347,7 +349,7 @@ class icon extends upAction
                 $basesize = $size;
             }
         }
-        $this->load_css_head($out);
+        UpHelper::load_css_head($this,$out);
     }
 }
 

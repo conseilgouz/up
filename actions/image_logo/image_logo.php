@@ -15,14 +15,16 @@
  */
 defined('_JEXEC') or die();
 
-class image_logo extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_logo extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        // $this->load_file('xxxxx.css');
-        // $this->load_file('xxxxx.js');
+        // UpHelper::load_file($this,'xxxxx.css');
+        // UpHelper::load_file($this,'xxxxx.js');
         return true;
     }
 
@@ -30,7 +32,7 @@ class image_logo extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -39,7 +41,7 @@ class image_logo extends upAction
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
         // - 0 pour cacher l'action dans l'aide générale
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // prefset,image_logo ou texte
@@ -57,7 +59,7 @@ class image_logo extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // == consolidation options
         // -- LOGO ou LIBELLE ?
@@ -66,30 +68,30 @@ class image_logo extends upAction
         // if (is_file(JURI::root() . $logo)) {
         if (file_exists($logo)) {
             $img_attr['src'] = $logo;
-            $img_attr['alt'] = $this->link_humanize($logo);
-            $logo = $this->set_attr_tag('img', $img_attr);
+            $img_attr['alt'] = UpHelper::link_humanize($this,$logo);
+            $logo = UpHelper::set_attr_tag($this,'img', $img_attr);
         } else {
-            $logo = $this->get_bbcode($logo); // v3.1
+            $logo = UpHelper::get_bbcode($this,$logo); // v3.1
         }
 
         // -- contenu. supprime les paragraphes vides
-        $content = $this->supertrim($this->content);
+        $content = UpHelper::supertrim($this,$this->content);
         $content = str_replace("<p>\xC2\xA0</p>", '', $content);
         $content = str_replace('<p> </p>', '', $content);
         $content = str_replace('<br />', '', $content);
-        $content_1 = $this->supertrim($content);
+        $content_1 = UpHelper::supertrim($this,$content);
         // -- contenu - supprime bloc p principal
-        $content = $this->preg_string('#^<p>(.*)</p>$#', $content_1);
+        $content = UpHelper::preg_string($this,'#^<p>(.*)</p>$#', $content_1);
         if ($content == '')
             $content = $content_1;
         // -- Position logo
-        $pos_ctrl = $this->strtoarray('left:l,gauche:l,right:r,droite:r,droit:r,center:c,centre:c,top:t,haut:t,bottom:b,bas:b', ',', ':', false);
+        $pos_ctrl = UpHelper::strtoarray($this,'left:l,gauche:l,right:r,droite:r,droit:r,center:c,centre:c,top:t,haut:t,bottom:b,bas:b', ',', ':', false);
         $sep = (strpos($options['pos'], ',') === false) ? '-' : ',';
         list ($pos1, $pos2) = array_map('trim', explode($sep, strtolower($options['pos'])));
         $pos = (isset($pos_ctrl[$pos1])) ? $pos_ctrl[$pos1] : '';
         $pos .= (isset($pos_ctrl[$pos2])) ? $pos_ctrl[$pos2] : '';
         if (strlen($pos) != 2)
-            return $this->info_debug('error pos=' . $options['pos']);
+            return UpHelper::info_debug($this,'error pos=' . $options['pos']);
         $css_translate = '';
         switch ($pos) {
             case 'lt':
@@ -143,34 +145,34 @@ class image_logo extends upAction
                 break;
         }
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc logo
         $attr_logo = array();
-        $this->get_attr_style($attr_logo, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_logo, $options['class'], $options['style']);
         $attr_logo['class'] .= ' display-inline-block';
         if ($options['width'])
-            $this->add_style($attr_logo['style'], 'width', $this->ctrl_unit($options['width'], '%, px, em, rem'));
-        $this->add_str($attr_logo['style'], 'z-index:10;
+            UpHelper::add_style($this,$attr_logo['style'], 'width', UpHelper::ctrl_unit($this,$options['width'], '%, px, em, rem'));
+        UpHelper::add_str($this,$attr_logo['style'], 'z-index:10;
 		position:absolute', ';
 		');
-        $this->add_str($attr_logo['style'], $css_posx, ';
+        UpHelper::add_str($this,$attr_logo['style'], $css_posx, ';
 		');
-        $this->add_str($attr_logo['style'], $css_posy, ';
+        UpHelper::add_str($this,$attr_logo['style'], $css_posy, ';
 		');
-        $this->add_str($attr_logo['style'], $css_translate, ';
+        UpHelper::add_str($this,$attr_logo['style'], $css_translate, ';
 		');
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
         $attr_main['class'] .= 'pos-relative display-inline-block';
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         $html[] = $content;
-        $html[] = $this->set_attr_tag('div', $attr_logo, $logo);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_logo, $logo);
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

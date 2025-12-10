@@ -12,15 +12,16 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class Ajax_View
+class Ajax_View extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public static function goAjax($input)
     {
         $actionName = 'ajax_view';
-        $upPath = 'plugins/content/up/';
-        include_once $upPath . 'upAction.php';
-        $action = new upAction($actionName);
+
+        $action = new $actionName($actionName);
+
         $data = $input->get('data', '', 'string');
 
         parse_str($data, $output);
@@ -75,10 +76,10 @@ class Ajax_View
 
             case 'text':
                 $out = file_get_contents($output['content']);
-                $out = $action->clean_HTML($out, $output['html'], $output['eol']);
+                $out = UpHelper::clean_HTML($action,$out, $output['html'], $output['eol']);
                 break;
             case 'image':
-                $out = '<img src="' . $action->get_url_relative($output['content']) . '">';
+                $out = '<img src="' . UpHelper::get_url_relative($action,$output['content']) . '">';
                 break;
             default:
                 $out = 'Error, Type incorrect';

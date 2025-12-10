@@ -18,12 +18,14 @@ v5.2 - fix options booleenne JS
 */
 defined('_JEXEC') or die();
 
-class text_typewriter extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class text_typewriter extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('typed.min.js');
+        UpHelper::load_file($this,'typed.min.js');
         return true;
     }
 
@@ -31,7 +33,7 @@ class text_typewriter extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // liste de mots séparés par des virgules
@@ -68,10 +70,10 @@ class text_typewriter extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
         // le code JS
         // les options saisies par l'utilisateur concernant le script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
         // on normalise la saisie des booleens v5.2
         foreach (array('fadeOut','loop','smartBackspace','shuffle','showCursor','autoInsertCss','autoInsertCss','bindInputFocusEvents') as $option) {
             if (isset($js_options[$option])) {
@@ -84,11 +86,11 @@ class text_typewriter extends upAction
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === la liste des mots
         if ($options[__CLASS__]) {
-            $str = $this->get_bbcode($options[__CLASS__]);
+            $str = UpHelper::get_bbcode($this,$options[__CLASS__]);
             $str = str_replace('"', '\'', $str);
             $wordlist = explode(',', $str);
             $js_words = '[';
@@ -101,26 +103,26 @@ class text_typewriter extends upAction
             $attr_string['id'] = $options['id'] . '-strings';
             $js_options['stringsElement'] = '#' . $attr_string['id'];
         } else {
-            $this->msg_error('Mots non trouvés / Words not found');
+            UpHelper::msg_error($this,'Mots non trouvés / Words not found');
         }
 
         // === attributs des blocs
         $attr_span['id'] = $options['id']; // le bloc affiché
-        $this->get_attr_style($attr_span, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_span, $options['class'], $options['style']);
 
         // === initialisation JS
         $js_code[] = 'var ' . str_replace('-', '_', $attr_span['id']) . ' = new Typed("#' . $attr_span['id'] . '",';
-        // $js_code[] = $this->json_arrtostr($js_options, 2);
-        $optString = $this->json_arrtostr($js_options, 2); // v5.2
+        // $js_code[] = UpHelper::json_arrtostr($this,$js_options, 2);
+        $optString = UpHelper::json_arrtostr($this,$js_options, 2); // v5.2
         $optString = str_replace(array('"false"','"true"'), array('false','true'), $optString);
         $js_code[] = $optString;
         $js_code[] = ');';
-        $js_code = $this->load_jquery_code(implode(PHP_EOL, $js_code), false);
+        $js_code = UpHelper::load_jquery_code($this,implode(PHP_EOL, $js_code), false);
 
         // === code en retour
-        $html[] = $this->set_attr_tag('span  ', $attr_span, true);
+        $html[] = UpHelper::set_attr_tag($this,'span  ', $attr_span, true);
         if (isset($js_options['stringsElement'])) {
-            $html[] = $this->set_attr_tag('div  ', $attr_string, $this->content);
+            $html[] = UpHelper::set_attr_tag($this,'div  ', $attr_string, $this->content);
         }
         // --- le jquery
         $html[] = $js_code;

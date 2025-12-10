@@ -21,7 +21,9 @@
  */
 defined('_JEXEC') or die();
 
-class lorem_flickr extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class lorem_flickr extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -32,7 +34,7 @@ class lorem_flickr extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétressvg par défaut
         // il est indispensable de tous les définir ici
@@ -61,7 +63,7 @@ class lorem_flickr extends upAction
 
         // ====== fusion et controle des options
         // =====================================
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // réaffectation des options entre lorem_flickr et lorem_place
         $options['text'] = $options[__CLASS__];
@@ -130,15 +132,15 @@ class lorem_flickr extends upAction
         $main_attr = array();
         if ($options['mode'] == 'img') {
             $img_attr = array();
-            $this->get_attr_style($img_attr, $options['class'], $options['style']);
+            UpHelper::get_attr_style($this,$img_attr, $options['class'], $options['style']);
             foreach ($images as $image) {
                 $img_attr['src'] = $image;
-                $imgout[] = $this->set_attr_tag('img', $img_attr);
+                $imgout[] = UpHelper::set_attr_tag($this,'img', $img_attr);
             }
             if ($options['align'] || $options['main-class']) {
                 $align = ($options['align']) ? 'text-align:' . $options['align'] . ';' : '';
-                $this->get_attr_style($main_attr, $options['main-class'], $align);
-                $out = $this->set_attr_tag($options['main-tag'], $main_attr, implode(PHP_EOL, $imgout));
+                UpHelper::get_attr_style($this,$main_attr, $options['main-class'], $align);
+                $out = UpHelper::set_attr_tag($this,$options['main-tag'], $main_attr, implode(PHP_EOL, $imgout));
             } else {
                 $out = implode('', $imgout);
             }

@@ -14,18 +14,20 @@
  */
 defined('_JEXEC') or die;
 
-class center extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class center extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_upcss();
+        UpHelper::load_upcss($this);
         return true;
     }
 
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -33,7 +35,7 @@ class center extends upAction {
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // classe(s) et style(s) pour le bloc interne (celui qui est centré)
@@ -44,24 +46,24 @@ class center extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // --- attributs du bloc principal
         // centrage H&V du bloc interne
         $outer_main['id'] = $options['id'];
-        $this->get_attr_style($outer_main, "up-center-outer;" . $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$outer_main, "up-center-outer;" . $options['class'], $options['style']);
 
         // --- classe pour centrage vertical
         if ($options[__class__] != 1) {
-            $this->get_attr_style($attr_content, "up-center-inner;", $options[__class__]);
+            UpHelper::get_attr_style($this,$attr_content, "up-center-inner;", $options[__class__]);
         }
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $outer_main);
-        $html[] = $this->set_attr_tag('div', $attr_content);
+        $html[] = UpHelper::set_attr_tag($this,'div', $outer_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_content);
         $html[] = $this->content;
         $html[] = '</div>';
         $html[] = '</div>';

@@ -12,7 +12,9 @@
  */
 defined('_JEXEC') or die();
 
-class qrcode extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class qrcode extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -23,7 +25,7 @@ class qrcode extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'text', // type de QRCode : text/url/sms/email/phone/location/wifi/contact
@@ -60,7 +62,7 @@ class qrcode extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // -- consolidation
         if (strpos($options['url'], '//') === false) {
@@ -116,17 +118,17 @@ class qrcode extends upAction
                 break;
         }
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
         $attr_main['src'] = str_replace(' ', '+', $url);
         $attr_main['alt'] = $options['alt'];
 
         // code en retour
-        $html[] = $this->set_attr_tag('img', $attr_main, true);
+        $html[] = UpHelper::set_attr_tag($this,'img', $attr_main, true);
 
         return implode(PHP_EOL, $html);
     }

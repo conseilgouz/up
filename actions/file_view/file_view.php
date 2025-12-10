@@ -17,12 +17,14 @@
  */
 defined('_JEXEC') or die;
 
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 /*
  * v2.9 : l'option block est renomée main-tag
  * v3.1 : pas de bloc pour main-tag=0
  */
 
-class file_view extends upAction
+class file_view extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -34,7 +36,7 @@ class file_view extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier
@@ -51,13 +53,13 @@ class file_view extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === lecture et nettoyage fichier
-        $content = $this->get_html_contents($options['file_view']);
-        $content = $this->clean_HTML($content, $options['HTML'], $options['EOL']);
+        $content = UpHelper::get_html_contents($this,$options['file_view']);
+        $content = UpHelper::clean_HTML($this,$content, $options['HTML'], $options['EOL']);
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // contenu brut
         if (empty($options['main-tag'])) {
@@ -71,7 +73,7 @@ class file_view extends upAction
         $attr_main['style'] = $options['style'];
 
         // code en retour
-        return $this->set_attr_tag($options['main-tag'], $attr_main, $content);
+        return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, $content);
     }
 
     // run

@@ -14,8 +14,9 @@
  * v5.0.1 - prise en charge de tous les attributs possibles
  */
 defined('_JEXEC') or die();
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class div extends upAction
+class div extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -26,12 +27,12 @@ class div extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // classes et style (séparateur : point-virgule)
@@ -48,10 +49,10 @@ class div extends upAction
         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // -- toutes les options sont des attributs sauf html, class et style
         $outer_div = $options;
@@ -62,7 +63,7 @@ class div extends upAction
         unset($outer_div['css-head']);
 
         // -- analyse et ajout class et style
-        $this->get_attr_style($outer_div, $options[__class__], $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$outer_div, $options[__class__], $options['class'], $options['style']);
 
         // attributs du bloc principal
         if (substr($this->options_user['id'], 0, 3) !== 'up-') {
@@ -70,7 +71,7 @@ class div extends upAction
         }
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $outer_div, $this->content);
+        $html[] = UpHelper::set_attr_tag($this,'div', $outer_div, $this->content);
 
         return implode(PHP_EOL, $html);
     }

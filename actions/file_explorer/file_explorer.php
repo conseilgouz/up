@@ -37,12 +37,14 @@ use Joomla\Component\Media\Administrator\Exception\FileExistsException;
  */
 defined('_JEXEC') or die();
 
-class file_explorer extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        $this->load_file('jquery-rbox.css');
-        $this->load_file('jquery-rbox.js');
+        UpHelper::load_file($this,'jquery-rbox.css');
+        UpHelper::load_file($this,'jquery-rbox.js');
         return true;
     }
 
@@ -50,7 +52,7 @@ class file_explorer extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin relatif du dossier sur le serveur
@@ -108,9 +110,9 @@ class file_explorer extends upAction
         }
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
-        $this->options['template'] = $this->get_bbcode($this->options['template']);
-        $this->options['template-folder'] = $this->get_bbcode($this->options['template-folder']);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options['template'] = UpHelper::get_bbcode($this,$this->options['template']);
+        $this->options['template-folder'] = UpHelper::get_bbcode($this,$this->options['template-folder']);
 
         $this->options['file-exclude'] = array_map('trim', explode(',', strtolower($this->options['file-exclude'])));
         if (empty($this->options['icon-path'])) {
@@ -120,7 +122,7 @@ class file_explorer extends upAction
         $this->options['icon-path'] .= '/' . $this->options['icon-size'] . '/';
 
         // =========== le code JS
-        $this->load_jquery_code('$(".up-rbox").rbox({' . $this->options['js-params'] . '});');
+        UpHelper::load_jquery_code($this,'$(".up-rbox").rbox({' . $this->options['js-params'] . '});');
 
         // extraction des composantes de la recherche
         $path = trim($this->options[__class__], ' /\\');
@@ -137,15 +139,15 @@ class file_explorer extends upAction
 
         // === relation extension et type des fichiers
         $this->ext_types = array();
-        $this->init_ext_types('image', 'jpg,png,webp,gif');
-        $this->init_ext_types('pdf', 'pdf'); // iframe
-        $this->init_ext_types('office', 'doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx'); // iframe
-        $this->init_ext_types('audio', 'mp3,ogg'); // html
-        $this->init_ext_types('video', 'mp4,ogv,webm'); // video
-        $this->init_ext_types('ajax', 'txt,csv,html,url'); // ajax
-        $this->init_ext_types('iframe', ''); // iframe
-        $this->init_ext_types('download-only', 'zip,rar');
-        $this->init_ext_types('none', '');
+        UpHelper::init_ext_types($this,'image', 'jpg,png,webp,gif');
+        UpHelper::init_ext_types($this,'pdf', 'pdf'); // iframe
+        UpHelper::init_ext_types($this,'office', 'doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx'); // iframe
+        UpHelper::init_ext_types($this,'audio', 'mp3,ogg'); // html
+        UpHelper::init_ext_types($this,'video', 'mp4,ogv,webm'); // video
+        UpHelper::init_ext_types($this,'ajax', 'txt,csv,html,url'); // ajax
+        UpHelper::init_ext_types($this,'iframe', ''); // iframe
+        UpHelper::init_ext_types($this,'download-only', 'zip,rar');
+        UpHelper::init_ext_types($this,'none', '');
 
         // === si le shortcode modifie au moins l'une des balises
         // si main-tag == ul -> item-tag=li
@@ -161,14 +163,14 @@ class file_explorer extends upAction
         // === ATTRIBUT POUR TEMPLATE
         // - view
         $this->attr_view = array();
-        $this->get_attr_style($this->attr_view, $this->options['view-style']);
-        $this->options['view-label'] = $this->get_bbcode($this->options['view-label']);
+        UpHelper::get_attr_style($this,$this->attr_view, $this->options['view-style']);
+        $this->options['view-label'] = UpHelper::get_bbcode($this,$this->options['view-label']);
         // - download
         $this->attr_download = array();
-        $this->get_attr_style($this->attr_download, $this->options['download-style']);
-        $this->options['download-label'] = $this->get_bbcode($this->options['download-label']);
+        UpHelper::get_attr_style($this,$this->attr_download, $this->options['download-style']);
+        $this->options['download-label'] = UpHelper::get_bbcode($this,$this->options['download-label']);
         // - image
-        $iconsize = (int) $this->supertrim($this->options['icon-size']);
+        $iconsize = (int) UpHelper::supertrim($this,$this->options['icon-size']);
         if ($iconsize <= 16) {
             $this->options['icon-size'] = 16;
         } elseif ($iconsize >= 48) {
@@ -180,7 +182,7 @@ class file_explorer extends upAction
         $this->attr_style_icon_image = 'height:' . $iconsize . 'px;width:' . $iconsize . 'px;object-fit: cover;';
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // === Recupération de la liste
         $this->result = array();
@@ -199,9 +201,9 @@ class file_explorer extends upAction
         // attributs du bloc principal
         if ($this->options['main-tag']) {
             $attr_main['id'] = $this->options['id'];
-            $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
             // code en retour
-            $out = $this->set_attr_tag($this->options['main-tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
         }
 
         return $out;
@@ -256,7 +258,7 @@ class file_explorer extends upAction
         }
 
         $abs_file = JPATH_ROOT . '/' . $file; // chemin disque
-        $url_file = $this->get_url_absolute($file); // chemin serveur
+        $url_file = UpHelper::get_url_absolute($this,$file); // chemin serveur
         $tag = $this->options['item-tag'];
 
         if (is_file($rel_file)) {
@@ -266,8 +268,8 @@ class file_explorer extends upAction
             $tmpl = str_ireplace("##basename##", $fileinfo['basename'], $tmpl);
             $tmpl = str_ireplace("##filename##", $fileinfo['filename'], $tmpl);
             $tmpl = str_ireplace("##extension##", $fileinfo['extension'], $tmpl);
-            $tmpl = str_ireplace("##size##", $this->human_filesize($file, $this->options['size-decimal']), $tmpl);
-            $tmpl = str_ireplace("##date##", $this->up_date_format(date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
+            $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this,$file, $this->options['size-decimal']), $tmpl);
+            $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this,date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
             $tmpl = str_ireplace("##relpath##", $rel_file, $tmpl);
             $ext = strtolower($fileinfo['extension']);
             // -- ICON
@@ -300,11 +302,11 @@ class file_explorer extends upAction
                         // $foo = str_replace($this->basepath, '', $fileinfo['dirname']);
                         // $attr['data-rbox-series'] = 'rbox-serie-' . str_replace($this->basepath, '', $fileinfo['dirname']);
                         $attr['data-rbox-type'] = 'image';
-                        $attr['data-rbox-image'] = $this->get_url_absolute($file);
+                        $attr['data-rbox-image'] = UpHelper::get_url_absolute($this,$file);
                         break;
                     case 'pdf':
                         $attr['data-rbox-type'] = "iframe";
-                        $pdfjs_path = $this->get_url_absolute($this->upPath . 'actions/pdf/pdfjs/web/viewer.html');
+                        $pdfjs_path = UpHelper::get_url_absolute($this,$this->upPath . 'actions/pdf/pdfjs/web/viewer.html');
                         $attr['data-rbox-iframe'] = $pdfjs_path . '?file=' . $url_file;
                         break;
                     case 'office':
@@ -337,12 +339,12 @@ class file_explorer extends upAction
                         $attr['data-rbox-type'] = 'none';
                         break;
                 }
-                if ($attr['data-rbox-type'] == 'none' || $this->preview_ok() == false) {  // v5.2 si <= win8
+                if ($attr['data-rbox-type'] == 'none' || UpHelper::preview_ok($this) == false) {  // v5.2 si <= win8
                     $tmpl = str_ireplace("##view-btn##", '', $tmpl);
                     $tmpl = str_ireplace("##view##", '', $tmpl);
                     $tmpl = str_ireplace("##/view##", '', $tmpl);
                 } else {
-                    $code = $this->set_attr_tag('a', array_merge($this->attr_view, $attr), false);
+                    $code = UpHelper::set_attr_tag($this,'a', array_merge($this->attr_view, $attr), false);
                     $tmpl = str_ireplace("##view-btn##", $code . $this->options['view-label'] . '</a>', $tmpl);
                     $tmpl = str_ireplace("##view##", $code, $tmpl);
                     $tmpl = str_ireplace("##/view##", '</a>', $tmpl);
@@ -357,7 +359,7 @@ class file_explorer extends upAction
                     $attr['href'] = $url_file;
                     $attr['class'] = $this->options['download-style'];
                     // $attr['title'] = 'Download ' . $fileinfo['basename'];
-                    $code = $this->set_attr_tag('a', $attr, $this->options['download-label']);
+                    $code = UpHelper::set_attr_tag($this,'a', $attr, $this->options['download-label']);
                 }
                 $tmpl = str_ireplace("##download##", $code, $tmpl);
             }
@@ -372,59 +374,6 @@ class file_explorer extends upAction
         $this->result[] = $tmpl;
     }
 
-    /*
-     * human_filesize
-     * --------------
-     */
-    public function human_filesize($file, $decimals = 2)
-    {
-        $bytes = filesize($file);
-        $sz = 'BKMGTP';
-        $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
-    }
-
-    public function date_modif($file, $format = 'Y/m/d H:i')
-    {
-        return date($format, filemtime($file));
-    }
-
-    /*
-     * initialisation des types de contenu
-     * -----------------------------------
-     */
-    public function init_ext_types($type, $base)
-    {
-        $user_ext = $this->supertrim($this->options['ext-' . $type]);
-        if (! empty($base) && (empty($user_ext) || $user_ext[0] == '+')) {
-            foreach (array_map('trim', explode(',', $base)) as $ext) {
-                $this->ext_types[$ext] = $type;
-            }
-        }
-        $user_ext = trim($user_ext, '+');
-        if (! empty($user_ext)) {
-            foreach (array_map('trim', explode(',', $user_ext)) as $ext) {
-                $this->ext_types[$ext] = $type;
-            }
-        }
-    }
-
-    /*
-     * preview_ok()
-     * return TRUE si l'OS ou navigateur visiteur permet pdfjs
-     * XP: NT 5.1, W7: NT 6.1, W8: NT 6.2, W8.1: NT 6.3, W10: NT 10
-     */
-
-    public function preview_ok()
-    {
-        $ok = true;
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $regex = '/Windows NT ([0-9.]*)/';
-        if (preg_match($regex, $userAgent, $version) == 1) {
-            $ok = (intval($version[1]) > 6);
-        }
-        return $ok;
-    }
 }
 
 // class

@@ -28,7 +28,9 @@
  */
 defined('_JEXEC') or die();
 
-class box extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class box extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -39,7 +41,7 @@ class box extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -96,16 +98,16 @@ class box extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // charge model CSS
         $model = strtolower($options[__class__]);
-        $this->load_model($model, $options);
-        $options['template'] = $this->get_bbcode($options['template']);
+        UpHelper::load_model($this,$model, $options);
+        $options['template'] = UpHelper::get_bbcode($this,$options['template']);
 
         // CSS dans le head
         if ($options['css-head']) {
-            $this->load_css_head($options['css-head']);
+            UpHelper::load_css_head($this,$options['css-head']);
         }
 
         // ==================================
@@ -113,7 +115,7 @@ class box extends upAction
         // ==================================
         // il est possible d'avoir plusieurs contenus séparé par {===}
         // dans ce cas titre et image sont dans le content
-        $contents = $this->get_content_parts($this->content);
+        $contents = UpHelper::get_content_parts($this,$this->content);
         $multibox = (count($contents) > 1);
 
         if ($multibox) {
@@ -130,8 +132,8 @@ class box extends upAction
             $attr_multibox['class'] .= ' fg-auto-' . $rwd[0];
             $attr_multibox['class'] .= ' fg-auto-m' . $rwd[1];
             $attr_multibox['class'] .= ' fg-auto-s' . $rwd[2];
-            $this->get_attr_style($attr_multibox, $options['multibox-class'], $options['multibox-style']);
-            $html[] = $this->set_attr_tag('div', $attr_multibox);
+            UpHelper::get_attr_style($this,$attr_multibox, $options['multibox-class'], $options['multibox-style']);
+            $html[] = UpHelper::set_attr_tag($this,'div', $attr_multibox);
         }
 
         // les valeurs par défaut
@@ -148,7 +150,7 @@ class box extends upAction
             $attr_box['id'] = $options['id'];
         }
         $model = ($model) ? 'up-box-' . $model : '';
-        $this->get_attr_style($attr_box, 'up-box', $model, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_box, 'up-box', $model, $options['class'], $options['style']);
 
         $kw_1['title']['class'] = $options['title-class'];
         $kw_1['title']['style'] = $options['title-style'];
@@ -181,9 +183,9 @@ class box extends upAction
             $content = str_replace(PHP_EOL, '', $content);
 
             // récupération et suppression des shortcodes secondaires dans le contenu
-            $kw_2 = $this->get_subshortcode($content);
+            $kw_2 = UpHelper::get_subshortcode($this,$content);
             // on surcharge les options générales avec les shortcodes contenu
-            $kw_box = $this->options_merge($kw_1, $kw_2);
+            $kw_box = UpHelper::options_merge($this,$kw_1, $kw_2);
             // init
             $kw_3 = array();
 
@@ -191,7 +193,7 @@ class box extends upAction
             // --- LINK
             if ($has_link && empty($kw_box['link']['href'])) {
                 if (preg_match('#<a.*>#Ui', $content, $old) == 1) {
-                    $kw_3['link'] = $this->get_attr_tag($old[0]);
+                    $kw_3['link'] = UpHelper::get_attr_tag($this,$old[0]);
                 }
             }
             // --- TITRE
@@ -201,7 +203,7 @@ class box extends upAction
                 // [2]=>h2
                 // [3]=><a href="#">title</a>
                 if (preg_match('#(<(h.?)\b.*>)(.*)</h.?>#Ui', $content, $old) == 1) {
-                    $kw_3['title'] = $this->get_attr_tag($old[1]);
+                    $kw_3['title'] = UpHelper::get_attr_tag($this,$old[1]);
                     $kw_3['title']['text'] = $old[3];
                     // supprimer a eventuel !!!!!
                     $content = str_replace($old[0], '', $content);
@@ -215,7 +217,7 @@ class box extends upAction
                 // [3]=>'a'
                 // [4]=>'<img src="...">'
                 if (preg_match('#(<[p|div]>)?(<(a) .*>)?(<img.*>)#Ui', $content, $old) == 1) {
-                    $kw_3['image'] = $this->get_attr_tag($old[4]);
+                    $kw_3['image'] = UpHelper::get_attr_tag($this,$old[4]);
                     // alt = humanize !!!
                     $len_img = strlen($old[0]);
                     $len_img += ($old[1]) ? strlen($old[1]) + 1 : 0; // </p> ou </div>
@@ -225,10 +227,10 @@ class box extends upAction
                 }
             }
             // ==== PREPARATION CONTENU FINAL
-            $kw_box = $this->options_merge($kw_box, $kw_3);
-            $kw_box['title']['text'] = $this->get_bbcode($kw_box['title']['text']);
-            $kw_box['subtitle']['text'] = $this->get_bbcode($kw_box['subtitle']['text']);
-            $kw_box['action']['text'] = $this->get_bbcode($kw_box['action']['text']);
+            $kw_box = UpHelper::options_merge($this,$kw_box, $kw_3);
+            $kw_box['title']['text'] = UpHelper::get_bbcode($this,$kw_box['title']['text']);
+            $kw_box['subtitle']['text'] = UpHelper::get_bbcode($this,$kw_box['subtitle']['text']);
+            $kw_box['action']['text'] = UpHelper::get_bbcode($this,$kw_box['action']['text']);
 
             // ==== CONTENU
             // les shortcodes et blocs récupérés ont été supprimés
@@ -236,55 +238,55 @@ class box extends upAction
 
             // ==== PREPARATION VARIABLES
             $attr = array(); // reset
-            $this->get_attr_style($attr['title'], 'up-box-title', $kw_box['title']['class'], $kw_box['title']['style']);
-            $this->get_attr_style($attr['title-link'], 'up-box-title-link', $kw_box['title']['link-class'], $kw_box['title']['link-style']);
-            $this->get_attr_style($attr['subtitle'], 'up-box-subtitle', $kw_box['subtitle']['class'], $kw_box['subtitle']['style']);
-            $this->get_attr_style($attr['subtitle-link'], 'up-box-subtitle-link', $kw_box['subtitle']['link-class'], $kw_box['subtitle']['link-style']);
-            $this->get_attr_style($attr['action'], 'up-box-action', $kw_box['action']['class'], $kw_box['action']['style']);
-            $this->get_attr_style($attr['action-link'], 'up-box-action-link', $kw_box['action']['link-class'], $kw_box['action']['link-style']);
-            $this->get_attr_style($attr['image'], 'up-box-image', $kw_box['image']['class'], $kw_box['image']['style']);
-            $this->get_attr_style($attr['image-link'], 'up-box-image-link', $kw_box['image']['link-class'], $kw_box['image']['link-style']);
+            UpHelper::get_attr_style($this,$attr['title'], 'up-box-title', $kw_box['title']['class'], $kw_box['title']['style']);
+            UpHelper::get_attr_style($this,$attr['title-link'], 'up-box-title-link', $kw_box['title']['link-class'], $kw_box['title']['link-style']);
+            UpHelper::get_attr_style($this,$attr['subtitle'], 'up-box-subtitle', $kw_box['subtitle']['class'], $kw_box['subtitle']['style']);
+            UpHelper::get_attr_style($this,$attr['subtitle-link'], 'up-box-subtitle-link', $kw_box['subtitle']['link-class'], $kw_box['subtitle']['link-style']);
+            UpHelper::get_attr_style($this,$attr['action'], 'up-box-action', $kw_box['action']['class'], $kw_box['action']['style']);
+            UpHelper::get_attr_style($this,$attr['action-link'], 'up-box-action-link', $kw_box['action']['link-class'], $kw_box['action']['link-style']);
+            UpHelper::get_attr_style($this,$attr['image'], 'up-box-image', $kw_box['image']['class'], $kw_box['image']['style']);
+            UpHelper::get_attr_style($this,$attr['image-link'], 'up-box-image-link', $kw_box['image']['link-class'], $kw_box['image']['link-style']);
 
             // ==========================
             // ==== CODE HTML POUR RETOUR
             // ==========================
 
-            $html[] = $this->set_attr_tag('div', $attr_box);
+            $html[] = UpHelper::set_attr_tag($this,'div', $attr_box);
             $tmpl = $options['template'];
 
             // ===== CONTENT
-            $this->kw_replace($tmpl, 'content', $kw_box['content']['text']);
+            UpHelper::kw_replace($this,$tmpl, 'content', $kw_box['content']['text']);
 
             // ===== LINK
-            $this->kw_replace($tmpl, 'link', $kw_box['link']['href']);
-            $this->kw_replace($tmpl, 'target', $kw_box['link']['target']);
+            UpHelper::kw_replace($this,$tmpl, 'link', $kw_box['link']['href']);
+            UpHelper::kw_replace($this,$tmpl, 'target', $kw_box['link']['target']);
 
             // ===== TITLE
             if (stripos($tmpl, '##title') !== false) {
                 $str = $kw_box['title']['text'];
                 if ($str) {
-                    $str = $this->set_attr_tag($options['title-tag'], $attr['title'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['title-tag'], $attr['title'], $str);
                 }
-                $this->kw_replace($tmpl, 'title', $str);
+                UpHelper::kw_replace($this,$tmpl, 'title', $str);
             }
 
             if (stripos($tmpl, '##title-link') !== false) {
                 $str = $kw_box['title']['text'];
                 if (! empty($str) && $kw_box['link']['href']) {
                     $tmp = array_merge($kw_box['link'], $attr['title-link']);
-                    $str = $this->set_attr_tag('a', $tmp, $str);
+                    $str = UpHelper::set_attr_tag($this,'a', $tmp, $str);
                 }
                 if ($str) {
-                    $str = $this->set_attr_tag($options['title-tag'], $attr['title'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['title-tag'], $attr['title'], $str);
                 }
-                $this->kw_replace($tmpl, 'title-link', $str);
+                UpHelper::kw_replace($this,$tmpl, 'title-link', $str);
             }
 
             // ===== SUBTITLE
             if (stripos($tmpl, '##subtitle') !== false) {
                 $str = $kw_box['subtitle']['text'] ?? ''; // 3.0
                 if ($str) {
-                    $str = $this->set_attr_tag($options['subtitle-tag'], $attr['subtitle'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['subtitle-tag'], $attr['subtitle'], $str);
                 }
                 $tmpl = str_ireplace('##subtitle##', $str, $tmpl);
             }
@@ -293,12 +295,12 @@ class box extends upAction
                 $str = $kw_box['subtitle']['text'];
                 if (! empty($str) && $kw_box['link']['href']) {
                     $tmp = array_merge($kw_box['link'], $attr['subtitle-link']);
-                    $str = $this->set_attr_tag('a', $tmp, $str);
+                    $str = UpHelper::set_attr_tag($this,'a', $tmp, $str);
                 }
                 if ($str) {
-                    $str = $this->set_attr_tag($options['subtitle-tag'], $attr['subtitle'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['subtitle-tag'], $attr['subtitle'], $str);
                 }
-                $this->kw_replace($tmpl, 'subtitle-link', $str);
+                UpHelper::kw_replace($this,$tmpl, 'subtitle-link', $str);
             }
 
             // ===== TITLE + SUBTITLE
@@ -313,26 +315,26 @@ class box extends upAction
                 $attr_title = array_merge($kw_box['link'], $attr['title-link']);
                 $attr_subtitle = array_merge($kw_box['link'], $attr['subtitle-link']);
                 if ($title && $subtitle) {
-                    $str = $title . $this->set_attr_tag('small', $attr['subtitle'], $subtitle);
+                    $str = $title . UpHelper::set_attr_tag($this,'small', $attr['subtitle'], $subtitle);
                     if ($is_link) {
-                        $str = $this->set_attr_tag('a', $attr_title, $str);
+                        $str = UpHelper::set_attr_tag($this,'a', $attr_title, $str);
                     }
-                    $str = $this->set_attr_tag($options['title-tag'], $attr['title'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['title-tag'], $attr['title'], $str);
                 } elseif ($title) {
                     $str = $title;
                     if ($is_link) {
-                        $str = $this->set_attr_tag('a', $attr_title, $str);
+                        $str = UpHelper::set_attr_tag($this,'a', $attr_title, $str);
                     }
-                    $str = $this->set_attr_tag($options['title-tag'], $attr['title'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['title-tag'], $attr['title'], $str);
                 } elseif ($subtitle) {
                     $str = $subtitle;
                     if ($is_link) {
-                        $str = $this->set_attr_tag('a', $attr_subtitle, $str);
+                        $str = UpHelper::set_attr_tag($this,'a', $attr_subtitle, $str);
                     }
-                    $str = $this->set_attr_tag($options['subtitle-tag'], $attr['subtitle'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['subtitle-tag'], $attr['subtitle'], $str);
                 }
-                $this->kw_replace($tmpl, 'title-subtitle', $str);
-                $this->kw_replace($tmpl, 'title-subtitle-link', $str);
+                UpHelper::kw_replace($this,$tmpl, 'title-subtitle', $str);
+                UpHelper::kw_replace($this,$tmpl, 'title-subtitle-link', $str);
             }
 
             // ===== ACTION
@@ -340,20 +342,20 @@ class box extends upAction
             $tmpl = str_ireplace('##action-text', $str, $tmpl); // v2.5
             if (stripos($tmpl, '##action') !== false) {
                 if ($str) {
-                    $str = $this->set_attr_tag($options['action-tag'], $attr['action'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['action-tag'], $attr['action'], $str);
                 }
-                $this->kw_replace($tmpl, 'action', $str);
+                UpHelper::kw_replace($this,$tmpl, 'action', $str);
             }
             $str = $kw_box['action']['text'] ?? ''; // 3.0
             if (stripos($tmpl, '##action-link') !== false) {
                 if (! empty($str) && $kw_box['link']['href']) {
                     $tmp = array_merge($kw_box['link'], $attr['action-link']);
-                    $str = $this->set_attr_tag('a', $tmp, $str);
+                    $str = UpHelper::set_attr_tag($this,'a', $tmp, $str);
                 }
                 if ($str) {
-                    $str = $this->set_attr_tag($options['action-tag'], $attr['action'], $str);
+                    $str = UpHelper::set_attr_tag($this,$options['action-tag'], $attr['action'], $str);
                 }
-                $this->kw_replace($tmpl, 'action-link', $str);
+                UpHelper::kw_replace($this,$tmpl, 'action-link', $str);
             }
 
             // ===== IMAGE
@@ -364,7 +366,7 @@ class box extends upAction
                     $str = $kw_box['image']['src'];
                     if ($str) {
                         // $css = 'background:url("/' . $str . '") no-repeat center center;background-size:cover;';
-                        $css = 'background:url("' . $this->get_url_absolute($str) . '") no-repeat center center;background-size:cover;'; // v5.1
+                        $css = 'background:url("' . UpHelper::get_url_absolute($this,$str) . '") no-repeat center center;background-size:cover;'; // v5.1
                         if ($matches[1] == '') {
                             // sur le bloc principal
                             $sel = ($multibox) ? '#id .up-box' : '#id.up-box';
@@ -372,34 +374,34 @@ class box extends upAction
                             // sur le bloc indiqué. ex: image-css-head
                             $sel = '#id .up-box' . $matches[1];
                         }
-                        $this->load_css_head($sel . '{' . $css . '}');
+                        UpHelper::load_css_head($this,$sel . '{' . $css . '}');
                     }
                     // on conserve l'ancienne méthode
                     $tmpl = str_ireplace($matches[0], '', $tmpl);
                 }
 
                 // -- comme img
-                $attr['image']['alt'] = (empty($kw_box['image']['alt'])) ? $this->link_humanize($kw_box['image']['src']) : $kw_box['image']['alt'];
+                $attr['image']['alt'] = (empty($kw_box['image']['alt'])) ? UpHelper::link_humanize($this,$kw_box['image']['src']) : $kw_box['image']['alt'];
                 if (stripos($tmpl, '##image##') !== false) {
                     $str = $kw_box['image']['src'];
                     if ($str) {
                         $attr['image']['src'] = $str;
-                        $str = $this->set_attr_tag('img', $attr['image']);
+                        $str = UpHelper::set_attr_tag($this,'img', $attr['image']);
                     }
-                    $this->kw_replace($tmpl, 'image', $str);
+                    UpHelper::kw_replace($this,$tmpl, 'image', $str);
                 }
                 // --------- ##image-link##
                 if (stripos($tmpl, '##image-link') !== false) {
                     $str = $kw_box['image']['src'];
                     $attr['image']['src'] = $str;
                     if ($str) {
-                        $str = $this->set_attr_tag('img', $attr['image']);
+                        $str = UpHelper::set_attr_tag($this,'img', $attr['image']);
                     }
                     if (! empty($str) && $kw_box['link']['href']) {
                         $tmp = array_merge($kw_box['link'], $attr['image-link']);
-                        $str = $this->set_attr_tag('a', $tmp, $str);
+                        $str = UpHelper::set_attr_tag($this,'a', $tmp, $str);
                     }
-                    $this->kw_replace($tmpl, 'image-link', $str);
+                    UpHelper::kw_replace($this,$tmpl, 'image-link', $str);
                 }
             }
 
@@ -408,16 +410,16 @@ class box extends upAction
             $tmpl = preg_replace('/##head##\s*##\/head##/', '', $tmpl);
             if (stripos($tmpl, '##head##') !== false) {
                 $attr = array();
-                $this->get_attr_style($attr, 'up-box-head', $options['head-class'], $options['head-style']);
-                $tmpl = str_ireplace('##head##', $this->set_attr_tag('div', $attr), $tmpl);
+                UpHelper::get_attr_style($this,$attr, 'up-box-head', $options['head-class'], $options['head-style']);
+                $tmpl = str_ireplace('##head##', UpHelper::set_attr_tag($this,'div', $attr), $tmpl);
                 $tmpl = str_ireplace('##/head##', '</div>', $tmpl);
             }
 
             $tmpl = preg_replace('/##body##\s*##\/body##/', '', $tmpl);
             if (stripos($tmpl, '##body##') !== false) {
                 $attr = array();
-                $this->get_attr_style($attr, 'up-box-body', $options['body-class'], $options['body-style']);
-                $tmpl = str_ireplace('##body##', $this->set_attr_tag('div', $attr), $tmpl);
+                UpHelper::get_attr_style($this,$attr, 'up-box-body', $options['body-class'], $options['body-style']);
+                $tmpl = str_ireplace('##body##', UpHelper::set_attr_tag($this,'div', $attr), $tmpl);
                 $tmpl = str_ireplace('##/body##', '</div>', $tmpl);
             }
 
@@ -430,123 +432,7 @@ class box extends upAction
         }
         return implode(PHP_EOL, $html);
     }
-
     // run
-
-    /*
-     * get_subshortcode
-     * analyse des shortcodes secondaires
-     * retourne $out : array avec les options
-     * actualise $content
-     * v2.5 ajout \w dans regex pour ecarter les <b>{</b>
-     */
-    public function get_subshortcode(&$content)
-    {
-        $out = array();
-        $search = array(
-            'image',
-            'link',
-            'subtitle',
-            'title',
-            'action'
-        );
-        $replace = array(
-            'src',
-            'href',
-            'text',
-            'text',
-            'text'
-        );
-        $regex = '#(?:<p>)?{(\w.*[\s\=\|].*)}(?:<\/p>)*?#siU';
-        if (preg_match_all($regex, $content, $matches) > 0) {
-            for ($i = 0; $i < count($matches[1]); $i++) {
-                $arr = explode('|', $matches[1][$i]);
-                $optname = '';
-                foreach ($arr as $tmp) {
-                    $tmp = preg_split("/=/", trim($tmp), 2);
-                    if ($optname == '') {
-                        $optname = $tmp[0];
-                        if (isset($out[$optname])) {
-                            break;
-                        }
-                        $tmp[0] = str_replace($search, $replace, $tmp[0]);
-                    }
-                    // sa valeur (true si aucune)
-                    $value = (count($tmp) == 2) ? trim($tmp[1]) : true;
-
-                    $out[$optname][$tmp[0]] = $value;
-                }
-                $content = str_replace($matches[0][$i], '', $content);
-            }
-        }
-        // nettoyage wisiwyg
-        $content = trim($content);
-        while (substr($content, 0, 6) == '<br />') {
-            $content = substr($content, 6);
-        }
-        while (substr($content, - 6, 6) == '<br />') {
-            $content = substr($content, 0, - 6);
-        }
-
-        return $out;
-    }
-
-    /*
-     * Charge le fichier CSS
-     * et initialise les options avec le fichier model.ini
-     * sauf si définies par user ou prefs.ini
-     */
-    public function load_model($model, &$options)
-    {
-        if (empty($model)) {
-            return;
-        }
-        // charge fichier CSS
-        $this->load_file('model/' . $model . '.css');
-        // surcharge des options par celle de model.ini
-        $inifile = $this->get_custom_path('model/' . $model . '.ini', null, false);
-        if ($inifile !== false) {
-            $modelini = $this->load_inifile($inifile, true);
-            if ($modelini !== false) {
-                foreach ($modelini as $key => $val) {
-                    $key = strtolower($key);
-                    if (isset($options[$key])) {
-                        if (! isset($this->options_user[$key])) {
-                            $options[$key] = $val;
-                        }
-                    } else {
-                        $this->msg_error($this->trad_keyword('OPTION_NOT_FOUND', $key, $inifile));
-                    }
-                }
-            }
-        }
-    }
-
-    // ajoute les clé-valeurs de $arr2 dans $arr1
-    // $arr1 contient les options du shortcode par type de mot-clé
-    // $arr2 contient les options saisie dans le contenu
-    // exemple :
-    // $a1['title'] = array('title'=>'TITRE','class'=>'foo')
-    // $a2['title'] = array('title'=>'TITRE-2','style'=>'color:red')
-    // return ['title'] = array('title'=>'TITRE-2','class'=>'foo','style'=>'color:red')
-    public function options_merge($arr1, $arr2)
-    {
-        if (! empty($arr2)) {
-            foreach ($arr2 as $arr2key => $arr2val) {
-                foreach ($arr2val as $key => $val) {
-                    if (! empty($val)) {
-                        if ($key == 'style' || $key == 'class' && $val[0] == '+') {
-                            $val[0] = ';';
-                            $arr1[$arr2key][$key] .= trim($val);
-                        } else {
-                            $arr1[$arr2key][$key] = trim($val);
-                        }
-                    }
-                }
-            }
-        }
-        return $arr1;
-    }
 }
 
 // class

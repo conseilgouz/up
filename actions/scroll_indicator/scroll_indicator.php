@@ -14,13 +14,15 @@
  */
 defined('_JEXEC') or die();
 
-class scroll_indicator extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class scroll_indicator extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('scroll_indicator.css');
-        $this->load_file('scroll_indicator.js');
+        UpHelper::load_file($this,'scroll_indicator.css');
+        UpHelper::load_file($this,'scroll_indicator.js');
         return true;
     }
 
@@ -28,7 +30,7 @@ class scroll_indicator extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // aucun argument
@@ -41,7 +43,7 @@ class scroll_indicator extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
         if ($options['bg-color']) {
@@ -57,7 +59,7 @@ class scroll_indicator extends upAction
             }
             $options['css-head'] .= '}';
         }
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // code en retour
         $html = <<<'HTML'

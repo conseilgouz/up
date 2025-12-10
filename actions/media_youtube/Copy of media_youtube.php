@@ -18,7 +18,7 @@
  */
 defined('_JEXEC') or die;
 
-class media_youtube extends upAction {
+class media_youtube extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
@@ -26,14 +26,14 @@ class media_youtube extends upAction {
         //  http://clic-en-berry.com/comment-rendre-vos-integrations-iframe-youtube-responsive/
         $css_code = '.up-video-container {position: relative; padding-bottom: 56.25%;	height: 0;overflow:hidden;}';
         $css_code .= '.up-video-container iframe{ position:absolute;top:0;left:0;width:100%;height:100%;}';
-        $this->load_css_head($css_code);
+        UpHelper::load_css_head($this,$css_code);
         return true;
     }
 
     function run() {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // code de la video (à la fin de l'url youtube)
@@ -51,13 +51,13 @@ class media_youtube extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         if ($options['width'])
-            $options['width'] = $this->ctrl_unit($options['width'], '%,px');
+            $options['width'] = UpHelper::ctrl_unit($this,$options['width'], '%,px');
 
         // le bloc externe
-        $this->get_attr_style($outer_attr, $options['class'], $options['style']);
-        $this->add_style($outer_attr['style'], 'width', $options['width']);
+        UpHelper::get_attr_style($this,$outer_attr, $options['class'], $options['style']);
+        UpHelper::add_style($this,$outer_attr['style'], 'width', $options['width']);
 
         // le bloc contenant la video
         $main_attr['class'] = 'up-video-container';
@@ -65,8 +65,8 @@ class media_youtube extends upAction {
 
         $api = "?rel=0";
         if (!empty($options['play-on-visible'])) {
-            $this->load_file('youtube_api.min.js');
-            $this->load_file('media_youtube.js');
+            UpHelper::load_file($this,'youtube_api.min.js');
+            UpHelper::load_file($this,'media_youtube.js');
             $api .= "&enablejsapi=1";
             $attr_iframe['class'] = 'play-on-visible';
         }
@@ -87,17 +87,17 @@ class media_youtube extends upAction {
         $attr_iframe['id'] = $options['id'];
         if ($this->tarteaucitron && $options['rgpd']) {
             $attr_iframe['videoID'] = $options[__class__] . $api;
-            $this->add_class($attr_iframe['class'], 'youtube_player');
+            UpHelper::add_class($this,$attr_iframe['class'], 'youtube_player');
             $tag = 'div';
         } else {
             $attr_iframe['src'] = 'https://www.youtube.com/embed/' . $options[__class__] . $api;
             $tag = 'iframe';
         }
         // le code renvoyé
-//        $out = $this->set_attr_tag('iframe', $attr_iframe, true);
-        $out = $this->set_attr_tag($tag, $attr_iframe, true);
-        $out = $this->set_attr_tag('div', $main_attr, $out);
-        $out = $this->set_attr_tag('_div', $outer_attr, $out);
+//        $out = UpHelper::set_attr_tag($this,'iframe', $attr_iframe, true);
+        $out = UpHelper::set_attr_tag($this,$tag, $attr_iframe, true);
+        $out = UpHelper::set_attr_tag($this,'div', $main_attr, $out);
+        $out = UpHelper::set_attr_tag($this,'_div', $outer_attr, $out);
         
         return $out;
     }

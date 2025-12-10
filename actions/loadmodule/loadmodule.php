@@ -15,8 +15,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class loadmodule extends upAction
+class loadmodule extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -28,7 +29,7 @@ class loadmodule extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nom ou id du module
@@ -41,15 +42,15 @@ class loadmodule extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === Chargement du module
         $document = Factory::getApplication()->getDocument();
@@ -88,11 +89,11 @@ class loadmodule extends upAction
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
         if (!empty($options['tag'])) {
-            $out = $this->set_attr_tag($options['tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $out);
         }
 
         return $out;

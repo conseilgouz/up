@@ -32,14 +32,16 @@
  */
 defined('_JEXEC') or die();
 
-class modal extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class modal extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes a toutes les instances de l'action
 
-        $this->load_file('flashy.css');
-        $this->load_file('jquery.flashy.min.js');
+        UpHelper::load_file($this,'flashy.css');
+        UpHelper::load_file($this,'jquery.flashy.min.js');
         return true;
     }
 
@@ -47,7 +49,7 @@ class modal extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // contenu ou type de contenu
@@ -79,23 +81,23 @@ class modal extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
-        $this->ctrl_unit($options['width'], '%, px');
-        $this->ctrl_unit($options['height'], 'px, %');
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
+        UpHelper::ctrl_unit($this,$options['width'], '%, px');
+        UpHelper::ctrl_unit($this,$options['height'], 'px, %');
 
         // check filter options
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
-        $options['label'] = $this->get_bbcode($options['label'], false);
+        $options['label'] = UpHelper::get_bbcode($this,$options['label'], false);
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela evite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options, 2);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 2);
         if ($options['base-js-params']) {
             $js_params = str_replace('{', '{' . $options['base-js-params'] . ',', $js_params);
         }
@@ -106,13 +108,13 @@ class modal extends upAction
             // $css = '#' . $id . ' .flashy-overlay .flashy-close{left:0}';
             // pour toutes les occurrences
             $css = '.flashy-overlay .flashy-close{left:0}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ==== Type de contenu
-        $type = $this->ctrl_argument($options['type'], ',,inline, iframe, image, video, ajax');
+        $type = UpHelper::ctrl_argument($this,$options['type'], ',,inline, iframe, image, video, ajax');
         $main = $options[__class__];
         if ($type == 'inline' || $main == '' || $main == 'html') {
             // ---- INLINE ----
@@ -138,7 +140,7 @@ class modal extends upAction
         }
 
         // -- init JS
-        $this->load_jquery_code('$(".' . $id . '").flashy(' . $js_params . ');');
+        UpHelper::load_jquery_code($this,'$(".' . $id . '").flashy(' . $js_params . ');');
         // code en retour
         return implode(PHP_EOL, $html);
     }
@@ -157,17 +159,17 @@ class modal extends upAction
         }
         // -- le lien pour ouvrir le popup
         $a_attr['class'] = $options['class'];
-        $a_attr['class'] = $this->str_append($a_attr['class'], $options['id'], ' ');
+        $a_attr['class'] = UpHelper::str_append($this,$a_attr['class'], $options['id'], ' ');
         $a_attr['style'] = $options['style'];
         $a_attr['data-flashy-type'] = 'inline';
         $a_attr['href'] = '#' . $id;
-        $out[] = $this->set_attr_tag('a', $a_attr);
+        $out[] = UpHelper::set_attr_tag($this,'a', $a_attr);
         $out[] = $options['label'];
         $out[] = '</a>';
         // -- le contenu de la popup
         $bloc_attr['id'] = $id;
         $bloc_attr['style'] = 'display:none';
-        $out[] = $this->set_attr_tag('div', $bloc_attr);
+        $out[] = UpHelper::set_attr_tag($this,'div', $bloc_attr);
         // $out[] = '<div class="inline">';
         $out[] = $content;
         // $out[] = '</div>';
@@ -183,22 +185,22 @@ class modal extends upAction
         $regex = '#<img .*>#iU';
         if (preg_match_all($regex, $content, $imglist)) {
             foreach ($imglist[0] as $img) {
-                $img_attr = $this->get_attr_tag($img, 'alt');
+                $img_attr = UpHelper::get_attr_tag($this,$img, 'alt');
                 $a_attr['href'] = str_ireplace($options['zoom-suffix'], '', $img_attr['src']);
                 $a_attr['class'] = $options['id'];
                 $a_attr['data-flashy-type'] = 'image';
                 if ($img_attr['alt'] == '') {
-                    $img_attr['alt'] = $this->link_humanize($a_attr['href']);
+                    $img_attr['alt'] = UpHelper::link_humanize($this,$a_attr['href']);
                 }
                 if (empty($img_attr['title']) && $options['title']) {
                     $a_attr['title'] = $img_attr['alt'];
                 }
                 // cas d'une seule image avec label indique
-                $code = $this->set_attr_tag('a', $a_attr);
+                $code = UpHelper::set_attr_tag($this,'a', $a_attr);
                 if (count($imglist) == 1 && $options['label']) {
                     $code .= $options['label'];
                 } else {
-                    $code .= $this->set_attr_tag('img', $img_attr);
+                    $code .= UpHelper::set_attr_tag($this,'img', $img_attr);
                 }
                 $code .= '</a>';
                 $content = str_replace($img, $code, $content);
@@ -218,11 +220,11 @@ class modal extends upAction
         $a_attr['class'] = $options['id'];
         $a_attr['data-flashy-type'] = $type;
         $a_attr['href'] = $content;
-        $a_attr['class'] = $this->str_append($a_attr['class'], $options['class'], ' ');
+        $a_attr['class'] = UpHelper::str_append($this,$a_attr['class'], $options['class'], ' ');
         $a_attr['style'] = $options['style'];
         $label = ($options['label']) ? $options['label'] : $this->content;
         // -- mise en forme
-        return $this->set_attr_tag('a', $a_attr, $label);
+        return UpHelper::set_attr_tag($this,'a', $a_attr, $label);
     }
 }
 

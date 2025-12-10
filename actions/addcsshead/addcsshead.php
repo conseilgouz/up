@@ -28,8 +28,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class addcsshead extends upAction {
+class addcsshead extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // aucune
@@ -37,7 +38,7 @@ class addcsshead extends upAction {
 
     function run() {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // fichier ou code CSS. ATTENTION [ ] à la place des {} pour code dans shortcode
@@ -45,24 +46,24 @@ class addcsshead extends upAction {
           'id' => '' // identifiant
         );
 
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         if (strpos($options[__class__], '[')) {
             // il suffit de charger le code dans le head
-            $this->load_css_head($options[__class__]);
+            UpHelper::load_css_head($this,$options[__class__]);
         } elseif(!empty($this->content)) { // v2.9
-            $this->load_css_head(strip_tags($this->content));
+            UpHelper::load_css_head($this,strip_tags($this->content));
         } else {
             $ficname = $options[__class__];
             if (strtolower(pathinfo($ficname, PATHINFO_EXTENSION)) == 'css' && file_exists($ficname)) {
                 HTMLHelper::stylesheet($ficname);
             } else {
-                $this->msg_error($this->trad_keyword('UP_FIC_NOT_FOUND', $ficname));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UP_FIC_NOT_FOUND', $ficname));
             }
         }
         // -- aucun code en retour

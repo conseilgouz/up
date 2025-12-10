@@ -15,19 +15,21 @@
  */
 defined('_JEXEC') or die;
 
-class _example_simple extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class _example_simple extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('xxxxx.css');
-        $this->load_file('xxxxx.js');
+        UpHelper::load_file($this,'xxxxx.css');
+        UpHelper::load_file($this,'xxxxx.js');
         return true;
     }
 
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -35,7 +37,7 @@ class _example_simple extends upAction {
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - 0 pour cacher le lien vers demo car inexistante
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // description argument attendu
@@ -46,18 +48,18 @@ class _example_simple extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main, $this->content);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, $this->content);
 
         return implode(PHP_EOL, $html);
     }

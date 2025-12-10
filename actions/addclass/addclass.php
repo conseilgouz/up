@@ -24,7 +24,9 @@
  */
 defined('_JEXEC') or die();
 
-class addclass extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class addclass extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -35,7 +37,7 @@ class addclass extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -50,11 +52,11 @@ class addclass extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $options[__class__] = trim($options[__class__], ' .'); // on enlève le point du nom de la classe (v5.2)
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -67,14 +69,14 @@ class addclass extends upAction
 
         // CSS dans le head
         if ($options['css-head'] != '') {
-            $this->load_css_head($options['css-head']);
+            UpHelper::load_css_head($this,$options['css-head']);
         }
 
         // === Ajout dans le head (3.1 jquery -> js)
 
         $parent = str_repeat('.parentElement', (int) $options['parent']);
         $code = 'document.querySelector("' . $options['selector'] . '")' . $parent . '.classList.add("' . $options[__class__] . '");';
-        $out['after'] = $this->load_js_code($code, false); // en fin d'article
+        $out['after'] = UpHelper::load_js_code($this,$code, false); // en fin d'article
 
         // -- le code en retour
         return $out;

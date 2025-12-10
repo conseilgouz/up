@@ -26,7 +26,9 @@
  */
 defined('_JEXEC') or die();
 
-class mq extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class mq extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -38,7 +40,7 @@ class mq extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // vide ou sélecteur CSS
@@ -73,7 +75,7 @@ class mq extends upAction
             settype($key, 'string');
             $foo = $key[0];
             if ($key[0] < '0' || $key[0] > '9') {
-                $this->msg_error($key . ' : is not a valid option');
+                UpHelper::msg_error($this,$key . ' : is not a valid option');
             } else {
                 $key = 'bp-' . $key;
                 $this->options_user[$key] = $val;
@@ -86,7 +88,7 @@ class mq extends upAction
         }
         // fusion et controle des options
         unset($options_def['xxx']);
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ===========================
         // === analyse de breakpoints

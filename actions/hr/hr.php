@@ -14,17 +14,19 @@
  */
 defined('_JEXEC') or die;
 
-class hr extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class hr extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        $this->load_file('hr.css');
+        UpHelper::load_file($this,'hr.css');
     }
 
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nom icône, code unicode, chemin image ou nom dans prefs.ini + color, size
@@ -54,15 +56,15 @@ class hr extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         if ($options['hr-width']) {
-            $options['hr-width'] = $this->ctrl_unit($options['hr-width'], '%, px, rem');
+            $options['hr-width'] = UpHelper::ctrl_unit($this,$options['hr-width'], '%, px, rem');
         }
         if ($options['hr-height']) {
-            $options['hr-height'] = $this->ctrl_unit($options['hr-height'], 'px, rem');
+            $options['hr-height'] = UpHelper::ctrl_unit($this,$options['hr-height'], 'px, rem');
         }
         if ($options['icon-space']) {
-            $options['icon-space'] = $this->ctrl_unit($options['icon-space'], 'px, rem');
+            $options['icon-space'] = UpHelper::ctrl_unit($this,$options['icon-space'], 'px, rem');
         }
 
         // ==== DECLARATION / CONSOLIDATION VARIABLES POUR HR
@@ -72,7 +74,7 @@ class hr extends upAction
         $margin_size = 28; // valeur margin-top et bottom dans hr.css
         // Dimensions verticales : unités permises px & rem. Calcul en px
         $hr_height = (isset($options['hr-height'])) ? $options['hr-height'] : '4px';
-        list($hr_height_val, $hr_height_unit) = $this->convert_size($hr_height);
+        list($hr_height_val, $hr_height_unit) = UpHelper::convert_size($this,$hr_height);
 
         //
         // ==== GESTION HR
@@ -121,8 +123,8 @@ class hr extends upAction
         // si pas de hauteur définie, on la force à 4px
         //
         if ($options['hr-bg']) {
-            $this->add_style($hr_attr['style'], 'background', $options['hr-bg']);
-            $this->add_style($hr_attr['style'], 'height', $hr_height);
+            UpHelper::add_style($this,$hr_attr['style'], 'background', $options['hr-bg']);
+            UpHelper::add_style($this,$hr_attr['style'], 'height', $hr_height);
             if (empty($this->options_user[__class__]) && empty($this->options_user['hr-border-top'])) {
                 $options['hr-border-top'] = '';
             }
@@ -133,16 +135,16 @@ class hr extends upAction
         //
         $hr_attr['id'] = $options['id'];
         $hr_attr['class'] = 'up ' . $hr_class;
-        $this->get_attr_style($hr_attr, $options['hr-class'], $options['hr-style']);
-        $this->add_style($hr_attr['style'], 'border-top', $options['hr-border-top']);
-        $this->add_style($hr_attr['style'], 'border-bottom', $options['hr-border-bottom']);
-        $this->add_style($hr_attr['style'], 'width', $options['hr-width']);
+        UpHelper::get_attr_style($this,$hr_attr, $options['hr-class'], $options['hr-style']);
+        UpHelper::add_style($this,$hr_attr['style'], 'border-top', $options['hr-border-top']);
+        UpHelper::add_style($this,$hr_attr['style'], 'border-bottom', $options['hr-border-bottom']);
+        UpHelper::add_style($this,$hr_attr['style'], 'width', $options['hr-width']);
         switch (strtolower($options['hr-align'])) {
             case 'left':
-                $this->add_str($hr_attr['style'], 'text-align:left;margin-left:0', ';');
+                UpHelper::add_str($this,$hr_attr['style'], 'text-align:left;margin-left:0', ';');
                 break;
             case 'right':
-                $this->add_str($hr_attr['style'], 'text-align:right;margin-right:0', ';');
+                UpHelper::add_str($this,$hr_attr['style'], 'text-align:right;margin-right:0', ';');
                 break;
         }
 
@@ -177,7 +179,7 @@ class hr extends upAction
             // variables de travail
             $icon_color = $options['icon-color'];
             $icon_size = (isset($options['icon-size'])) ? $options['icon-size'] : '';
-            list($icon_size_val, $icon_size_unit) = $this->convert_size($icon_size);
+            list($icon_size_val, $icon_size_unit) = UpHelper::convert_size($this,$icon_size);
             //
             // --- Gestion position horizontale
             //
@@ -206,8 +208,8 @@ class hr extends upAction
                     }
                     //					$css .= 'line-height:1;';
                     $css .= ($icon_color) ? 'color:' . $icon_color . ' !important;' : '';
-                } elseif ($this->preg_string('#.(png|jpg|gif)#i', $icon)) {  // === IMAGE
-                    $css .= 'content:url(' . $this->get_url_relative($icon) . ') ' . $icon_text . ' !important;'; // v2.6
+                } elseif (UpHelper::preg_string($this,'#.(png|jpg|gif)#i', $icon)) {  // === IMAGE
+                    $css .= 'content:url(' . UpHelper::get_url_relative($this,$icon) . ') ' . $icon_text . ' !important;'; // v2.6
                     if (file_exists($icon)) {
                         list($w, $h) = getimagesize($icon);
                         if ($icon_size) {
@@ -246,21 +248,21 @@ class hr extends upAction
             // CSS pour HR
             // si $top_offset < 0 -> on ajoute à margin-top
             if ($top_offset < $margin_size * -1) {
-                $this->add_style($hr_attr['style'], 'margin-top', abs($top_offset) . $icon_size_unit);
+                UpHelper::add_style($this,$hr_attr['style'], 'margin-top', abs($top_offset) . $icon_size_unit);
             }
             if (($top_offset + $icon_size_val) > max($hr_height_val, $margin_size)) {
                 $mb = ($top_offset + $icon_size_val) - $hr_height_val;
-                $this->add_style($hr_attr['style'], 'margin-bottom', $mb . $icon_size_unit);
+                UpHelper::add_style($this,$hr_attr['style'], 'margin-bottom', $mb . $icon_size_unit);
             }
             // --- autres propriétés CSS
             $css .= ($options['icon-bg']) ? 'background:' . $options['icon-bg'] . ';' : '';
             $css .= ($options['icon-space']) ? 'padding:0 ' . $options['icon-space'] . ';' : '';
-            $this->load_css_head('hr#id:before{' . $css . '}');
+            UpHelper::load_css_head($this,'hr#id:before{' . $css . '}');
         } // if icon
         // =
         // === retour
         // =
-        $html = $this->set_attr_tag('hr', $hr_attr);
+        $html = UpHelper::set_attr_tag($this,'hr', $hr_attr);
 
         return $html;
     }

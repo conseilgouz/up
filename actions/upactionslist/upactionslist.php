@@ -19,6 +19,8 @@
 // No direct access
 defined('_JEXEC') or die();
 
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 /*
  * v1.4 - ajout param demo pour ne pas afficher le lien sur la page de demo
  * - ajout param class & style
@@ -35,13 +37,13 @@ defined('_JEXEC') or die();
  * - prise en charge sous-titre dans l'aide intégrée
  * v5.1 - ajout blink pour lire la doc
  */
-class upactionslist extends upAction
+class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // ===== Ajout dans le head (une seule fois)
-        $this->load_file('/plugins/content/up/assets/js/faq.js');
+        UpHelper::load_file($this,'/plugins/content/up/assets/js/faq.js');
 
         $css_code = '.upfaq {width: 100%;}';
         $css_code .= '.upfaq-button {';
@@ -69,13 +71,13 @@ class upactionslist extends upAction
         $css_code .= '.blink{animation: blinker 1.5s linear infinite;}';
         $css_code .= '@keyframes blinker{50% {opacity:20;color:yellow;}}';
 
-        $this->load_css_head($css_code);
+        UpHelper::load_css_head($this,$css_code);
     }
 
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
         /* [st-sel] Sélection des actions listées */
@@ -98,10 +100,10 @@ class upactionslist extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -127,26 +129,26 @@ class upactionslist extends upAction
 
         // === CONSOLIDATION DU FICHIER DICO.JSON ===
         if ($options['make-dico']) {
-            $dicoFolder = $this->up_actions_list();
+            $dicoFolder = UpHelper::up_actions_list($this);
             $dicoIni = $this->upPath . 'custom/dico.ini';
             if (file_exists($dicoIni) === false)
                 $dicoIni = $this->upPath . 'dico.ini';
-            $newDico = $this->load_inifile($dicoIni);
+            $newDico = UpHelper::load_inifile($this,$dicoIni);
             // on recherche les dico des actions avec preference pour celui dans custom
             foreach ($dicoFolder as $dicoAction) {
                 $dicoIni = $this->upPath . 'actions/' . $dicoAction . '/custom/dico.ini';
                 if (file_exists($dicoIni) === false)
                     $dicoIni = $this->upPath . 'actions/' . $dicoAction . '/up/dico.ini';
                 if (file_exists($dicoIni)) {
-                    $tmp = $this->load_inifile($dicoIni);
+                    $tmp = UpHelper::load_inifile($this,$dicoIni);
                     $newDico = array_merge($newDico, $tmp);
                 }
             }
             $dicoJson = $this->upPath . 'dico.json';
             if (file_put_contents($dicoJson, json_encode($newDico, JSON_UNESCAPED_SLASHES)) !== false) {
-                $this->msg_info($this->trad_keyword('MAKE_DICO_OK'));
+                UpHelper::msg_info($this,UpHelper::trad_keyword($this,'MAKE_DICO_OK'));
             } else {
-                $this->msg_error($this->trad_keyword('MAKE_DICO_ERR'));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'MAKE_DICO_ERR'));
             }
         }
 
@@ -155,7 +157,7 @@ class upactionslist extends upAction
             $fic = 'plugins/content/up/doc-actions.csv';
             $hfic = fopen($fic, 'w');
             if (! $hfic) {
-                $this->msg_error($this->trad_keyword('LOAD_FIC_ERR', $fic));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'LOAD_FIC_ERR', $fic));
             } else {
                 fputcsv($hfic, array(
                     'Action',
@@ -169,7 +171,7 @@ class upactionslist extends upAction
                 foreach ($actionsList as $actionName) {
 
                     // === récupération des infos et options
-                    $actinfos = $this->up_action_infos($actionName);
+                    $actinfos = UpHelper::up_action_infos($this,$actionName);
                     $actoptions = $this->up_action_options($actionName, true);
                     // la traduction anglaise des options - v2.9
                     $gb_file = $this->upPath . 'actions/' . $actionName . '/up/en-GB.ini';
@@ -198,7 +200,7 @@ class upactionslist extends upAction
                     }
                 }
                 fclose($hfic);
-                $this->msg_info($this->trad_keyword('SAVE_CSV_OK', $fic));
+                UpHelper::msg_info($this,UpHelper::trad_keyword($this,'SAVE_CSV_OK', $fic));
             }
         }
 
@@ -223,7 +225,7 @@ class upactionslist extends upAction
             $fic = 'plugins/content/up/comment-actions.csv';
             $hfic = fopen($fic, 'w');
             if (! $hfic) {
-                $this->msg_error($this->trad_keyword('LOAD_FIC_ERR', $fic));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'LOAD_FIC_ERR', $fic));
             } else {
                 fputcsv($hfic, $header, ";","\"","\n");
                 foreach ($comment as $k => $infos) {
@@ -238,7 +240,7 @@ class upactionslist extends upAction
                     fputcsv($hfic, $txt,";","\"","\n");
                 }
                 fclose($hfic);
-                $this->msg_info($this->trad_keyword('SAVE_COMMENT_OK', $fic));
+                UpHelper::msg_info($this,UpHelper::trad_keyword($this,'SAVE_COMMENT_OK', $fic));
             }
         }
 
@@ -252,17 +254,17 @@ class upactionslist extends upAction
                 $fic = 'plugins/content/up/UP-doc-actions-v' . $this->get_upversion() . '-(' . strtolower(substr($lang, - 2, 2)) . ').md';
                 $hfic = fopen($fic, 'w');
                 if (! $hfic) {
-                    $this->msg_error($this->trad_keyword('LOAD_FIC_ERR', $fic));
+                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'LOAD_FIC_ERR', $fic));
                 } else {
                     // setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
                     setlocale(LC_TIME, str_replace('-', '_', $lang) . '.utf8', substr($lang, 0, 2));
-                    fwrite($hfic, '# UP-' . $this->get_upversion() . ' - Documentation actions' . PHP_EOL . $this->up_date_format('', '%e %B %Y') . PHP_EOL);
+                    fwrite($hfic, '# UP-' . $this->get_upversion() . ' - Documentation actions' . PHP_EOL . UpHelper::up_date_format($this,'', '%e %B %Y') . PHP_EOL);
                     foreach ($actionsList as $actionName) {
                         // === récupération des infos et options
-                        $actinfos = $this->up_action_infos($actionName, $lang);
+                        $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
                         $actoptions = $this->up_action_options($actionName, false, $lang);
 
-                        $actionName .= $this->str_append('', $this->get_dico_synonym($actionName), ' ', ' (', ')');
+                        $actionName .= UpHelper::str_append($this,'', UpHelper::get_dico_synonym($this,$actionName), ' ', ' (', ')');
                         $actionName = str_replace('_', '-', $actionName);
                         // === infos action
                         fwrite($hfic, '# ' . $actionName . PHP_EOL);
@@ -281,7 +283,7 @@ class upactionslist extends upAction
                         }
                     }
                     fclose($hfic);
-                    $this->msg_info($this->trad_keyword('SAVE_ACTIONS_OK', $fic));
+                    UpHelper::msg_info($this,UpHelper::trad_keyword($this,'SAVE_ACTIONS_OK', $fic));
                 }
             }
         }
@@ -295,15 +297,15 @@ class upactionslist extends upAction
         // </div>
         // === code HTML
         $attr_main['class'] = 'upfaq';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
-        $txt = $this->set_attr_tag('div', $attr_main);
+        $txt = UpHelper::set_attr_tag($this,'div', $attr_main);
 
         foreach ($actionsList as $actionName) {
 
             // === récupération des infos et options
-            $actinfos = $this->up_action_infos($actionName);
-            $actoptions = $this->up_action_options($actionName);
+            $actinfos = UpHelper::up_action_infos($this,$actionName);
+            $actoptions = UpHelper::up_action_options($this,$actionName);
             if (is_string($actinfos)) {
                 $txt .= $actinfos;
                 continue;
@@ -316,8 +318,8 @@ class upactionslist extends upAction
 
             $txt .= '<div class="upfaq-button bloc">';
             $txt .= '&#x1F199; ' . $actionName; // fleche et nom action
-            $txt .= $this->str_append('', $this->get_dico_synonym($actionName), ' ', ' (', ')');
-            $txt .= $this->str_append('', $actinfos['_shortdesc'], ' ', ' : <small>', '</small>');
+            $txt .= UpHelper::str_append($this,'', UpHelper::get_dico_synonym($this,$actionName), ' ', ' (', ')');
+            $txt .= UpHelper::str_append($this,'', $actinfos['_shortdesc'], ' ', ' : <small>', '</small>');
 
             // ajout URL pour démo ()remplace _ par - pour alias Joomla
             // > 5 : pas une URL mais un mot-clé - LM-v2
@@ -340,8 +342,8 @@ class upactionslist extends upAction
             $txt .= ($actinfos['_longdesc']) ? $actinfos['_longdesc'] : '';
             // les infos du sous-dossier custom
             if (empty($options['without-custom'])) {
-                $txt .= $this->up_help_txt($actionName);
-                $txt .= $this->up_prefset_list($actionName);
+                $txt .= UpHelper::up_help_txt($this,$actionName);
+                $txt .= UpHelper::up_prefset_list($this,$actionName);
             }
             // les mots-clés
             $txt .= '<div style="background:#bbb;padding:3px">';

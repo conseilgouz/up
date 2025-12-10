@@ -14,7 +14,9 @@
  */
 defined('_JEXEC') or die;
 
-class php_error extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class php_error extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // none
@@ -23,7 +25,7 @@ class php_error extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => 'dev', // mode rapport d'erreurs : none, 0, min, max, dev
@@ -31,7 +33,7 @@ class php_error extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         switch (strtolower($options[__class__])) {
             case 'none':

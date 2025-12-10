@@ -13,12 +13,14 @@
  * */
 defined('_JEXEC') or die();
 
-class data2table extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class data2table extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
-        $this->load_file('data2table.css');
+        UpHelper::load_file($this,'data2table.css');
         return true;
     }
 
@@ -26,7 +28,7 @@ class data2table extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
            /* [st-data] emplacement et type des données */
@@ -75,26 +77,26 @@ class data2table extends upAction
         include_once ($this->upPath . '/assets/lib/data.php');
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         $data = get_data($options[__class__], $options['cache-delay']);
         if ($data == '') {
-            return $this->msg_inline('data-info - data source not found or empty' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data-info - data source not found or empty' . $options[__class__]);
         }
 
         // Conversion des données en array
         $data = convert_data_to_array($data, $options, true);
         if ($data == '') {
-            return $this->msg_inline('data2table - format data source invalid : ' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data2table - format data source invalid : ' . $options[__class__]);
         }
 
         // consolidation des options de formattage
-        $options['boolean-out'] = $this->get_bbcode($options['boolean-out']);
-        $options['col-type'] = $this->get_bbcode($options['col-type']);
-        $options['col-empty'] = $this->get_bbcode($options['col-empty']);
+        $options['boolean-out'] = UpHelper::get_bbcode($this,$options['boolean-out']);
+        $options['col-type'] = UpHelper::get_bbcode($this,$options['col-type']);
+        $options['col-empty'] = UpHelper::get_bbcode($this,$options['col-empty']);
         fix_options($options);
         if ($options['datatype'] = 'json')
             $options['xml-attributes'] = 1;
@@ -102,25 +104,25 @@ class data2table extends upAction
         // selection de la racine options['root']
         if ($options['lign-root'] != '')
             if (get_root($data, $options) === false)
-                return $this->msg_error($this->trad_keyword('ITEM_NOT_FOUND', $options['lign-root']));
+                return UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ITEM_NOT_FOUND', $options['lign-root']));
 
         // selection options['select']
         if ($options['lign-select'] != '') {
             $msg = get_select($data, $options);
             if ($msg)
-                $this->msg_inline($msg . ' for ' . $options[__class__]);
+                UpHelper::msg_inline($this,$msg . ' for ' . $options[__class__]);
         }
 
         // --- filtrage des données v5.1
         // nomcol:condition(<=,>=,==,<>,><)valeur
         $msg = get_filter($data, $options['lign-filter']);
         if ($msg)
-            return $this->msg_inline($msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
+            return UpHelper::msg_inline($this,$msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
 
         // --- tri des données v5.1
-        $msg = sort_data($data, $this->strtoarray($options['lign-sort'], ',', ':', false));
+        $msg = sort_data($data, UpHelper::strtoarray($this,$options['lign-sort'], ',', ':', false));
         if ($msg)
-            $this->msg_inline($msg . ' for ' . $options[__class__]);
+            UpHelper::msg_inline($this,$msg . ' for ' . $options[__class__]);
 
         // --- lign-max v5.1
         if ((int) $options['lign-max'] > 0) {
@@ -129,10 +131,10 @@ class data2table extends upAction
         
         // HTML si pas de donnée v5.1
         if (empty($data))
-            return sprintf($this->get_bbcode($options['no-data-html']), $options[__class__]);
+            return sprintf(UpHelper::get_bbcode($this,$options['no-data-html']), $options[__class__]);
             
         // === les sous-titres des colonnes (THEAD)
-        $title = $this->get_title($data, $options);
+        $title = UpHelper::get_title($this,$data, $options);
         if ($options['col-list']) { // v31
             $title2 = array_map('trim', explode(',', $options['col-list']));
             foreach ($title2 as $col2) {
@@ -145,141 +147,25 @@ class data2table extends upAction
             if (empty($col_novalid)) {
                 $title = $title3;
             } else {
-                $this->msg_error($this->trad_keyword('ERROR_COL_LIST', implode(',', $col_novalid)));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ERROR_COL_LIST', implode(',', $col_novalid)));
             }
         }
-        $out = $this->make_table($data, $title, $options);
+        $out = UpHelper::make_table($this,$data, $title, $options);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'data2table ' . $options['model'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $out = $this->set_attr_tag('table', $attr_main, implode(PHP_EOL, $out));
+        $out = UpHelper::set_attr_tag($this,'table', $attr_main, implode(PHP_EOL, $out));
 
         return $out;
     }
 
     /* run */
 
-    /*
-     * ---------------------------------------------------------------------
-     * make_table
-     * retourne le code HTML pour la table (thead & tbody)
-     * ---------------------------------------------------------------------
-     */
-    function make_table($data, $title, $options)
-    {
-        // == thead
-        // profondeur sous-titres
-        $rowspan = '';
-        foreach ($title as $k => $v) {
-            if (is_array($v))
-                $rowspan = ' rowspan="2"';
-        }
-        //
-        $title1 = array();
-        $title2 = array();
-        $cols = array();
-        foreach ($title as $k => $v) {
-            $label = (isset($options['col-label'][$k])) ? $options['col-label'][$k] : $k;
-            if (is_array($v)) {
-                $nbcol = count($v);
-                $title1[] = '<th colspan="' . $nbcol . '">' . $label . '</th>';
-                foreach ($v as $k2 => $v2) {
-                    $label = (isset($options['col-label'][$k2])) ? $options['col-label'][$k2] : $k2;
-                    $title2[] = '<th>' . $label . '</th>';
-                    $cols[] = $k . '/' . $k2;
-                }
-            } else {
-                $title1[] = '<th' . $rowspan . '>' . $label . '</th>';
-                $cols[] = $k;
-            }
-        }
-        $html[] = '<thead>';
-        $html[] = '<tr>' . implode(PHP_EOL, $title1) . '</tr>';
-        if ($title2)
-            $html[] = '<tr>' . implode(PHP_EOL, $title2) . '</tr>';
-        $html[] = '</thead>';
-
-        // == tbody
-        $html[] = '<tbody>';
-        foreach ($data as $kdata => $vdata) {
-            $lign = '';
-            foreach ($cols as $col) {
-                $ret = get_col_value($col, $vdata, $options);
-                if ($ret[0]) {
-                    $val = $ret[0];
-                } else {
-                    $val = (isset($options['col-empty'][$col])) ? $options['col-empty'][$col] : '';
-                }
-                $class = ($ret[1]);
-                if (is_array($val)) {
-                    $str = '';
-                    array_to_string($str, $val);
-                    $val = $str;
-                }
-
-                $lign .= '<td' . $class . '>' . $val . '</td>';
-            }
-            $html[] = '<tr>' . $lign . '</tr>';
-        }
-        $html[] = '</tbody>';
-        // == fini
-        return $html;
-    }
-
-    /*
-     * ---------------------------------------------------------------------
-     * function get_title
-     * retourne un tableau dont les clés avec les titres de colonne
-     * $title['col1'] <- titre colonne 1er niveau
-     * $title['col1'][subcol1] <- sous-titre de la sous-colonne
-     * ---------------------------------------------------------------------
-     * Il est imperatif que le 1er niveau de data soit les lignes de la future table
-     */
-    function get_title($data, $options)
-    {
-        foreach ($data as $krow => $vrow) { // les lignes
-
-            foreach ($vrow as $kcol => $vcol) {
-                // supprimer les champs exclus
-                if (in_array($kcol, $options['col-exclude'])) {
-                    unset($data[$kcol]);
-                    continue;
-                }
-                // conserver uniquement les champs inclus
-                if (! empty($options['col-include']) && ! in_array($kcol, $options['col-include'])) {
-                    unset($data[$kcol]);
-                    continue;
-                }
-                // les sous-titres de colonnes
-
-                if (is_array($vcol)) {
-                    if ((isset($options['col-type'][$kcol]) && $options['col-type'][$kcol] == 'compact') || empty($options['xml-attributes'])) {
-                        // 1 - titre attributes + contenu compact
-                        if (! isset($title[$kcol]))
-                            $title[$kcol] = '';
-                    } else {
-                        // 3 - titre attributes + sous-colonnes
-                        foreach ($vcol as $ksub => $vsub) {
-                            if (! is_array($vsub)) {
-                                if (! isset($title[$kcol][$ksub])) {
-                                    $title[$kcol][$ksub] = '';
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (! isset($title[$kcol]))
-                        $title[$kcol] = '';
-                }
-            }
-        }
-        return $title ?? '';
-    }
 
     // --- fin class
 }

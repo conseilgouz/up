@@ -34,14 +34,15 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class sql extends upAction
+class sql extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('sql.css');
-        $this->load_file('stupidtable.min.js');
+        UpHelper::load_file($this,'sql.css');
+        UpHelper::load_file($this,'stupidtable.min.js');
         return true;
     }
 
@@ -49,7 +50,7 @@ class sql extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nom de la table
@@ -92,19 +93,19 @@ class sql extends upAction
         // fusion et controle des options
         // 3e arg : '#\-(?:format|model)$#' autorise les options dont le nom se termine par -format ou -model
         $optmask = '#\-(?:format|model|rowclass|colclass)$#';
-        $options = $this->ctrl_options($options_def, [], $optmask);
+        $options = UpHelper::ctrl_options($this,$options_def, [], $optmask);
 
         if ($options[__class__] && empty($options['no-prefix-auto'])) {
             $options[__class__] = '#__' . ltrim($options[__class__], '#_');
         }
         if ($options['template']) { // v3
             // gestion BBCode
-            $options['template'] = $this->get_bbcode($options['template'], false);
+            $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
             // on reactive les tags HTML
             $options['template'] = html_entity_decode($options['template']);
         }
         // tableau des balises de présentation
-        $options['presentation'] = $this->ctrl_argument($options['presentation'], 'list,table,div,0,,1');
+        $options['presentation'] = UpHelper::ctrl_argument($this,$options['presentation'], 'list,table,div,0,,1');
 
         // type des colonnes pour ajouter attribut 'data-sort-value'
         $sortcol_type = array(
@@ -125,7 +126,7 @@ class sql extends upAction
                 foreach ($rows as $row) {
                     $out .= ($out) ? ' &#x25cf; ' . $row[0] : $row[0];
                 }
-                $this->msg_info($out, $this->trad_keyword('TITLE_TABLE'));
+                UpHelper::msg_info($this,$out, UpHelper::trad_keyword($this,'TITLE_TABLE'));
                 return ''; // juste infos sur tables
             } else {
                 $db->setQuery('DESCRIBE ' . $db->quoteName($options[__class__]));
@@ -135,7 +136,7 @@ class sql extends upAction
                     $field = ($col['Key'] == 'PRI') ? '<b>' . $field . '</b>' : $field;
                     $out .= $field . ' <small>' . $col['Type'] . '</small>  ';
                 }
-                $this->msg_info($out, $this->trad_keyword('TITLE_COLUMNS', $options[__class__]));
+                UpHelper::msg_info($this,$out, UpHelper::trad_keyword($this,'TITLE_COLUMNS', $options[__class__]));
                 unset($rows);
             }
         }
@@ -221,12 +222,12 @@ class sql extends upAction
         $db->setQuery($query);
         if (isset($this->options_user['debug'])) {
             $debug = $query->__toString();
-            $this->msg_info(htmlentities($debug), 'Requete SQL');
+            UpHelper::msg_info($this,htmlentities($debug), 'Requete SQL');
         }
         try {
             $row_tmp = $db->loadAssocList();
         } catch (RuntimeException $e) {
-            $this->msg_error(reset(explode('Stack', $e)));
+            UpHelper::msg_error($this,reset(explode('Stack', $e)));
         }
         // si pas de résultat
         if (empty($row_tmp)) {
@@ -273,7 +274,7 @@ class sql extends upAction
         $tags_order = array(); // [0] ##keyword## [1] keyName origine
         $tags = array(); // [key][tag|format|rowclass|colclass|model] info sur chaque cle
         if (preg_match_all('/##(.*)##/U', $options['template'], $tags_order) === false) {
-            return $this->info_debug('option "template" is empty');
+            return UpHelper::info_debug($this,'option "template" is empty');
         }
         foreach ($tags_order[1] as $tag) {
             list($tagBase) = explode('.', $tag); // si json
@@ -293,10 +294,10 @@ class sql extends upAction
                 // --- ANALYSE MODEL
                 if (isset($options[$tag . '-model'])) {
                     // $tags[$tag]['model'] = html_entity_decode($options[$tag . '-model']);
-                    $tags[$tag]['model'] = $this->get_bbcode($options[$tag . '-model'], false);
+                    $tags[$tag]['model'] = UpHelper::get_bbcode($this,$options[$tag . '-model'], false);
                 }
             } else {
-                $this->msg_error($this->trad_keyword('UNKNOWN_COLUMN', $tag));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_COLUMN', $tag));
             }
         }
         // === Récupération ordre de tri initial pour SORT
@@ -313,7 +314,7 @@ class sql extends upAction
         foreach ($options as $key => $val) {
             if (preg_match($optmask, $key, $tmp)) {
                 if (! isset($tags[$tmp[1]])) {
-                    $this->msg_error($this->trad_keyword('UNKNOWN_TAG', $key));
+                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_TAG', $key));
                 }
             }
         }
@@ -332,7 +333,7 @@ class sql extends upAction
             th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
             });
             JS;
-            $this->load_jquery_code($js);
+            UpHelper::load_jquery_code($this,$js);
         }
 
         // ================================
@@ -340,12 +341,12 @@ class sql extends upAction
         // ================================
         $html = array(); // pour retour
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === ENTETE
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
         $is_table = false;
         switch ($options['presentation']) {
             case 'table':
@@ -355,7 +356,7 @@ class sql extends upAction
                 if ($options['overflow']) {
                     $html[] = '<div style="max-width:100%;overflow:auto;">';
                 }
-                $html[] = $this->set_attr_tag('table', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this,'table', $attr_main);
                 // entete avec attributs pour tri
                 if ($options['sort'] || $options['header']) {
                     $sort = $this->table_col_sort($options['sort'], $primary_sort, count($tags));
@@ -376,13 +377,13 @@ class sql extends upAction
                 $col_tag = 'td';
                 break;
             case 'div':
-                $html[] = $this->set_attr_tag('div', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
                 $close_main = '</div>';
                 $row_tag = 'div';
                 $col_tag = 'span';
                 break;
             case 'list':
-                $html[] = $this->set_attr_tag('ul', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this,'ul', $attr_main);
                 $close_main = '</ul>';
                 $row_tag = 'li';
                 $col_tag = 'span';
@@ -444,10 +445,10 @@ class sql extends upAction
 
                 // ===== SET COLONNE
                 if ($is_table) {
-                    $out .= $this->set_attr_tag($col_tag, $attr_col, $val);
+                    $out .= UpHelper::set_attr_tag($this,$col_tag, $attr_col, $val);
                 } else {
                     if (! empty($attr_col['class'])) {
-                        $val = $this->set_attr_tag($col_tag, $attr_col, $val);
+                        $val = UpHelper::set_attr_tag($this,$col_tag, $attr_col, $val);
                     }
                     if (!$val) { // pas de valeur pour un tag : on le cache
                         $val = "";
@@ -457,9 +458,9 @@ class sql extends upAction
             } // fin col
             // ===== SET LIGNE
             if ($is_table) {
-                $html[] = $this->set_attr_tag('tr', $attr_row, $out);
+                $html[] = UpHelper::set_attr_tag($this,'tr', $attr_row, $out);
             } elseif ($row_tag != '') {
-                $html[] = $this->set_attr_tag($row_tag, $attr_row, $out);
+                $html[] = UpHelper::set_attr_tag($this,$row_tag, $attr_row, $out);
             } else {
                 $html[] = $out;
             }
@@ -507,7 +508,7 @@ class sql extends upAction
                 case 'regex':
                 case 'route': 
                     // list[1:un, 2:deux]
-                    $out[$type] = $this->strtoarray($arg, ',', ':', false);
+                    $out[$type] = UpHelper::strtoarray($this,$arg, ',', ':', false);
                     break;
                     // case 'regex' :
                     // // regex[regex:class]
@@ -528,8 +529,8 @@ class sql extends upAction
                     );
                     break;
                 default:
-                    $this->msg_error('Type inconnu pour ' . $type);
-                    $this->msg_error($this->trad_keyword('UNKNOWN_TYPE', $type));
+                    UpHelper::msg_error($this,'Type inconnu pour ' . $type);
+                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_TYPE', $type));
                     break;
             }
         }
@@ -575,7 +576,7 @@ class sql extends upAction
                     }
                     break;
                 case 'date':
-                    $out = (empty($val)) ? '' : $this->up_date_format($val, key($arg)); // v2.9
+                    $out = (empty($val)) ? '' : UpHelper::up_date_format($this,$val, key($arg)); // v2.9
                     break;
                 case 'replace':
                     $out = str_ireplace($arg['old'], $arg['new'], $val);
@@ -587,7 +588,7 @@ class sql extends upAction
                         $size = ($w > $h) ? ' width' : ' height';
                         $size .= '="' . key($arg) . 'px"';
                     }
-                    $out = '<img src="' . $val . '" alt="' . $this->link_humanize($val) . '"' . $size . '>';
+                    $out = '<img src="' . $val . '" alt="' . UpHelper::link_humanize($this,$val) . '"' . $size . '>';
                     break;
                 case 'route':
                     $out = Route::_(RouteHelper::getArticleRoute($val));
@@ -669,7 +670,7 @@ class sql extends upAction
                 }
             }
         }
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
     }
 
     // class

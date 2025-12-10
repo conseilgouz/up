@@ -17,15 +17,16 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class image_compare extends upAction
+class image_compare extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('images-compare.css');
-        $this->load_file('jquery.images-compare.min.js');
+        UpHelper::load_file($this,'images-compare.css');
+        UpHelper::load_file($this,'jquery.images-compare.min.js');
         HTMLHelper::script('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js');
         return true;
     }
@@ -34,11 +35,11 @@ class image_compare extends upAction
     {
 
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -62,14 +63,14 @@ class image_compare extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         $regeximg = '#<img .*>#U';
         preg_match_all($regeximg, $this->content, $img);
 
         // =========== le code JS
         // les options saisis par l'utilisateur concernant le script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // conversion params JS en chaine JSON
         $js_params = '';
@@ -81,7 +82,7 @@ class image_compare extends upAction
         $js_code = '$("#' . $options['id'] . '").imagesCompare(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
@@ -90,7 +91,7 @@ class image_compare extends upAction
         $outer_div['style'] = $options['style'];
 
         // -- le code en retour
-        $out = $this->set_attr_tag('div', $outer_div);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
         $out .= '<div style="display: none;">';
         $out .= $img[0][0];
         $out .= '</div>';

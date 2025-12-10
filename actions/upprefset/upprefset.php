@@ -16,7 +16,9 @@
  */
 defined('_JEXEC') or die();
 
-class upprefset extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class upprefset extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -27,7 +29,7 @@ class upprefset extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
         /* [st-sel] Sélection des actions */
@@ -59,13 +61,13 @@ class upprefset extends upAction
             $log_export = '';
         }
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // bbcode
-        $options['action-template'] = $this->get_bbcode($options['action-template'], false);
-        $options['prefset-template'] = $this->get_bbcode($options['prefset-template'], false);
-        $options['info-template'] = $this->get_bbcode($options['info-template'], false);
-        $options['prefset-separator'] = $this->get_bbcode($options['prefset-separator'], false);
-        $options['options-separator'] = $this->get_bbcode($options['options-separator'], false);
+        $options['action-template'] = UpHelper::get_bbcode($this,$options['action-template'], false);
+        $options['prefset-template'] = UpHelper::get_bbcode($this,$options['prefset-template'], false);
+        $options['info-template'] = UpHelper::get_bbcode($this,$options['info-template'], false);
+        $options['prefset-separator'] = UpHelper::get_bbcode($this,$options['prefset-separator'], false);
+        $options['options-separator'] = UpHelper::get_bbcode($this,$options['options-separator'], false);
         // liste des noms de sections réservées par UP
         $prefset_exclude = explode(',', $options['prefset-exclude']);
 
@@ -94,17 +96,17 @@ class upprefset extends upAction
         }
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === supprimer un ancien export pour le recréer
         if ($options['export-prefs']) {
             $options['export-prefs'] = rtrim($options['export-prefs'], '/') . '/';
-            $this->deleteTree($options['export-prefs']);
+            UpHelper::deleteTree($this,$options['export-prefs']);
             // -- copie de assets/custom
             $filelist = array();
             $regex = '/.*\.dist$|.*\.bak$|.*\.empty$|index.html/';
-            $this->scanSubdir($filelist, $this->upPath . 'assets/custom', $regex, $this->upPath);
-            $this->copyFilelist($filelist, $this->upPath, $options['export-prefs']);
+            UpHelper::scanSubdir($this,$filelist, $this->upPath . 'assets/custom', $regex, $this->upPath);
+            UpHelper::copyFilelist($this,$filelist, $this->upPath, $options['export-prefs']);
         }
 
         // attributs du bloc principal
@@ -114,7 +116,7 @@ class upprefset extends upAction
         $attr_main['style'] = $options['style'];
         // attributs bloc action
         $attr_action = array();
-        $this->get_attr_style($attr_action, $options['action-class']);
+        UpHelper::get_attr_style($this,$attr_action, $options['action-class']);
 
         // ==== code en retour
         $html = array();
@@ -126,8 +128,8 @@ class upprefset extends upAction
                 $regex = '/.*\.dist$|index.html/';
                 $srcFolder = $this->upPath . 'actions/' . $action . '/custom/';
                 $filelist = array();
-                $this->scanSubdir($filelist, $srcFolder, $regex, $this->upPath);
-                $this->copyFilelist($filelist, $this->upPath, $options['export-prefs']);
+                UpHelper::scanSubdir($this,$filelist, $srcFolder, $regex, $this->upPath);
+                UpHelper::copyFilelist($this,$filelist, $this->upPath, $options['export-prefs']);
             }
 
             // le prefs.ini
@@ -135,7 +137,7 @@ class upprefset extends upAction
             $pref_user_file = $this->upPath . 'actions/' . $action . '/custom/prefs.ini';
             $ok = file_exists($pref_user_file);
             if ($ok) {
-                $pref_user = $this->load_inifile($pref_user_file, true);
+                $pref_user = UpHelper::load_inifile($this,$pref_user_file, true);
                 foreach ($prefset_exclude as $key) {
                     unset($pref_user[$key]);
                 }
@@ -160,7 +162,7 @@ class upprefset extends upAction
 
             // DEBUT POUR UNE ACTION
             if ($options['action-class']) {
-                $html[] = $this->set_attr_tag('div', $attr_action);
+                $html[] = UpHelper::set_attr_tag($this,'div', $attr_action);
             }
             if ($options['action-template'] != '0') {
                 $html[] = str_replace('##action##', $action, $options['action-template']);
@@ -198,81 +200,15 @@ class upprefset extends upAction
         }
 
         if (isset($log_export)) {
-            $this->msg_info($this->trad_keyword('EXPORT_PREFS_OK', $options['export-prefs']));
+            UpHelper::msg_info($this,UpHelper::trad_keyword($this,'EXPORT_PREFS_OK', $options['export-prefs']));
         }
 
-        return $this->set_attr_tag('div', $attr_main, implode(PHP_EOL, $html));
+        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $html));
     }
 
     // run
 
-    /*
-     * Supprime tous les dossiers et fichiers du répertoire indiqué
-     */
-    public function deleteTree($dir)
-    {
-        $dir = rtrim($dir, '/') . '/';
-        foreach (glob($dir . '*') as $element) {
-            if (is_dir($element)) {
-                $this->deleteTree($element); // On rappel la fonction deleteTree
-                rmdir($element); // Une fois le dossier courant vidé, on le supprime
-            } else { // Sinon c'est un fichier, on le supprime
-                unlink($element);
-            }
-            // On passe à l'élément suivant
-        }
-    }
 
-    /*
-     * retourne la liste de tous les fichiers d'un dossier et sous-dossiers
-     * $regex_exclus : les fichiers exclus. ex: /*.dist\s|index.html/ (se terminant par .dist ou index.html)
-     * $root : la racine retirée pour chemin relatif
-     */
-    public function scanSubdir(&$filelist, $folder, $regex_exclus = null, $root = '')
-    {
-        $tmp = glob(trim($folder, '/') . '/*');
-        foreach ($tmp as $file) {
-            if (is_dir($file)) {
-                $this->scanSubdir($filelist, $file, $regex_exclus, $root);
-            } else {
-                if ($root) {
-                    $rootSize = strlen($root);
-                    $file = substr($file, strlen($root));
-                }
-                if ($regex_exclus) {
-                    $foo = preg_match($regex_exclus, $file, $match);
-                    if (preg_match($regex_exclus, $file, $match)) {
-                        $file = '';
-                    }
-                }
-                if ($file) {
-                    $filelist[] = $file;
-                }
-            }
-        }
-    }
-
-    // }
-
-    /*
-     * copie d'une liste de fichiers vers un dossier
-     * $filelist : chemin relatif des fichiers
-     * $srcRoot : racine fichiers source
-     * $destRoot : racine fichiers dstination
-     */
-    public function copyFilelist($filelist, $srcRoot, $destRoot)
-    {
-        foreach ($filelist as $file) {
-            if (file_exists($srcRoot . $file)) {
-                if (! file_exists(dirname($destRoot . $file))) {
-                    mkdir(dirname($destRoot . $file), 0777, true);
-                }
-                if (! copy($srcRoot . $file, $destRoot . $file)) {
-                    $this->msg_error($this->trad_keyword('COPYFILE_ERR', $destRoot . $file));
-                }
-            }
-        }
-    }
 }
 
 // class

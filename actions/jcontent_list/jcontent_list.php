@@ -26,8 +26,9 @@ use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Access\Access;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcontent_list extends upAction
+class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -38,7 +39,7 @@ class jcontent_list extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // ID de la catégorie ou vide pour celle de l'article actuel
@@ -90,11 +91,11 @@ class jcontent_list extends upAction
         }
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ======> contrôle clé de tri
         $list_sortkey = 'title, ordering, created, modified, publish_up, id, hits';
-        $options['sort-by'] = $this->ctrl_argument($options['sort-by'], $list_sortkey);
+        $options['sort-by'] = UpHelper::ctrl_argument($this,$options['sort-by'], $list_sortkey);
 
         $catid = $options[__class__];
         if ($catid == '') {
@@ -200,7 +201,7 @@ class jcontent_list extends upAction
         }
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ======> mise en forme résultat
         $artlist = array();
@@ -217,22 +218,22 @@ class jcontent_list extends upAction
         }
 
         // attributs du bloc principal
-        $this->get_attr_style($attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
         // pour compatibilité v1.6
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // attributs du bloc titre
-        $this->get_attr_style($attr_title, $options['title-class'], $options['title-style']);
+        UpHelper::get_attr_style($this,$attr_title, $options['title-class'], $options['title-style']);
 
         // attributs du bloc list
-        $this->get_attr_style($attr_list, $options['list-class'], $options['list-style']);
+        UpHelper::get_attr_style($this,$attr_list, $options['list-class'], $options['list-style']);
 
         // ======> code en retour
-        $out = $this->set_attr_tag('div', $attr_main);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_main);
         if ($options['title']) {
-            $out .= $this->set_attr_tag($options['title-tag'], $attr_title, $options['title']);
+            $out .= UpHelper::set_attr_tag($this,$options['title-tag'], $attr_title, $options['title']);
         }
-        $out .= $this->set_attr_tag('ul', $attr_list);
+        $out .= UpHelper::set_attr_tag($this,'ul', $attr_list);
         foreach ($artlist as $lign) {
             $out .= '<li>' . $lign . '</li>';
         }

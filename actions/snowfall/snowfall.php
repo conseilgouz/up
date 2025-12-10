@@ -18,12 +18,14 @@
  */
 defined('_JEXEC') or die;
 
-class snowfall extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class snowfall extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('snowfall-up.jquery.min.js');
+        UpHelper::load_file($this,'snowfall-up.jquery.min.js');
         return true;
     }
 
@@ -31,7 +33,7 @@ class snowfall extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'snow-01.png', // image ou dossier
@@ -51,13 +53,13 @@ class snowfall extends upAction
         );
 
         // contôle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === selecteur cible
         $selector = ($this->content) ? '#' . $options['id'] : $options['selector'];
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -87,14 +89,14 @@ class snowfall extends upAction
 
         // --- init JS
         foreach ($flakes as $flake) {
-            $js_options['image'] = $this->get_url_relative($flake);
+            $js_options['image'] = UpHelper::get_url_relative($this,$flake);
             // -- conversion en chaine Json
-            $js_params = $this->json_arrtostr($js_options);
+            $js_params = UpHelper::json_arrtostr($this,$js_options);
             // -- code JS
             $js_code = '$("' . $selector . '").snowfall(';
             $js_code .= $js_params;
             $js_code .= ');';
-            $this->load_jquery_code($js_code);
+            UpHelper::load_jquery_code($this,$js_code);
         }
 
         // ==== code HTML en retour
@@ -104,18 +106,18 @@ class snowfall extends upAction
         if ($this->content) {
             // --- classe pour centrage vertical
             if ($options['center']) {
-                $this->add_class($attr_main['class'], 'up-center-outer');
-                $this->get_attr_style($attr_content, 'up-center-inner', $options['center']);
+                UpHelper::add_class($this,$attr_main['class'], 'up-center-outer');
+                UpHelper::get_attr_style($this,$attr_content, 'up-center-inner', $options['center']);
             }
 
             // attribut
-            $this->get_attr_style($attr_main, $options['class'], 'position:relative;' . $options['style']);
+            UpHelper::get_attr_style($this,$attr_main, $options['class'], 'position:relative;' . $options['style']);
             $attr_inner['id'] = $options['id'];
             $attr_inner['style'] = 'position:absolute; top:0; left:0; right:0; bottom:0';
             // code
-            $out = $this->set_attr_tag('div', $attr_main);
-            $out .= $this->set_attr_tag('div', $attr_inner, true);
-            $out .= $this->set_attr_tag('div', $attr_content, $this->content);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main);
+            $out .= UpHelper::set_attr_tag($this,'div', $attr_inner, true);
+            $out .= UpHelper::set_attr_tag($this,'div', $attr_content, $this->content);
             $out .= '</div>';
         }
 

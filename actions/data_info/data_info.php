@@ -18,7 +18,9 @@
  */
 defined('_JEXEC') or die();
 
-class data_info extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class data_info extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -31,7 +33,7 @@ class data_info extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /* [st-data] emplacement et type des données */
@@ -75,53 +77,53 @@ class data_info extends upAction
         include_once ($this->upPath . '/assets/lib/data.php');
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ========================
         // === recup des données
         // ========================
         $data = get_data($options[__class__], $options['cache-delay']);
         if ($data == '') {
-            return $this->msg_inline('data-info - data source not found or empty' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data-info - data source not found or empty' . $options[__class__]);
         }
 
         // Conversion des données en array
         $data = convert_data_to_array($data, $options);
         if ($data == '') {
-            return $this->msg_inline('data2table - format data source invalid : ' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data2table - format data source invalid : ' . $options[__class__]);
         }
 
         // consolidation des options de formattage
-        $options['boolean-out'] = $this->get_bbcode($options['boolean-out']);
-        $options['col-type'] = $this->get_bbcode($options['col-type']);
-        $options['col-empty'] = $this->get_bbcode($options['col-empty']);
+        $options['boolean-out'] = UpHelper::get_bbcode($this,$options['boolean-out']);
+        $options['col-type'] = UpHelper::get_bbcode($this,$options['col-type']);
+        $options['col-empty'] = UpHelper::get_bbcode($this,$options['col-empty']);
         fix_options($options);
 
         // selection de la racine options['root']
         if ($options['lign-root'] != '')
             if (get_root($data, $options) === false)
-                return $this->msg_error('l\'élément ' . $options['lign-root'] . ' n\'existe pas dans le fichier');
+                return UpHelper::msg_error($this,'l\'élément ' . $options['lign-root'] . ' n\'existe pas dans le fichier');
 
         // --- tri des données v5.1
-        $msg = sort_data($data, $this->strtoarray($options['lign-sort'], ',', ':', false));
+        $msg = sort_data($data, UpHelper::strtoarray($this,$options['lign-sort'], ',', ':', false));
         if ($msg)
-            $this->msg_error($msg . ' for ' . $options[__class__]);
+            UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
 
         // selection options['select']
         if ($options['lign-select'] != '') {
             $msg = get_select($data, $options);
             if ($msg)
-                $this->msg_error($msg . ' for ' . $options[__class__]);
+                UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
         }
 
         // --- filtrage des données v5.1
         // nomcol:condition(<=,>=,==,<>,><)valeur
         $msg = get_filter($data, $options['lign-filter']);
         if ($msg)
-            $this->msg_error($msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
+            UpHelper::msg_error($this,$msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
 
         // --- lign-max v5.1
         if ((int) $options['lign-max'] > 0) {
@@ -130,17 +132,17 @@ class data_info extends upAction
 
         // HTML si pas de donnée v5.1
         if (empty($data))
-            return sprintf($this->get_bbcode($options['no-data-html']), $options[__class__]);
+            return sprintf(UpHelper::get_bbcode($this,$options['no-data-html']), $options[__class__]);
 
         // mise en forme pour retour
-        $tmpl = $this->get_bbcode($options['template']);
+        $tmpl = UpHelper::get_bbcode($this,$options['template']);
         if (empty($tmpl)) {
-            $tmpl = $this->get_bbcode($this->content);
+            $tmpl = UpHelper::get_bbcode($this,$this->content);
             if (empty($tmpl))
-                return $this->msg_inline('data-info - template not found ' . $options[__class__]);
+                return UpHelper::msg_inline($this,'data-info - template not found ' . $options[__class__]);
         }
         if ($tmpl == '')
-            return $this->msg_error('no template');
+            return UpHelper::msg_error($this,'no template');
 
         // -- on récupère les champs demandés
         $out = array();
@@ -169,22 +171,15 @@ class data_info extends upAction
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = $this->set_attr_tag($options['tag'], $attr_main, implode(PHP_EOL, $out));
+        $html = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, implode(PHP_EOL, $out));
 
         return $html;
     }
 
     // run
-    function get_data_field($data, $fieldlist)
-    {
-        $fields = explode(',', $fieldlist);
-        foreach ($fields as $key)
-            $data = $data[$key];
-        return $data;
-    }
 }
 
 // class

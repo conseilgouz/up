@@ -14,8 +14,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class lorem_serie extends upAction
+class lorem_serie extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -28,7 +29,7 @@ class lorem_serie extends upAction
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '',   // liste séparateur virgule ou mot-cle : NUM, ALPHA, ALPHANUM
@@ -48,15 +49,15 @@ class lorem_serie extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $maxi = $options['maxi'];
         if ((int) $maxi <= 0) {
-            $this->msg_inline('Le paramètre maxi doit être un entier positif');
+            UpHelper::msg_inline($this,'Le paramètre maxi doit être un entier positif');
             return;
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === Contenu
         $out = array();
@@ -96,7 +97,7 @@ class lorem_serie extends upAction
 
         // --- style bloc principal
         $attr_main['id'] = $options['main-id'];
-        $this->get_attr_style($attr_main, $options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['main-style']);
         // on force le bloc principal si nécessaire
         $main_tag = ($options['main-tag'] == 0) ? false : $options['main-tag'];
         if ($main_tag === false && $options['main-style']) {
@@ -107,7 +108,7 @@ class lorem_serie extends upAction
         $attr_item = array();
         $item_id = (empty($options['item-id'])) ? false : $options['item-id'];
         $item_tag = (empty($options['item-tag'])) ? false : $options['item-tag'];
-        $this->get_attr_style($attr_item, $options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
         // === HTML
 
@@ -118,7 +119,7 @@ class lorem_serie extends upAction
         } else {
             // valeurs mises en forme
             if ($main_tag) {
-                $html[] = $this->set_attr_tag($main_tag, $attr_main);
+                $html[] = UpHelper::set_attr_tag($this,$main_tag, $attr_main);
             }
             $cpt = 0;
             foreach ($out as $item) {
@@ -126,7 +127,7 @@ class lorem_serie extends upAction
                     $cpt++;
                     $attr_item['id'] = $item_id . $cpt;
                 }
-                $html[] = $this->set_attr_tag($item_tag, $attr_item, $item);
+                $html[] = UpHelper::set_attr_tag($this,$item_tag, $attr_item, $item);
             }
             if ($main_tag) {
                 $html[] = "</$main_tag>" ;

@@ -19,13 +19,15 @@
 
 defined('_JEXEC') or die;
 
-class countdown_simple extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class countdown_simple extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('countdown_simple.css');
-        $this->load_file('upcountdown.js');
+        UpHelper::load_file($this,'countdown_simple.css');
+        UpHelper::load_file($this,'upcountdown.js');
         return true;
     }
 
@@ -33,7 +35,7 @@ class countdown_simple extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // date cible ou délai si débute par +
@@ -58,14 +60,14 @@ class countdown_simple extends upAction
 
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
-        $tz = $this->get_action_pref('timezone', 'Europe/Paris');
+        $tz = UpHelper::get_action_pref($this,'timezone', 'Europe/Paris');
         date_default_timezone_set($tz);
 
         // === Date cible ou delai ?
@@ -79,7 +81,7 @@ class countdown_simple extends upAction
 
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // les libellés prefix et suffix
         $prefix = array_pad(explode(',', $options['prefix']), 6, '');
@@ -102,11 +104,11 @@ class countdown_simple extends upAction
         $attr_main['data-date'] = date_format(date_create($targetDate), 'Y/m/d H:i:s');
         $attr_main['data-zero'] = $options['zero'];
         $attr_main['class'] = 'countdown-simple ' . $options['model'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // Texte si délai écoulé
         $elapsed_content = ($this->content > '') ? $this->content : $options['elapsed-text'];
-        $elapsed_content = $this->get_bbcode($elapsed_content);
+        $elapsed_content = UpHelper::get_bbcode($this,$elapsed_content);
         $attr_elapsed['class'] = 'elapsed';
 
         // nb jours pour determiner les afficheurs nécessaires
@@ -128,26 +130,26 @@ class countdown_simple extends upAction
         }
         // style des chiffres
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         $html[] = '<div class="digits">';
-        $html[] = $this->get_bbcode($options['intro-text']);
+        $html[] = UpHelper::get_bbcode($this,$options['intro-text']);
         for ($i = 0; $i < 6; $i++) {
             if ($digit_period[$i]) {
                 $str = '<div class="block-' . $digit_period[$i] . '">' . $prefix[$i];
                 $digit_class = array();
-                $this->get_attr_style($digit_class, $digit_period[$i], $options['digit-class']);
-                $str .= $this->set_attr_tag('span', $digit_class, true);
+                UpHelper::get_attr_style($this,$digit_class, $digit_period[$i], $options['digit-class']);
+                $str .= UpHelper::set_attr_tag($this,'span', $digit_class, true);
                 //                $str .= '<span class = "' . $digit_period[$i] . $digit_class . '"></span>';
                 $str .= $suffix[$i] . '</div>';
                 $html[] = $str;
             }
         }
-        $html[] = $this->get_bbcode($options['close-text']);
+        $html[] = UpHelper::get_bbcode($this,$options['close-text']);
         $html[] = '</div>'; // digits
-        $html[] = $this->set_attr_tag('div', $attr_elapsed, $elapsed_content);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_elapsed, $elapsed_content);
         $html[] = '</div>'; // main
 
-        $html[] = $this->load_jquery_code($js, false);
+        $html[] = UpHelper::load_jquery_code($this,$js, false);
 
         return implode(PHP_EOL, $html);
     }

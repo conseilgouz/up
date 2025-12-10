@@ -19,21 +19,23 @@
 
 defined('_JEXEC') or die;
 
-class image_magnify extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_magnify extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('magnify.css');
-        $this->load_file('jquery.magnify.js');
-        $this->load_jquery_code('$(".loupe").magnify({speed: 400, limitBounds:true});');
-        $this->load_jquery_code('$(".zoommanuel").magnify();');
+        UpHelper::load_file($this,'magnify.css');
+        UpHelper::load_file($this,'jquery.magnify.js');
+        UpHelper::load_jquery_code($this,'$(".loupe").magnify({speed: 400, limitBounds:true});');
+        UpHelper::load_jquery_code($this,'$(".zoommanuel").magnify();');
         return true;
     }
 
     function run() {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -50,7 +52,7 @@ class image_magnify extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         if ($options['imgzoom'] == '')
             $options['imgzoom'] = $options[__class__];
@@ -62,17 +64,17 @@ class image_magnify extends upAction {
         );
 
         if ($options['size']) {
-            $size = $this->ctrl_unit($options['size'], 'px');
+            $size = UpHelper::ctrl_unit($this,$options['size'], 'px');
             $css = '#' . $options['id'] . ' .magnify > .magnify-lens {';
             $css .= 'width:' . $size . ';';
             $css .= 'height:' . $size . ';';
             if ($options['radius'])
-                $css .= 'border-radius:' . $this->ctrl_unit($options['radius'], 'px,%');
+                $css .= 'border-radius:' . UpHelper::ctrl_unit($this,$options['radius'], 'px,%');
             if (array_key_exists($options['border'], $lib_border)) {
-                $this->add_str($css, $lib_border[$options['border']], ';');
+                UpHelper::add_str($this,$css, $lib_border[$options['border']], ';');
             }
             $css .= '}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
 
         // === le code HTML
@@ -80,13 +82,13 @@ class image_magnify extends upAction {
         $link_attr['href'] = $options['imgzoom'];
 
         $img_attr['class'] = 'loupe';
-        $this->get_attr_style($img_attr, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$img_attr, $options['class'], $options['style']);
         $img_attr['src'] = $options[__class__];
         // $img_attr['data-magnify-finalwidth'] = '600px';
         // $img_attr['data-magnify-finalheight'] = '400px';
         // -- le code en retour
-        $out = $this->set_attr_tag('a', $link_attr);
-        $out .= $this->set_attr_tag('img', $img_attr);
+        $out = UpHelper::set_attr_tag($this,'a', $link_attr);
+        $out .= UpHelper::set_attr_tag($this,'img', $img_attr);
         $out .= '</a>';
 
         return $out;

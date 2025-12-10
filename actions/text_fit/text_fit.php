@@ -17,13 +17,15 @@
  */
 defined('_JEXEC') or die();
 
-class text_fit extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class text_fit extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes ÃƒÂ  toutes les instances de l'action
-        $this->load_file('textblock.min.js');
+        UpHelper::load_file($this,'textblock.min.js');
         return true;
     }
 
@@ -31,12 +33,12 @@ class text_fit extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // sélecteur du bloc. ex: h1, h1.foo, #id, h2#id, ...
@@ -58,7 +60,7 @@ class text_fit extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ====
         $main_selector = '';
@@ -82,7 +84,7 @@ class text_fit extends upAction
            }
         }
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === Analyse options
         if ($main_selector) {
@@ -108,25 +110,25 @@ class text_fit extends upAction
             }
             $code[] = '}]);';
             $code[] = '</script>';
-            $this->load_custom_code_head(implode(PHP_EOL, $code));
+            UpHelper::load_custom_code_head($this,implode(PHP_EOL, $code));
         }
         // === Demande chargement police
         if ($options['fontfile'] != '') {
             $options['fontclass'] = ($options['fontclass'] != '') ? $options['fontclass'] : $options['id'];
             $css = '@font-face{font-family:"' . $options['fontclass']. '";';
-            $css .= 'src:url("' . $this->get_url_absolute($options['fontfile']) . '")}';
+            $css .= 'src:url("' . UpHelper::get_url_absolute($this,$options['fontfile']) . '")}';
             $css .= '.' . $options['fontclass'] . '{font-family:"' . $options['fontclass'] . '"}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['fontclass'], $main_class);
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['fontclass'], $main_class);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = $this->set_attr_tag($main_tag, $attr_main, $this->content);
+        $html = UpHelper::set_attr_tag($this,$main_tag, $attr_main, $this->content);
 
         return $html;
     }

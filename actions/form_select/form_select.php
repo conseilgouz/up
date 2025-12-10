@@ -16,7 +16,9 @@
  */
 defined('_JEXEC') or die();
 
-class form_select extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class form_select extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -27,7 +29,7 @@ class form_select extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'url', // mot-clé (url, url-blank) ou argument pour onchange ou prefset
@@ -49,10 +51,10 @@ class form_select extends upAction
         );
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -62,18 +64,18 @@ class form_select extends upAction
         // === ID et Style
         // ========================
         // --- CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
         // --- Attributs
         $attr_select['id'] = $id;
         // --- size en nombre de lignes ou en height
-        $size = $this->ctrl_unit($options['size'], ',vh,px,rem');
+        $size = UpHelper::ctrl_unit($this,$options['size'], ',vh,px,rem');
         if ((int) $size == $size) {
             $attr_select['size'] = strval($options['size']);
         } else {
             $attr_select['size'] = '99';
             $attr_select['style'] = 'height:' . $size;
         }
-        $this->get_attr_style($attr_select, $options['style']);
+        UpHelper::get_attr_style($this,$attr_select, $options['style']);
 
         // ========================
         // === recup du contenu CSV
@@ -83,7 +85,7 @@ class form_select extends upAction
         // 2 - le contenu d'un fichier
         $filename = $options['file'];
         if ($content == '' and $filename != '') {
-            $filename = $this->get_url_absolute($filename);
+            $filename = UpHelper::get_url_absolute($this,$filename);
             $content = file_get_contents($filename);
         }
 
@@ -99,7 +101,7 @@ class form_select extends upAction
         // 5.3 : if content has been created by another action, remove divs
         $content = preg_replace("/(<div[^>]*>|<\/div>)/i", PHP_EOL, $content);
 
-        $content = $this->get_content_csv($content, false);
+        $content = UpHelper::get_content_csv($this,$content, false);
         // === analyse et nombre de colonnes du tableau
 
         foreach ($content as $key => $val) {
@@ -143,7 +145,7 @@ class form_select extends upAction
             $js .= 'document.getElementById("' . $id . '").addEventListener("dblclick", () => {';
             $js .= 'document.getElementById("btn' . $id . '").click();';
             $js .= '});';
-            $js = $this->load_js_code($js, false);
+            $js = UpHelper::load_js_code($this,$js, false);
         }
 
         // ============================
@@ -155,12 +157,12 @@ class form_select extends upAction
             $attr_select['name'] = $options['id'];
             // $attr_select['autofocus'] = '1';
             $attr_label['for'] = $id;
-            $this->get_attr_style($attr_label, $options['label-style']);
-            $html[] = $this->set_attr_tag('label', $attr_label, $this->get_bbcode($options['label']));
+            UpHelper::get_attr_style($this,$attr_label, $options['label-style']);
+            $html[] = UpHelper::set_attr_tag($this,'label', $attr_label, UpHelper::get_bbcode($this,$options['label']));
         }
 
         // --- le select
-        $html[] = $this->set_attr_tag('select', $attr_select, false);
+        $html[] = UpHelper::set_attr_tag($this,'select', $attr_select, false);
         $selected = ' selected';
         foreach ($csv as $val) {
             $html[] = sprintf('<option value="%s"' . $selected . '>%s</option>', $val[1], $val[0]);
@@ -174,8 +176,8 @@ class form_select extends upAction
             $attr_btn['type'] = 'button';
             $attr_btn['accesskey'] = 'enter';
             $attr_btn['value'] = $options['btn'];
-            $this->get_attr_style($attr_btn, $options['btn-style']);
-            $html[] = $this->set_attr_tag('input', $attr_btn);
+            UpHelper::get_attr_style($this,$attr_btn, $options['btn-style']);
+            $html[] = UpHelper::set_attr_tag($this,'input', $attr_btn);
         }
 
         $html[] = $js;

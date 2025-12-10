@@ -12,18 +12,20 @@
  */
 defined('_JEXEC') or die;
 
-class image_secure extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('image_secure.css');
+        UpHelper::load_file($this,'image_secure.css');
         return true;
     }
 
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin relatif vers image jpg ou png
@@ -44,7 +46,7 @@ class image_secure extends upAction {
         // ==============================
         // fusion et controle des options
         // ==============================
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // -- les dossiers racines
         $folder_source = rtrim($options['folder-source'], '\/');
         $folder_strip = rtrim($options['folder-strip'], '\/');
@@ -92,7 +94,7 @@ class image_secure extends upAction {
         if (empty($img_list)) {
             // si image originale manquante -> c'est fini
             if (!file_exists($img_source)) {
-                return($this->msg_inline(lang('en=NOT FOUND : ;fr=NON TROUVE : ') . $img_source));
+                return(UpHelper::msg_inline($this,lang('en=NOT FOUND : ;fr=NON TROUVE : ') . $img_source));
             }
             // on découpe
             $this->create_subdir($folder_strip . '/' . $img_path);
@@ -116,7 +118,7 @@ class image_secure extends upAction {
         // ===========================
         // Code pour les strip-images
         // ===========================
-        $alt = ($options['alt']) ? $options['alt'] : $this->link_humanize($img_name);
+        $alt = ($options['alt']) ? $options['alt'] : UpHelper::link_humanize($this,$img_name);
         $strip_code = '<div class="overlay"><img src="' . $img_leurre . '"></div>';
         foreach ($img_list as $k => $v) {
             $strip_code .= '<img src="' . $v . '" alt="' . $alt . '">';
@@ -124,16 +126,16 @@ class image_secure extends upAction {
 
         // === CSS-HEAD
         $options['css-head'] .= '#id> img [width:' . (100 / count($img_list)) . '%]';
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'up-secure';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = $this->set_attr_tag('div', $attr_main, $strip_code);
+        $html = UpHelper::set_attr_tag($this,'div', $attr_main, $strip_code);
 
         return $html;
     }

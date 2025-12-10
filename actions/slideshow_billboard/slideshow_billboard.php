@@ -25,7 +25,9 @@
  */
 defined('_JEXEC') or die();
 
-class slideshow_billboard extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class slideshow_billboard extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     /**
@@ -36,9 +38,9 @@ class slideshow_billboard extends upAction
      */
     function init()
     {
-        $this->load_file('jquery.billboard.css');
-        $this->load_file('jquery.easing.min.js');
-        $this->load_file('jquery.billboard.min.js');
+        UpHelper::load_file($this,'jquery.billboard.css');
+        UpHelper::load_file($this,'jquery.easing.min.js');
+        UpHelper::load_file($this,'jquery.billboard.min.js');
         return true;
     }
 
@@ -51,7 +53,7 @@ class slideshow_billboard extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -83,27 +85,27 @@ class slideshow_billboard extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options, 2);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 2);
 
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").billboard(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === le code CSS
         if ($options['zoom-suffix'])
             $options['css-head'] .= '#id a[cursor:zoom-in]';
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
@@ -126,11 +128,11 @@ class slideshow_billboard extends upAction
                     $imgname = str_ireplace($options['zoom-suffix'] . '.', '.', $img);
                     if ($img != $imgname) {
                         $img = str_replace(JPATH_ROOT . '/', '', $img); // chemin relatif
-                        $images[] = '<img src="' . $img . '" alt="' . $this->link_humanize($imgname) . '">';
+                        $images[] = '<img src="' . $img . '" alt="' . UpHelper::link_humanize($this,$imgname) . '">';
                     }
                 } else {
                     $img = str_replace(JPATH_ROOT . '/', '', $img); // chemin relatif
-                    $images[] = '<img src="' . $img . '" alt="' . $this->link_humanize($img) . '">';
+                    $images[] = '<img src="' . $img . '" alt="' . UpHelper::link_humanize($this,$img) . '">';
                 }
             }
         } else {
@@ -139,23 +141,23 @@ class slideshow_billboard extends upAction
             if (preg_match_all($regex, $this->content, $imglist)) {
                 foreach ($imglist[0] as $img) {
                     preg_match('#(<a.*>)?(<img .*>)(</a>)?#iU', $img, $matches);
-                    $tmp = $this->get_attr_tag($matches[2], 'alt');
+                    $tmp = UpHelper::get_attr_tag($this,$matches[2], 'alt');
                     if ($tmp['alt'] == '') {
                         $imgname = str_ireplace($options['zoom-suffix'] . '.', '.', $tmp['src']);
-                        $tmp['alt'] = $this->link_humanize($imgname);
+                        $tmp['alt'] = UpHelper::link_humanize($this,$imgname);
                     }
                     $matches[3] = ($matches[1]) ? '</a>' : ''; // lien ouvrant et fermant
-                    $images[] = $matches[1] . $this->set_attr_tag('img', $tmp) . $matches[3];
+                    $images[] = $matches[1] . UpHelper::set_attr_tag($this,'img', $tmp) . $matches[3];
                 }
             }
         }
 
         // -- le code en retour
-        $out = $this->set_attr_tag('div', $outer_div);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
         $out .= '<ul>';
         foreach ($images as $img) {
             if ($options['label']) {
-                $alt = $this->preg_string('#alt="(.*)"#i', $img);
+                $alt = UpHelper::preg_string($this,'#alt="(.*)"#i', $img);
                 $out .= '<li title="' . $alt . '">';
             } else {
                 $out .= '<li>';

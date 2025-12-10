@@ -13,7 +13,9 @@
  */
 defined('_JEXEC') or die;
 
-class bbcode extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class bbcode extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -22,7 +24,7 @@ class bbcode extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // contenu au format BBCODE
@@ -31,11 +33,11 @@ class bbcode extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // Ou est le bbcode ?
         $content = ($this->content) ? $this->content : $options[__class__];
         if ($content === '')
-            return $this->msg_inline($this->trad_keyword('no_content'));
+            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'no_content'));
 
         // Tags spécifiques à cette instance de l'action
         $tags = null;
@@ -47,10 +49,10 @@ class bbcode extends upAction {
         // suppression balises HTML
         $content = strip_tags($content);
         // Conversion contenu
-        $content = $this->get_bbcode($content, $tags);
+        $content = UpHelper::get_bbcode($this,$content, $tags);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // code en retour
 

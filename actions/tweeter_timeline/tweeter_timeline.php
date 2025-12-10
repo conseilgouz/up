@@ -12,11 +12,13 @@
  */
 defined('_JEXEC') or die;
 
-class tweeter_timeline extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class tweeter_timeline extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        $this->load_file('tweeter_timeline.js');
+        UpHelper::load_file($this,'tweeter_timeline.js');
         return true;
     }
 
@@ -24,7 +26,7 @@ class tweeter_timeline extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // tweet id
@@ -42,14 +44,14 @@ class tweeter_timeline extends upAction
           'style' => '', // classes et style inline bloc parent
           'class' => '', // classe bloc parent (obsolète)
         );
-        $this->set_option_user_if_true(__class__, $this->actionUserName);
+        UpHelper::set_option_user_if_true($this,__class__, $this->actionUserName);
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // attributs pour div externe
         $attr_outer['id'] = $options['id'];
-        $this->get_attr_style($attr_outer, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_outer, $options['class'], $options['style']);
 
         // attributs pour div interne
         $attr_in['class'] = 'twitter-timeline';
@@ -65,10 +67,10 @@ class tweeter_timeline extends upAction
         $attr_in['target'] = '_blank';
 
 
-        $out = $this->set_attr_tag('div', $attr_outer);
-        $out .= $this->set_attr_tag('a', $attr_in);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_outer);
+        $out .= UpHelper::set_attr_tag($this,'a', $attr_in);
         if (empty($this->content)) {
-            $out .= '<i class="fab fa-square-x-twitter fs150"></i> ' . $this->lang('en=follow;fr=suivre') .' ' . $options[__class__];
+            $out .= '<i class="fab fa-square-x-twitter fs150"></i> ' . UpHelper::lang($this,'en=follow;fr=suivre') .' ' . $options[__class__];
         } else {
             $out .= $this->content;
         }

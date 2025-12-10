@@ -12,8 +12,9 @@
  * @tags    Editor
  */
 defined('_JEXEC') or die();
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class note extends upAction
+class note extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -25,7 +26,7 @@ class note extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'lang[en=hidden text. HTML allowed;fr=texte masqué. HTML autorisé]' // texte à masquer

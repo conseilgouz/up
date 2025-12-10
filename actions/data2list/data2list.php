@@ -17,7 +17,9 @@
  */
 defined('_JEXEC') or die();
 
-class data2list extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class data2list extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -29,7 +31,7 @@ class data2list extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /* [st-data] emplacement et type des données */
@@ -80,54 +82,54 @@ class data2list extends upAction
         include_once ($this->upPath . '/assets/lib/data.php');
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ========================
         // === recup des données
         // ========================
         $data = get_data($options[__class__], $options['cache-delay']);
         if ($data == '') {
-            return $this->msg_inline('data-info - data source not found or empty' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data-info - data source not found or empty' . $options[__class__]);
         }
 
         // Conversion des données en array
         $data = convert_data_to_array($data, $options, false);
         if ($data == '') {
-            return $this->msg_inline('data2list - format data source invalid : ' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data2list - format data source invalid : ' . $options[__class__]);
         }
 
         // consolidation des options de formattage
-        $options['boolean-out'] = $this->get_bbcode($options['boolean-out']);
-        $options['col-type'] = $this->get_bbcode($options['col-type']);
-        $options['col-empty'] = $this->get_bbcode($options['col-empty']);
-        $options['template '] = $this->get_bbcode($options['template ']);
+        $options['boolean-out'] = UpHelper::get_bbcode($this,$options['boolean-out']);
+        $options['col-type'] = UpHelper::get_bbcode($this,$options['col-type']);
+        $options['col-empty'] = UpHelper::get_bbcode($this,$options['col-empty']);
+        $options['template '] = UpHelper::get_bbcode($this,$options['template ']);
         fix_options($options);
 
         // selection de la racine options['root']
         if ($options['lign-root'] != '')
             if (get_root($data, $options) === false)
-                return $this->msg_error($this->trad_keyword('ITEM_NOT_FOUND', $options['lign-root']));
+                return UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ITEM_NOT_FOUND', $options['lign-root']));
 
         // --- tri des données v5.1
-        $msg = sort_data($data, $this->strtoarray($options['lign-sort'], ',', ':', false));
+        $msg = sort_data($data, UpHelper::strtoarray($this,$options['lign-sort'], ',', ':', false));
         if ($msg)
-            $this->msg_error($msg . ' for ' . $options[__class__]);
+            UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
 
         // selection options['select']
         if ($options['lign-select'] != '') {
             $msg = get_select($data, $options);
             if ($msg)
-                $this->msg_error($msg . ' for ' . $options[__class__]);
+                UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
         }
 
         // --- filtrage des données v5.1
         // nomcol:condition(<=,>=,==,<>,><)valeur
         $msg = get_filter($data, $options['lign-filter']);
         if ($msg)
-            $this->msg_error($msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
+            UpHelper::msg_error($this,$msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
 
         // --- lign-max v5.1
         if ((int) $options['lign-max'] > 0) {
@@ -136,10 +138,10 @@ class data2list extends upAction
 
         // HTML si pas de donnée v5.1
         if (empty($data))
-            return sprintf($this->get_bbcode($options['no-data-html']), $options[__class__]);
+            return sprintf(UpHelper::get_bbcode($this,$options['no-data-html']), $options[__class__]);
 
         if (! empty($options['array-subtitle'])) {
-            $options['array-subtitle'] = $this->get_bbcode($options['array-subtitle']);
+            $options['array-subtitle'] = UpHelper::get_bbcode($this,$options['array-subtitle']);
             $options['array-subtitle'] = strtoarray($options['array-subtitle']);
             foreach ($options['array-subtitle'] as $k => $v) {
                 if (preg_match_all('#\#\#(.*)\#\##U', $v, $matches))
@@ -148,103 +150,22 @@ class data2list extends upAction
         }
         // === resultat
         $this->result = array();
-        $this->make_list($data, $options);
+        UpHelper::make_list($this,$data, $options);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main, implode(PHP_EOL, $this->result));
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $this->result));
 
         return implode(PHP_EOL, $html);
     }
 
     // run
 
-    /*
-     * function array_subtitle
-     * $parent_key : le nom du champ parent
-     * $key : le champ qui doit contenir un array
-     * $rowdata : le contenu de la ligne
-     * $options : liens sur les options user
-     */
-    function array_subtitle($parent_key, $key, $rowdata, &$options)
-    {
-        $tmpl = $options['array-subtitle'][$parent_key];
-        foreach ($this->array_subtitle[$parent_key] as $field) {
-            $tmpdata = $rowdata;
-            $val = '###';
-            foreach (explode('/', $field) as $key) {
-                if (isset($tmpdata[$key])) {
-                    $val = $tmpdata[$key];
-                    $tmpdata = $tmpdata[$key];
-                }
-            }
-            $tmpl = str_ireplace('##' . $field . '##', $val, $tmpl);
-        }
 
-        return ($tmpl) ? $tmpl : $keys;
-    }
-
-    /*
-     * function make_list
-     * fonction récursive pour remplir la liste
-     * $data : le jeu de données
-     * &$options : liens sur les options user
-     * $parent_key : le nom du champ parent
-     */
-    function make_list($data, &$options, $parent_key = 'root')
-    {
-        $this->result[] = '<ul>';
-        foreach ($data as $k => $v) {
-            if (($options['col-empty-invisible'] && $v == '') === false) {
-                // --- les colonnes exclues / inclues
-                if (! is_numeric($k)) {
-                    if (! empty($options['col-include'])) {
-                        if (in_array($k, $options['col-include']) === false)
-                            continue;
-                    }
-                    if (! empty($options['col-exclude'])) {
-                        if (in_array($k, $options['col-exclude']) === true)
-                            continue;
-                    }
-                }
-                if (is_array($v) && ! isset($options['col-type'][$k])) {
-                    // $k = ($niv == 0 && is_numeric($k)) ? $this->niv1_label($v, $options, $k) : $k;
-                    if (is_numeric($k) && isset($options['array-subtitle'][$parent_key]))
-                        $k = $this->array_subtitle($parent_key, $k, $v, $options);
-                    $this->result[] = '<li>' . $k;
-                    $this->make_list($v, $options, $k);
-                    $this->result[] = '</li>';
-                } else {
-                    $ret = get_col_value($k, $data, $options);
-                    if ($ret[0]) {
-                        $val = $ret[0];
-                    } else {
-                        $val = (isset($options['col-empty'][$k])) ? $options['col-empty'][$k] : '';
-                    }
-
-                    $class = ($ret[1]) ? ' class="' . $ret[1] . '"' : '';
-                    if (is_array($val)) {
-                        $str = '';
-                        array_to_string($str, $val);
-                        $val = $str;
-                    }
-
-                    $k = (isset($options['col-label'][$k])) ? $options['col-label'][$k] : $k;
-
-                    // $this->result[] = '<li' . $class . '>' . $k . ': ' . $val . '</li>';
-                    $out = str_ireplace('##LABEL##', $k, $options['template ']);
-                    $out = str_ireplace('##VALUE##', $val, $out);
-                    $this->result[] = '<li' . $class . '>' . $out . '</li>';
-                }
-            }
-        }
-
-        $this->result[] = '</ul>';
-    }
 }
 
 // class

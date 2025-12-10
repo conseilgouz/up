@@ -5,7 +5,7 @@
  * @package plg_UP for Joomla!
  * @author Lomart
  * @copyright (c) 2025 Lomart
- * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
+ * @license   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  *
  * */
 /*
@@ -14,18 +14,22 @@ v5.3.3 : check/load actions from github
 v5.4.1 : variables publiques dans up.php
 v5.4.2 : cleanup checkfiles
 */
+namespace  Lomart\Plugin\Content\Up\Extension;
 
-// namespace up;
 defined('_JEXEC') or die('Restricted access');
 
-use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Event\Content\ContentPrepareEvent;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Version;
+use Joomla\Event\SubscriberInterface;
 use Joomla\Filesystem\Folder;
-
+use Joomla\Registry\Registry;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 // #[AllowDynamicProperties] // php 8.4
 
-class plgContentUP extends CMSPlugin
+class UP extends CMSPlugin implements SubscriberInterface
 {
     public $upPath = 'plugins/content/up/';
     public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
@@ -46,22 +50,46 @@ class plgContentUP extends CMSPlugin
     public $urlhelpsite,$usehelpsite;
     public $valid_type,$varStyle,$varStyleString;
 
-    private $githubapikey = null;
-    private $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
-    private $api_token_1 = 'github#pat#';
-    private $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
-    private $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
-    private $actionsha256 = [];
+    public $githubapikey = null;
+    public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
+    public $api_token_1 = 'github#pat#';
+    public $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
+    public $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
+    public $actionsha256 = [];
 
-    public function __construct(&$subject, $params)
+    /**
+     * @inheritDoc
+     *
+     * @return string[]
+     *
+     * @since 4.1.0
+     */
+    public static function getSubscribedEvents(): array
     {
-        parent::__construct($subject, $params);
-        $this->LoadLanguage();
-        $this->loadActionsSha256();
+        return [
+            'onContentPrepare' 	=> 'onContentPrepare',
+            'onAjaxUp'  => 'onAjaxUp'
+        ];
     }
 
-    public function onContentPrepare($context, &$article, &$params, $limitstart = 0)
+
+    public function __construct(&$subject,$config = [])
     {
+        parent::__construct($subject, $config);
+        if (!$config) { // on vient d'une action : recharger les paramètres généraux du plugin
+            $up = PluginHelper::getPlugin('content','up');
+            $this->params = new Registry();
+            $this->params->set('def',json_decode($up->params));
+        }
+        $this->LoadLanguage();
+        UpHelper::loadActionsSha256($this);
+    }
+
+    public function onContentPrepare(ContentPrepareEvent $event) // ($context, &$article, &$params, $limitstart = 0)
+    {
+        $context = $event->getContext();
+        $article = $event->getItem();
+        $params = $event->getParams();
         $app = Factory::getApplication();
         $tdeb = microtime(true);
         $debug = false;
@@ -135,11 +163,11 @@ class plgContentUP extends CMSPlugin
 
             // ==========> C'EST BON, IL FAUT Y ALLER !
             // fonctions utilitaires pour les actions
-            include_once $this->upPath . 'upAction.php';
+            // include_once $this->upPath . 'upAction.php';
 
             // charger le dictionnaire
-            $dico = file_get_contents('dico.json', FILE_USE_INCLUDE_PATH);
-            $dico = json_decode($dico, true);
+            $this->dico = file_get_contents($this->upPath.'dico.json');
+            $this->dico = json_decode($this->dico, true);
 
             /*
              * ****** PSEUDO-CODE
@@ -188,19 +216,19 @@ class plgContentUP extends CMSPlugin
             // ==== parcours des shortcodes ouvrants a partir du dernier
             for ($i = $nbSC - 1; $i >= 0; $i--) {
                 // reset variables
-                unset($actionUserName); // nom de l'action saisi dans le shortcode
-                unset($actionClassName); // nom du dossier, script php et classe de l'action
-                unset($options_user);
+                unset($this->actionUserName); // nom de l'action saisi dans le shortcode
+                unset($this->actionClassName); // nom du dossier, script php et classe de l'action
+                unset($this->options_user);
                 $content = ''; // le contenu entre shortcodes
                 unset($ret); // retour par action
                 // identifiant unique pour l'action
                 if (isset($article->id)) { // si article
                     // $loopStr = ($loopId > 0) ? '-' . $loopId : '';
                     $loopStr = ($loopId > 0) ? chr($loopId + 64) : '';
-                    $options_user['id'] = 'up-' . $article->id . '-' . $loopStr. ($i + 1);
+                    $this->options_user['id'] = 'up-' . $article->id . '-' . $loopStr. ($i + 1);
                     // $options_user['id'] = 'up-' . $article->id . '-' . ($i + 1);
                 } else { // si module
-                    $options_user['id'] = 'up-m' . uniqid();
+                    $this->options_user['id'] = 'up-m' . uniqid();
                 }
                 // -- Le shortcode ouvrant complet : {up action=xx | opt=val}
                 $SC = strstr(substr($article->text, $openSC[$i]['posDeb']), '}', true) . '}';
@@ -235,21 +263,21 @@ class plgContentUP extends CMSPlugin
                     // suppression d'un saut de ligne <br> ou <br /> entre les options
                     /* $value = preg_replace('#\s*\<br\s?\/?>#i', '', $value); */
                     // la 1ere option est le nom de l'action
-                    if (! isset($actionUserName)) {
-                        $actionUserName = $key; // tel que saisi dans article
+                    if (! isset($this->actionUserName)) {
+                        $this->actionUserName = $key; // tel que saisi dans article
                         // LM 180921: l'argument principal est égal à vide et pas true
                         $value = (count($param) == 2) ? trim($param[1]) : '';
                         // le mot clé traduit pour le script action
                         $key = str_replace('-', '_', $key); // tel que le script (14/12/19)
-                        if (array_key_exists($key, $dico)) {
-                            $key = $dico[$key];
+                        if (array_key_exists($key, $this->dico)) {
+                            $key = $this->dico[$key];
                         }
                         $key = str_replace('-', '_', $key); // tel que le script
-                        $actionClassName = $key; // Nom dossier et classe
+                        $actionClassName = $key; // Nom dossier et classe : Joomla 6/namespace
                     } else {
                         // le mot clé traduit pour le script action
-                        if (array_key_exists($key, $dico)) {
-                            $key = $dico[$key];
+                        if (array_key_exists($key, $this->dico)) {
+                            $key = $this->dico[$key];
                         }
                     }
                     // guillemets double pour forcer un espace en tete ou fin - v3
@@ -257,10 +285,10 @@ class plgContentUP extends CMSPlugin
                         $value = trim($value, '\"');
                     }
                     // analyse de l'argument de l'option
-                    $options_user[$key] = $value;
+                    $this->options_user[$key] = $value;
                 }
                 // -- on recherche l'eventuel shortcode fermant
-                $regexclose = '/\{\/(?:' . $tag . ')\s+' . $actionUserName . '.*\}/siU';
+                $regexclose = '/\{\/(?:' . $tag . ')\s+' . $this->actionUserName . '.*\}/siU';
                 if (preg_match($regexclose, $article->text, $matches, PREG_OFFSET_CAPTURE, $replaceDeb + $replaceLen)) {
                     // le contenu
                     $content_deb = $replaceDeb + $replaceLen;
@@ -283,12 +311,12 @@ class plgContentUP extends CMSPlugin
                 $actionfile = 'actions/' . $actionClassName . '/' . $actionClassName . '.php';
                 if ($this->params->def('checkgithub', 0)) {
                     // contrôle de version de l'action sur github
-                    $this->checkactionsha256($actionClassName);
+                    UpHelper::checkactionsha256($this,$actionClassName);
                 }
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
-                    $this->githubapikey = $this->get_action_pref('github-key');
-                    if (!$this->getGithubActionRec('actions/'.$actionClassName)) {
+                    $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
+                    if (!UpHelper::getGithubActionRec($this,'actions/'.$actionClassName)) {
                         continue;  // error  ignore it
                     }
                     // exceptions : appel croisé dans les actions
@@ -297,14 +325,14 @@ class plgContentUP extends CMSPlugin
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
                         if (!is_file($this->upPath.'actions/modal/modal.php')) {
-                            if (!$this->getGithubActionRec('actions/modal')) {
+                            if (!UpHelper::getGithubActionRec($this,'actions/modal')) {
                                 continue;  // error  ignore it
                             }
                         }
                     }
                     if ($actionClassName == 'pdf_gallery') {
                         if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
-                            if (!$this->getGithubActionRec('actions/pdf')) {
+                            if (!UpHelper::getGithubActionRec($this,'actions/pdf')) {
                                 continue;  // error  ignore it
                             }
                         }
@@ -330,31 +358,41 @@ class plgContentUP extends CMSPlugin
                 if ($text == '') {
                     if (array_key_exists($actionClassName, $classObjList) == false) {
                         // on charge la classe de l'action
-                        if (@include_once $actionfile) {
+                        if (@include_once $this->upPath.$actionfile) {
                             $classObjList[$actionClassName] = new $actionClassName($actionClassName);
-                            $classObjList[$actionClassName]->actionUserName = $actionUserName;
+                            $classObjList[$actionClassName]->actionUserName = $this->actionUserName;
                             $classObjList[$actionClassName]->firstInstance = true; // pour action unique par page dans run
                             $classObjList[$actionClassName]->article = $article; // pour load_js_file_head
-                            $classObjList[$actionClassName]->init();
                             $objVersion = new Version(); // v2.6
                             $classObjList[$actionClassName]->J4 = ((int) $objVersion->getShortVersion() >= 4);
                             $classObjList[$actionClassName]->inedit = (!(isset($article->id) && empty($article->checked_out))); // v3.1
+                            $classObjList[$actionClassName]->name = $actionClassName;
+                            $classObjList[$actionClassName]->upPath =  str_replace('/', DIRECTORY_SEPARATOR, $this->upPath);
+                            $classObjList[$actionClassName]->actionPath = $this->upPath . 'actions' . DIRECTORY_SEPARATOR . $actionClassName . DIRECTORY_SEPARATOR;
+                            $classObjList[$actionClassName]->init();
                         } else {
-                            $msg = ($actionUserName == '') ? 'Syntax error' : 'non trouvée / not found'; // v2.7
-                            $text = '&#x1F199; ' . $options_user['id'] . ' Action "<b>' . $openSC[$i]['actionName'] . '</b>" ' . $msg;
+                            $msg = ($this->actionUserName == '') ? 'Syntax error' : 'non trouvée / not found'; // v2.7
+                            $text = '&#x1F199; ' . $this->options_user['id'] . ' Action "<b>' . $openSC[$i]['actionName'] . '</b>" ' . $msg;
                             $app->enqueueMessage($text, 'error');
                         }
                     } else {
-                        $classObjList[$actionClassName] = new $actionClassName($actionClassName);
-                        $classObjList[$actionClassName]->actionUserName = $actionUserName;
-                        $classObjList[$actionClassName]->firstInstance = false; // 07-18:pour action unique par page dans run
-                        $classObjList[$actionClassName]->J4 = ((int) $objVersion->getShortVersion() >= 4); // v2.9
+                            $classObjList[$actionClassName] = new $actionClassName($actionClassName);
+                            $classObjList[$actionClassName]->actionUserName = $this->actionUserName;
+                            $classObjList[$actionClassName]->firstInstance = false; // pour action unique par page dans run
+                            $classObjList[$actionClassName]->article = $article; // pour load_js_file_head
+                            $objVersion = new Version(); // v2.6
+                            $classObjList[$actionClassName]->J4 = ((int) $objVersion->getShortVersion() >= 4);
+                            $classObjList[$actionClassName]->inedit = (!(isset($article->id) && empty($article->checked_out))); // v3.1
+                            $classObjList[$actionClassName]->name = $actionClassName;
+                            $classObjList[$actionClassName]->upPath =  str_replace('/', DIRECTORY_SEPARATOR, $this->upPath);
+                            $classObjList[$actionClassName]->actionPath = $this->upPath . 'actions' . DIRECTORY_SEPARATOR . $actionClassName . DIRECTORY_SEPARATOR;
+                            $classObjList[$actionClassName]->init();
                     }
                 }
 
                 if ($text == '') {
                     // l'objet est cree et initialisé
-                    $classObjList[$actionClassName]->options_user = $options_user;
+                    $classObjList[$actionClassName]->options_user = $this->options_user;
                     $classObjList[$actionClassName]->content = $content;
                     $classObjList[$actionClassName]->article = $article;
                     $classObjList[$actionClassName]->actionprefs = $this->params->get('actionprefs');
@@ -366,7 +404,7 @@ class plgContentUP extends CMSPlugin
                     $classObjList[$actionClassName]->tarteaucitron = $this->params->def('tarteaucitron', false); // v2.4
                     $classObjList[$actionClassName]->trimA0 = $this->params->def('trimA0', true); // v3.0
                     $classObjList[$actionClassName]->demopage = '';
-                    $classObjList[$actionClassName]->dico = $dico;
+                    $classObjList[$actionClassName]->dico = $this->dico;
                     // 18-07-20 ajout pour remplacement par action
                     $classObjList[$actionClassName]->replace_deb = $replaceDeb;
                     $classObjList[$actionClassName]->replace_len = $replaceLen;
@@ -397,7 +435,7 @@ class plgContentUP extends CMSPlugin
                         $article->text = $article->text . $ret['after'];
                     }
                 }
-                $debug = ($debug || ! empty($options_user['debug']));
+                $debug = ($debug || ! empty($this->options_user['debug']));
             } // fin parcours openSC
 
             unset($classObjList);
@@ -406,7 +444,7 @@ class plgContentUP extends CMSPlugin
 
         if ($debug) { // v3
             $tfin = microtime(true);
-            $msg = 'UP-' . $options_user['id'] . '-Execution time for ' . $nbSC . ' actions on the page or module : ' . (round(($tfin - $tdeb) * 1000, 3)) . ' ms';
+            $msg = 'UP-' . $this->options_user['id'] . '-Execution time for ' . $nbSC . ' actions on the page or module : ' . (round(($tfin - $tdeb) * 1000, 3)) . ' ms';
             $app->enqueueMessage($msg);
         }
         return true;
@@ -415,68 +453,10 @@ class plgContentUP extends CMSPlugin
     // onContentPrepare
 
     /*
-     * ==== lang
-     * fonction utilitaire pour UP
-     * @param [string] $str [alternative de traduction sous la forme "en=apple;fr=pomme"]
-     * @return [string] [la traduction dans la langue]
-     */
-    public function lang($str)
-    {
-        // l'argument doit faire au minimum 10 caractères (fr=xx;en=xx)
-        $out = trim($str);
-        if (strlen($out) <= 10) {
-            return $str;
-        }
-
-        // -- v1.6 : permettre l'arg commencant par lang[
-        if (substr(strtolower($out), 0, 5) == 'lang[') {
-            $out = (substr($out, -1, 1) == ']') ? substr($out, 5, - 1) : substr($out, 5);
-        }
-        // -- v3 : rétablir entité HTML (url)
-        $out = str_replace('&amp;', '&', $out);
-
-        // test langue uniquement sur les 2 premiers caractères
-        $codelang = substr(Factory::getApplication()->getLanguage()->getTag(), 0, 2);
-
-        // recherche du motif dans $str. Il faut au moins 2 langues
-        if (preg_match_all('#\b(\w\w)\s*=\s*(.*);#U', $out . ';', $tmp) > 1) {
-            if (isset($tmp[0][1])) {
-                $trad = array_combine($tmp[1], $tmp[2]);
-                if (isset($trad[$codelang])) {
-                    $out = $trad[$codelang]; // dans la langue
-                } elseif (isset($trad['en'])) {
-                    $out = $trad['en']; // sinon en anglais
-                } elseif ($str[2] == '=') {
-                    $out = $trad[$tmp[1][0]]; // sinon le premier
-                    // v1.8 - retour totalité car pb si url du type : index.php?option=com_content&amp;id=...
-                    // v1.9 - on retourne le 1er si le 3e caractère est le signe égal
-                }
-                $out = trim($out);
-            }
-        }
-        return $out;
-    }
-
-    /*
-     * ==== info_debug
-     * utilisé pour indiquer une erreur à son emplacement dans la page
-     * $txt accepte la forme : en:hello;fr:bonjour
-     * exemple : argument de paramètre manquant
-     */
-    public function info_debug($txt, $infoUP = true)
-    {
-        $txt = $this->lang($txt);
-        if ($infoUP) {
-            $txt = 'UP.' . $this->actionUserName . ' : ' . $txt;
-        }
-        return ' <span style="color:red;background:yellow;font-weight:bolder"> &#x279c; ' . $txt . '&nbsp;</span>';
-    }
-
-    /*
      * ==== onAjaxUp
      * appels AJAX pour toutes les actions
      */
-    public function onAjaxUp()
+    public function onAjaxUp($event)
     {
         $input = Factory::getApplication()->getInput();
         // Vérifie que l'action existe, sinon la charger (appel par upbtn.js)
@@ -485,8 +465,8 @@ class plgContentUP extends CMSPlugin
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
             if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
-                $this->githubapikey = $this->get_action_pref('github-key');
-                if (!$this->getGithubActionRec('actions/'.$exist, '../')) {
+                $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
+                if (!UpHelper::getGithubActionRec($this,'actions/'.$exist, '../')) {
                     return false; // non trouvé : erreur
                 }
             }
@@ -503,244 +483,13 @@ class plgContentUP extends CMSPlugin
 
         if (@include_once $actionfile) {
             $return = $actionClassName::goAjax($input);
-            return $return;
+            return $event->addResult($return);
         } else {
             $text = 'Action Ajax ' . $actionClassName . ' non trouvée / not found';
             return 'err : ' . $text;
         }
     }
-    /*
-    * ==== getGithubActionRec
-    * chargement d'une action avec ses sous-répertoires
-    */
-    private function getGithubActionRec($dir, $admin = '')
-    {
-        if (!$response = $this->getGithubAction($dir)) {
-            $msg = 'Action '.$dir.' -> Erreur appel Github';
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
-        }
-        $action = json_decode($response);
-        if (isset($action->message)) { // message d'erreur de github
-            $msg = 'Action '.$dir.' -> '.$action->message;
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
-        }
-        $actionDir = $admin.$this->upPath.$dir;
-        if (!is_dir($actionDir)) {
-            mkdir($actionDir);
-        }
-        foreach ($action as $one) {
-            if ($one->download_url) {
-                $url = $one->download_url;
-                try {
-                    // ignorer les fichiers existants
-                    if (!is_file($actionDir.'/'.$one->name)) {
-                        copy($url, $actionDir.'/'.$one->name);
-                    }
-                } catch (\Exception $e) {
-                }
-            } else {// subdir
-                $this->getGithubActionRec($one->path, $admin);
-            }
-        }
-        return true;
-    }
-    /*
-    * ==== getGithubAction
-    * chargement d'un répertoire de github
-    */
-    private function getGithubAction($dir)
-    {
-        $url = $this->githuburl.$dir;
-        try {
-            $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_USERAGENT, $agent);
-            curl_setopt($curl, CURLOPT_NOBODY, 0);
-            curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            if (!$this->githubapikey) { // pas de clé définie, on prend la clé par défaut
-                $this->githubapikey = $this->api_token_1.$this->api_token_2.$this->api_token_3;
-                $this->githubapikey = str_replace('#','_',$this->githubapikey);
-            }
-            curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                        "Authorization: token ".$this->githubapikey,
-                        "User-Agent: PHP"
-            ]);
 
-            $response = curl_exec($curl);
-            return $response;
-        } catch (\RuntimeException $e) {
-            return null;
-        }
-    }
-    /*
-     * ==== get_action_pref
-     * Retourne la valeur pour une préf action (ex: apikey)
-     * @param [string] $key le mot-clé
-     * @return [string] valeur ou vide
-    */
-    private function get_action_pref($key, $default = null)
-    {
-        $regex = '#' . $key . ' *\= *(.*)\n#';
-        if (preg_match($regex, $this->params->get('actionprefs'). PHP_EOL, $val) == 1) {
-            return trim($val[1]);
-        } elseif (! is_null($default)) {
-            return $default;
-        }
-        return false;
-
-    }
-    /*
-    *  vérification sur github une fois par jour
-    *  création d'un fichier up_checkfile.<date+heure prochaine vérification>
-    */
-    private function createcheckfile() {
-        
-        $folder = JPATH_SITE.'/plugins/content/up/assets';
-        $chkfile = 'up_checkfile';
-        $dayssecs = 0;
-        $dayssecs = strtotime(date('Y-m-d').' '.$dayssecs);
-        if (!$dayssecs) {
-            $dayssecs = 0;
-        } else {
-            $dayssecs -= strtotime(date('Y-m-d'));
-        }
-        $time = time();
-        $round = strtotime(date('Y-m-d', $time));
-        $uptime = $round + $dayssecs;
-        $xdays = 1;
-        $interval = $xdays * 86400;
-        if ($uptime < $time) {
-            $uptime += 86400;
-        }
-        $fname = $folder .'/'. $chkfile.'.'.$uptime;
-        if (!touch($fname)) {
-            return;
-        }
-        $f = fopen($fname, 'w');
-        fputs($f, 'w'.$interval);
-        fclose($f);
-    }
-    /*
-    * ==== getGithubFile
-    * chargement d'un fichier à partir de github
-    */
-    private function getGithubFile($file, $admin = '')
-    {
-        /* la vérification sur github est faite une fois par jour */
-        $folder = JPATH_SITE.'/plugins/content/up/assets';
-        $chkfile = 'up_checkfile';
-        $fnames = Folder::files($folder, $chkfile.'.*');
-        $fname = array_pop($fnames);
-        if (!$fname) { // fichier non trouvé : on le crée 
-            $this->createcheckfile();
-        } else {
-            $uptime = substr($fname, -10, 10);
-            $time = time();
-            if ($time < $uptime) { // moins d'un jour depuis la dernière vérification ?
-                return; // pas de vérification, on sort
-            }
-            unlink($folder.'/'.$fname); // remove previous checkfile
-            $this->createcheckfile();
-        }
-        // recherche sur github de la nouvelle version du fichier
-        if (!$response = $this->getGithubAction($file)) {
-            $msg = 'Fichier '.$file.' -> Erreur appel Github';
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
-        }
-        $action = json_decode($response);
-        if (isset($action->message)) { // message d'erreur de github
-            $msg = 'File '.$file.' -> '.$action->message;
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
-        }
-        if ($action->download_url) {
-            $url = $action->download_url;
-            try {
-                if (is_file($this->upPath.$file)) {
-                    unlink($this->upPath.$file);
-                }
-                copy($url, $this->upPath.$file);
-            } catch (\Exception $e) {
-            }
-        }
-        return true;
-    }
-
-    /*
-    *  Vérifie si UP-list-actions-version-v<versionUP>.txt existe
-    */
-    private function loadActionsSha256()
-    {
-        if (Factory::getApplication()->isClient('administrator')) {
-            return false;
-        }
-        if ($this->params->def('checkgithub', 0)) {
-        // récupération du dernier fichier sur github
-            $this->getGithubFile('assets/UP-list-actions-version.txt');
-        }
-        $file = $this->upPath.'/assets/UP-list-actions-version.txt';
-        if (!is_file($file)) {
-            return false;
-        }
-        $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
-        if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
-            return '';
-        }
-        foreach ($readBuffer as $line) {
-            $one = explode(':', $line);
-            if (sizeof($one) > 1) {
-                $this->actionsha256[$one[0]] = $one[1];
-            }
-        }
-    }
-    /*
-    *  Vérifie la version du fichier <action>.php par rapport au fichier version des actions
-    */
-    private function checkactionsha256($action)
-    {
-        $dir = $this->upPath.'actions/' . $action;
-        $file = $dir. '/' . $action . '.php';
-        if (!is_dir($dir) || !is_file($file)) { // non trouvé : do nothing
-            return;
-        }
-        $hash = hash_file('sha256', $file);
-        if (array_key_exists($action, $this->actionsha256)) {
-            if ($this->actionsha256[$action] != $hash) { // différent : suppression du répertoire
-                $this->delete_directory($dir);
-            }
-        }
-    }
-    /* 
-    * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
-    *
-    * supprime les fichiers d'une action, sauf le répertoire custom
-    */
-    private function delete_directory($dir)
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-        foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..' || $item == 'custom') {
-                continue;
-            }
-            if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-        }
-        return rmdir($dir);
-    }
 
 }
 

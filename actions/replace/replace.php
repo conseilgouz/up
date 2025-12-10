@@ -13,7 +13,9 @@
  */
 defined('_JEXEC') or die();
 
-class replace extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class replace extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -24,12 +26,12 @@ class replace extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // liste des remplacements sous la forme ancien:nouveau, ... BBcode admis
@@ -40,12 +42,12 @@ class replace extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $options['tags'] = str_replace(',', '|', $options['tags']);
         $options[__class__] = strip_tags($options[__class__]);
 
-        $list = $this->get_bbcode($options[__class__], $options['tags']);
-        $replace = $this->strtoarray($list, $options['sep-item'], $options['sep-oldnew'], false);
+        $list = UpHelper::get_bbcode($this,$options[__class__], $options['tags']);
+        $replace = UpHelper::strtoarray($this,$list, $options['sep-item'], $options['sep-oldnew'], false);
 
         foreach ($replace as $old => $new) {
             if ($options['regex']) {

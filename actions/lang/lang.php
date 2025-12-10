@@ -21,11 +21,10 @@
  * permet {html=img | src=images/foo_{up lang}.png} 
  */
 defined('_JEXEC') or die();
-
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-
-class lang extends upAction
+class lang extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -37,7 +36,7 @@ class lang extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // langue pour vérifer le rendu (vide en production)
@@ -65,15 +64,15 @@ class lang extends upAction
                 }
             }
             // fusion et controle des options
-            $options = $this->ctrl_options($options_def);
+            $options = UpHelper::ctrl_options($this,$options_def);
         } else {
             // fusion et controle des options
-            $options = $this->ctrl_options($options_def);
+            $options = UpHelper::ctrl_options($this,$options_def);
             // les traduction dans le contenu dans l'ordre de lang-order
             $lang_list = explode(',', strtolower($options['lang-order']));
-            $content_parts = $this->get_content_parts($this->content);
+            $content_parts = UpHelper::get_content_parts($this,$this->content);
             if (count($lang_list) != count($content_parts)) {
-                $html = $this->info_debug($this->trad_keyword('LANG_NB_DIFF'));
+                $html = UpHelper::info_debug($this,UpHelper::trad_keyword($this,'LANG_NB_DIFF'));
                 return $html;
             }
             $trads = array_combine($lang_list, $content_parts);
@@ -107,13 +106,13 @@ class lang extends upAction
         // === info language (v2.4)
         if ($options['info']) {
             $msgTitle = 'Lang info ' . $options['id'];
-            $msg = $this->trad_keyword('LANG_INFO', $userlang, $bestlang);
-//             $msg = $this->trad_keyword('User language : ' . $userlang . ' --- Displayed : ' . $bestlang);
-            $this->msg_info($msg, $msgTitle);
+            $msg = UpHelper::trad_keyword($this,'LANG_INFO', $userlang, $bestlang);
+//             $msg = UpHelper::trad_keyword($this,'User language : ' . $userlang . ' --- Displayed : ' . $bestlang);
+            UpHelper::msg_info($this,$msg, $msgTitle);
         }
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
@@ -127,7 +126,7 @@ class lang extends upAction
         if ($options['tag'] == '') {
             $html = $content;
         } else {
-            $html = $this->set_attr_tag($options['tag'], $attr_main, $content);
+            $html = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $content);
         }
         return $html;
     }

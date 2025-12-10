@@ -1,3 +1,10 @@
+## 20/12/2025 - version 6.0.0
+
+### modification interne
+
+- UP devient un "service provider"
+- déplacement des fonctions dans UpHelper
+
 ## 06/12/2025 - version 5.4.12
 
 #### Modification interne

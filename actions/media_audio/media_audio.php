@@ -21,13 +21,15 @@
  */
 defined('_JEXEC') or die();
 
-class media_audio extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class media_audio extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('media_audio.css');
-        $this->load_file('media_audio.js');
+        UpHelper::load_file($this,'media_audio.css');
+        UpHelper::load_file($this,'media_audio.js');
         return true;
     }
 
@@ -35,7 +37,7 @@ class media_audio extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier vidéo ou dossier. caractères joker autorisés
@@ -73,24 +75,24 @@ class media_audio extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ===================
         // === analyse options
         // ===================
-        $audio_types = $this->strtoarray($options['types'], ';', ':', false);
-        $ext_codecs = $this->strtoarray($options['codecs'], ';', ':', false);
+        $audio_types = UpHelper::strtoarray($this,$options['types'], ';', ':', false);
+        $ext_codecs = UpHelper::strtoarray($this,$options['codecs'], ';', ':', false);
 
         $image_types = explode(';', $options['image-types']);
         if (empty($options['image-default'])) {
             //             $options['image-default'] = $this->actionPath.'media_audio.png' ;
-            $options['image-default'] = $this->get_custom_path('audio-default.png') ;
+            $options['image-default'] = UpHelper::get_custom_path($this,'audio-default.png') ;
         }
 
-        $options['template'] = str_replace('"', '\'', $this->get_bbcode($options['template']));
+        $options['template'] = str_replace('"', '\'', UpHelper::get_bbcode($this,$options['template']));
 
         // ============================
         // === liste des fichiers audio
@@ -137,18 +139,18 @@ class media_audio extends upAction
 
         // -- attributs du bloc principal
         $attr_main['class'] = 'upaudio-main';
-        $this->get_attr_style($attr_main, $options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['main-style']);
 
         // -- attributs du bloc d'un fichier
         if (empty($options['item-tag']) && !empty($options['item-style'])) {
             $options['item-tag'] = 'div';
         }
         $attr_item['class'] = 'upaudio-item';
-        $this->get_attr_style($attr_item, $options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
         // -- attributs du player HTML
         $attr_player['class'] = 'upaudio-player';
-        $this->get_attr_style($attr_player, $options['player-style']);
+        UpHelper::get_attr_style($this,$attr_player, $options['player-style']);
         if (! empty($options['autoplay'])) {
             $attr_player['autoplay'] = null;
         }
@@ -165,16 +167,16 @@ class media_audio extends upAction
 
         // -- attributs du bloc titre
         $attr_title['class'] = 'upaudio-title';
-        $this->get_attr_style($attr_title, $options['title-style']);
+        UpHelper::get_attr_style($this,$attr_title, $options['title-style']);
 
         // -- attributs du bloc image
         $attr_image['class'] = 'upaudio-image';
-        $this->get_attr_style($attr_image, $options['image-style']);
+        UpHelper::get_attr_style($this,$attr_image, $options['image-style']);
 
         // -- attributs du bloc téléchargement
         $attr_download['download'] = null; // attribut sans argument pour forcer le téléchargement
         $attr_download['class'] = 'upaudio-download';
-        $this->get_attr_style($attr_download, $options['download-style']);
+        UpHelper::get_attr_style($this,$attr_download, $options['download-style']);
 
         // -- attributs du bloc téléchargement
         $attr_info['class'] = 'upaudio-info' ;
@@ -192,20 +194,20 @@ class media_audio extends upAction
                     $player .= '<source src="' . $src . '" type="audio/' . $audio_types[$ext] . '">';
                 }
                 $player .= '<p class="upaudio-nosupport">' . $options['no-support'] . '</p>' . PHP_EOL;
-                $player = $this->set_attr_tag('audio', $attr_player, $player);
+                $player = UpHelper::set_attr_tag($this,'audio', $attr_player, $player);
                 unset($attr_player['autoplay']);
-                $this->kw_replace($template, 'player', $player);
+                UpHelper::kw_replace($this,$template, 'player', $player);
             }
             if (strpos($template, '##title') !== false) {
-                $tmp = $this->set_attr_tag($options['title-tag'], $attr_title, $this->link_humanize($name));
-                $this->kw_replace($template, 'title', $tmp);
+                $tmp = UpHelper::set_attr_tag($this,$options['title-tag'], $attr_title, UpHelper::link_humanize($this,$name));
+                UpHelper::kw_replace($this,$template, 'title', $tmp);
             }
             if (strpos($template, '##image') !== false) {
                 $mask = dirname($options[__class__]) . '/' . $name . '.{' . $options['image-types'] . '}';
                 $images = glob($mask, GLOB_BRACE);
                 $attr_image['src'] = ($images) ? $images[0] : $options['image-default'];
-                $tmp = ($attr_image['src']) ? $this->set_attr_tag('img', $attr_image) : '';
-                $this->kw_replace($template, 'image', $tmp);
+                $tmp = ($attr_image['src']) ? UpHelper::set_attr_tag($this,'img', $attr_image) : '';
+                UpHelper::kw_replace($this,$template, 'image', $tmp);
             }
             if (strpos($template, '##info') !== false) {
                 $fileinfo = $filepath . '/' . $name . '.info';
@@ -213,24 +215,24 @@ class media_audio extends upAction
                 if (file_exists($fileinfo)) {
                     $info = file_get_contents($fileinfo);
                     if ($options['info-style']) {
-                        $info = $this->set_attr_tag('div', $attr_info, $info);
+                        $info = UpHelper::set_attr_tag($this,'div', $attr_info, $info);
                     }
                 }
-                $this->kw_replace($template, 'info', $info);
+                UpHelper::kw_replace($this,$template, 'info', $info);
             }
 
             if (strpos($template, '##download') !== false) {
                 $attr_download['href'] = $filepath . '/' . $name . '.' . $exts[0];
-                $tmp = $this->set_attr_tag($options['download-tag'], $attr_download, $options['download-text']);
-                $this->kw_replace($template, 'download', PHP_EOL . $tmp);
+                $tmp = UpHelper::set_attr_tag($this,$options['download-tag'], $attr_download, $options['download-text']);
+                UpHelper::kw_replace($this,$template, 'download', PHP_EOL . $tmp);
             }
-            $out[] = $this->set_attr_tag($options['item-tag'], $attr_item, $template);
+            $out[] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $template);
         }
 
         // ajout du bloc main
         $html = implode(PHP_EOL, $out);
         if (! empty($options['main-tag'])) {
-            $html = $this->set_attr_tag($options['main-tag'], $attr_main, PHP_EOL . $html . PHP_EOL);
+            $html = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, PHP_EOL . $html . PHP_EOL);
         }
 
         // code en retour

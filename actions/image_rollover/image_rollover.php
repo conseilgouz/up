@@ -12,7 +12,9 @@
  */
 defined('_JEXEC') or die;
 
-class image_rollover extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class image_rollover extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -22,7 +24,7 @@ class image_rollover extends upAction {
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // image repos
@@ -35,22 +37,22 @@ class image_rollover extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['src'] = $options[__class__];
-        $attr_main['onmouseover'] = 'this.src=\'' . $this->get_url_absolute($options['hover']) . '\'';
-        $attr_main['onmouseout'] = 'this.src=\'' . $this->get_url_absolute($options[__class__]) . '\'';
+        $attr_main['onmouseover'] = 'this.src=\'' . UpHelper::get_url_absolute($this,$options['hover']) . '\'';
+        $attr_main['onmouseout'] = 'this.src=\'' . UpHelper::get_url_absolute($this,$options[__class__]) . '\'';
         if ($options['click']) {
-            $attr_main['onmousedown'] = 'this.src=\'' . $this->get_url_absolute($options['click']) . '\'';
-            $attr_main['onmouseup'] = 'this.src=\'' . $this->get_url_absolute($options['hover']) . '\'';
+            $attr_main['onmousedown'] = 'this.src=\'' . UpHelper::get_url_absolute($this,$options['click']) . '\'';
+            $attr_main['onmouseup'] = 'this.src=\'' . UpHelper::get_url_absolute($this,$options['hover']) . '\'';
         }
         $attr_main['class'] = $options['class'];
         $attr_main['style'] = $options['style'];
 
         // code en retour
-        $html[] = $this->set_attr_tag('img', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'img', $attr_main);
 
         return implode(PHP_EOL, $html);
     }

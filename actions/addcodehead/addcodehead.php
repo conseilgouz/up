@@ -24,7 +24,9 @@
 
 defined('_JEXEC') or die();
 
-class addcodehead extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class addcodehead extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -36,7 +38,7 @@ class addcodehead extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // code à ajouter dans le head ou balise
@@ -50,10 +52,10 @@ class addcodehead extends upAction
         foreach (array_diff_key($this->options_user, $options_def) as $key => $val) {
             $options_def[$key] = '';
         }
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -67,14 +69,14 @@ class addcodehead extends upAction
             // -- code pour head
             $tag_not_close = array_map('trim', explode(',', 'area, br, hr, img, input, link, meta, param'));
             $close = (array_search($options[__class__], $tag_not_close) === false);
-            $code = $this->set_attr_tag($options[__class__], $attr, $close);
+            $code = UpHelper::set_attr_tag($this,$options[__class__], $attr, $close);
         } else {
-            $code = $this->get_code(trim($options[__class__]));
+            $code = UpHelper::get_code($this,trim($options[__class__]));
         }
         // -- aucun code HTML en retour
         // il suffit de charger le code dans le head
         if (!empty($code))
-            $this->load_custom_code_head($code);
+            UpHelper::load_custom_code_head($this,$code);
         return '';
     }
 

@@ -29,7 +29,9 @@
  */
 defined('_JEXEC') or die;
 
-class html extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class html extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -42,7 +44,7 @@ class html extends upAction
 
         // contenu non obligatoire, ex: IMG
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -60,7 +62,7 @@ class html extends upAction
         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $options[__class__] = ($options[__class__] == 1) ? 'div' : $options[__class__];
 
         // === le code HTML
@@ -71,7 +73,7 @@ class html extends upAction
         unset($outer_div['style']);
         unset($outer_div['xxx']);
         // -- analyse et ajout class et style
-        $this->get_attr_style($outer_div, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$outer_div, $options['class'], $options['style']);
 
         // === v2.2 - saisie rapide balise et ses classes. ex: html=h2.t-red.bg-yellow
         $tmp = explode('.', $options[__class__]);
@@ -85,11 +87,11 @@ class html extends upAction
         // -- le code en retour
         //
         if ($this->content) {
-            $out = $this->set_attr_tag($options[__class__], $outer_div, $this->content);
+            $out = UpHelper::set_attr_tag($this,$options[__class__], $outer_div, $this->content);
         } else {
             $tag_not_close = array_map('trim', explode(',', 'area, br, hr, img, input, link, meta, param'));
             $close = (array_search($options[__class__], $tag_not_close) === false);
-            $out = $this->set_attr_tag($options[__class__], $outer_div, $close);
+            $out = UpHelper::set_attr_tag($this,$options[__class__], $outer_div, $close);
         }
 
         return $out;

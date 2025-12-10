@@ -28,8 +28,9 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcategories_by_tags extends upAction
+class jcategories_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -41,7 +42,7 @@ class jcategories_by_tags extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // ID ou nom du tag
@@ -77,10 +78,10 @@ class jcategories_by_tags extends upAction
         );
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['new-html'] = $this->get_bbcode($options['new-html'], false);
-        $options['no-content-html'] = $this->get_bbcode($options['no-content-html'], false);
-        $options['template'] = $this->get_bbcode($options['template'], false);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['new-html'] = UpHelper::get_bbcode($this,$options['new-html'], false);
+        $options['no-content-html'] = UpHelper::get_bbcode($this,$options['no-content-html'], false);
+        $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
 
         // ======> verif template (modèle de mise en page)
         // en priorité : le sontenu entre shortcode
@@ -91,7 +92,7 @@ class jcategories_by_tags extends upAction
             $tmpl = $options['template'];
         }
         if (! $tmpl) {
-            $this->msg_error($this->trad_keyword('NO_CONTENT'));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_CONTENT'));
             return false;
         }
 
@@ -107,7 +108,7 @@ class jcategories_by_tags extends upAction
             $db->setQuery($query);
             $id = (int) $db->loadResult();
             if ($id === 0) {
-                $this->msg_error($this->trad_keyword('NO_CATID',$options[__class__] ));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_CATID',$options[__class__] ));
                 return false;
             }
         }
@@ -125,8 +126,8 @@ class jcategories_by_tags extends upAction
         if (isset($list_sortkey[$options['sort-by']])) {
             $sort_by = $list_sortkey[$options['sort-by']];
         } else {
-//             $this->msg_error(Text::_('Error <b>sort_by=' . $options['sort-by'] . '</b> not found. Correct is : ' . implode(', ', array_keys($list_sortkey))));
-            $this->msg_error($this->trad_keyword('ERR_SORTBY', $options['sort-by'], implode(', ', array_keys($list_sortkey))));
+//             UpHelper::msg_error($this,Text::_('Error <b>sort_by=' . $options['sort-by'] . '</b> not found. Correct is : ' . implode(', ', array_keys($list_sortkey))));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ERR_SORTBY', $options['sort-by'], implode(', ', array_keys($list_sortkey))));
             return false;
         }
         $sort_by = (isset($list_sortkey[$options['sort-by']])) ? $list_sortkey[$options['sort-by']] : 'title';
@@ -158,22 +159,22 @@ class jcategories_by_tags extends upAction
 
         // ======> Style général et par catégorie
         $main_attr['id'] = $options['id'];
-        $this->get_attr_style($main_attr, $options['main-class'], $options['main-style']);
-        $this->get_attr_style($item_attr, $options['item-class'], $options['item-style']);
-        $this->get_attr_style($tags_list_attr, $options['tags-list-style']);
+        UpHelper::get_attr_style($this,$main_attr, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$item_attr, $options['item-class'], $options['item-style']);
+        UpHelper::get_attr_style($this,$tags_list_attr, $options['tags-list-style']);
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ======> SORTIE HTML
 
         if ($options['main-tag'] != '0')
-            $html[] = $this->set_attr_tag($options['main-tag'], $main_attr);
+            $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $main_attr);
 
         foreach ($items as $item) {
             // --- Bloc catégorie
             if ($options['item-tag'] != '0')
-                $html[] = $this->set_attr_tag($options['item-tag'], $item_attr);
+                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $item_attr);
             $sItem = $tmpl; // reinit pour nouvel article
                             // --- lien vers le blog de la catégorie
             $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -198,32 +199,32 @@ class jcategories_by_tags extends upAction
 
             // ==== les remplacements
             // {id} : ID de la categorie
-            $this->kw_replace($sItem, 'id', $item->id);
+            UpHelper::kw_replace($this,$sItem, 'id', $item->id);
             // {link} : lien vers le blog categorie - a mettre dans balise a
-            $this->kw_replace($sItem, 'link', $url);
+            UpHelper::kw_replace($this,$sItem, 'link', $url);
             // {title-link} : titre categorie avec lien
             if ($count > 0) {
-                $this->kw_replace($sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
+                UpHelper::kw_replace($this,$sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
             } else {
-                $this->kw_replace($sItem, 'title-link', $title);
+                UpHelper::kw_replace($this,$sItem, 'title-link', $title);
             }
             // {title} : titre categorie sans lien
-            $this->kw_replace($sItem, 'title', $title);
+            UpHelper::kw_replace($this,$sItem, 'title', $title);
             // {subtitle} : sous-titre categorie (partie après tilde du titre)
-            $this->kw_replace($sItem, 'subtitle', $subtitle);
+            UpHelper::kw_replace($this,$sItem, 'subtitle', $subtitle);
             // {date-crea} : date de création v2.9
-            $this->kw_replace($sItem, 'date-crea', $this->up_date_format($item->created_time, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this,$sItem, 'date-crea', UpHelper::up_date_format($this,$item->created_time, $options['date-format'], $options['date-locale']));
             // {date-modif} : date de création v2.9
-            $this->kw_replace($sItem, 'date-modif', $this->up_date_format($item->modified_time, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this,$sItem, 'date-modif', UpHelper::up_date_format($this,$item->modified_time, $options['date-format'], $options['date-locale']));
             // {description} : texte en HTML
             // prise en charge plugins contenu v31
             if ($options['content-plugin']) {
                 if (stripos($sItem, '##intro') !== false || stripos($sItem, '##content##') !== false)
-                    $item->description = $this->import_content($item->description); // v31
+                    $item->description = UpHelper::import_content($this,$item->description); // v31
             }
             
-            $this->kw_replace($sItem, 'intro', $item->description);
-            $this->kw_replace($sItem, 'content', $item->description);
+            UpHelper::kw_replace($this,$sItem, 'intro', $item->description);
+            UpHelper::kw_replace($this,$sItem, 'content', $item->description);
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
                 // ##### TODO #####
@@ -239,20 +240,20 @@ class jcategories_by_tags extends upAction
                 $listTags = $db->loadObjectList();
                 $tmpTags = (empty($listTags)) ? '' : $options['tags-list-prefix'];
                 foreach ($listTags as $tag) {
-                    $tmpTags .= $this->set_attr_tag('span', $tags_list_attr, $tag->title);
+                    $tmpTags .= UpHelper::set_attr_tag($this,'span', $tags_list_attr, $tag->title);
                 }
-                $this->kw_replace($sItem, 'tags-list', '<span>' . $tmpTags . '</span>');
+                UpHelper::kw_replace($this,$sItem, 'tags-list', '<span>' . $tmpTags . '</span>');
             }
             // {new} : badge
             if (stripos($sItem, '##new##') !== false) {
                 $max = date('Y-m-d H:i:s', mktime(date("H"), date("i"), 0, date("m"), date("d") - intval($options['new-days']), date("Y")));
                 $new = ($item->created_time > $max) ? $options['new-html'] : '';
-                $this->kw_replace($sItem, 'new', $new);
+                UpHelper::kw_replace($this,$sItem, 'new', $new);
             }
             // {count}
-            $this->kw_replace($sItem, 'count', $count);
+            UpHelper::kw_replace($this,$sItem, 'count', $count);
             // {hits}
-            $this->kw_replace($sItem, 'hits', $item->hits);
+            UpHelper::kw_replace($this,$sItem, 'hits', $item->hits);
             // {image-xxx} : l'image d'intro, sinon celle dans l'introtext
             // {image} : la balise img complete
             // {image-src} et {image-alt} : uniquement src et alt d'une balise img existante
@@ -264,25 +265,25 @@ class jcategories_by_tags extends upAction
                     $img_src = $params->image;
                     $img_alt = $params->image_alt;
                 } else {
-                    $imgTag = $this->preg_string('#(\<img .*\>)#Ui', $item->description);
+                    $imgTag = UpHelper::preg_string($this,'#(\<img .*\>)#Ui', $item->description);
                     if ($imgTag) {
-                        $imgAttr = $this->get_attr_tag($imgTag, 'alt');
+                        $imgAttr = UpHelper::get_attr_tag($this,$imgTag, 'alt');
                         $img_src = $imgAttr['src'];
                         $img_alt = $imgAttr['alt'];
                     }
                 }
                 // alt par défaut (v1.8)
                 if ($img_alt == '')
-                    $img_alt = $this->link_humanize($img_src);
+                    $img_alt = UpHelper::link_humanize($this,$img_src);
                 $imgtag = '<img src="' . $img_src . '" alt="' . $img_alt . '">';
                 if ($count > 0) {
-                    $this->kw_replace($sItem, 'image-link', '<a href="' . $url . '">' . $imgtag . '</a>');
+                    UpHelper::kw_replace($this,$sItem, 'image-link', '<a href="' . $url . '">' . $imgtag . '</a>');
                 } else {
-                    $this->kw_replace($sItem, 'image-link', $imgtag);
+                    UpHelper::kw_replace($this,$sItem, 'image-link', $imgtag);
                 }
-                $this->kw_replace($sItem, 'image', $imgtag);
-                $this->kw_replace($sItem, 'image-src', $img_src);
-                $this->kw_replace($sItem, 'image-alt', $img_alt);
+                UpHelper::kw_replace($this,$sItem, 'image', $imgtag);
+                UpHelper::kw_replace($this,$sItem, 'image-src', $img_src);
+                UpHelper::kw_replace($this,$sItem, 'image-alt', $img_alt);
             }
 
             // --- keyword avec param
@@ -296,7 +297,7 @@ class jcategories_by_tags extends upAction
                     if (strlen($intro) > $len)
                         $intro = mb_substr($intro, 0, $len) . '...';
                 }
-                $this->kw_replace($sItem, $tag[1],$intro);
+                UpHelper::kw_replace($this,$sItem, $tag[1],$intro);
             }
             
             // --- fin article

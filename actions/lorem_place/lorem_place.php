@@ -21,7 +21,9 @@
  */
 defined('_JEXEC') or die();
 
-class lorem_place extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class lorem_place extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -32,7 +34,7 @@ class lorem_place extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // dimension de l'image largeur x hauteur
@@ -55,10 +57,10 @@ class lorem_place extends upAction
 
         // ====== fusion et controle des options
         // =====================================
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === nettoyage du cache
         if ($options['cache-reset']) {
@@ -89,7 +91,7 @@ class lorem_place extends upAction
         }
 
         // --- 2- $ext : extension image
-        $ext = (isset($this->options_user['format'])) ? $this->ctrl_argument($this->options_user['format'], 'svg,png,jpeg,jpg,gif,webp') : '';
+        $ext = (isset($this->options_user['format'])) ? UpHelper::ctrl_argument($this,$this->options_user['format'], 'svg,png,jpeg,jpg,gif,webp') : '';
 
         // --- 3- $text : text et font
         $texte_prefix = '';
@@ -107,7 +109,7 @@ class lorem_place extends upAction
         $font_prefix = '';
         $font = '';
         if (isset($this->options_user['font'])) {
-            $font = $this->ctrl_argument($options['font'], 'Lato,Montserrat,Oswald,PT Sans,Roboto,Lora,Open Sans,Playfair Display,Raleway,Source Sans Pro', false);
+            $font = UpHelper::ctrl_argument($this,$options['font'], 'Lato,Montserrat,Oswald,PT Sans,Roboto,Lora,Open Sans,Playfair Display,Raleway,Source Sans Pro', false);
             $font = str_replace(' ', '+', $font);
             $font_prefix = ((empty($texte)) ? '?' : '&') . 'font='. $font;
         }
@@ -158,10 +160,10 @@ class lorem_place extends upAction
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['src'] = $image;
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = $this->set_attr_tag('img', $attr_main, false);
+        $html = UpHelper::set_attr_tag($this,'img', $attr_main, false);
 
         return $html;
     }

@@ -36,8 +36,9 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcontent_in_content extends upAction
+class jcontent_in_content extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -48,7 +49,7 @@ class jcontent_in_content extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // ID de l'article
@@ -71,7 +72,7 @@ class jcontent_in_content extends upAction
         $sItemid = (int) $this->options_user[__class__];
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // ======> verif template (modèle de mise en page)
         // en priorité : le contenu entre shortcode
         // en second : le model dans prefs.ini
@@ -81,10 +82,10 @@ class jcontent_in_content extends upAction
             $tmpl = $options['template'];
         }
         if (! $tmpl) {
-            $this->msg_error($this->trad_keyword('NO_TEMPLATE'));
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_TEMPLATE'));
             return false;
         }
-        $tmpl = $this->get_bbcode($tmpl, '+hr|pre');
+        $tmpl = UpHelper::get_bbcode($this,$tmpl, '+hr|pre');
         // =====> RECUP DES DONNEES
         // JLoader::register('ContentModelArticles', JPATH_SITE . '/components/com_content/models/articles.php');
         $model = Factory::getApplication()->bootComponent('com_content')->getMVCFactory()->createModel('Articles', '', array(
@@ -120,15 +121,15 @@ class jcontent_in_content extends upAction
 
         // ======> Style général et par article
         $main_attr['id'] = $options['id'];
-        $this->get_attr_style($sItem_attr, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this,$sItem_attr, $options['main-class'], $options['main-style']);
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ======> mise en forme résultat
         // --- Bloc article
         if ($options['main-tag'] != '0') {
-            $html[] = $this->set_attr_tag($options['main-tag'], $sItem_attr);
+            $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $sItem_attr);
         }
         $sItem = $tmpl; // reinit pour nouvel article
         // --- lien vers l'article
@@ -147,25 +148,25 @@ class jcontent_in_content extends upAction
 
         // ==== les remplacements
         // {id} : ID de l'article
-        $this->kw_replace($sItem, 'id', $item->id);
+        UpHelper::kw_replace($this,$sItem, 'id', $item->id);
         // {link} : lien vers l'article - a mettre dans balise a
-        $this->kw_replace($sItem, 'link', $url);
+        UpHelper::kw_replace($this,$sItem, 'link', $url);
         // {title} : titre de l'article
-        $this->kw_replace($sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
+        UpHelper::kw_replace($this,$sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
         // {title-no-link} : titre de l'article
-        $this->kw_replace($sItem, 'title', $title);
+        UpHelper::kw_replace($this,$sItem, 'title', $title);
         // {subtitle} : sous-titre de l'article (partie après tilde du titre)
-        $this->kw_replace($sItem, 'subtitle', $subtitle);
+        UpHelper::kw_replace($this,$sItem, 'subtitle', $subtitle);
         // {cat} : catégorie de l'article
-        $this->kw_replace($sItem, 'cat', $item->category_title);
+        UpHelper::kw_replace($this,$sItem, 'cat', $item->category_title);
         // {date-crea} : date de création
-        $this->kw_replace($sItem, 'date-crea', $this->up_date_format($item->created, $options['date-format'], $options['date-locale']));
+        UpHelper::kw_replace($this,$sItem, 'date-crea', UpHelper::up_date_format($this,$item->created, $options['date-format'], $options['date-locale']));
         // {date-modif} : date de modification
-        $this->kw_replace($sItem, 'date-modif', $this->up_date_format($item->modified, $options['date-format'], $options['date-locale']));
+        UpHelper::kw_replace($this,$sItem, 'date-modif', UpHelper::up_date_format($this,$item->modified, $options['date-format'], $options['date-locale']));
         // {date-publish} : date de publication
-        $this->kw_replace($sItem, 'date-publish', $this->up_date_format($item->publish_up, $options['date-format'], $options['date-locale']));
+        UpHelper::kw_replace($this,$sItem, 'date-publish', UpHelper::up_date_format($this,$item->publish_up, $options['date-format'], $options['date-locale']));
         // {author} : auteur
-        $this->kw_replace($sItem, 'author', $item->author);
+        UpHelper::kw_replace($this,$sItem, 'author', $item->author);
 
         // --- traitement $item->introtext et $item->fulltext
         // si pas d'introtext -> introtext=fulltext et fulltext=vide
@@ -177,34 +178,34 @@ class jcontent_in_content extends upAction
         // prise en charge plugins contenu v31
         if ($options['content-plugin']) {
             if (stripos($sItem, '##intro') !== false) {
-                $item->introtext = $this->import_content($item->introtext);
+                $item->introtext = UpHelper::import_content($this,$item->introtext);
             } // v31
             if (stripos($sItem, '##content##') !== false) {
-                $item->fulltext = $this->import_content($item->fulltext);
+                $item->fulltext = UpHelper::import_content($this,$item->fulltext);
             }
         }
 
         // {intro} : texte d'introduction en HTML
         PluginHelper::importPlugin('content');
         $content = HTMLHelper::_('content.prepare', $item->introtext);
-        $this->kw_replace($sItem, 'intro', $content);
+        UpHelper::kw_replace($this,$sItem, 'intro', $content);
         // {content} : contenu de l'article en HTML
         PluginHelper::importPlugin('content');
         $content = ($item->fulltext == '') ? ($item->introtext) : ($item->fulltext);
         $content = HTMLHelper::_('content.prepare', $content);
-        $this->kw_replace($sItem, 'content', $content);
+        UpHelper::kw_replace($this,$sItem, 'content', $content);
         // {cat} : nom catégorie
-        $this->kw_replace($sItem, 'cat', $item->category_title);
+        UpHelper::kw_replace($this,$sItem, 'cat', $item->category_title);
         // {tags} : liste des tags
         if (stripos($sItem, '##tag##') !== false) {
         }
         // {featured} : en vedette
         if (stripos($sItem, '##featured##') !== false) {
             $tmp = ($item->featured == '1') ? $options['featured-html'] : '';
-            $this->kw_replace($sItem, 'featured', $tmp);
+            UpHelper::kw_replace($this,$sItem, 'featured', $tmp);
         }
         // {hit}
-        $this->kw_replace($sItem, 'hits', $item->hits);
+        UpHelper::kw_replace($this,$sItem, 'hits', $item->hits);
 
         // {image-xxx} : l'image d'intro, sinon celle dans l'introtext
         // {image} : la balise img complete
@@ -216,14 +217,14 @@ class jcontent_in_content extends upAction
                 $img_src = $images->image_intro;
                 $img_alt = $images->image_intro_alt;
             } else {
-                $imgTag = $this->preg_string('#(\<img .*\>)#Ui', $item->introtext);
-                $imgAttr = $this->get_attr_tag($imgTag, 'src,alt');
+                $imgTag = UpHelper::preg_string($this,'#(\<img .*\>)#Ui', $item->introtext);
+                $imgAttr = UpHelper::get_attr_tag($this,$imgTag, 'src,alt');
                 $img_src = (isset($imgAttr['src'])) ? $imgAttr['src'] : '';
                 $img_alt = (isset($imgAttr['alt'])) ? $imgAttr['alt'] : '';
             }
-            $this->kw_replace($sItem, 'image', '<img src="' . $img_src . '" alt="' . $img_alt . '">');
-            $this->kw_replace($sItem, 'image-src', $img_src);
-            $this->kw_replace($sItem, 'image-alt', $img_alt);
+            UpHelper::kw_replace($this,$sItem, 'image', '<img src="' . $img_src . '" alt="' . $img_alt . '">');
+            UpHelper::kw_replace($this,$sItem, 'image-src', $img_src);
+            UpHelper::kw_replace($this,$sItem, 'image-alt', $img_alt);
         }
 
         // --- tags avec param
@@ -238,7 +239,7 @@ class jcontent_in_content extends upAction
                     $intro = mb_substr($intro, 0, $len) . '...';
                 }
             }
-            $this->kw_replace($sItem, $tag[1], $intro);
+            UpHelper::kw_replace($this,$sItem, $tag[1], $intro);
         }
 
         // les custom fields (v3.1)

@@ -19,11 +19,13 @@
  */
 defined('_JEXEC') or die();
 
-class facebook_timeline extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class facebook_timeline extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        $this->load_file('facebook.js');
+        UpHelper::load_file($this,'facebook.js');
         return true;
     }
 
@@ -31,7 +33,7 @@ class facebook_timeline extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // ID facebook. Voir https://findmyfbid.com
@@ -53,9 +55,9 @@ class facebook_timeline extends upAction
          * width=500 (valeur maxi) permet avec adaptwidth=1 de toujours remplir la largeur d'une colonne
          */
 
-        // $this->set_option_user_if_true(__class__, $this->actionUserName);
+        // UpHelper::set_option_user_if_true($this,__class__, $this->actionUserName);
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // attributs pour div externe
         $attr_outer['id'] = $options['id'];
@@ -78,9 +80,9 @@ class facebook_timeline extends upAction
         $attr_in['data-width'] = $options['width'];
         $attr_in['data-height'] = $options['height'];
 
-        $out = $this->set_attr_tag('div', $attr_outer);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_outer);
         $out .= '<div id="fb-root"></div>';
-        $out .= $this->set_attr_tag('div', $attr_in);
+        $out .= UpHelper::set_attr_tag($this,'div', $attr_in);
         $out .= '<div class="fb-xfbml-parse-ignore"> </div>';
         $out .= '</div>';
         $out .= '</div>';

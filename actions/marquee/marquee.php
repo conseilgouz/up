@@ -14,25 +14,27 @@
  */
 defined('_JEXEC') or die();
 
-class marquee extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class marquee extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('liMarquee.css');
-        $this->load_file('jquery.liMarquee.min.js');
+        UpHelper::load_file($this,'liMarquee.css');
+        UpHelper::load_file($this,'jquery.liMarquee.min.js');
         return true;
     }
 
     function run()
     {
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ==== la configuration par défaut de l'action
         $options_def = array(
@@ -71,19 +73,19 @@ class marquee extends upAction
         // l'option principale est le texte label. Si non saisi = vide (pas true)
         // if ($options_user[$action]===true) $options_user[$action] = '';
 
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
-        $js_params = $this->only_using_options($js_options_def);
-        $js_params = $this->json_arrtostr($js_params);
+        $js_params = UpHelper::only_using_options($this,$js_options_def);
+        $js_params = UpHelper::json_arrtostr($this,$js_params);
 
         // ==== code appel du plugin
         $js_code = '$("#' . $options['id'] . ' .str_wrap").liMarquee(' . $js_params . ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // == CONSOLIDATION OPTIONS
         // -- lbl-pos : nom verifie et complete pour faciliter CSS
@@ -112,22 +114,22 @@ class marquee extends upAction
         $main_attr['id'] = $options['id'];
         // si demande utilisation fichier style CSS
         if ($options['model']) {
-            $this->load_file('style/' . $options['model'] . '.css'); // TODO chemin
+            UpHelper::load_file($this,'style/' . $options['model'] . '.css'); // TODO chemin
             $main_attr['class'] = 'lmmq-' . $options['model'];
         }
 
         // -- BLOC OUT ----------------------------------------------
         // -- les classes
         $out_attr['class'] = 'lmmq-out';
-        $this->add_class($out_attr['class'], $class_label_pos);
+        UpHelper::add_class($this,$out_attr['class'], $class_label_pos);
 
         // les classes utilisateurs
-        $this->add_class($out_attr['class'], $options['out-class']);
+        UpHelper::add_class($this,$out_attr['class'], $options['out-class']);
 
         // -- les styles
         $out_attr['style'] = $options['out-style'];
         if (! $class_label_pos) {
-            $this->add_style($out_attr['style'], 'padding-right', '5px');
+            UpHelper::add_style($this,$out_attr['style'], 'padding-right', '5px');
         }
 
         // -- BLOC LABEL ------------------------------------------------
@@ -137,12 +139,12 @@ class marquee extends upAction
         // les styles
         $lbl_attr['style'] = $options['lbl-style'];
         if ($options['lbl-nowrap']) {
-            $this->add_style($lbl_attr['style'], 'white-space', 'nowrap');
+            UpHelper::add_style($this,$lbl_attr['style'], 'white-space', 'nowrap');
         }
 
         // -- MSG ------------------------------------------------
         $msg_attr['class'] = 'lmmq-msg';
-        $this->add_class($msg_attr['class'], $options['msg-class']);
+        UpHelper::add_class($this,$msg_attr['class'], $options['msg-class']);
         // les styles
         $msg_attr['style'] = $options['msg-style'];
 
@@ -158,19 +160,19 @@ class marquee extends upAction
 
         // ==== CODE RETOURNE POUR ACTION
         // outer
-        $out = $this->set_attr_tag('div', $main_attr);
-        $out .= $this->set_attr_tag('div', $out_attr);
+        $out = UpHelper::set_attr_tag($this,'div', $main_attr);
+        $out .= UpHelper::set_attr_tag($this,'div', $out_attr);
         // label left ou top
         if (in_array($options['lbl-pos'], array(
             'left',
             'top'
         ))) {
-            $out .= $this->set_attr_tag('div', $lbl_attr);
+            $out .= UpHelper::set_attr_tag($this,'div', $lbl_attr);
             $out .= ($options[__class__] == 1) ? '' : $options[__class__];
             $out .= '</div>';
         }
-        $out .= $this->set_attr_tag('div', $msg_attr);
-        $out .= $this->set_attr_tag('div', $wrap_attr);
+        $out .= UpHelper::set_attr_tag($this,'div', $msg_attr);
+        $out .= UpHelper::set_attr_tag($this,'div', $wrap_attr);
         $out .= $this->content;
         $out .= '</div>';
         $out .= '</div>';
@@ -179,7 +181,7 @@ class marquee extends upAction
             'right',
             'bottom'
         ))) {
-            $out .= $this->set_attr_tag('div', $lbl_attr);
+            $out .= UpHelper::set_attr_tag($this,'div', $lbl_attr);
             $out .= $options[__class__];
             $out .= '</div>';
         }

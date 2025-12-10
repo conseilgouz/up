@@ -18,15 +18,17 @@
  */
 defined('_JEXEC') or die();
 
-class popover extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class popover extends Lomart\Plugin\Content\Up\Extension\Up
 {
     /**
      * charger les ressources communes à toutes les instances de l'action
      */
     public function init()
     {
-        $this->load_file('jquery.gpopover.css');
-        $this->load_file('jquery.gpopover.js');
+        UpHelper::load_file($this,'jquery.gpopover.css');
+        UpHelper::load_file($this,'jquery.gpopover.js');
         return true;
     }
 
@@ -39,7 +41,7 @@ class popover extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -78,60 +80,60 @@ class popover extends upAction
         // affecter l'option principale à une option JS
         // $this->options_user['xxx'] = $this->options_user[__class__];
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
         if ($options['pop-bg-color']) {
             $css = '#id-content{background-color:' . $options['pop-bg-color'] . '}';
             $css .= '#id-content > .gpopover-arrow{border-bottom-color:' . $options['pop-bg-color'] . '}';
             $css .= '#id-content > .gpopover-arrow.bottom{border-top-color:' . $options['pop-bg-color'] . '}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").gpopover(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $attr_trigger['id'] = $options['id'];
         $attr_trigger['data-popover'] = $options['id'] . '-content';
-        $this->get_attr_style($attr_trigger, $options['class'], $options['style']);
-        $trigger_content = $this->get_bbcode($options[__class__]);
+        UpHelper::get_attr_style($this,$attr_trigger, $options['class'], $options['style']);
+        $trigger_content = UpHelper::get_bbcode($this,$options[__class__]);
         // -- attribut contenu
         $attr_content['id'] = $options['id'] . '-content';
         $attr_content['class'] = 'gpopover';
         if ($options['max-height']) {
             $this->content = '<div style="max-height:' . $options['max-height'] . ';overflow:auto">' . $this->content . '</div>';
         }
-        $this->get_attr_style($attr_content, $options['pop-class'], $options['pop-style']);
+        UpHelper::get_attr_style($this,$attr_content, $options['pop-class'], $options['pop-style']);
 
         // ==== code en retour
         // ---- le déclencheur
-        $out['tag'] = $this->set_attr_tag($options['tag'], $attr_trigger, $trigger_content);
+        $out['tag'] = UpHelper::set_attr_tag($this,$options['tag'], $attr_trigger, $trigger_content);
         // ---- le contenu popover
-        $out['after'] = $this->set_attr_tag('div', $attr_content, $this->content);
+        $out['after'] = UpHelper::set_attr_tag($this,'div', $attr_content, $this->content);
 
         return $out;
     }

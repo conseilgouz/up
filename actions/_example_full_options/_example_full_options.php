@@ -19,14 +19,16 @@
  * */
 /* * **************************************************************************** */
 /* * **************** ATTENTION CE SCRIPT EST UN MODELE  ************************ */
-/**    il ne peux pas fonctionner car les fichiers appelés n'existent pas     * */
+/**    il ne peut pas fonctionner car les fichiers appelés n'existent pas     * */
 /**    Inspirez-vous d'autres actions pour comprendre le fonctionnement       * */
 /* * **************************************************************************** */
 
 
 defined('_JEXEC') or die;
 
-class _example_full_options extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class _example_full_options extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -34,8 +36,8 @@ class _example_full_options extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('fichier.css');
-        $this->load_file('fichier.js');
+        UpHelper::load_file($this,'fichier.css');
+        UpHelper::load_file($this,'fichier.js');
         // JHtml::script('https://site.com/script_externe.js');
         return true;
     }
@@ -47,7 +49,7 @@ class _example_full_options extends upAction {
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -55,7 +57,7 @@ class _example_full_options extends upAction {
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - 0 pour cacher le lien vers demo car inexistante
-        $this->set_demopage();
+        $UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -80,18 +82,18 @@ class _example_full_options extends upAction {
         $this->options_user[strtolower('xXx')] = $this->options_user[__class__];
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
         
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
         // contrôle des valeurs permises pour les listes
-        $options['xxx'] = $this->ctrl_argument($options['xxx'], 'arg1,arg2,arg3');
+        $options['xxx'] = UpHelper::ctrl_argument($this,$options['xxx'], 'arg1,arg2,arg3');
         
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
         
         // --- En cas de changement de l'argument d'une option JS par le script, 
         // il faut actualiser avant traitement par only_using_options()
@@ -100,25 +102,25 @@ class _example_full_options extends upAction {
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
 
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").xxxxx(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $outer_div['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
         $html[] = $this->content;
         $html[] = '</div>';
 

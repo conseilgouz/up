@@ -22,8 +22,8 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
-
-class jextensions_list extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -35,7 +35,7 @@ class jextensions_list extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'component,module,plugin', // nom d'un prefset ou un des types suivants : component,module,plugin,template
@@ -63,14 +63,14 @@ class jextensions_list extends upAction
         );
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['template'] = $this->get_bbcode($options['template'], false);
-        $options['model-note'] = $this->get_bbcode($options['model-note'], false);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
+        $options['model-note'] = UpHelper::get_bbcode($this,$options['model-note'], false);
         // === Consolidation des options
         // balise HTML
         $options['main-tag'] = ($options['main-tag'] == '0') ? '' : $options['main-tag'];
         $options['item-tag'] = ($options['item-tag'] == '0') ? '' : $options['item-tag'];
-        $state = explode(',', $this->get_bbcode($options['state-list']) . ',,'); // v31
+        $state = explode(',', UpHelper::get_bbcode($this,$options['state-list']) . ',,'); // v31
 
         // SQL : type pour list
         foreach (explode(',', $options[__class__]) as $type) {
@@ -80,7 +80,7 @@ class jextensions_list extends upAction
         $type = trim(implode(',', $typelist));
         $exclude = ($options['type-exclude'] == '0') ? '' : 'NOT';
         // SQL : where sur client_id
-        $client = $this->ctrl_argument($options['client'], ',0,1', false);
+        $client = UpHelper::ctrl_argument($this,$options['client'], ',0,1', false);
         // Critères de tri
         $sort_keys = explode(',', $options['sort']);
 
@@ -99,14 +99,14 @@ class jextensions_list extends upAction
         if (isset($this->options_user['debug'])) {
             $debug = $query->__toString();
             // $debug .= '<br' . var_export($db->loadAssocList());
-            $this->msg_info(htmlentities($debug), 'Requete SQL');
+            UpHelper::msg_info($this,htmlentities($debug), 'Requete SQL');
         }
         $resbrut = $db->loadAssocList();
 
         // === Lecture des notes webmaster
         $notes_file = $this->actionPath . 'custom/info.ini';
         if (file_exists($notes_file)) {
-            $notes = $this->load_inifile($notes_file, true);
+            $notes = UpHelper::load_inifile($this,$notes_file, true);
             $notes = ($notes === false) ? array() : $notes;
         }
         // ces caractéres sont a supprimer du nom des extensions
@@ -162,36 +162,36 @@ class jextensions_list extends upAction
             }
         }
         if (empty($results)) {
-            return $this->msg_inline('no extension found with this options');
+            return UpHelper::msg_inline($this,'no extension found with this options');
         }
         ksort($results);
 
         // === MISE EN FORME
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['style']);
 
         foreach ($results as $res) {
             $out = $options['template'];
-            $this->kw_replace($out, 'id', $res['id']);
-            $this->kw_replace($out,'state', $state[$res['enabled']]);
-            $this->kw_replace($out,'type', $res['type']);
+            UpHelper::kw_replace($this,$out, 'id', $res['id']);
+            UpHelper::kw_replace($this,$out,'state', $state[$res['enabled']]);
+            UpHelper::kw_replace($this,$out,'type', $res['type']);
             $str = ($res['folder'] == '') ? '' : sprintf($options['model-folder'], $res['folder']);
-            $this->kw_replace($out, 'folder', $str);
-            $this->kw_replace($out,'client', $res['client']);
-            $this->kw_replace($out,'name', $res['name']);
-            $this->kw_replace($out,'author', $res['author']);
+            UpHelper::kw_replace($this,$out, 'folder', $str);
+            UpHelper::kw_replace($this,$out,'client', $res['client']);
+            UpHelper::kw_replace($this,$out,'name', $res['name']);
+            UpHelper::kw_replace($this,$out,'author', $res['author']);
             $str = ($res['version'] == '') ? '' : sprintf($options['model-version'], $res['version']);
-            $this->kw_replace($out,'version', $str);
+            UpHelper::kw_replace($this,$out,'version', $str);
             $str = ($res['note'] == '') ? '' : sprintf($options['model-note'], $res['note']);
-            $this->kw_replace($out,'note', $str);
+            UpHelper::kw_replace($this,$out,'note', $str);
             // ajout tag si demande
             if ($options['item-tag'])
-                $out = $this->set_attr_tag($options['item-tag'], array(), $out);
+                $out = UpHelper::set_attr_tag($this,$options['item-tag'], array(), $out);
 
             $html[] = $out;
         }
         if ($options['main-tag']) {
-            return $this->set_attr_tag($options['main-tag'], $attr_main, implode(PHP_EOL, $html));
+            return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, implode(PHP_EOL, $html));
         } else {
             return implode(PHP_EOL, $html);
         }

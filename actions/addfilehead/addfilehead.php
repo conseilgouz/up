@@ -12,8 +12,9 @@
  *
  */
 defined('_JEXEC') or die();
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class addfilehead extends upAction
+class addfilehead extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -25,7 +26,7 @@ class addfilehead extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // liste des fichiers ou URL. séparateur virgule
@@ -33,16 +34,16 @@ class addfilehead extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         $files = array_map('trim', explode(',', $options[__class__]));
         foreach ($files as $file) {
-            $this->load_file($file);
+            UpHelper::load_file($this,$file);
         }
 
         return '';

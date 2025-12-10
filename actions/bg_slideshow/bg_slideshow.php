@@ -40,16 +40,17 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class bg_slideshow extends upAction
+class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_upcss();
-        $this->load_file('vegas/vegas.min.css');
-        $this->load_file('vegas/vegas.min.js');
+        UpHelper::load_upcss($this);
+        UpHelper::load_file($this,'vegas/vegas.min.css');
+        UpHelper::load_file($this,'vegas/vegas.min.js');
         return true;
     }
 
@@ -57,7 +58,7 @@ class bg_slideshow extends upAction
     {
 
         // ---- lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /*images*/
@@ -98,22 +99,22 @@ class bg_slideshow extends upAction
         $animation_list = 'kenburns,kenburnsLeft,kenburnsUp,kenburnsDown,kenburnsUpLeft,kenburnsUpRight,kenburnsDownLeft,kenburnsDownRight,random';
 
         // --- fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
-        $options['transition'] = $this->ctrl_argument($options['transition'], $transition_list);
+        $options['transition'] = UpHelper::ctrl_argument($this,$options['transition'], $transition_list);
         if ($options['animation'] != null) {
-            $options['animation'] = $this->ctrl_argument($options['animation'], $animation_list);
+            $options['animation'] = UpHelper::ctrl_argument($this,$options['animation'], $animation_list);
         }
         // === Init variables
         $on_mobile = false;
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ========== localisation du fond
         $selector = ($this->content) ? '#' . $options['id'] : $options['bg-selector'];
@@ -123,21 +124,21 @@ class bg_slideshow extends upAction
             $client = Factory::getApplication()->client;
             if ($client->mobile) {
                 $on_mobile = true;
-                $css_mobile = $this->get_bg_mobile($options);
-                $this->load_css_head($selector . '{' . $css_mobile . '}');
+                $css_mobile = UpHelper::get_bg_mobile($this,$options);
+                UpHelper::load_css_head($this,$selector . '{' . $css_mobile . '}');
             }
         }
 
         // =========== overlay sur slideshow
         if ($options['bg-overlay'] && ! $on_mobile) {
-            $this->add_str($options['js-options'], 'overlay:true', ',');
-            $val = $this->get_overlay($options['bg-overlay']);
-            $this->load_css_head($selector . ' .vegas-overlay{background:' . $val . '}');
+            UpHelper::add_str($this,$options['js-options'], 'overlay:true', ',');
+            $val = UpHelper::get_overlay($this,$options['bg-overlay']);
+            UpHelper::load_css_head($this,$selector . ' .vegas-overlay{background:' . $val . '}');
         }
         // =========== overlay sur page
         if ($options['page-overlay'] && $options['page-selector']) {
-            $val = $this->get_overlay($options['page-overlay']);
-            $this->load_css_head($options['page-selector'] . '{background:' . $val . '}');
+            $val = UpHelper::get_overlay($this,$options['page-overlay']);
+            UpHelper::load_css_head($this,$options['page-selector'] . '{background:' . $val . '}');
         }
 
         // ====== Récupération de la liste des images
@@ -154,7 +155,7 @@ class bg_slideshow extends upAction
                 $imgList = array_map('trim', explode(';', $option_images));
             }
             foreach ($imgList as $img) {
-                $imgsrc[] = $this->get_slide_info($img, $is_dir, $options['path']);
+                $imgsrc[] = UpHelper::get_slide_info($this,$img, $is_dir, $options['path']);
             }
             if ($options['shuffle']) { // v5.1 forcé car non pris en charge par le JS
                 shuffle($imgsrc);
@@ -168,17 +169,17 @@ class bg_slideshow extends upAction
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
         if (! $on_mobile) {
-            $js_options = $this->only_using_options($js_options_def);
+            $js_options = UpHelper::only_using_options($this,$js_options_def);
             // -- conversion en chaine Json
-            $js_params = $this->json_arrtostr($js_options, 2, false);
+            $js_params = UpHelper::json_arrtostr($this,$js_options, 2, false);
             // -- initialisation
             $js_code = '$("' . $selector . '").vegas({';
             $js_code .= 'slides: [' . $slides . ']';
-            $this->add_str($js_code, $js_params, ',');
+            UpHelper::add_str($this,$js_code, $js_params, ',');
             if ($options['js-options'])
-                $this->add_str($js_code, $options['js-options'], ',');
+                UpHelper::add_str($this,$js_code, $options['js-options'], ',');
             $js_code .= '});';
-            $this->load_jquery_code($js_code);
+            UpHelper::load_jquery_code($this,$js_code);
         }
 
         // ====== si contenu, on crée un bloc à la position du shortcode
@@ -192,11 +193,11 @@ class bg_slideshow extends upAction
             if ($options['center']) {
                 $attr_center['class'] = 'up-center';
             }
-            $this->get_attr_style($attr_center, $options['style']);
+            UpHelper::get_attr_style($this,$attr_center, $options['style']);
 
             // -- code retour
-            $html[] = $this->set_attr_tag('div', $attr_main);
-            $html[] = $this->set_attr_tag('div', $attr_center);
+            $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
+            $html[] = UpHelper::set_attr_tag($this,'div', $attr_center);
             $html[] = '<div>';
             $html[] = $this->content;
             $html[] = '</div>';
@@ -212,141 +213,6 @@ class bg_slideshow extends upAction
 
     // run
 
-    /*
-     * get_slide_info : retourne la chaine pour l'argument slide de vegas
-     * -------------------------------------------------
-     * LE PRINCIPE.
-     * les infos de cadrage permettent d'indiquer le point référence pour le recadrage
-     * elles sont ajoutées entre crochets à la fin du nom
-     * exemple maPhoto[100-100].jpg pour recadrer à partir du droit-bas (Right-Bottom)
-     * 1ere valeur = position horizontale en pourcentage. 0=gauche, 100=droite
-     * 2eme valeur = position verticale en pourcentage. 0=haut, 100=bas
-     * 3eme valeur = mode recouvrement : repeat, contain ou cover
-     * Cet ajout peut-être :
-     * - dans le nom du fichier pour les images passées par dossier
-     * - ajouté au nom du fichier dans l'option principale
-     * -------------------------------------------------
-     * $img : nom de l'image
-     * $is_dir : TRUE si les infos de cadrage existe dans le nom du fichier
-     * $path : chemin commun
-     */
-    function get_slide_info($img, $is_dir, $path)
-    {
-        // recherche options dans nom du fichier
-        $regex = '#(.*)\[([\d]{0,3})\-?([\d]{0,3})\-?(.*)\]\.(.*)#i';
-        if (preg_match($regex, $img, $result) == 1) {
-            // $result[0] = $img
-            // $result[1] = chemin et nom image (sans extension)
-            // $result[2] = cadrage horizontal en %
-            // $result[3] = cadrage vertical en %
-            // $result[4] = mode size
-            // $result[5] = extension (sans le point)
-            if ($is_dir) {
-                $out = '{src:"' . $this->get_url_relative($img) . '" ';
-            } else {
-                $out = '{src:"' . $this->get_url_relative($path . $result[1] . '.' . $result[5]) . '" ';
-            }
-            $this->add_str($out, $result[2], ',', 'align:"', '%"');
-            $this->add_str($out, $result[3], ',', 'valign:"', '%"');
-            $arg = strtolower($result[4]);
-            switch ($arg) {
-                case 'cover':
-                    $this->add_str($out, 'cover:true', ',');
-                    break;
-                case 'contain':
-                    $this->add_str($out, 'cover:false', ',');
-                    break;
-                case 'repeat':
-                    $this->add_str($out, 'cover:"repeat"', ',');
-                    break;
-            }
-            $out .= '}';
-        } else {
-            $out = '{src:"' . $this->get_url_relative($path . $img) . '"}';
-        }
-
-        return $out;
-    }
-
-    /*
-     * get_overlay : retourne la valeur pour la propriété background d'un overley
-     * si $val se termine par .png : image répétée
-     * si $val est un nombre (70, 70%) : masque blanc transparent
-     * si $val commence par # (#FF9999 70%) : masque coloré transparent
-     * sinon $val est une règle CSS (linear-gradient ou radial-gradient)
-     */
-    function get_overlay($val)
-    {
-        if (strtolower(substr($val, strrpos($val, '.'))) == '.png') {
-            // si fichier PNG
-            if (dirname($val) == '.') {
-                $val = $this->upPath . 'assets/overlay/' . $val;
-                $val = str_replace('\\', '/', $val);
-            }
-            $val = 'url(\'' . Uri::root(true) . '/' . $val . '\') repeat';
-        } else if ($val[0] == '#') {
-            $rgba = $this->hex2rgba($val);
-            $val = 'linear-gradient(' . $rgba . ' 0%,' . $rgba . ' 100%)';
-        } else if ((float) $val > 0) {
-            // si 70 ou 70% -> rgba(256,256,256,.7)
-            $val = (float) $val;
-            $val = $val / 100;
-            $val = 'linear-gradient(rgba(240,240,240,' . $val . ') 0%,rgba(240,240,240,' . $val . ') 100%)';
-        }
-        // sinon, c'était une règle CSS
-        return $val;
-    }
-
-    /*
-     * hex2rgba : retourne une couleur au format #RRGGBBAA ou #RGBA au format rgba(r,g,b,a)
-     * opacité à 1 par défaut
-     */
-    function hex2rgba($hex)
-    {
-        // on retire le #
-        $hex = str_replace('#', '', $hex);
-        // si #RGBA ou #RGB : on double en forcant à FF si besoin
-        if (strlen($hex) <= 4) {
-            $hex .= $hex . 'FFFF';
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
-        }
-        // si >4 et <8, on force à FF
-        $hex = substr($hex . 'FFFF', 0, 8);
-        // conversion en décimal
-        $rgba = array_map('hexdec', str_split($hex, 2));
-        // canal alpha sous forme coeff
-        $rgba[3] = round($rgba[3] / 255, 1);
-        // retour
-        return 'rgba(' . implode(',', $rgba) . ')';
-    }
-
-    /*
-     * retourne le CSS pour le background sur mobile
-     * $opt_mobile peut contenir :
-     * - rien : on n'affiche pas la video, mais le fond prévu (poster bg-color)
-     * - une image
-     * - des propriétés css pour background : url(image.jpg) repeat-y
-     * - du css : background:...;color:...
-     */
-    function get_bg_mobile($options)
-    {
-        $opt_mobile = $options['mobile'];
-        if ($opt_mobile == '1') {
-            $out = '';
-        } elseif (is_file($opt_mobile)) {
-            // image existante
-            list ($w, $h) = getimagesize($opt_mobile);
-            if (($w + $h) < 200) {
-                $out = 'background:url(\'' . $opt_mobile . '\') repeat ' . $options['bg-color'];
-            } else {
-                $out = 'background:url(\'' . $opt_mobile . '\') no-repeat ' . $options['bg-color'] . ' center/cover';
-            }
-        } else {
-            $out = (substr($opt_mobile, 0, 11) == 'background:') ? '' : 'background:';
-            $out .= $opt_mobile;
-        }
-        return $out;
-    }
 }
 
 // class

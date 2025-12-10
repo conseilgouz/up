@@ -14,13 +14,15 @@
  */
 defined('_JEXEC') or die();
 
-class gotop extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class gotop extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('gotop.css');
-        $this->load_file('gotop.js');
+        UpHelper::load_file($this,'gotop.css');
+        UpHelper::load_file($this,'gotop.js');
         return true;
     }
 
@@ -28,7 +30,7 @@ class gotop extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // texte ou caractère unicode pour la flèche. ex \25b2, \21ea ou top
@@ -43,7 +45,7 @@ class gotop extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $css = '';
         $css .= (empty($options[__class__])) ? '' : '--progress-icon:"' . $options[__class__].'";';
@@ -58,7 +60,7 @@ class gotop extends upAction
 
         // === CSS-HEAD
         $css .= $options['css-head'];
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
         $id = '#' . $options['id'];
 
         // code en retour

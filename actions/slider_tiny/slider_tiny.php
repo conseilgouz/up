@@ -30,7 +30,9 @@
  */
 defined('_JEXEC') or die();
 
-class slider_tiny extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class slider_tiny extends Lomart\Plugin\Content\Up\Extension\Up
 {
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -40,9 +42,9 @@ class slider_tiny extends upAction
      */
     public function init()
     {
-        $this->load_file('tiny-slider.css');
-        $this->load_file('tiny-slider-min.js');
-        // $this->load_file('https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js');
+        UpHelper::load_file($this,'tiny-slider.css');
+        UpHelper::load_file($this,'tiny-slider-min.js');
+        // UpHelper::load_file($this,'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js');
         return true;
     }
 
@@ -55,7 +57,7 @@ class slider_tiny extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -157,19 +159,19 @@ class slider_tiny extends upAction
 
         // fusion et controle des options
         // attention pour $this->options_user, le nom de l'action est en minuscules
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === controle options PHP
-        $options['sort-by'] = $this->ctrl_argument($options['sort-by'], 'name,random,date');
-        $options['sort-order'] = $this->ctrl_argument($options['sort-order'], 'asc,desc');
-        $options['legend-template'] = $this->get_bbcode($options['legend-template']);
+        $options['sort-by'] = UpHelper::ctrl_argument($this,$options['sort-by'], 'name,random,date');
+        $options['sort-order'] = UpHelper::ctrl_argument($this,$options['sort-order'], 'asc,desc');
+        $options['legend-template'] = UpHelper::get_bbcode($this,$options['legend-template']);
 
         // === controle options JS
-        $options['navPosition'] = $this->ctrl_argument($options['navPosition'], 'top,bottom,center');
-        $options['controlsPosition'] = $this->ctrl_argument($options['controlsPosition'], 'top,bottom,center');
-        $options['autoplayPosition'] = $this->ctrl_argument($options['autoplayPosition'], 'top,bottom,center,none');
-        $options['mode'] = $this->ctrl_argument($options['mode'], 'carousel,gallery');
-        $options['autoplayDirection'] = $this->ctrl_argument($options['autoplayDirection'], 'forward,backward');
+        $options['navPosition'] = UpHelper::ctrl_argument($this,$options['navPosition'], 'top,bottom,center');
+        $options['controlsPosition'] = UpHelper::ctrl_argument($this,$options['controlsPosition'], 'top,bottom,center');
+        $options['autoplayPosition'] = UpHelper::ctrl_argument($this,$options['autoplayPosition'], 'top,bottom,center,none');
+        $options['mode'] = UpHelper::ctrl_argument($this,$options['mode'], 'carousel,gallery');
+        $options['autoplayDirection'] = UpHelper::ctrl_argument($this,$options['autoplayDirection'], 'forward,backward');
 
         if (isset($this->options_user['startindex'])) {
             $this->options_user['startindex']--;
@@ -195,7 +197,7 @@ class slider_tiny extends upAction
             if (isset($options[$option]) && strpos($options[$option], ',') !== false) {
                 $tmp = array_map('trim', explode(',', $options[$option] . $nbbp));
                 // pour actualiser JScode
-                $this->js_actualise($option, $tmp[0], $options, $js_options_def);
+                UpHelper::js_actualise($this,$option, $tmp[0], $options, $js_options_def);
                 for ($i = 1; $i < count($bp); $i++) {
                     if ($tmp[$i]) {
                         $aResp[$bp[$i]][$option] = $tmp[$i];
@@ -205,26 +207,26 @@ class slider_tiny extends upAction
         }
         // l'option responsive est prioritaire. On a supprimé les alternative des options
         if (empty($options['responsive'])) {
-            $responsive = $this->json_arrtostr($aResp);
+            $responsive = UpHelper::json_arrtostr($this,$aResp);
         } else {
-            $responsive = $this->get_code(trim($options['responsive']), true);
+            $responsive = UpHelper::get_code($this,trim($options['responsive']), true);
             $this->options_user['responsive'] = '';
         }
 
         // === Compactage options JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // === CSS-HEAD
         if ($options['zoom-suffix']) {
             $options['css-head'] .= '#id a[cursor:zoom-in]';
         }
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // ========================================
         // === RECUPERATION CONTENU : IMAGE ou BLOC
         // ========================================
         $attr_item['class'] = 'item';
-        $this->get_attr_style($attr_item, $options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
         $images = array(); // code html à afficher
         $tag = 'div';
@@ -233,7 +235,7 @@ class slider_tiny extends upAction
             $pattern = $options[__class__] . '/*.{' . $options['image-extension'] . '}';
             $images = glob($pattern, GLOB_BRACE);
             if (isset($this->options_user['debug'])) {
-                $this->msg_info(json_encode($images));
+                UpHelper::msg_info($this,json_encode($images));
             }
             // uniquement les images dont le nom se termine par zoom-suffix
             if (! empty($options['zoom-suffix'])) {
@@ -272,18 +274,18 @@ class slider_tiny extends upAction
 
             foreach ($images as $img) {
                 $attr_image['src'] = $img;
-                $attr_image['alt'] = $this->link_humanize(str_replace($options['zoom-suffix'] . '.', '.', $img));
+                $attr_image['alt'] = UpHelper::link_humanize($this,str_replace($options['zoom-suffix'] . '.', '.', $img));
                 $thumbnails[] = $img;
 
-                $str = $this->set_attr_tag('img', $attr_image);
+                $str = UpHelper::set_attr_tag($this,'img', $attr_image);
                 if ($options['legend']) {
                     $str = $str . '<figcaption>' . $this->legend_style($attr_image['alt'], $options['legend-template']) . '</figcaption>';
                 }
                 $items[] = $str;
             }
-        } elseif ($this->ctrl_content_parts($this->content)) {
+        } elseif (UpHelper::ctrl_content_parts($this,$this->content)) {
             // séparées par {====} : recup texte colonnes sans le tag P ajouté par éditeur
-            $items = $this->get_content_parts($this->content);
+            $items = UpHelper::get_content_parts($this,$this->content);
         } else {
             // on prend les blocs de 1er niveau du contenu
             require_once($this->upPath . '/assets/lib/simple_html_dom.php');
@@ -298,7 +300,7 @@ class slider_tiny extends upAction
         }
 
         if (empty($items)) {
-            return $this->msg_inline('No content for slider-tiny');
+            return UpHelper::msg_inline($this,'No content for slider-tiny');
         }
 
         // ===========================
@@ -324,7 +326,7 @@ class slider_tiny extends upAction
 
         // le bloc externe a l'ID habituel pour usage par css-head
         $outer_div['id'] = $options['id'];
-        $this->get_attr_style($outer_div, $options['class'], $options['style'], 'tns-bloc-outer');
+        UpHelper::get_attr_style($this,$outer_div, $options['class'], $options['style'], 'tns-bloc-outer');
         // pour le slider on ajoute '-slider'
         $slider_id = $options['id'] . '-slider';
 
@@ -333,10 +335,10 @@ class slider_tiny extends upAction
         if ($options['autoplay']) {
             // --- le texte
             $options['autoplayText'] = html_entity_decode(strtolower($options['autoplayText']));
-            $btnAutoplayText = explode(',', $this->get_bbcode($options['autoplayText'] ?? ''));
+            $btnAutoplayText = explode(',', UpHelper::get_bbcode($this,$options['autoplayText'] ?? ''));
 
             if (count($btnAutoplayText) != 2) {
-                return $this->msg_inline('ERROR autoplayText=START,STOP');
+                return UpHelper::msg_inline($this,'ERROR autoplayText=START,STOP');
             }
             $js_options['autoplayText'] = '[\'' . $btnAutoplayText[0] . '\',\'' . $btnAutoplayText[1] . '\']';
 
@@ -361,8 +363,8 @@ class slider_tiny extends upAction
             $htmlControls = '<div class="tns-controls" id="' . $tns_controls_id . '">';
             // $htmlControls .= '<button data-controls="prev" tabindex="-1" aria-controls="' . $slider_id . '">' . $btnControlsText[0] . '</button>';
             // $htmlControls .= '<button data-controls="next" tabindex="-1" aria-controls="' . $slider_id . '">' . $btnControlsText[1] . '</button>';
-            $htmlControls .= '<button data-controls="prev" tabindex="-1" aria-controls="' . $slider_id . '">' . $this->get_bbcode($options['btn-prev']) . '</button>';
-            $htmlControls .= '<button data-controls="next" tabindex="-1" aria-controls="' . $slider_id . '">' . $this->get_bbcode($options['btn-next']) . '</button>';
+            $htmlControls .= '<button data-controls="prev" tabindex="-1" aria-controls="' . $slider_id . '">' . UpHelper::get_bbcode($this,$options['btn-prev']) . '</button>';
+            $htmlControls .= '<button data-controls="next" tabindex="-1" aria-controls="' . $slider_id . '">' . UpHelper::get_bbcode($this,$options['btn-next']) . '</button>';
             $htmlControls .= '</div>';
         }
 
@@ -426,7 +428,7 @@ class slider_tiny extends upAction
         // ======================
 
         // code en retour
-        $out[] = $this->set_attr_tag('div', $outer_div, false);
+        $out[] = UpHelper::set_attr_tag($this,'div', $outer_div, false);
         // ========== bloc top
         if (! empty($html['top'])) {
             $out[] = '<div class="tns-bloc-top">';
@@ -437,10 +439,10 @@ class slider_tiny extends upAction
         $out[] = '<div class="tns-bloc-center">';
         // le slider
         $attr_slider['id'] = $slider_id;
-        $this->get_attr_style($attr_slider, $options['slider-style']);
-        $out[] = $this->set_attr_tag('div', $attr_slider, false);
+        UpHelper::get_attr_style($this,$attr_slider, $options['slider-style']);
+        $out[] = UpHelper::set_attr_tag($this,'div', $attr_slider, false);
         foreach ($items as $item) {
-            $out[] = $this->set_attr_tag($tag, $attr_item, $item);
+            $out[] = UpHelper::set_attr_tag($this,$tag, $attr_item, $item);
         }
         $out[] = '</div> <!--slider-->';
         // les boutons
@@ -459,13 +461,13 @@ class slider_tiny extends upAction
 
         // -- debug
         if (isset($this->options_user['debug'])) {
-            $this->msg_info(nl2br(htmlspecialchars(implode(PHP_EOL, $out))));
+            UpHelper::msg_info($this,nl2br(htmlspecialchars(implode(PHP_EOL, $out))));
         }
 
         // ======================
         // =========== le code JS
         // ======================
-        $js_params = $this->json_arrtostr($js_options, 2, false);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 2, false);
         if (isset($responsive)) {
             $js_params .= ',"responsive":' . $responsive;
         }
@@ -473,14 +475,14 @@ class slider_tiny extends upAction
         $js_code = 'tns({container:"#' . $slider_id . '",';
         $js_code .= $js_params;
         $js_code .= '});';
-        $js_code = $this->load_js_code($js_code, false);
+        $js_code = UpHelper::load_js_code($this,$js_code, false);
         // force la valeurs booleennes
         $js_code = str_replace('"1"', 1, $js_code);
         $js_code = str_replace('"0"', 0, $js_code);
         $out[] = $js_code;
         // -- debug
         if (isset($this->options_user['debug'])) {
-            $this->msg_info(str_replace(',', ', ', htmlspecialchars($js_code)));
+            UpHelper::msg_info($this,str_replace(',', ', ', htmlspecialchars($js_code)));
         }
 
         return implode(PHP_EOL, $out);

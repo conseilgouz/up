@@ -22,7 +22,9 @@
  */
 defined('_JEXEC') or die();
 
-class website extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class website extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -34,7 +36,7 @@ class website extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // URL du site
@@ -53,17 +55,17 @@ class website extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $renew = intval($options['renew']);
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
-        $options['apikey'] = $this->get_action_pref('gwebsite-key');
+        $options['apikey'] = UpHelper::get_action_pref($this,'gwebsite-key');
 
         // -- traitement
         $tmp = parse_url($options[__class__]);
@@ -73,7 +75,7 @@ class website extends upAction
         $siteURL .= (empty($tmp['query'])) ? '' : '?' . $tmp['query'];
         $msgerr = '';
         if (! filter_var($siteURL, FILTER_VALIDATE_URL)) {
-            $msgerr = $this->lang('en=not valid URL;fr=URL non valide');
+            $msgerr = UpHelper::lang($this,'en=not valid URL;fr=URL non valide');
         } else {
             // -- si besoin creation dossier cache
             $filePath = 'media/plg_content_up/website/';
@@ -81,7 +83,7 @@ class website extends upAction
                 mkdir(JPATH_ROOT . '/' . $filePath, 0755, true);
             }
             // -- nom fichier image (sans http)
-            $siteName = $this->preg_string('#.*\:\/\/(.*)#', $siteURL);
+            $siteName = UpHelper::preg_string($this,'#.*\:\/\/(.*)#', $siteURL);
             $siteFileName = str_replace('/', '_', $siteName) . '.png';
             $siteFileName = str_replace('?', '_', $siteFileName);
             $siteFileName = str_replace('&', '_', $siteFileName);
@@ -104,7 +106,7 @@ class website extends upAction
                 if ($options['apikey'] !== false) {
                     $url .= "&key=".$options['apikey'];
                 }
-                $resp = $this->get_html_contents($url, $options['timeout']);
+                $resp = UpHelper::get_html_contents($this,$url, $options['timeout']);
                 // dump($resp, $url);
                 if ($resp != '') {
                     $resp = json_decode($resp, true);
@@ -124,7 +126,7 @@ class website extends upAction
             // -- nom visible du site
             $siteName = ($options['link-text']) ? $options['link-text'] : $siteName;
             // -- code retour
-            $out = $this->set_attr_tag('div', $attr_main);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main);
             $out .= '<a href="' . $siteURL . '" target="' . $options['target'] . '">';
             $out .= '<img src="' . $siteFilePath . '" alt="' . $siteName . '">';
             if ($options['link']) {
@@ -133,7 +135,7 @@ class website extends upAction
             $out .= '</a>';
             $out .= '</div>';
         } else {
-            $out = $this->msg_inline($siteURL . ' : ' . $msgerr);
+            $out = UpHelper::msg_inline($this,$siteURL . ' : ' . $msgerr);
         }
 
         return $out;

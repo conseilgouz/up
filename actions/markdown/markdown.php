@@ -22,7 +22,9 @@
  */
 defined('_JEXEC') or die();
 
-class markdown extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class markdown extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -35,7 +37,7 @@ class markdown extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier markdown ou vide pour contenu
@@ -47,7 +49,7 @@ class markdown extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // récupération du contenu
         // 1 - le texte entre les shortcodes (sans html)
@@ -58,20 +60,20 @@ class markdown extends upAction
         // 2 - le contenu d'un fichier
         $filename = $options[__class__];
         if ($content == '' and $filename != '') {
-            $content = $this->get_html_contents($filename);
+            $content = UpHelper::get_html_contents($this,$filename);
         }
         if ($content == '') {
-            return $this->msg_inline('Markdown - content not found ' . $filename);
+            return UpHelper::msg_inline($this,'Markdown - content not found ' . $filename);
         }
         // attributs du bloc principal
         $attr_main = array();
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         $Parsedown = new Parsedown();
         $content = $Parsedown->text($content);
 
         // code en retour
-        $out = $this->set_attr_tag('div', $attr_main);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_main);
         $out .= $content;
         $out .= '</div>';
 

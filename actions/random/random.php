@@ -20,7 +20,9 @@
  */
 defined('_JEXEC') or die();
 
-class random extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class random extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -32,7 +34,7 @@ class random extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // liste des valeurs, fichier txt ou csv avec les valeurs, chemin vers fichiers
@@ -53,7 +55,7 @@ class random extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $options['csv-numcol'] = (int) $options['csv-numcol'];
         $options['csv-title'] = (int) $options['csv-title'];
 
@@ -61,12 +63,12 @@ class random extends upAction
         $data = $options[__class__];
         if (! empty($this->content)) {
             // liste entre shortcode
-            $datalist = $this->get_content_parts($this->content);
+            $datalist = UpHelper::get_content_parts($this,$this->content);
         } elseif (is_file($data)) {
             // fichier texte avec valeurs
             if (pathinfo($data, PATHINFO_EXTENSION) == 'csv') {
-                $data = $this->get_html_contents($data);
-                $data = $this->get_content_csv($data, false);
+                $data = UpHelper::get_html_contents($this,$data);
+                $data = UpHelper::get_content_csv($this,$data, false);
                 if (! empty($data)) {
                     if ($options['csv-title']) {
                         unset($data[0]);
@@ -84,13 +86,13 @@ class random extends upAction
                 }
             } else {
                 // fichier texte avec une donnée par ligne
-                $data = $this->get_html_contents($data);
+                $data = UpHelper::get_html_contents($this,$data);
                 $datalist = array_values(array_filter(explode(PHP_EOL, $data))); // ote lignes vides
             }
         } elseif (is_dir($data)) {
             // les fichiers d'un dossier
-            $data = rtrim($data, '/\\') . '/' . $this->get_code($options['mask']);
-            //$data = $this->get_url_absolute($data);
+            $data = rtrim($data, '/\\') . '/' . UpHelper::get_code($this,$options['mask']);
+            //$data = UpHelper::get_url_absolute($this,$data);
             $datalist = glob($data, GLOB_BRACE);
         } else {
             // range
@@ -107,13 +109,13 @@ class random extends upAction
                 $out = $datalist; // le retour est déjà fait
             } else {
                 // liste simple
-                $data = $this->get_bbcode($data);
+                $data = UpHelper::get_bbcode($this,$data);
                 $datalist = explode($options['sep-in'], $data);
             }
         }
         // --- sortie si vide
         if (empty($datalist)) {
-            return $this->msg_inline($options['msg-empty']);
+            return UpHelper::msg_inline($this,$options['msg-empty']);
         }
 
         // === préparation retour
@@ -135,19 +137,19 @@ class random extends upAction
             return implode($options['sep-out'], $out);
         } else {
             // attributs du bloc principal
-            $this->load_css_head($options['css-head']);
+            UpHelper::load_css_head($this,$options['css-head']);
             $attr_main = array();
             $attr_main['id'] = $options['id'];
-            $this->get_attr_style($attr_main, $options['main-style']);
-            $this->get_attr_style($attr_item, $options['item-style']);
+            UpHelper::get_attr_style($this,$attr_main, $options['main-style']);
+            UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
             for ($i = 0; $i < count($out); $i++) {
                 if (! empty($out[$i])) {
-                    $out[$i] = $this->set_attr_tag($options['item-tag'], $attr_item, $out[$i]);
+                    $out[$i] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $out[$i]);
                 }
             }
             // code en retour
-            return $this->set_attr_tag($options['main-tag'], $attr_main, implode(PHP_EOL, $out));
+            return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, implode(PHP_EOL, $out));
         }
     }
 

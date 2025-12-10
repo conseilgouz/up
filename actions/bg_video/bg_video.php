@@ -47,19 +47,20 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class bg_video extends upAction {
+class bg_video extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('lib/bg_video.css');
-        $this->load_file('lib/videoBackground.js');
+        UpHelper::load_file($this,'lib/bg_video.css');
+        UpHelper::load_file($this,'lib/videoBackground.js');
         return true;
     }
 
     function run() {
         // ---- lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /*video*/
@@ -87,9 +88,9 @@ class bg_video extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -104,11 +105,11 @@ class bg_video extends upAction {
         $js_params = '';
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // =========== Code HTML commun
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['style']);
         $attr_inner['class'] = 'up-bgvid-inner';
 
         // =========== CONTROLE DES OPTIONS
@@ -131,20 +132,20 @@ class bg_video extends upAction {
 
         // --- classe pour centrage vertical
         if ($options['center']) {
-            $this->add_class($attr_main['class'], 'up-center-outer');
-            $this->get_attr_style($attr_content, 'up-center-inner', $options['center']);
+            UpHelper::add_class($this,$attr_main['class'], 'up-center-outer');
+            UpHelper::get_attr_style($this,$attr_content, 'up-center-inner', $options['center']);
         }
 
         // --- overlay sur video
         if ($options['bg-overlay']) {
-            $val = $this->get_overlay($options['bg-overlay']);
-            $this->get_attr_style($attr_overlay, 'background:' . $val, 'up-overlay');
+            $val = UpHelper::get_overlay($this,$options['bg-overlay']);
+            UpHelper::get_attr_style($this,$attr_overlay, 'background:' . $val, 'up-overlay');
         }
 
         // --- overlay sur page
         if ($options['page-overlay'] && $options['page-selector']) {
-            $val = $this->get_overlay($options['page-overlay']);
-            $this->load_css_head($options['page-selector'] . '{background:' . $val . '}');
+            $val = UpHelper::get_overlay($this,$options['page-overlay']);
+            UpHelper::load_css_head($this,$options['page-selector'] . '{background:' . $val . '}');
         }
 
         // ====== origine et cible de la video
@@ -152,9 +153,9 @@ class bg_video extends upAction {
         $on_server = is_file($video); // VIDEO LOCALE
         $selector = '#' . $options['id'];
         if ($this->content) {
-            $this->add_class($attr_main['class'], 'up-bgvid-bloc');
+            UpHelper::add_class($this,$attr_main['class'], 'up-bgvid-bloc');
         } else {
-            $this->add_class($attr_main['class'], 'up-bgvid-body');
+            UpHelper::add_class($this,$attr_main['class'], 'up-bgvid-body');
         }
 
         // ====== si le device est un mobile
@@ -186,9 +187,9 @@ class bg_video extends upAction {
                 $attr_video['autoplay'] = null;
                 $attr_video['loop'] = null;
                 $attr_video['muted'] = null;
-                $video_code = $this->set_attr_tag('video', $attr_video);
+                $video_code = UpHelper::set_attr_tag($this,'video', $attr_video);
                 foreach ($vidSources AS $ext => $vid) {
-                    $video_code .= '<source src="' . $this->get_url_relative($vid) . '" type="video/' . $ext . '">';
+                    $video_code .= '<source src="' . UpHelper::get_url_relative($this,$vid) . '" type="video/' . $ext . '">';
                 }
                 $video_code .= 'Votre navigateur ne permet pas de lire les vidéos HTML5.';
                 $video_code .= '</video>';
@@ -238,7 +239,7 @@ class bg_video extends upAction {
                 $attr_iframe['frameborder'] = 0;
                 $attr_iframe['allowfullscreen'] = null;
 
-                $video_code = $this->set_attr_tag($tag, $attr_iframe, true);
+                $video_code = UpHelper::set_attr_tag($this,$tag, $attr_iframe, true);
                 break;
 
             default :
@@ -256,7 +257,7 @@ class bg_video extends upAction {
         // le fond par défaut
         $posterSource = ($options['poster']) ? $options['poster'] : $posterSource;
         if ($posterSource) {
-            $css = 'background:url(\'' . $this->get_url_relative($posterSource) . '\') ';
+            $css = 'background:url(\'' . UpHelper::get_url_relative($this,$posterSource) . '\') ';
             $css .= $options['bg-color'] . ' no-repeat ' . $css_position . '/cover';
         } else {
             $bgColor = ($options['bg-color']) ? $options['bg-color'] : '#aaa';
@@ -267,7 +268,7 @@ class bg_video extends upAction {
         if ($on_mobile) {
             if ($options['mobile'] != 1) {
                 // infos dans option mobile prioritaire
-                $css = $this->get_bg_mobile($options);
+                $css = UpHelper::get_bg_mobile($this,$options);
             } else {
                 if ($posterSource == '' && $on_server) {
                     $vidNoExt = substr($video, 0, strrpos($video, '.'));
@@ -282,11 +283,11 @@ class bg_video extends upAction {
                 }
             }
         }
-        $this->get_attr_style($attr_inner, $css);
+        UpHelper::get_attr_style($this,$attr_inner, $css);
 
         // ===== init JS
         if (!$on_mobile)
-            $this->load_jquery_code('$("#' . $options['id'] . '").videoBackground({' . $js_params . '});');
+            UpHelper::load_jquery_code($this,'$("#' . $options['id'] . '").videoBackground({' . $js_params . '});');
 
         // ====== HTML pour retour
         // attr_main
@@ -294,13 +295,13 @@ class bg_video extends upAction {
         //        video
         //    attr_overlay
         //    attr_content
-        $out['tag'] = $this->set_attr_tag('div', $attr_main);
-        $out['tag'] .= $this->set_attr_tag('div', $attr_inner);
+        $out['tag'] = UpHelper::set_attr_tag($this,'div', $attr_main);
+        $out['tag'] .= UpHelper::set_attr_tag($this,'div', $attr_inner);
         $out['tag'] .= $video_code;
         $out['tag'] .= '</div>'; // inner
-        $out['tag'] .= (isset($attr_overlay)) ? $this->set_attr_tag('div', $attr_overlay, true) : '';
+        $out['tag'] .= (isset($attr_overlay)) ? UpHelper::set_attr_tag($this,'div', $attr_overlay, true) : '';
         if ($this->content) {
-            $out['tag'] .= $this->set_attr_tag('div', $attr_content, $this->content);
+            $out['tag'] .= UpHelper::set_attr_tag($this,'div', $attr_content, $this->content);
         }
         $out['tag'] .= '</div>'; // main
         // c'est fini
@@ -309,109 +310,6 @@ class bg_video extends upAction {
 
 // run
 
-
-    /*
-     * get_overlay : retourne la valeur pour la propriété background d'un overley
-     * si $val se termine par .png : image répétée
-     * si $val est un nombre (70, 70%) : masque blanc transparent
-     * si $val commence par # (#FF9999 70%) : masque coloré transparent
-     * sinon $val est une règle CSS (linear-gradient ou radial-gradient)
-     */
-
-    function get_overlay($val) {
-        if (strtolower(substr($val, strrpos($val, '.'))) == '.png') {
-            // si fichier PNG
-            if (dirname($val) == '.') {
-                $val = $this->upPath . 'assets/overlay/' . $val;
-                $val = str_replace('\\', '/', $val);
-            }
-            $val = 'url(\'' . Uri::root(true) . '/' . $val . '\') repeat';
-        } else if ($val[0] == '#') {
-            $rgba = $this->hex2rgba($val);
-            $val = 'linear-gradient(' . $rgba . ' 0%,' . $rgba . ' 100%)';
-        } else if ((float) $val > 0) {
-            // si 70 ou 70% -> rgba(256,256,256,.7)
-            $val = (float) $val;
-            $val = $val / 100;
-            $val = 'linear-gradient(rgba(240,240,240,' . $val . ') 0%,rgba(240,240,240,' . $val . ') 100%)';
-        }
-        // sinon, c'était une règle CSS
-        return $val;
-    }
-
-    /*
-     * hex2rgba : retourne une couleur au format #RRGGBBAA ou #RGBA au format rgba(r,g,b,a)
-     * opacité à 1 par défaut
-     */
-
-    function hex2rgba($hex) {
-        // on retire le #
-        $hex = str_replace('#', '', $hex);
-        // si #RGBA ou #RGB : on double en forcant à FF si besoin
-        if (strlen($hex) <= 4) {
-            $hex .= $hex . 'FFFF';
-            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
-        }
-        // si >4 et <8, on force à FF
-        $hex = substr($hex . 'FFFF', 0, 8);
-        // conversion en décimal
-        $rgba = array_map('hexdec', str_split($hex, 2));
-        // canal alpha sous forme coeff
-        $rgba[3] = round($rgba[3] / 255, 1);
-        // retour
-        return 'rgba(' . implode(',', $rgba) . ')';
-    }
-
-    /*
-     * retourne le CSS pour le background sur mobile
-     * $opt_mobile peut contenir :
-     * - rien : on n'affiche pas la video, mais le fond prévu (poster bg-color)
-     * - une image
-     * - des propriétés css pour background : url(image.jpg) repeat-y
-     * - du css : background:...;color:...
-     */
-
-    function get_bg_mobile($options) {
-        $opt_mobile = $options['mobile'];
-        if (is_file($opt_mobile)) {
-            // image existante
-            list($w, $h) = getimagesize($opt_mobile);
-            if (($w + $h) < 200) {
-                $out = 'background:url(\'' . $opt_mobile . '\') repeat ' . $options['bg-color'];
-            } else {
-                $out = 'background:url(\'' . $opt_mobile . '\') no-repeat ' . $options['bg-color'] . ' center/cover';
-            }
-        } else {
-            $out = (substr($opt_mobile, 0, 11) == 'background:') ? '' : 'background:';
-            $out .= $opt_mobile;
-        }
-
-        return $out;
-    }
-
 }
 
 // class
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

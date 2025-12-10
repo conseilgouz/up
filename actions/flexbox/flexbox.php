@@ -27,22 +27,24 @@
  */
 defined('_JEXEC') or die();
 
-class flexbox extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class flexbox extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charge la feuille de style UP
         require_once($this->upPath . '/assets/lib/simple_html_dom.php');
-        //$this->load_upcss();
+        //UpHelper::load_upcss($this);
     }
 
     public function run()
     {
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -70,7 +72,7 @@ class flexbox extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // si alternate = 1, on force à 480px
         $alternate = $options['alternate'];
@@ -86,10 +88,10 @@ class flexbox extends upAction
         $colSize = array(); // les largeurs de colonnes ordi, tablet et mobile
         $colSize[0] = explode('-', $options[__class__]);
         $nbcol = count($colSize[0]); // le nombre de colonnes est défini en vue normale
-        $tmp = $this->str_append($options['tablet'], 'x-x-x-x-x-x', '-');
+        $tmp = UpHelper::str_append($this,$options['tablet'], 'x-x-x-x-x-x', '-');
         $colSize[1] = explode('-', $tmp);
         // v2.3 si non défini, force colonne à 100% en mobile
-        $tmp = $this->str_append($options['mobile'], '12-12-12-12-12-12', '-');
+        $tmp = UpHelper::str_append($this,$options['mobile'], '12-12-12-12-12-12', '-');
         $colSize[2] = explode('-', $tmp);
         // ======== css-head
         $css = $options['css-head'];
@@ -103,11 +105,11 @@ class flexbox extends upAction
                 $css .= '#id .col-' . ($i + 1) . '[' . $options['style-' . ($i + 1)] . ']';
             }
         }
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // ======== ajout options utilisateur dans la div principale
         $attr_main['id'] = $options['id']; // v1.8
-        $this->get_attr_style($attr_main, 'fg-row', $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, 'fg-row', $options['class'], $options['style']);
 
 
         // -- ajout des styles pour les colonnes
@@ -130,10 +132,10 @@ class flexbox extends upAction
         // ================================================================================
 
         $Content_OK = false;
-        $this->content = $this->supertrim($this->content);  //v5.1.1
-        if ($this->ctrl_content_parts($this->content) === true) {
+        $this->content = UpHelper::supertrim($this,$this->content);  //v5.1.1
+        if (UpHelper::ctrl_content_parts($this,$this->content) === true) {
             $Content_OK = ($options['bloc-tag'] == 1);
-            $allcoltxt = $this->get_content_parts($this->content);
+            $allcoltxt = UpHelper::get_content_parts($this,$this->content);
             $this->content = '';
             $i = 0;
             foreach ($allcoltxt as $coltxt) {
@@ -206,7 +208,7 @@ class flexbox extends upAction
                 $css .= '#' . $options['id'] . ' .item-' . $i . '{order:' . $order . '}';
             }
             $css .= '}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
 
 
@@ -214,9 +216,9 @@ class flexbox extends upAction
         // le code HTML en retour
         // ================================================================================
         if (! isset($this->content)) {
-            $out = $this->msg_inline($options['no-content-html']);
+            $out = UpHelper::msg_inline($this,$options['no-content-html']);
         } else {
-            $out = $this->set_attr_tag('div', $attr_main, $this->content);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main, $this->content);
         }
         return $out;
     }

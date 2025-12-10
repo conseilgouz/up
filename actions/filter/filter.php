@@ -44,8 +44,9 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Environment\Browser;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class filter extends upAction
+class filter extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -55,7 +56,7 @@ class filter extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -95,7 +96,7 @@ class filter extends upAction
         );
 
         // ===== fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ===== Affichage des valeurs actuelles des arguments pour les conditions
         $user = Factory::getApplication()->getIdentity();
@@ -142,7 +143,7 @@ class filter extends upAction
             foreach ($infos as $k => $v) {
                 $txt .= '<p><b>' . $k . '</b> : ' . $v . '</p>';
             }
-            $this->msg_info($txt);
+            UpHelper::msg_info($this,$txt);
         }
         // ===== récupérer contenu vrai et contenu faux (fix v2.8.2)
         $out_true = $options['return-true'];
@@ -153,7 +154,7 @@ class filter extends upAction
             //    0     | return-true  | return-false
             //    1     |   $tmp[0]    |    vide
             //    2     |   $tmp[0]    |   $tmp[1]
-            $tmp = $this->get_content_parts($this->content);
+            $tmp = UpHelper::get_content_parts($this,$this->content);
             $out_true = $tmp[0];
             $out_false = (isset($tmp[1])) ? $tmp[1] : '';
         }
@@ -162,17 +163,17 @@ class filter extends upAction
         if ($options[__class__]) {
             $conditions = $options[__class__];
         } else {
-            $conditions = $this->only_using_options($options_def);
+            $conditions = UpHelper::only_using_options($this,$options_def);
             unset($conditions['info']);
             unset($conditions['id']);
             unset($conditions['return-true']);
             unset($conditions['return-false']);
         }
         // ===== Remplit-on les conditions
-        if ($this->filter_ok($conditions) !== true) {
-            return $this->get_bbcode($out_false);
+        if (UpHelper::filter_ok($this,$conditions) !== true) {
+            return UpHelper::get_bbcode($this,$out_false);
         } else {
-            return $this->get_bbcode($out_true);
+            return UpHelper::get_bbcode($this,$out_true);
         }
     }
 

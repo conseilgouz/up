@@ -22,8 +22,9 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Uri\Uri;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class link extends upAction
+class link extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -35,7 +36,7 @@ class link extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // URL ou EMAIL pour l'attribut href
@@ -58,19 +59,19 @@ class link extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // le lien
         $link = trim($options['link']);
@@ -108,18 +109,18 @@ class link extends upAction
             }
             if (strtoupper(substr($icon, 0, 2)) == 'UX') {
                 $icon = '&#' . substr($icon, 1) . ';';
-            } elseif ($this->preg_string('#.(png|jpg|gif)#i', $icon)) {
+            } elseif (UpHelper::preg_string($this,'#.(png|jpg|gif)#i', $icon)) {
                 $icon = '<img src="' . $icon . '">';
             } else {
                 $options['icon-style'] .= ';' . $options['font-prefix'] . $icon;
                 $icon = ' ';
             }
-            $this->get_attr_style($attr_icon, $options['icon-style']);
-            $icon = $this->set_attr_tag('span', $attr_icon, $icon);
+            UpHelper::get_attr_style($this,$attr_icon, $options['icon-style']);
+            $icon = UpHelper::set_attr_tag($this,'span', $attr_icon, $icon);
             $label = '&nbsp;' . $label;
         }
         if ($icon == '' && ($options['class'] || $options['style'])) {
-            $label = $this->set_attr_tag('span', $attr_main, $label);
+            $label = UpHelper::set_attr_tag($this,'span', $attr_main, $label);
         }
 
         $label = $icon . trim($label, '/');
@@ -131,7 +132,7 @@ class link extends upAction
             $attr_main['target'] = '_blank';
         }
 
-        $html[] = $this->set_attr_tag('a', $attr_main, $label);
+        $html[] = UpHelper::set_attr_tag($this,'a', $attr_main, $label);
 
         return implode(PHP_EOL, $html);
     }

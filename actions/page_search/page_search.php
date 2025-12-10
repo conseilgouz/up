@@ -18,7 +18,9 @@
  */
 defined('_JEXEC') or die();
 
-class page_search extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class page_search extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     /**
@@ -29,7 +31,7 @@ class page_search extends upAction
      */
     function init()
     {
-        $this->load_file('gsearch.js');
+        UpHelper::load_file($this,'gsearch.js');
         return true;
     }
 
@@ -42,7 +44,7 @@ class page_search extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -63,7 +65,7 @@ class page_search extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // === Chemin de l'icon
         $icon = $options['search-icon'];
         if (dirname($icon) == '.') {
@@ -79,10 +81,10 @@ class page_search extends upAction
         $js[] = 'background_color:"' . $options['highlight-bg'] . '",';
         $js[] = '});';
         $js[] = '});';
-        $this->load_jquery_code(implode(PHP_EOL, $js));
+        UpHelper::load_jquery_code($this,implode(PHP_EOL, $js));
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === la position de la loupe
         $style = 'position:fixed;z-index:99999;';
@@ -91,10 +93,10 @@ class page_search extends upAction
 
         // === le code HTML
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $style, $options['style'], $options['class']);
+        UpHelper::get_attr_style($this,$attr_main, $style, $options['style'], $options['class']);
 
         // return implode(PHP_EOL, $html);
-        $html = $this->set_attr_tag('span', $attr_main, true);
+        $html = UpHelper::set_attr_tag($this,'span', $attr_main, true);
 
         return $html;
     }

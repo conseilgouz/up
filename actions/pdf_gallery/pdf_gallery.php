@@ -40,7 +40,9 @@
  */
 defined('_JEXEC') or die();
 
-class pdf_gallery extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class pdf_gallery extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -52,7 +54,7 @@ class pdf_gallery extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin du dossier contenant les PDF
@@ -97,11 +99,11 @@ class pdf_gallery extends upAction
         );
 
         // === fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $this->ctrl_unit($options['preview-width'], '%,vw');
-        $this->ctrl_unit($options['preview-height'], 'px,vh,rem');
-        $this->ctrl_unit($options['popup-width'], '%,vw');
-        $this->ctrl_unit($options['popup-height'], 'vh,px,rem');
+        $options = UpHelper::ctrl_options($this,$options_def);
+        UpHelper::ctrl_unit($this,$options['preview-width'], '%,vw');
+        UpHelper::ctrl_unit($this,$options['preview-height'], 'px,vh,rem');
+        UpHelper::ctrl_unit($this,$options['popup-width'], '%,vw');
+        UpHelper::ctrl_unit($this,$options['popup-height'], 'vh,px,rem');
         $bgcolor = $options['preview-background'] ? '#background=' . ltrim($options['preview-background'], ' #') : '';
         $flip = ($options['flip']) ? '#magazineMode=true' : ''; // v2.9
         
@@ -112,12 +114,12 @@ class pdf_gallery extends upAction
         $pattern = $folder . $mask . '.{pdf,PDF}';
         $fileList = glob($pattern, GLOB_BRACE); // | GLOB_NOSORT
         if (empty($fileList)) {
-            return $this->get_bbcode($options['msg-no-file']);
+            return UpHelper::get_bbcode($this,$options['msg-no-file']);
         }
 
         // === Preparation template
         $template = ($this->content) ? $this->content : $options['template'];
-        $template = $this->get_bbcode($template);
+        $template = UpHelper::get_bbcode($this,$template);
         if (empty($template)) {
             return '';
         }
@@ -153,7 +155,7 @@ class pdf_gallery extends upAction
 
         // --- style bloc principal
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
         // on force le bloc principal si nécessaire
         if ($options['main-tag'] == 0 && ($options['class'] || $options['style'])) {
             $options['main-tag'] = 'div';
@@ -161,7 +163,7 @@ class pdf_gallery extends upAction
 
         // --- style bloc item
         $attr_item = array();
-        $this->get_attr_style($attr_item, $options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
         // on force le bloc principal si nécessaire
         if ($options['item-tag'] == 0 && $options['item-style'] != '') {
             $options['item-tag'] = 'div';
@@ -170,10 +172,10 @@ class pdf_gallery extends upAction
         // === bouton ou image view en modal
         if (stripos($template, '-view##')) {
             $attr_image_view = array();
-            $this->load_file('../modal/flashy.css');
-            $this->load_file('../modal/jquery.flashy.min.js');
+            UpHelper::load_file($this,'../modal/flashy.css');
+            UpHelper::load_file($this,'../modal/jquery.flashy.min.js');
             $attr_image_view['data-flashy-type'] = 'iframe';
-            $this->add_class($attr_image_view['class'], 'flashy');
+            UpHelper::add_class($this,$attr_image_view['class'], 'flashy');
 
             $css = '';
             if ($options['popup-close-left']) {
@@ -186,33 +188,33 @@ class pdf_gallery extends upAction
                 $css .= '}';
             }
             if ($css) {
-                $this->load_css_head($css);
+                UpHelper::load_css_head($this,$css);
             }
             // le bouton a un style en plus
             $attr_btn_view = $attr_image_view;
-            $this->get_attr_style($attr_btn_view, $options['btn-view-style']);
+            UpHelper::get_attr_style($this,$attr_btn_view, $options['btn-view-style']);
         }
 
         // === image
         $attr_image = array();
-        $this->get_attr_style($attr_image, $options['image-style']);
+        UpHelper::get_attr_style($this,$attr_image, $options['image-style']);
 
         // === info
         $attr_info = array();
-        $this->get_attr_style($attr_info, $options['info-style']);
+        UpHelper::get_attr_style($this,$attr_info, $options['info-style']);
 
         // === lien ou bouton download
         if (stripos($template, '-download##')) {
         }
 
         $attr_btn_download = array();
-        $this->get_attr_style($attr_btn_download, $options['btn-download-style']);
+        UpHelper::get_attr_style($this,$attr_btn_download, $options['btn-download-style']);
 
         // === Preparation preview
         if (strpos($template, '##preview##') !== false) {
             // style
             $attr_view['style'] = 'width:' . $options['width'];
-            $this->add_style($attr_view['style'], 'height', $options['height']);
+            UpHelper::add_style($this,$attr_view['style'], 'height', $options['height']);
 
             error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
@@ -228,10 +230,10 @@ class pdf_gallery extends upAction
         // ==================================
 
         $html = array();
-        $html[] = ($options['main-tag'] != '0') ? $this->set_attr_tag($options['main-tag'], $attr_main, false) : '';
+        $html[] = ($options['main-tag'] != '0') ? UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, false) : '';
         // v3.0 pour ajout image dans le label du fichier
-        $label_replace = $this->get_bbcode($options['label-replace']);
-        $label_replace = $this->strtoarray($label_replace, ',', ':', false);
+        $label_replace = UpHelper::get_bbcode($this,$options['label-replace']);
+        $label_replace = UpHelper::strtoarray($this,$label_replace, ',', ':', false);
         foreach ($fileSort as $file => $sortVal) {
             $fullName = basename($file);
             // $name = ($prefixDateSize > 0) ? substr($fullName, $prefixDateSize):$fullName;
@@ -246,19 +248,19 @@ class pdf_gallery extends upAction
             $tmpl = $template;
 
             // --- NAME
-            $this->kw_replace($tmpl, 'name', $name);
-            $this->kw_replace($tmpl, 'full-name', $fullName);
+            UpHelper::kw_replace($this,$tmpl, 'name', $name);
+            UpHelper::kw_replace($this,$tmpl, 'full-name', $fullName);
 
             // HUMAN-NAME
-            $human_name = $this->link_humanize($name);
+            $human_name = UpHelper::link_humanize($this,$name);
             foreach ($label_replace as $old => $new) {
                 $human_name = str_ireplace($old, $new, $human_name);
             }
-            $this->kw_replace($tmpl, 'human-name', $human_name);
+            UpHelper::kw_replace($this,$tmpl, 'human-name', $human_name);
 
             // --- SIZE
             if (strpos($tmpl, '##size##') !== false) {
-                $this->kw_replace($tmpl, 'size', $this->filesize($file, 2));
+                UpHelper::kw_replace($this,$tmpl, 'size', UpHelper::filesize($this,$file, 2));
             }
             // --- DATE
             if (strpos($tmpl, '##date##') !== false) {
@@ -267,7 +269,7 @@ class pdf_gallery extends upAction
                 } else {
                     $tmp = filemtime($file);
                 }
-                $this->kw_replace($tmpl, 'date', date($options['format-date'], $tmp)); // fix v3.2
+                UpHelper::kw_replace($this,$tmpl, 'date', date($options['format-date'], $tmp)); // fix v3.2
             }
 
             // --- INFO : fichier .info de même nom que le PDF avec texte descriptif
@@ -277,39 +279,39 @@ class pdf_gallery extends upAction
                 if (file_exists($fileinfo)) {
                     $info = file_get_contents($fileinfo);
                     if ($options['info-style']) {
-                        $info = $this->set_attr_tag('div', $attr_info, $info);
+                        $info = UpHelper::set_attr_tag($this,'div', $attr_info, $info);
                     }
                 }
-                $this->kw_replace($tmpl, 'info', $info);
+                UpHelper::kw_replace($this,$tmpl, 'info', $info);
             }
 
             // --- IMAGE : fichier jpg ou png de même nom que le PDF
             if (strpos($tmpl, '##image') !== false) {
                 $filelist = glob($pathFolder . '/' . basename($fullName) . '.{jpg,png}', GLOB_BRACE);
                 $attr_image['src'] = (empty($filelist)) ? $this->actionPath . '/pdf-icon.svg' : $filelist[0];
-                $tmp = $this->set_attr_tag('img', $attr_image, '');
-                $this->kw_replace($tmpl, 'image', $tmp);
+                $tmp = UpHelper::set_attr_tag($this,'img', $attr_image, '');
+                UpHelper::kw_replace($this,$tmpl, 'image', $tmp);
                 // ---
-                $attr_image_view['href'] = $this->get_url_absolute('plugins/content/up/actions/pdf/pdfjs/web/viewer.html') . '?file=' . $this->get_url_absolute($file) . $bgcolor. $flip;
-                $tmp = $this->set_attr_tag('a', $attr_image_view, $tmp);
-                $this->kw_replace($tmpl, 'image-view', $tmp);
+                $attr_image_view['href'] = UpHelper::get_url_absolute($this,'plugins/content/up/actions/pdf/pdfjs/web/viewer.html') . '?file=' . UpHelper::get_url_absolute($this,$file) . $bgcolor. $flip;
+                $tmp = UpHelper::set_attr_tag($this,'a', $attr_image_view, $tmp);
+                UpHelper::kw_replace($this,$tmpl, 'image-view', $tmp);
             }
 
             // --- PREVIEW : vue du PDF selon method
             if (strpos($tmpl, '##preview##') !== false) {
-                $attr_view['src'] = str_replace('##PDF_URL##', $this->get_url_absolute($file), $attr_view_src);
-                $tmp = $this->set_attr_tag('iframe', $attr_view, true);
-                $this->kw_replace($tmpl, 'preview', $tmp);
+                $attr_view['src'] = str_replace('##PDF_URL##', UpHelper::get_url_absolute($this,$file), $attr_view_src);
+                $tmp = UpHelper::set_attr_tag($this,'iframe', $attr_view, true);
+                UpHelper::kw_replace($this,$tmpl, 'preview', $tmp);
             }
 
             // --- BTN-VIEW : lien pour afficher PDF dans modal. Texte selon btn-view-text
             if (strpos($tmpl, '##btn-view##') !== false) {
-                $attr_btn_view['href'] = $this->get_url_absolute('plugins/content/up/actions/pdf/pdfjs/web/viewer.html') . '?file=' . $this->get_url_absolute($file) . $bgcolor . $flip;
-                $tmp = $this->set_attr_tag('a', $attr_btn_view, sprintf($options['btn-view-text'], basename($file)));
+                $attr_btn_view['href'] = UpHelper::get_url_absolute($this,'plugins/content/up/actions/pdf/pdfjs/web/viewer.html') . '?file=' . UpHelper::get_url_absolute($this,$file) . $bgcolor . $flip;
+                $tmp = UpHelper::set_attr_tag($this,'a', $attr_btn_view, sprintf($options['btn-view-text'], basename($file)));
                 if ($this->preview_ok() == false) {
                     $tmp = ''; // v5.2 si <= win8
                 }
-                $this->kw_replace($tmpl, 'btn-view', $tmp);
+                UpHelper::kw_replace($this,$tmpl, 'btn-view', $tmp);
             }
 
             // --- BTN-DOWNLOAD : lien pour télécharger le PDF. Texte selon btn-download-text
@@ -317,45 +319,27 @@ class pdf_gallery extends upAction
                 $attr_btn_download['href'] = $file;
                 $attr_btn_download['download'] = $options['add-sitename'];
                 $attr_btn_download['download'] .= str_replace('--', '-', basename($file));
-                $str = sprintf($this->get_bbcode($options['btn-download-text']), basename($file));
-                $tmp = $this->set_attr_tag('a', $attr_btn_download, $str);
-                $this->kw_replace($tmpl, 'btn-download', $tmp);
+                $str = sprintf(UpHelper::get_bbcode($this,$options['btn-download-text']), basename($file));
+                $tmp = UpHelper::set_attr_tag($this,'a', $attr_btn_download, $str);
+                UpHelper::kw_replace($this,$tmpl, 'btn-download', $tmp);
             }
 
             // habillage bloc ligne fichier
             if ($options['item-tag'] != '0') {
-                $html[] = $this->set_attr_tag($options['item-tag'], $attr_item, $tmpl);
+                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $tmpl);
             } else {
                 $html[] = $tmpl . PHP_EOL;
             }
         }
         $html[] = ($options['main-tag'] != '0') ? '</' . $options['main-tag'] . '>' : '';
         if (stripos($template, '##btn-view##')) {
-            $html[] = $this->load_jquery_code('if ($(".flashy").length > 0) $(".flashy").flashy({overlayClose:1})');
+            $html[] = UpHelper::load_jquery_code($this,'if ($(".flashy").length > 0) $(".flashy").flashy({overlayClose:1})');
         }
 
         return implode(PHP_EOL, $html);
     }
 
     // run
-    public function filesize($file, $decimal = 0)
-    {
-        $size = filesize($file);
-        $units = array(
-            'Go',
-            'Mo',
-            'ko',
-            'o'
-        );
-        $divider = 1024 * 1024 * 1024;
-        foreach ($units as $unit) {
-            if (floor($size / $divider) > 0) {
-                return round($size / $divider, $decimal) . '&nbsp;' . $unit;
-            }
-            $divider /= 1024;
-        }
-        return '';
-    }
 
     /*
      * preview_ok()

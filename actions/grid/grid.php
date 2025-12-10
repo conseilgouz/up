@@ -16,7 +16,9 @@
  */
 defined('_JEXEC') or die();
 
-class grid extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class grid extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -29,12 +31,12 @@ class grid extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             /*[st-grid] mise en page par grid-template-areas */
@@ -83,7 +85,7 @@ class grid extends upAction
             'css-head' => '' // class2style et style ajouté dans le HEAD de la page
         );
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // list des propriétés pour propertyNoEmpty
         $properties = array(
@@ -96,12 +98,12 @@ class grid extends upAction
         );
 
         // === ANALYSE OPTIONS
-        $this->ctrl_timer('début');
+        UpHelper::ctrl_timer($this,'début');
         // === LES NOMS DES ZONES
         // si pas défini par l'option 'zone-name', on analyse $grid_css
         $grid_css = '';
         if (!empty($this->options['grid'])) {
-            $grid_css = $this->normalize_grid_template_areas($this->options['grid']);
+            $grid_css = UpHelper::normalize_grid_template_areas($this,$this->options['grid']);
             $zone_name = array();
             if (preg_match_all('/\"(.*)\"/U', $grid_css, $matches)) {
                 $zone_name = array_map('trim', explode(' ', implode(' ', $matches[1])));
@@ -111,7 +113,7 @@ class grid extends upAction
                     if ($v[0] == '.') {
                         unset($zone_name[$k]);
                     } elseif (is_numeric($v)) {
-                        return $this->msg_inline('Nom de zone interdit :' . $v);
+                        return UpHelper::msg_inline($this,'Nom de zone interdit :' . $v);
                     }
                 }
                 $zone_name = array_values($zone_name);
@@ -142,7 +144,7 @@ class grid extends upAction
             }
             $diff = array_diff($zone_name_2, $zone_name);
             if (!empty($diff)) {
-                $this->msg_error('Les noms de zone-name ne correspondent pas à ceux de grid');
+                UpHelper::msg_error($this,'Les noms de zone-name ne correspondent pas à ceux de grid');
                 return false;
             }
             $zone_name = $zone_name_2;
@@ -154,18 +156,18 @@ class grid extends upAction
         $css = '#id[display:grid;';
         $css .= ($grid_css) ? 'grid-template-areas:' . $grid_css . ';' : '';
         foreach ($properties as $property) {
-            $css .= $this->propertyNoEmpty($property);
+            $css .= UpHelper::propertyNoEmpty($this,$property);
         }
-        $css .= $this->propertyNoEmpty('grid-auto-rows');
-        $css .= $this->propertyNoEmpty('grid-auto-columns');
-        $css .= $this->propertyNoEmpty('grid-auto-flow');
+        $css .= UpHelper::propertyNoEmpty($this,'grid-auto-rows');
+        $css .= UpHelper::propertyNoEmpty($this,'grid-auto-columns');
+        $css .= UpHelper::propertyNoEmpty($this,'grid-auto-flow');
         $css .= ']';
 
         $attr_all_items_class = array();
-        $this->get_attr_style($attr_all_items_class, $this->options['items-style-*']);
+        UpHelper::get_attr_style($this,$attr_all_items_class, $this->options['items-style-*']);
         $attr_items = array(); // classes et styles pour item individuellement
         for ($i = 1; $i <= 12; $i++) {
-            $this->get_attr_style($attr_items[$i], $this->options['items-style-' . $i]);
+            UpHelper::get_attr_style($this,$attr_items[$i], $this->options['items-style-' . $i]);
         }
 
         // --- les styles pour tablet et mobile
@@ -175,16 +177,16 @@ class grid extends upAction
                 'mobile-'
             ) as $bp
         ) {
-            $mqcss = $this->normalize_grid_template_areas($this->options[$bp.'grid']);
+            $mqcss = UpHelper::normalize_grid_template_areas($this,$this->options[$bp.'grid']);
             if (!empty($mqcss)) {
-                $nbcol = $this->get_nb_col($mqcss);
+                $nbcol = UpHelper::get_nb_col($this,$mqcss);
                 if (empty($this->options[$bp.'grid-template-columns'])) {
                     $this->options[$bp.'grid-template-columns'] = 'repeat(' . $nbcol . ',1fr)';
                 }
                 $mqcss = 'grid-template-areas:' . $mqcss . ';' ;
             }
             foreach ($properties as $property) {
-                $mqcss .= $this->propertyNoEmpty($property, $bp);
+                $mqcss .= UpHelper::propertyNoEmpty($this,$property, $bp);
             }
             if (!empty($mqcss)) {
                 $mqcss = '#id[' . $mqcss . ']';
@@ -208,14 +210,14 @@ class grid extends upAction
 
 
         $css .= $this->options['css-head'];
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // ======== RECUPERATION & ANALYSE CONTENU
         // --- Suppression des shortcodes separateurs {====}
         // --- si bloc-tag, on ajoute balise DIV
-        $this->content = $this->supertrim($this->content);
-        if ($this->ctrl_content_parts($this->content) === true) {
-            $allcoltxt = $this->get_content_parts($this->content);
+        $this->content = UpHelper::supertrim($this,$this->content);
+        if (UpHelper::ctrl_content_parts($this,$this->content) === true) {
+            $allcoltxt = UpHelper::get_content_parts($this,$this->content);
             // mise en forme
             $this->content = '';
             $tag = $this->options['main-tag'];
@@ -230,13 +232,13 @@ class grid extends upAction
 
         // --- ajout des classes de reperage aux blocs enfants
         // require_once($this->upPath . '/assets/lib/simple_html_dom.php');
-        $this->ctrl_timer('avant simple_html_dom');
+        UpHelper::ctrl_timer($this,'avant simple_html_dom');
         $html = new simple_html_dom();
         $html->load('<html>' . $this->content . '</html>', true, false);
-        $this->ctrl_timer('avant $html->find');
+        UpHelper::ctrl_timer($this,'avant $html->find');
         $childs = $html->find('html>*');
         $item = 1;
-        $this->ctrl_timer('avant foreach');
+        UpHelper::ctrl_timer($this,'avant foreach');
         foreach ($childs as $child) {
             $name = (empty($zone_name[$item - 1])) ? 'item-'.$item : $zone_name[$item - 1];
             $child->addClass($name);
@@ -258,63 +260,25 @@ class grid extends upAction
             $items[] = $child->outertext;
             $item++;
         }
-        $this->ctrl_timer('après foreach');
+        UpHelper::ctrl_timer($this,'après foreach');
         unset($html);
         $content = implode(PHP_EOL, $items);
 
-        $this->ctrl_timer('après simple_html_dom');
+        UpHelper::ctrl_timer($this,'après simple_html_dom');
 
         // === ATTRIBUTS BLOC PRINCPAL
         $attr_main = array();
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['main-style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['main-style']);
 
-        $this->ctrl_timer('avant retour');
+        UpHelper::ctrl_timer($this,'avant retour');
 
         // code en retour
-        return $this->set_attr_tag($this->options['main-tag'], $attr_main, $content);
+        return UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $content);
     }
 
     // run
 
-    /**
-     * Normalise le contenu de grid-template-areas
-     *
-     * @param string $grid
-     * @return string
-     */
-    private function normalize_grid_template_areas($grid)
-    {
-        $grid = str_replace('\'', '"', $grid);
-        $grid = $this->spaceNormalize($grid);
-        $grid = preg_replace('/\s+/', ' ', $grid);
-        return $grid;
-    }
-
-    private function propertyNoEmpty($option, $bp = '')
-    {
-        $str = (!empty($this->options[$bp.$option])) ? $option.':' . $this->options[$bp.$option] . ';' : '';
-        return $str;
-    }
-
-    /**
-    * retourne le nombre de colonnes d'une grille
-    */
-    private function get_nb_col($grid)
-    {
-        $nbSpace = -1;
-        if (preg_match_all('/\"(.*)\"/U', $grid, $matches)) {
-            foreach ($matches[1] as $match) {
-                $nb = substr_count($match, ' ');
-                if ($nbSpace == -1) {
-                    $nbSpace = $nb;
-                } elseif ($nb != $nbSpace) {
-                    $this->msg_error('Le nombre de colonnes doit être identique pour tous les items');
-                }
-            }
-        }
-        return $nbSpace + 1;
-    }
 }
 
 // class

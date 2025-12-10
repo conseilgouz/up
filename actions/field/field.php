@@ -20,7 +20,9 @@
  */
 defined('_JEXEC') or die;
 
-class field extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class field extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -29,7 +31,7 @@ class field extends upAction {
     function run() {
 
 // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // id ou name du champ
@@ -44,7 +46,7 @@ class field extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         $id = $options[__class__];
 
         // ==== Les CF de l'article par id & name
@@ -57,7 +59,7 @@ class field extends upAction {
         // ==== retour avec message si champ inexistant
         // ==========================================================
         if (isset($cf[$id]) === false) {
-            $this->msg_error($id . ' : field not found');
+            UpHelper::msg_error($this,$id . ' : field not found');
             return '';
         }
 
@@ -83,7 +85,7 @@ class field extends upAction {
         if (strpos($model, '%') === false)
             $model = '%' . $model . '%';
         // extraire tous les noms d'éléments du model
-        $model = $this->get_bbcode($model);
+        $model = UpHelper::get_bbcode($this,$model);
         preg_match_all('#%(.*)%#U', $model, $kw);
         // la chaine model peut contenir du bbcode
         $out = $model;
@@ -103,7 +105,7 @@ class field extends upAction {
 
         // === CSS-HEAD
         // ==========================================================
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === Insertion dans bloc HTML ?
         // ==========================================================
@@ -111,10 +113,10 @@ class field extends upAction {
             // attributs du bloc principal
             $attr_main = array();
             $attr_main['id'] = $options['id'];
-            $this->get_attr_style($attr_main, $options['class'], $options['style']);
+            UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
             // code en retour
-            $out = $this->set_attr_tag($options['tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $out);
         }
 
         // ==== FINI

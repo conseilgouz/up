@@ -14,8 +14,9 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcat_image extends upAction
+class jcat_image extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -26,7 +27,7 @@ class jcat_image extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // dossier/chemin/url vers une image si la catégorie n'en possède pas
@@ -38,10 +39,10 @@ class jcat_image extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === récup ID article
         $artid = Factory::getApplication()->getInput()->get('id');
@@ -80,13 +81,13 @@ class jcat_image extends upAction
 
         // attributs du bloc principal
         $img['id'] = $options['id'];
-        $this->get_attr_style($img, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$img, $options['class'], $options['style']);
         if ($img['alt'] == '') {
-            $img['alt'] = $this->link_humanize($img['src']);
+            $img['alt'] = UpHelper::link_humanize($this,$img['src']);
         }
 
         // code en retour
-        $out = (!empty($img['src'])) ? $this->set_attr_tag('img', $img) : '';
+        $out = (!empty($img['src'])) ? UpHelper::set_attr_tag($this,'img', $img) : '';
         return $out;
     }
 

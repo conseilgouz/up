@@ -35,7 +35,9 @@
  */
 defined('_JEXEC') or die();
 
-class lorem extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class lorem extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -45,7 +47,7 @@ class lorem extends upAction
     public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             $this->name => '', // nombre de paragraphe et mots-clés séparés par des virgules
@@ -63,7 +65,7 @@ class lorem extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ==== les arguments
         $args = preg_split("/[\s\,\/\.]+/", strtolower($options[$this->name]));
@@ -142,7 +144,7 @@ class lorem extends upAction
             if ($options['tag'] < "A") {
                 $out = $text;
             } else {
-                $out = $this->set_attr_tag($options['tag'], $attr_main, $text);
+                $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $text);
             }
             return $out;
         }
@@ -157,7 +159,7 @@ class lorem extends upAction
                 shuffle($words);
             }
             $title = ucfirst(implode(" ", array_slice($words, 0, rand(3, 6))));
-            $htag = $this->ctrl_argument($options['header-tag'], 'h3,h1,h2,h4,h5,h6', false);
+            $htag = UpHelper::ctrl_argument($this,$options['header-tag'], 'h3,h1,h2,h4,h5,h6', false);
             $text .= "<$htag>$title</$htag>\n";
         }
 
@@ -243,7 +245,7 @@ class lorem extends upAction
         if ($options['tag'] < "A") {
             $out = $text;
         } else {
-            $out = $this->set_attr_tag($options['tag'], $attr_main, $text);
+            $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $text);
         }
 
         return $out;

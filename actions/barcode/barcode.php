@@ -24,7 +24,9 @@
  */
 defined('_JEXEC') or die();
 
-class barcode extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class barcode extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -37,7 +39,7 @@ class barcode extends upAction
         include_once ('tcpdf_barcodes_1d.php');
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => 'text', // valeur alphanumérique du code code barre
@@ -55,21 +57,21 @@ class barcode extends upAction
             'css-head' => '' // regles CSS definies par le webmaster (ajout dans le head)
         );
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // controle type barcode
         $typeList = ',EAN13,EAN2,EAN5,EAN8,EAN13,C39,C39+,C39E,C39E+,C93,S25,S25+,I25,C128,C128A,C128B';
         $typeList .= ',UCPA,UPCE,MSI,MSI+,POSTNET,PLANET,RMS4CC,KIX,IMB,IMBPRE,CODABOR,CODE11,PHARMA,PHARMA2T';
-        $type = $this->ctrl_argument($options['type'], $typeList, false);
+        $type = UpHelper::ctrl_argument($this,$options['type'], $typeList, false);
         if ($type == '')
-            return $this->msg_inline($this->trad_keyword('ERR_TYPE', $options['type']));
+            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'ERR_TYPE', $options['type']));
         if (empty($options['color']))
             $options['color'] = '#000';
         // === base-css
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
         $barcode = new TCPDFBarcode($options['barcode'], $options['type']);
 
         $text = $options['showtext'] ? $options['barcode'] : '';
@@ -95,11 +97,11 @@ class barcode extends upAction
                 }
                 break;
             default:
-                $content = $this->msg_inline($this->trad_keyword('ERR_FORMAT', $options['format']));
+                $content = UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'ERR_FORMAT', $options['format']));
                 break;
         }
         $content = '<div style="text-align:' . $options["align"] . '">' . $content . '</div>';
-        return $this->set_attr_tag('div', $attr_main, $content);
+        return UpHelper::set_attr_tag($this,'div', $attr_main, $content);
     }
 
     // run

@@ -16,10 +16,11 @@
 /*
  v5.3.3 : php 8.5 compatibility
  */
- 
 defined('_JEXEC') or die;
 
-class geocode extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class geocode extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -32,7 +33,7 @@ class geocode extends upAction
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // adresse postale
@@ -44,10 +45,10 @@ class geocode extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         $address = $options[__class__];
-        $address = $this->spaceNormalize($address);
+        $address = UpHelper::spaceNormalize($this,$address);
         $address = preg_replace('/\s+/', ' ', $address); // on supprime les espaces en trop
         $address = urlencode($address);
         $file = 'tmp/up-geocode/'. str_replace('%2C', '_', $address) . '.json';
@@ -98,7 +99,7 @@ class geocode extends upAction
             $out = str_replace('##longitude##', $responseData[0]['lon'], $out);
             $out = str_replace('##adresse##', $responseData[0]['display_name'], $out);
         } else {
-            $out = $this->msg_inline('error, adresse introuvable : '. $options[__class__]);
+            $out = UpHelper::msg_inline($this,'error, adresse introuvable : '. $options[__class__]);
         }
 
         // code en retour

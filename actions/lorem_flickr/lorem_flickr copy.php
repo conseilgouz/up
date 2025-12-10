@@ -23,7 +23,7 @@
  */
 defined('_JEXEC') or die();
 
-class lorem_flickr extends upAction
+class lorem_flickr extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -34,7 +34,7 @@ class lorem_flickr extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -79,14 +79,14 @@ class lorem_flickr extends upAction
 
         // ====== fusion et controle des options
         // =====================================
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // réaffectation des options entre lorem_flickr et lorem_place
         $options['text'] = $options[__CLASS__];
         // $option['bg-color'] = $options['color'];
 
         // === CSS-HEAD
-        //$this->load_css_head($options['css-head']);
+        //UpHelper::load_css_head($this,$options['css-head']);
 
         // === nettoyage du cache
         if ($options['cache-reset']) {
@@ -191,10 +191,10 @@ class lorem_flickr extends upAction
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['src'] = $image;
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = $this->set_attr_tag('img', $attr_main, false);
+        $html = UpHelper::set_attr_tag($this,'img', $attr_main, false);
 
         return $html;
         // === fini

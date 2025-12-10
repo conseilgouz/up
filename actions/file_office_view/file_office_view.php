@@ -14,7 +14,9 @@
  */
 defined('_JEXEC') or die;
 
-class file_office_view extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class file_office_view extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -24,7 +26,7 @@ class file_office_view extends upAction {
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nom du fichier
@@ -39,13 +41,13 @@ class file_office_view extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
         
         // === le lien
-        $file_url = $this->get_url_absolute($options[__class__], true);
+        $file_url = UpHelper::get_url_absolute($this,$options[__class__], true);
 
 		$mainclass= '';
 		switch ($options['mode']){
@@ -68,15 +70,15 @@ class file_office_view extends upAction {
         $attr_iframe['src'] =$url;
         $attr_iframe['style'] = 'width:'.$options['width'].';height:'.$options['height'];
         $attr_iframe['frameborder'] ='0';
-        $iframe = $this->set_attr_tag('iframe', $attr_iframe, true);
+        $iframe = UpHelper::set_attr_tag($this,'iframe', $attr_iframe, true);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style'], $mainclass);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style'], $mainclass);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main, $iframe);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, $iframe);
 
         return implode(PHP_EOL, $html);
     }

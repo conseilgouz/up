@@ -18,7 +18,9 @@
  */
 defined('_JEXEC') or die;
 
-class cell extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class cell extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // aucune
@@ -26,11 +28,11 @@ class cell extends upAction {
 
     function run() {
 
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -49,23 +51,23 @@ class cell extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
         // -- ajout options utilisateur dans la div principale
         $outer_div['class'] = 'cell-row';
-        $this->add_class($outer_div['class'], $options['class']);
+        UpHelper::add_class($this,$outer_div['class'], $options['class']);
         $outer_div['style'] = $options['style'];
 
         // ======== les styles des colonnes
         // -- taille des colonnes (version rwd)
         $col[0] = array_map('intval', explode('-', $options[__class__]));
-        $tmp = $this->str_append($options['mobile'], '0-0-0-0-0-0', '-');
+        $tmp = UpHelper::str_append($this,$options['mobile'], '0-0-0-0-0-0', '-');
         $col[1] = array_map('intval', explode('-', $tmp));
-        $tmp = $this->str_append($options['tablet'], '0-0-0-0-0-0', '-');
+        $tmp = UpHelper::str_append($this,$options['tablet'], '0-0-0-0-0-0', '-');
         $col[2] = array_map('intval', explode('-', $tmp));
         // le nombre de colonnes est défini par col
         $nbcol = count($col[0]);
@@ -76,21 +78,21 @@ class cell extends upAction {
         for ($i = 0; $i < $nbcol; $i++) {
             $bloc[$i]['class'] = 'cell w' . $col[0][$i];
             if ($options['mobile']) {
-                $this->add_class($bloc[$i]['class'], 'ws' . $col[1][$i]);
+                UpHelper::add_class($this,$bloc[$i]['class'], 'ws' . $col[1][$i]);
             }
             if ($options['tablet']) {
-                $this->add_class($bloc[$i]['class'], 'wm' . $col[2][$i]);
+                UpHelper::add_class($this,$bloc[$i]['class'], 'wm' . $col[2][$i]);
             }
-            $this->add_class($bloc[$i]['class'], $options['class-*']);
-            $this->add_class($bloc[$i]['class'], $options['class-' . ($i + 1)]);
+            UpHelper::add_class($this,$bloc[$i]['class'], $options['class-*']);
+            UpHelper::add_class($this,$bloc[$i]['class'], $options['class-' . ($i + 1)]);
             $bloc[$i]['style'] = $options['style-*'];
-            $this->add_str($bloc[$i]['style'], $options['style-' . ($i + 1)], ';');
+            UpHelper::add_str($this,$bloc[$i]['style'], $options['style-' . ($i + 1)], ';');
         }
 
         // RECUPERATION & ANALYSE CONTENU
         // si les 2 colonnes ne sont pas séparées par {====}
         // on prend les maxi 6 premiers blocs enfants
-        if ($this->ctrl_content_parts($this->content) === false) {
+        if (UpHelper::ctrl_content_parts($this,$this->content) === false) {
             // === analyse structure HTML du content
             $dom = new domDocument;
             $dom->loadHTML('<?xml encoding="utf-8" ?>' . $this->content);
@@ -101,11 +103,11 @@ class cell extends upAction {
             foreach ($nodes as $node) {
                 if (isset($bloc[$i % $nbcol]['class'])) {
                     $tmp = @$nodes->item($i)->getAttribute('class');
-                    $nodes->item($i)->setAttribute('class', $this->str_append($tmp, $bloc[$i % $nbcol]['class']));
+                    $nodes->item($i)->setAttribute('class', UpHelper::str_append($this,$tmp, $bloc[$i % $nbcol]['class']));
                 }
                 if (isset($bloc[$i % $nbcol]['style'])) {
                     $tmp = @$nodes->item($i)->getAttribute('style');
-                    $nodes->item($i)->setAttribute('style', $this->str_append($tmp, $bloc[$i % $nbcol]['style'], ';'));
+                    $nodes->item($i)->setAttribute('style', UpHelper::str_append($this,$tmp, $bloc[$i % $nbcol]['style'], ';'));
                 }
                 $i++;
             }
@@ -114,18 +116,18 @@ class cell extends upAction {
             $this->content = preg_replace('~<(?:/?(?:html|head|body))[^>]*>\s*~i', '', $this->content);
         } else { // séparation par {============}
             // recup texte des colonnes sans le tag P ajouté par éditeur
-            $coltxt = $this->get_content_parts($this->content);
+            $coltxt = UpHelper::get_content_parts($this,$this->content);
             // mise en forme
             $this->content = '';
             for ($i = 0; $i < $nbcol; $i++) {
-                $this->content .= $this->set_attr_tag('div', $bloc[$i]);
+                $this->content .= UpHelper::set_attr_tag($this,'div', $bloc[$i]);
                 $this->content .= $coltxt[$i];
                 $this->content .= '</div>';
             }
         }
 
         // === le code HTML en retour
-        $out = $this->set_attr_tag('div', $outer_div);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
         $out .= $this->content;
         $out .= '</div>';
 

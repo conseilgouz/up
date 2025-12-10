@@ -21,24 +21,26 @@
  */
 defined('_JEXEC') or die();
 
-class sameheight extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class sameheight extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('sameheight.js');
+        UpHelper::load_file($this,'sameheight.js');
         return true;
     }
 
     function run()
     {
         // cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // inutilisé
@@ -49,20 +51,20 @@ class sameheight extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === ajout code CSS dans le header
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $outer_div['id'] = $options['id'];
         $outer_div['class'] = 'sameheight';
-        $this->add_class($outer_div['class'], $options['class']);
+        UpHelper::add_class($this,$outer_div['class'], $options['class']);
         $outer_div['style'] = $options['style'];
 
         // -- le code en retour
-        $out = $this->set_attr_tag('div', $outer_div);
+        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
         $out .= $this->content;
         $out .= '</div>';
 

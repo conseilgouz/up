@@ -13,11 +13,13 @@
  */
 defined('_JEXEC') or die;
 
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 /*
  * La valeur est lue dans le fichier up/assets/color.ini
  */
 
-class color extends upAction {
+class color extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -27,7 +29,7 @@ class color extends upAction {
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // nom UP de la couleur (français ou anglais) ou de la variable CSS (--red)
@@ -36,7 +38,7 @@ class color extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // --- cas d'une variable CSS (case sensitive)
         if (substr($options[__class__], 0, 2) === '--') {
@@ -46,16 +48,16 @@ class color extends upAction {
         // traite en fin car l'option info est prioritaire
         $colorname = strtoupper($options[__class__]);
         // liste des couleurs avec tous les noms en MAJ
-        $colorlist = $this->load_inifile($this->upPath . 'assets/colorname.ini');
+        $colorlist = UpHelper::load_inifile($this,$this->upPath . 'assets/colorname.ini');
 
         // === liste des couleurs (sans retour valeur)
         if ($options['info']) {
             // idem $colorlist avec tous les noms en min/maj
-            $colorlistRef = $this->load_inifile($this->upPath . 'assets/colorname-ref.ini');
+            $colorlistRef = UpHelper::load_inifile($this,$this->upPath . 'assets/colorname-ref.ini');
             // les noms de base en francais (min/maj) avec les couleurs non modifiées pour le site
-            $colorlistOrig = $this->load_inifile($this->actionPath . 'colorname-orig.ini');
+            $colorlistOrig = UpHelper::load_inifile($this,$this->actionPath . 'colorname-orig.ini');
             $info = '<div class="fg-row fg-auto-5 fg-auto-m3 fg-auto-s2 colorgamme">';
-            $this->load_css_head('.colorgamme > div [border-top:16px solid red; border-bottom:16px solid red; padding: 10px; text-align:center ]');
+            UpHelper::load_css_head($this,'.colorgamme > div [border-top:16px solid red; border-bottom:16px solid red; padding: 10px; text-align:center ]');
             $name1 = array_key_first($colorlistRef);
             $color1 = reset($colorlistRef);
             foreach ($colorlistRef AS $name => $color) {
@@ -98,7 +100,7 @@ class color extends upAction {
         if (isset($colorlist[$colorname])) {
             return $colorlist[$colorname];
         } else {
-            $this->msg_error($this->lang('fr=Couleur inconnue:; en=Unknown color:') . $options[__class__]);
+            UpHelper::msg_error($this,UpHelper::lang($this,'fr=Couleur inconnue:; en=Unknown color:') . $options[__class__]);
             return $options['default'];
         }
     }

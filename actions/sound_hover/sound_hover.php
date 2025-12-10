@@ -14,8 +14,9 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Uri\Uri;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class sound_hover extends upAction {
+class sound_hover extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -23,7 +24,7 @@ class sound_hover extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('jquery.playSound.js');
+        UpHelper::load_file($this,'jquery.playSound.js');
         return true;
     }
 
@@ -34,12 +35,12 @@ class sound_hover extends upAction {
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -53,7 +54,7 @@ class sound_hover extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
@@ -68,7 +69,7 @@ class sound_hover extends upAction {
         $attr_main[$options['evenement']] = 'jQuery.playSound(\'' . $son . '\')';
 
         // -- le code en retour
-        $out = $this->set_attr_tag($options['tag'], $attr_main);
+        $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main);
         $out .= $this->content;
         $out .= '</' . $options['tag'] . '>';
 

@@ -1,0 +1,17 @@
+motclé;description;type valeur
+datemax; vrai jusqu'à cette date; AAAAMMJJHHMM
+datemin; vrai à partir de cette date; AAAAMMJJHHMM
+period; vrai entre ces dates; AAAAMMJJHHMM,AAAAMMJJHHMM<br>1224,01021000 = du 24 décembre minuit au 2 janvier de l'année suivante à 10h
+day; liste des jours autorisés.; 1=lundi, 7=dimanche
+month; liste des mois autorisés; 1=janvier, ...
+hmax; vrai jusqu'à cette heure; HHMM
+hmin; vrai à partir de cette heure; HHMM
+hperiod; vrai entre ces plages horaires (liste possible); HHMM-HHMM
+guest; vrai si l'internaute n'est pas identifié (invité); 1|0
+admin; vrai si un admin est connecté; 1|0
+user; liste des userid autorisés; ex: 8,12
+username; liste des username autorisés; ex: admin,lomart
+group; liste des usergroup autorisés; ex: 8,12
+lang; liste des langages autorisés. Seule une partie du code est nécessaire; ex: fr,ca
+mobile; vrai si le site est affiché sur un mobile; 1|0
+homepage; vrai si le shortcode est affiché sur la page d'accueil; 1|0

@@ -7,17 +7,20 @@
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
 	<authorEmail>lomart@lomart.fr</authorEmail>
-    <version>5.4.12</version>
+    <version>6.0.0</version>
     <description>PLG_CONTENT_UP_DESC</description>
+	<namespace path="src">Lomart\Plugin\Content\Up</namespace>
     <files>
-        <filename plugin="up">up.php</filename>
+        <folder plugin="up">services</folder>
+        <folder>src</folder>
+        <folder>actions</folder>
         <filename>up.xml</filename>
         <filename>changelog.md</filename>
-        <filename>upAction.php</filename>
         <filename>dico.ini</filename>
         <filename>dico.json</filename>
-        <folder>actions</folder>
+        <folder>services</folder>
         <folder>assets</folder>
+        <folder>actions</folder>
         <folder>language</folder>
         <folder>upbtn</folder>
         <folder>fields</folder>

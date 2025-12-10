@@ -20,7 +20,9 @@
  */
 defined('_JEXEC') or die();
 
-class file extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class file extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -32,7 +34,7 @@ class file extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -40,7 +42,7 @@ class file extends upAction
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier à télécharger
@@ -55,7 +57,7 @@ class file extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // extension du fichier
         $ficext = strtolower(pathinfo($options[__class__], PATHINFO_EXTENSION));
@@ -133,7 +135,7 @@ class file extends upAction
         $attr_main['rel'] = $options['rel'];
 
         // code en retour
-        $out = $this->set_attr_tag('a', $attr_main);
+        $out = UpHelper::set_attr_tag($this,'a', $attr_main);
         $out .= $icon;
         $out .= $this->content;
         $out .= '</a>';

@@ -16,12 +16,14 @@
  */
 defined('_JEXEC') or die();
 
-class text_blink extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class text_blink extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
-        $this->load_file('text_blink.css');
+        UpHelper::load_file($this,'text_blink.css');
         return true;
     }
 
@@ -29,7 +31,7 @@ class text_blink extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -37,7 +39,7 @@ class text_blink extends upAction
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - 0 pour cacher le lien vers demo car inexistante
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // rien, prefset, classe ou style(s) CSS
@@ -53,7 +55,7 @@ class text_blink extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
         $css = $options['css-head'];
@@ -62,12 +64,12 @@ class text_blink extends upAction
         $id = $options['id'];
         $attr_main = array();
         $attr_main['id'] = $id;
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         if (! empty($options[__class__]) && ! str_contains($options[__class__], ':')) {
             // === si option principale est une classe
             $attr_main['class'] .= ' ' . $options[__class__];
-            $html = $this->set_attr_tag($options['main-tag'], $attr_main, $this->content);
+            $html = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, $this->content);
         } else {
             // ===
             $speed = ($options['speed']) ? floatval($options['speed']) . 's' : '1.5s';
@@ -86,10 +88,10 @@ class text_blink extends upAction
             $css .= '@keyframes kf-' . $id . '{';
             $css .= ($css_to) ? 'to{' . $css_to . '}' : '';
             $css .= '}';
-            $this->load_css_head($css);
+            UpHelper::load_css_head($this,$css);
         }
         // code en retour
-        $html = $this->set_attr_tag($options['main-tag'], $attr_main, $this->content);
+        $html = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, $this->content);
         return $html;
     }
 

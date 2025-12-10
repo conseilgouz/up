@@ -18,7 +18,9 @@
  */
 defined('_JEXEC') or die();
 
-class file_in_content extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class file_in_content extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -30,7 +32,7 @@ class file_in_content extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier
@@ -61,7 +63,7 @@ class file_in_content extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         if (empty($options[__class__])) {
             return '';
@@ -72,9 +74,9 @@ class file_in_content extends upAction
         }
 
         $attr_image = array();
-        $this->get_attr_style($attr_image, $options['image-style']);
+        UpHelper::get_attr_style($this,$attr_image, $options['image-style']);
         $attr_item = array();
-        $this->get_attr_style($attr_item, $options['item-style']);
+        UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
         // === lecture et nettoyage fichier
         if (strpos($options[__class__], '//') === false) {
@@ -87,8 +89,8 @@ class file_in_content extends upAction
                 $files = glob($filepath, GLOB_BRACE);
                 // === ajout timestamp aux nouveaux fichiers
                 for ($i = 0; $i < count($files); $i++) {
-                    if ($this->check_timestamp($files[$i]) === false) {
-                        $files[$i] = $this->add_timestamp($files[$i]);
+                    if (UpHelper::check_timestamp($this,$files[$i]) === false) {
+                        $files[$i] = UpHelper::add_timestamp($this,$files[$i]);
                     }
                 }
 
@@ -110,7 +112,7 @@ class file_in_content extends upAction
 
         // === pas de fichier
         if (empty($files)) {
-            return $this->get_bbcode($options['msg-no-file']);
+            return UpHelper::get_bbcode($this,$options['msg-no-file']);
         }
 
         // === Recuperation contenu
@@ -118,9 +120,9 @@ class file_in_content extends upAction
             $pathinfo = pathinfo($file);
             // $ext = strtolower($pathinfo['extension']);
             // --- récupération des valeurs pour mots-clés
-            $content = $this->get_html_contents($file);
-            $content = $this->clean_HTML($content, $options['HTML'], $options['EOL']);
-            if ($this->check_timestamp($file)) {
+            $content = UpHelper::get_html_contents($this,$file);
+            $content = UpHelper::clean_HTML($this,$content, $options['HTML'], $options['EOL']);
+            if (UpHelper::check_timestamp($this,$file)) {
                 list($date, $title) = explode('-', $pathinfo['basename'], 2);
                 $datetime = strtotime($date);
             } else {
@@ -135,25 +137,25 @@ class file_in_content extends upAction
             }
             $image = (empty($list_image)) ? '' : $list_image[0];
             // préparation retour
-            $tmpl = $this->get_bbcode($options['template']);
-            $this->kw_replace($tmpl, 'title', $this->link_humanize($title));
-            $this->kw_replace($tmpl, 'content', $content);
-            $this->kw_replace($tmpl, 'date', $date);
+            $tmpl = UpHelper::get_bbcode($this,$options['template']);
+            UpHelper::kw_replace($this,$tmpl, 'title', UpHelper::link_humanize($this,$title));
+            UpHelper::kw_replace($this,$tmpl, 'content', $content);
+            UpHelper::kw_replace($this,$tmpl, 'date', $date);
             if ($image) {
                 $attr_image['src'] = $image;
-                $image = $this->set_attr_tag('img', $attr_image);
+                $image = UpHelper::set_attr_tag($this,'img', $attr_image);
             }
-            $this->kw_replace($tmpl, 'image', $image);
+            UpHelper::kw_replace($this,$tmpl, 'image', $image);
             // le bloc pour un fichier
             if (empty($options['main-tag']) && empty($options['item-style'])) {
                 $html[] = $tmpl;
             } else {
-                $html[] = $this->set_attr_tag($options['item-tag'], $attr_item, $tmpl);
+                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $tmpl);
             }
         }
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // code en retour
         if (empty($options['main-tag'])) {
@@ -162,48 +164,13 @@ class file_in_content extends upAction
             // attributs du bloc principal
             $attr_main = array();
             $attr_main['id'] = $options['id'];
-            $this->get_attr_style($attr_main, $options['main-style'], $options['class'], $options['style']);
-            return $this->set_attr_tag($options['main-tag'], $attr_main, implode(PHP_EOL, $html));
+            UpHelper::get_attr_style($this,$attr_main, $options['main-style'], $options['class'], $options['style']);
+            return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, implode(PHP_EOL, $html));
         }
     }
 
     // run
 
-    /**
-     * check_timestamp($file)
-     * ----------------------
-     *
-     * @return : true si $file commence par AAAAMMJJHHMM-
-     */
-    public function check_timestamp($file)
-    {
-        $filename = basename($file);
-        // return (strlen($filename) > 12 && $filename[12] === '-' && checkdate(substr($filename, 4, 2), substr($filename, 6, 2), substr($filename, 0, 4)));
-        return (preg_match('#^20[0-9]{10}-#', $filename) === 1); // v2.9.1
-    }
-
-    /**
-     * add_timestamp($file)
-     * --------------------
-     * ajoute un timestamp à tous les fichiers de meme nom
-     */
-    public function add_timestamp($file)
-    {
-        $timestamp = date('YmdHi') . '-';
-        $pathinfo = pathinfo($file);
-        // tous les fichiers de meme nom
-        $filelist = glob($pathinfo['dirname'] . '/' . $pathinfo['filename'] . '.*', GLOB_BRACE);
-        for ($i = 0; $i < count($filelist); $i++) {
-            $pathinfo2 = pathinfo($filelist[$i]);
-            $newname = $pathinfo2['dirname'] . '/' . $timestamp . $pathinfo2['filename'] . '.' . $pathinfo2['extension'];
-            if (rename($filelist[$i], $newname) === false) {
-                $this->msg_error('Error rename : ' . $filelist[$i]);
-            }
-        }
-        // retour
-        $newname = $pathinfo['dirname'] . '/' . $timestamp . $pathinfo['filename'] . '.' . $pathinfo['extension'];
-        return $newname;
-    }
 }
 
 // class

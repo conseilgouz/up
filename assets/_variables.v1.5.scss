@@ -1,0 +1,70 @@
+//
+// VARIABLES
+// **********************
+
+
+//-- breakpoints pour mediaqueries
+$breakpoint-s : 480px;
+$breakpoint-m : 760px;
+
+//-- couleurs de base (utilisé par btn, color, ...)
+$bleuFonce    :	#001f3f;	    $rougeFonce   : #8b0000;
+$bleu         : #01457F;	    $rouge        : #ff1111;
+$bleuClair    :	#069;	    	$rougeClair   : #f08080;
+$bleuPale	  :	#BCE0FF;	    $jauneFonce   : #ffc40d;
+$vertFonce    : #006400;	    $jaune        : #ffee00;
+$vert         : #46a546;	    $jauneClair   : #ffffe0;
+$vertClair    :	#98fb98;	    $orange       : #ff851b;
+$brun         : #a0522d;	    $rose         : #f012be;
+$beige        : #E8DAC3;	    $violet       : #9400D3;
+//-- les gris
+$noir         : #000;        $blanc        :	#fff;
+$grisFonce    :	#333;        $gris         :	#888;
+$grisClair    :	#bbb;        $grisPale     :	#eee;
+
+//-- couleurs de base du template
+$primary-fonce : $bleu;			$primary-clair: $bleuClair;
+$second-fonce  : $brun;			$second-clair : $beige;
+
+//-- couleurs par défaut des textes sur un fond coloré (voir fct colorContraste)
+$text-clair : $blanc;
+$text-fonce : $noir;
+
+// ========================================================================
+// ==== 03-spacers
+// ========================================================================
+
+// utilisé par ma1, pa2, ...
+$up-space-0: 0;
+$up-space-1: 10px;
+$up-space-2: 24px;
+$up-space-3: 36px;
+
+// utilisé par border (b1, b2, ...)
+$up-border-0: 0;
+$up-border-1: 1px;
+$up-border-2: 2px;
+$up-border-3: 6px;
+
+// utilisé pour les boutons, onglets, ...
+// $radius-mini 	: 3px;
+// $radius-small : 3px;
+// $radius-base 	: 5px;
+// $radius-large : 10px;
+
+// liste des valeurs pour width et max-width
+$list-width-percent: 10, 15, 20, 25, 30, 33.3333, 40, 50, 60, 66.6666, 70, 75, 80, 90; // 100 traité à part
+$list-max-width-pixel: 100, 150, 200, 300, 400, 960, 1140, 1240;
+$list-width-pixel: 50,100,150,200,300;
+$list-height-pixel: 2,4,6,50,100,150,200,300;
+
+// ombre par défaut
+$btn-box-shadow : inset 0 1px 0 rgba(255,255,255,.2);
+
+// ===========================================
+//   FONCTIONS UTILITAIRES POUR LES ACTIONS
+// ===========================================
+
+@function rgb2rgba($rgb, $alpha:0) {
+	@return rgba(red($rgb), green($rgb), blue($rgb), $alpha);
+}

@@ -24,7 +24,9 @@
  */
 defined('_JEXEC') or die;
 
-class media_vimeo extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class media_vimeo extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
@@ -32,14 +34,14 @@ class media_vimeo extends upAction {
         //  http://clic-en-berry.com/comment-rendre-vos-integrations-iframe-youtube-responsive/
         $css_code = '.up-vimeo-container {position: relative; padding-bottom: 56.25%;	height: 0;overflow:hidden;}';
         $css_code .= '.up-vimeo-container iframe{ position:absolute;top:0;left:0;width:100%;height:100%;}';
-        $this->load_css_head($css_code);
+        UpHelper::load_css_head($this,$css_code);
         return true;
     }
 
     function run() {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // code de la video (à la fin de l'url vimeo)
@@ -59,14 +61,14 @@ class media_vimeo extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         if ($options['width'])
-            $options['width'] = $this->ctrl_unit($options['width'], '%,px');
+            $options['width'] = UpHelper::ctrl_unit($this,$options['width'], '%,px');
 
         // le bloc externe
         $outer_attr=array();
-        $this->get_attr_style($outer_attr, $options['class'], $options['style']);
-        $this->add_style($outer_attr['style'], 'width', $options['width']);
+        UpHelper::get_attr_style($this,$outer_attr, $options['class'], $options['style']);
+        UpHelper::add_style($this,$outer_attr['style'], 'width', $options['width']);
 
         // le bloc contenant la video
         $main_attr['class'] = 'up-vimeo-container';
@@ -78,8 +80,8 @@ class media_vimeo extends upAction {
         $loop = (!empty($options['loop'])) ? '&loop=1' : '&loop=0';
         $muted = (!empty($options['muted'])) ? '&muted=1' : '&muted=0';
         if (!empty($options['play-on-visible'])) { // mettre en pause si caché
-            $this->load_file('player.min.js');
-            $this->load_file('media_vimeo.js');
+            UpHelper::load_file($this,'player.min.js');
+            UpHelper::load_file($this,'media_vimeo.js');
             $attr_iframe['class'] = 'play-on-visible';
         }
         $attr_iframe['frameborder'] = '0';
@@ -92,7 +94,7 @@ class media_vimeo extends upAction {
 
         if ($this->tarteaucitron && $options['rgpd']) {
             $attr_iframe['videoID'] = $options[__class__];
-            $this->add_class($attr_iframe['class'], 'vimeo_player');
+            UpHelper::add_class($this,$attr_iframe['class'], 'vimeo_player');
             $tag = 'div';
         } else {
             $attr_iframe['src'] = 'https://player.vimeo.com/video/' . $options[__class__] . $title . $portrait . $loop . $muted . $autoplay;
@@ -100,9 +102,9 @@ class media_vimeo extends upAction {
         }
 
         // le code renvoyé
-        $out = $this->set_attr_tag($tag, $attr_iframe, true);
-        $out = $this->set_attr_tag('div', $main_attr, $out);
-        $out = $this->set_attr_tag('_div', $outer_attr, $out);
+        $out = UpHelper::set_attr_tag($this,$tag, $attr_iframe, true);
+        $out = UpHelper::set_attr_tag($this,'div', $main_attr, $out);
+        $out = UpHelper::set_attr_tag($this,'_div', $outer_attr, $out);
         return $out;
     }
 

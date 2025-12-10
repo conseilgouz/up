@@ -26,7 +26,9 @@
  */
 defined('_JEXEC') or die;
 
-class meteo_france extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class meteo_france extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
@@ -36,14 +38,14 @@ class meteo_france extends upAction {
     function run() {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // sortie si pas de code commune
         if ($this->options_user[__class__] === true) {
             $txt = '<a href="https://www.meteofrance.com/meteo-widget" target="_blank">';
             $txt .= 'METEO: Récupérer le code de la commune ici';
             $txt .= '</a>';
-            $this->msg_info($txt);
+            UpHelper::msg_info($this,$txt);
             return $txt;
         }
 
@@ -60,7 +62,7 @@ class meteo_france extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // le bloc conteneur
         $main_attr['class'] = $options['class'];
@@ -78,10 +80,10 @@ class meteo_france extends upAction {
         $url .= $sens;
         $url2 = str_replace('https://', 'http://', $url);
 
-        $meteo = $this->get_html_contents($url, 30, $url2);
+        $meteo = UpHelper::get_html_contents($this,$url, 30, $url2);
         // ajout détection erreur de Pascal Leconte
         if (preg_match("/Erreur :/", $meteo)) { // erreur dans l'appel meteo France
-            return $this->info_debug('M&eacute;t&eacute;o France: ' . $meteo);
+            return UpHelper::info_debug($this,'M&eacute;t&eacute;o France: ' . $meteo);
         }
         $meteo = str_replace('<head>', '', $meteo);
         $meteo = str_replace('</head>', '', $meteo);
@@ -90,7 +92,7 @@ class meteo_france extends upAction {
         $meteo = str_replace('target="_blank"', 'target="_blank" rel="noopener noreferrer" ', $meteo);
 
         // code retour
-        $out = $this->set_attr_tag($options['block'], $main_attr);
+        $out = UpHelper::set_attr_tag($this,$options['block'], $main_attr);
         $out .= '<script charset="UTF-8" type="text/javascript">';
         $out .= $meteo;
         $out .= '</script>';

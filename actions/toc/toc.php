@@ -21,7 +21,9 @@
  */
 defined('_JEXEC') or die;
 
-class toc extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class toc extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -29,9 +31,9 @@ class toc extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('toc.css');
-        $this->load_file('toc.js');
-        $this->load_js_file_body('smooth-scroll.js');
+        UpHelper::load_file($this,'toc.css');
+        UpHelper::load_file($this,'toc.js');
+        UpHelper::load_js_file_body($this,'smooth-scroll.js');
         return true;
     }
 
@@ -42,7 +44,7 @@ class toc extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -82,32 +84,32 @@ class toc extends upAction {
 //         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options, 1);
+        $js_params = UpHelper::json_arrtostr($this,$js_options, 1);
         // -- initialisation
         $js_code = '$(\'#' . $options['id'] . '\').toc(';
         $js_code .= $js_params;
         $js_code .= ');';
 
 
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === le code HTML
         $attr['id'] = $options['id'];
         $attr['class'] = "uptoc";
-        $this->get_attr_style($attr, $options['class'], $options['style']);
-        $out = $this->set_attr_tag('div', $attr, true);
+        UpHelper::get_attr_style($this,$attr, $options['class'], $options['style']);
+        $out = UpHelper::set_attr_tag($this,'div', $attr, true);
         return $out;
     }
 

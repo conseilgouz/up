@@ -19,8 +19,9 @@
  * v5.3 - ajout de l'option facade : chargement d'une image au lieu de la vidéo
  */
 defined('_JEXEC') or die();
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class media_youtube extends upAction
+class media_youtube extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -33,7 +34,7 @@ class media_youtube extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // code de la video (à la fin de l'url youtube)
@@ -53,14 +54,14 @@ class media_youtube extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         if ($options['width'])
-            $options['width'] = $this->ctrl_unit($options['width'], '%,px');
+            $options['width'] = UpHelper::ctrl_unit($this,$options['width'], '%,px');
 
         // le bloc externe
         $outer_attr = array();
-        $this->get_attr_style($outer_attr, $options['class'], $options['style']);
-        $this->add_style($outer_attr['style'], 'width', $options['width']);
+        UpHelper::get_attr_style($this,$outer_attr, $options['class'], $options['style']);
+        UpHelper::add_style($this,$outer_attr['style'], 'width', $options['width']);
 
         // le bloc contenant la video
         $main_attr['id'] = $options['id'];
@@ -68,18 +69,18 @@ class media_youtube extends upAction
         $main_attr['style'] = '';
 
         if ($options['facade']) {
-            $this->load_file('lib/lite-yt-embed.css');
-            $this->load_file('lib/lite-yt-embed.js');
+            UpHelper::load_file($this,'lib/lite-yt-embed.css');
+            UpHelper::load_file($this,'lib/lite-yt-embed.js');
             $out = "";
-            $out .= ($outer_attr) ? $this->set_attr_tag('div', $outer_attr) : '';
+            $out .= ($outer_attr) ? UpHelper::set_attr_tag($this,'div', $outer_attr) : '';
             $out .= '<lite-youtube videoid='.$options[__class__].' style="margin-left:auto;margin-right:auto"></lite-youtube>';
             $out .= ($outer_attr) ? '</div>' : '';
             return $out;
         }
         $api = "?rel=0";
         if (! empty($options['play-on-visible'])) {
-            $this->load_file('youtube_api.min.js');
-            $this->load_file('media_youtube.js');
+            UpHelper::load_file($this,'youtube_api.min.js');
+            UpHelper::load_file($this,'media_youtube.js');
             $api .= "&enablejsapi=1";
             $attr_iframe['class'] = 'play-on-visible';
         }
@@ -101,7 +102,7 @@ class media_youtube extends upAction
         $attr_iframe['allowfullscreen'] = null; // null = attribut sans argument
         if ($this->tarteaucitron && $options['rgpd']) {
             $attr_iframe['videoID'] = $options[__class__] . $api;
-            $this->add_class($attr_iframe['class'], 'youtube_player');
+            UpHelper::add_class($this,$attr_iframe['class'], 'youtube_player');
             $tag = 'div';
         } else {
             $attr_iframe['src'] = 'https://www.youtube.com/embed/' . $options[__class__] . $api;
@@ -111,12 +112,12 @@ class media_youtube extends upAction
         // le CSS
         $css_code = '#' . $options['id'] . '.up-video-container div  {aspect-ratio: ' . $options['ratio'] . '}';
         $css_code .= '#' . $options['id'] . '.up-video-container iframe {aspect-ratio: ' . $options['ratio'] . ';display:flex;}';
-        $this->load_css_head($css_code);
+        UpHelper::load_css_head($this,$css_code);
 
         // le code renvoyé
-        $out = $this->set_attr_tag($tag, $attr_iframe, true);
-        $out = $this->set_attr_tag('div', $main_attr, $out);
-        $out = $this->set_attr_tag('_div', $outer_attr, $out);
+        $out = UpHelper::set_attr_tag($this,$tag, $attr_iframe, true);
+        $out = UpHelper::set_attr_tag($this,'div', $main_attr, $out);
+        $out = UpHelper::set_attr_tag($this,'_div', $outer_attr, $out);
 
         return $out;
     }

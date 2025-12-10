@@ -28,16 +28,18 @@
  */
 defined('_JEXEC') or die();
 
-class media_plyr extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class media_plyr extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
-        $this->load_file('plyr.css'); // v 2.0.13
-        $this->load_file('plyr.js'); // v 2.0.13
+        UpHelper::load_file($this,'plyr.css'); // v 2.0.13
+        UpHelper::load_file($this,'plyr.js'); // v 2.0.13
 
         $js_code = 'var instances = plyr.setup({ debug: false });';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         return true;
     }
@@ -46,7 +48,7 @@ class media_plyr extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // type de lecture : youtube, vimeo, video ou audio
@@ -66,31 +68,31 @@ class media_plyr extends upAction
 
         // ==== si video en video ou audio, on affecte les variables pour un eventuel debug
         // si appel par vimeo, audio ou video
-        $this->set_option_user_if_true(__class__, $this->actionUserName);
+        UpHelper::set_option_user_if_true($this,__class__, $this->actionUserName);
 
         // si video, on affecte les variables pour debug
         if ($this->options_user[__class__] == "video") {
             if (! isset($this->options_user['poster'])) {
-                return $this->msg_inline($this->trad_keyword('NO_POSTER'));
+                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NO_POSTER'));
             }
             $name = substr($this->options_user['poster'], 0, strrpos($this->options_user['poster'], '.'));
-            $this->set_option_user_if_true('mp4', $name . '.mp4');
-            $this->set_option_user_if_true('webm', $name . '.webm');
-            $this->set_option_user_if_true('vtt', $name . '.vtt');
-            $this->set_option_user_if_true('download', $name . '.download');
+            UpHelper::set_option_user_if_true($this,'mp4', $name . '.mp4');
+            UpHelper::set_option_user_if_true($this,'webm', $name . '.webm');
+            UpHelper::set_option_user_if_true($this,'vtt', $name . '.vtt');
+            UpHelper::set_option_user_if_true($this,'download', $name . '.download');
         }
 
         // si audio, on affecte les variables pour debug
         if ($this->options_user[__class__] == "audio") {
             if (! isset($this->options_user['mp3'])) {
-                return $this->msg_inline($this->trad_keyword('NO_MP3'));
+                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NO_MP3'));
             }
             $name = substr($this->options_user['mp3'], 0, strrpos($this->options_user['mp3'], '.'));
-            $this->set_option_user_if_true('ogg', $name . '.ogg');
+            UpHelper::set_option_user_if_true($this,'ogg', $name . '.ogg');
         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         switch ($options[__class__]) {
             case 'yt':
@@ -110,11 +112,11 @@ class media_plyr extends upAction
                 $out .= ($options['download'] > '') ? '<a href="' . $options['download'] . '">download</a>' : '';
                 $out .= '</video>';
 
-                if ($options['download'] && $this->on_server($name . '.mp4')) { // v5.0
+                if ($options['download'] && UpHelper::on_server($this,$name . '.mp4')) { // v5.0
                     $attr_link['href'] = $name . '.mp4';
                     $attr_link['download'] = basename($name . '.mp4'); // on force le téléchargement
                     $attr_link['class'] = 'plyr-download';
-                    $out .= $this->set_attr_tag('a', $attr_link, 'télécharger ' . basename($name . '.mp4'));
+                    $out .= UpHelper::set_attr_tag($this,'a', $attr_link, 'télécharger ' . basename($name . '.mp4'));
                 }
                 break;
 
@@ -123,17 +125,17 @@ class media_plyr extends upAction
                 $out .= '<source src="' . $options['mp3'] . '" type="audio/mp3">';
                 $out .= ($options['ogg'] > '') ? '<source src="' . $options['ogg'] . '" type="audio/ogg">' : '';
                 $out .= '</audio>';
-                if ($options['download'] && $this->on_server($name . '.mp3')) { // v5.0
+                if ($options['download'] && UpHelper::on_server($this,$name . '.mp3')) { // v5.0
                     $attr_link['href'] = $name . '.mp3';
                     $attr_link['download'] = basename($name . '.mp3'); // on force le téléchargement
                     $attr_link['class'] = 'plyr-download';
-                    $out .= $this->set_attr_tag('a', $attr_link, 'télécharger ' . basename($name . '.mp3'));
+                    $out .= UpHelper::set_attr_tag($this,'a', $attr_link, 'télécharger ' . basename($name . '.mp3'));
                 }
                 break;
                 break;
 
             default:
-                $out = $this->msg_inline($this->trad_keyword('ARG_INVALID', $options[__class__]));
+                $out = UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'ARG_INVALID', $options[__class__]));
         }
 
         if (($options['class'] > '') || ($options['style'] > '')) {
@@ -144,13 +146,13 @@ class media_plyr extends upAction
             $attr_main['style'] = $options['style'];
 
             // code en retour
-            $out = $this->set_attr_tag('div', $attr_main);
+            $out = UpHelper::set_attr_tag($this,'div', $attr_main);
             $out .= $inner;
             $out .= '</div>';
         }
 
         if (isset($this->options_user['debug'])) { // v2.7
-            $this->msg_info($options['id'] . ' : <code>' . str_replace('<', '&lt;', $out) . '</code>');
+            UpHelper::msg_info($this,$options['id'] . ' : <code>' . str_replace('<', '&lt;', $out) . '</code>');
         }
         return $out;
     }

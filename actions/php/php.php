@@ -21,8 +21,8 @@
  *      : ajout option authorized-functions pour permettre ponctuellement l'utilisation d'une fonction interdite
  */
 defined('_JEXEC') or die();
-
-class php extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+class php extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -34,7 +34,7 @@ class php extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // le code PHP
@@ -49,10 +49,10 @@ class php extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -75,7 +75,7 @@ class php extends upAction
             "'"
         );
         $phpCode = str_replace($search, $replace, $phpCode);
-        $phpCode = $this->spaceNormalize($phpCode);
+        $phpCode = UpHelper::spaceNormalize($this,$phpCode);
 
         // liste des fonctions interdites
         $block_list = explode(' ', 'basename chgrp chmod chown clearstatcache copy delete dirname disk_free_space disk_total_space diskfreespace fclose feof fflush fgetc fgetcsv fgets fgetss file_exists file_get_contents file_put_contents file fileatime filectime filegroup fileinode filemtime fileowner fileperms filesize filetype flock fnmatch fopen fpassthru fputcsv fputs fread fscanf fseek fstat ftell ftruncate fwrite glob lchgrp lchown link linkinfo lstat move_uploaded_file opendir parse_ini_file pathinfo pclose popen readfile readdir readllink realpath rename rewind rmdir set_file_buffer stat symlink tempnam tmpfile touch umask unlink fsockopen system exec passthru escapeshellcmd pcntl_exec proc_open proc_close mkdir rmdir base64_decode');
@@ -105,13 +105,13 @@ class php extends upAction
             $out = ob_get_contents();
             ob_end_clean();
         } else {
-            $out = $this->msg_inline('****** INVALID CODE IN PHP : ' . $errmsg . ' ******');
+            $out = UpHelper::msg_inline($this,'****** INVALID CODE IN PHP : ' . $errmsg . ' ******');
         }
 
         if ($options['class'] || $options['style']) {
             $attr['id'] = $options['id'];
-            $this->get_attr_style($attr, $options['class'], $options['style']);
-            $out = $this->set_attr_tag($options['tag'], $attr, $out);
+            UpHelper::get_attr_style($this,$attr, $options['class'], $options['style']);
+            $out = UpHelper::set_attr_tag($this,$options['tag'], $attr, $out);
         }
         return $out;
     }

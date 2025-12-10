@@ -36,8 +36,9 @@ use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jmenus_metadata extends upAction
+class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -49,7 +50,7 @@ class jmenus_metadata extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // prefset, liste menutype (sep:virgule) ou vide pour tous
@@ -77,16 +78,16 @@ class jmenus_metadata extends upAction
         );
 
         // ======> fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
-        $this->options['template-menutype'] = $this->get_bbcode($this->options['template-menutype'], false);
-        $this->options['template-menu'] = $this->get_bbcode($this->options['template-menu'], false);
-        $this->options['template-article'] = $this->get_bbcode($this->options['template-article'], false);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options['template-menutype'] = UpHelper::get_bbcode($this,$this->options['template-menutype'], false);
+        $this->options['template-menu'] = UpHelper::get_bbcode($this,$this->options['template-menu'], false);
+        $this->options['template-article'] = UpHelper::get_bbcode($this,$this->options['template-article'], false);
         $isList = ($this->options['main-tag'] == 'ul');
         if (! $isList) {
             $this->options['template-menu'] = '<' . $this->options['main-tag'] . ' class="level_##level##">' . $this->options['template-menu'] . '</' . $this->options['main-tag'] . '>';
         }
-        $this->options['article-sort-by'] = $this->ctrl_argument($this->options['article-sort-by'], 'title,ordering,created,modified,publish_up,id,hits,random');
-        $this->options['article-sort-order'] = $this->ctrl_argument($this->options['article-sort-order'], 'asc,desc');
+        $this->options['article-sort-by'] = UpHelper::ctrl_argument($this,$this->options['article-sort-by'], 'title,ordering,created,modified,publish_up,id,hits,random');
+        $this->options['article-sort-order'] = UpHelper::ctrl_argument($this,$this->options['article-sort-order'], 'asc,desc');
 
         $now = date('Y-m-d H:i:s');
         $this->options['template-menu'] = str_ireplace('#now', $now, $this->options['template-menu']);
@@ -94,7 +95,7 @@ class jmenus_metadata extends upAction
             $this->options['template-article'] = str_ireplace('#now', $now, $this->options['template-article']);
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // === RECUP NIVEAU ACCES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -131,7 +132,7 @@ class jmenus_metadata extends upAction
         $level = 0;
         $toplevel = 0;
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['style']);
 
         // $menu = AbstractMenu::getInstance('site');
 
@@ -197,7 +198,7 @@ class jmenus_metadata extends upAction
             }
         }
 
-        return $this->set_attr_tag('div', $attr_main, implode(PHP_EOL, $out));
+        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $out));
     }
 
     // run
@@ -338,10 +339,10 @@ class jmenus_metadata extends upAction
     function getLignMenutype($menutype)
     {
         $tmpl = $this->options['template-menutype'];
-        $this->kw_replace($tmpl, 'id', $menutype->id);
-        $this->kw_replace($tmpl, 'title', $menutype->title);
-        $this->kw_replace($tmpl, 'menutype', $menutype->menutype);
-        $this->kw_replace($tmpl, 'description', $menutype->description);
+        UpHelper::kw_replace($this,$tmpl, 'id', $menutype->id);
+        UpHelper::kw_replace($this,$tmpl, 'title', $menutype->title);
+        UpHelper::kw_replace($this,$tmpl, 'menutype', $menutype->menutype);
+        UpHelper::kw_replace($this,$tmpl, 'description', $menutype->description);
         return $tmpl;
     }
 
@@ -352,34 +353,34 @@ class jmenus_metadata extends upAction
         $root = Uri::getInstance()->root();
         $url = $root . $this->get_db_value('path', 'menu', 'id=' . $menu->id);
 
-        $this->kw_replace($tmpl, 'id', $menu->id);
-        $this->kw_replace($tmpl, 'title', $menu->title);
-        $this->kw_replace($tmpl, 'title-link', '<a href="' . $url . '">' . $menu->title . '</a>');
-        $this->kw_replace($tmpl, 'menutype', $menu->menutype);
-        $this->kw_replace($tmpl, 'home', $menu->home);
-        $this->kw_replace($tmpl, 'access', $this->nivacces[$menu->access]);
-        $this->kw_replace($tmpl, 'level', $menu->level);
-        $this->kw_replace($tmpl, 'note', $menu->note);
-        $this->kw_replace($tmpl, 'state', $menu->published);
+        UpHelper::kw_replace($this,$tmpl, 'id', $menu->id);
+        UpHelper::kw_replace($this,$tmpl, 'title', $menu->title);
+        UpHelper::kw_replace($this,$tmpl, 'title-link', '<a href="' . $url . '">' . $menu->title . '</a>');
+        UpHelper::kw_replace($this,$tmpl, 'menutype', $menu->menutype);
+        UpHelper::kw_replace($this,$tmpl, 'home', $menu->home);
+        UpHelper::kw_replace($this,$tmpl, 'access', $this->nivacces[$menu->access]);
+        UpHelper::kw_replace($this,$tmpl, 'level', $menu->level);
+        UpHelper::kw_replace($this,$tmpl, 'note', $menu->note);
+        UpHelper::kw_replace($this,$tmpl, 'state', $menu->published);
         // date publish
         if (stripos($tmpl, '##publish_') !== false) {
-            $this->kw_replace($tmpl, 'publish_up', $this->get_db_value('publish_up', 'menu', 'id=' . $menu->id));
-            $this->kw_replace($tmpl, 'publish_down', $this->get_db_value('publish_down', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this,$tmpl, 'publish_up', $this->get_db_value('publish_up', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this,$tmpl, 'publish_down', $this->get_db_value('publish_down', 'menu', 'id=' . $menu->id));
         }
         //
         $robots = explode(',', $robots);
-        $this->kw_replace($tmpl, 'index', trim($robots[0]));
-        $this->kw_replace($tmpl, 'follow', trim($robots[1]));
+        UpHelper::kw_replace($this,$tmpl, 'index', trim($robots[0]));
+        UpHelper::kw_replace($this,$tmpl, 'follow', trim($robots[1]));
 
         // ============================================================
         if (strpos($tmpl, '##image') !== false) {
             // $itemParams = json_decode($menu->params);
             $image = $this->get_image($menu->params);
-            $this->kw_replace($tmpl, 'image', $image);
+            UpHelper::kw_replace($this,$tmpl, 'image', $image);
         }
         // language
         $str = ($menu->language == '*') ? '' : $menu->language;
-        $this->kw_replace($tmpl, 'language', $str);
+        UpHelper::kw_replace($this,$tmpl, 'language', $str);
 
         // type
         if ($menu->type == 'component') {
@@ -426,7 +427,7 @@ class jmenus_metadata extends upAction
                     $str = $menu->type;
             }
         }
-        $this->kw_replace($tmpl, 'type', $str);
+        UpHelper::kw_replace($this,$tmpl, 'type', $str);
 
         return $tmpl;
     }
@@ -450,25 +451,25 @@ class jmenus_metadata extends upAction
 //         if ($article->id==290)
 //             $debug=true;
         
-        $this->kw_replace($tmpl, 'id', $article->id);
-        $this->kw_replace($tmpl, 'title', $article->title);
-        $this->kw_replace($tmpl, 'title-link', '<a href="' . $url . '">' . $article->title . '</a>');
-        $this->kw_replace($tmpl, 'title-size', strlen($article->title));
-        $this->kw_replace($tmpl, 'alias', $article->alias);
-        $this->kw_replace($tmpl, 'state', $article->state);
-        $this->kw_replace($tmpl, 'access', $this->nivacces[$article->access]);
-        $this->kw_replace($tmpl, 'created', $this->up_date_format($article->created, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'modified', $this->up_date_format($article->modified, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'publish_up', $this->up_date_format($article->publish_up, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'publish_down', $this->up_date_format($article->publish_down, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'catid', $article->catid);
-        $this->kw_replace($tmpl, 'catname', $article->catname);
-        $this->kw_replace($tmpl, 'featured', $article->featured);
-        $this->kw_replace($tmpl, 'featured_up', $this->up_date_format($article->featured_up, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'featured_down', $this->up_date_format($article->featured_down, $this->options['date-format'], $this->options['date-locale']));
-        $this->kw_replace($tmpl, 'language', $article->language);
-        $this->kw_replace($tmpl, 'index', trim($robots[0]));
-        $this->kw_replace($tmpl, 'follow', trim($robots[1]));
+        UpHelper::kw_replace($this,$tmpl, 'id', $article->id);
+        UpHelper::kw_replace($this,$tmpl, 'title', $article->title);
+        UpHelper::kw_replace($this,$tmpl, 'title-link', '<a href="' . $url . '">' . $article->title . '</a>');
+        UpHelper::kw_replace($this,$tmpl, 'title-size', strlen($article->title));
+        UpHelper::kw_replace($this,$tmpl, 'alias', $article->alias);
+        UpHelper::kw_replace($this,$tmpl, 'state', $article->state);
+        UpHelper::kw_replace($this,$tmpl, 'access', $this->nivacces[$article->access]);
+        UpHelper::kw_replace($this,$tmpl, 'created', UpHelper::up_date_format($this,$article->created, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'modified', UpHelper::up_date_format($this,$article->modified, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'publish_up', UpHelper::up_date_format($this,$article->publish_up, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'publish_down', UpHelper::up_date_format($this,$article->publish_down, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'catid', $article->catid);
+        UpHelper::kw_replace($this,$tmpl, 'catname', $article->catname);
+        UpHelper::kw_replace($this,$tmpl, 'featured', $article->featured);
+        UpHelper::kw_replace($this,$tmpl, 'featured_up', UpHelper::up_date_format($this,$article->featured_up, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'featured_down', UpHelper::up_date_format($this,$article->featured_down, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this,$tmpl, 'language', $article->language);
+        UpHelper::kw_replace($this,$tmpl, 'index', trim($robots[0]));
+        UpHelper::kw_replace($this,$tmpl, 'follow', trim($robots[1]));
 
 
         // des mots-clés JSON
@@ -495,7 +496,7 @@ class jmenus_metadata extends upAction
                     $res = array();
             }
             $val = $res[$key] ?? 'error';
-            $this->kw_replace($tmpl, $matches[1][0] . '.' . $matches[2][0], $val);
+            UpHelper::kw_replace($this,$tmpl, $matches[1][0] . '.' . $matches[2][0], $val);
         }
         
         return $tmpl;
@@ -507,10 +508,10 @@ class jmenus_metadata extends upAction
     function get_lign_menutype($menutype)
     {
         $tmpl = $this->options['template-menutype'];
-        $this->kw_replace($tmpl, 'id', $menutype['id']);
-        $this->kw_replace($tmpl, 'menutype', $menutype['menutype']);
-        $this->kw_replace($tmpl, 'title', $menutype['title']);
-        $this->kw_replace($tmpl, 'description', $menutype['description']);
+        UpHelper::kw_replace($this,$tmpl, 'id', $menutype['id']);
+        UpHelper::kw_replace($this,$tmpl, 'menutype', $menutype['menutype']);
+        UpHelper::kw_replace($this,$tmpl, 'title', $menutype['title']);
+        UpHelper::kw_replace($this,$tmpl, 'description', $menutype['description']);
         return $tmpl;
     }
 

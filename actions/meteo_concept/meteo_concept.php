@@ -55,7 +55,9 @@
  */
 defined('_JEXEC') or die();
 
-class meteo_concept extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class meteo_concept extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public $synonym;
     public $wcity,$wdata ;
@@ -68,7 +70,7 @@ class meteo_concept extends upAction
     function run()
     {
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
         $options_def = array(
 
             __class__ => '', // Date de la prévision sous la forme AAAAMMJJ (journée) ou AAAAMMJJHHMM (quart de journée début à 1,7,13 ou 19h)
@@ -87,20 +89,20 @@ class meteo_concept extends upAction
         );
         // === fusion et controle des options
 
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         // === les styles
         $attr_main = array();
-        $this->get_attr_style($attr_main, $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['style']);
 
         // === le code INSEE est obligatoire pour éviter d'avoir Rennes par défaut
         if (strlen($options['insee']) < 4)
-            return $this->info_debug($this->trad_keyword('error_insee'));
+            return UpHelper::info_debug($this,UpHelper::trad_keyword($this,'error_insee'));
 
         // === Analyse et chargement des paramètres
-        $lib_daypart = $this->params_decode($this->trad_keyword('DAY-PART'));
-        $lib_weather = $this->params_decode($this->trad_keyword('WEATHER'));
-        $lib_winddirs = $this->params_decode($this->trad_keyword('WINDDIRS'));
-        $this->synonym = $this->params_decode($this->trad_keyword('SYNONYM'));
+        $lib_daypart = UpHelper::params_decode($this,UpHelper::trad_keyword($this,'DAY-PART'));
+        $lib_weather = UpHelper::params_decode($this,UpHelper::trad_keyword($this,'WEATHER'));
+        $lib_winddirs = UpHelper::params_decode($this,UpHelper::trad_keyword($this,'WINDDIRS'));
+        $this->synonym = UpHelper::params_decode($this,UpHelper::trad_keyword($this,'SYNONYM'));
 
         // === Traitement de la date de prévisions souhaitée (argument meteo-concept)
         // vide : date du jour si out-of-period=2
@@ -124,7 +126,7 @@ class meteo_concept extends upAction
 
         // date non saisie
         if ((int) $target == 0)
-            return $this->info_debug($this->trad_keyword('error_empty_date'));
+            return UpHelper::info_debug($this,UpHelper::trad_keyword($this,'error_empty_date'));
 
         // traiter la date
         if (strlen($target) >= 12) {
@@ -144,8 +146,8 @@ class meteo_concept extends upAction
                 $msg = ($date_offset < 0) ? $options['msg-before'] : $options['msg-after'];
                 if ($date_offset > 13)
                     $target = date("Y-m-d",strtotime('-13 day',strtotime($target)));
-                $msg = sprintf($msg, $this->up_date_format($target, $options['date-format']));
-                return $this->set_attr_tag('_' . $options['tag'], $attr_main, $msg);
+                $msg = sprintf($msg, UpHelper::up_date_format($this,$target, $options['date-format']));
+                return UpHelper::set_attr_tag($this,'_' . $options['tag'], $attr_main, $msg);
             } else {
                 return '';
             }
@@ -165,9 +167,9 @@ class meteo_concept extends upAction
         if ($this->content) {
             $template = $this->content;
         } else {
-            $template = ($daypart == 'all') ? $this->trad_keyword('MSG-ALL') : $this->trad_keyword('MSG-PART');
+            $template = ($daypart == 'all') ? UpHelper::trad_keyword($this,'MSG-ALL') : UpHelper::trad_keyword($this,'MSG-PART');
         }
-        $this->out = $this->get_bbcode($template);
+        $this->out = UpHelper::get_bbcode($this,$template);
 
         // Récupération des données
         $filetemp = 'tmp/meteo-concept-' . $options['insee'] . '-' . $target . '.json';
@@ -185,7 +187,7 @@ class meteo_concept extends upAction
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $data = curl_exec($ch);
             if ($data == false)
-                return $this->info_debug(curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
+                return UpHelper::info_debug($this,curl_getinfo($ch, CURLINFO_RESPONSE_CODE));
             file_put_contents($filetemp, $data);
         }
 
@@ -193,7 +195,7 @@ class meteo_concept extends upAction
         $decoded = json_decode($data);
         // print_r($decoded);
         if (isset($decoded->message)) {
-            $this->out = $this->info_debug($decoded->message);
+            $this->out = UpHelper::info_debug($this,$decoded->message);
         } else {
             $this->wcity = $decoded->city;
             if ($daypart == 'all') {
@@ -204,8 +206,8 @@ class meteo_concept extends upAction
 
             // --- données de base ou avec mise en forme
             $this->kwmeteo_replace('DAY-PART', $lib_daypart[$daypart]);
-            $this->kwmeteo_replace('DATE', $this->up_date_format($this->wdata->datetime, $options['date-format']));
-            $this->kwmeteo_replace('UPDATE', $this->up_date_format($decoded->update, $options['date-format']));
+            $this->kwmeteo_replace('DATE', UpHelper::up_date_format($this,$this->wdata->datetime, $options['date-format']));
+            $this->kwmeteo_replace('UPDATE', UpHelper::up_date_format($this,$decoded->update, $options['date-format']));
             $this->kwmeteo_replace('WINDDIRS', $lib_winddirs[(int) floor(($this->wdata->dirwind10m + 11.25) / 22.5)]);
             $this->kwmeteo_replace('WEATHER-TEXT', $lib_weather[$this->wdata->weather]);
 
@@ -219,7 +221,7 @@ class meteo_concept extends upAction
         }
 
         // -- c'est fini
-        return $this->set_attr_tag('_' . $options['tag'], $attr_main, $this->out);
+        return UpHelper::set_attr_tag($this,'_' . $options['tag'], $attr_main, $this->out);
         
     }
 

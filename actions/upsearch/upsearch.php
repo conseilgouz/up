@@ -29,10 +29,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 require_once('sort_text.php');
 
-class upsearch extends upAction
+class upsearch extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -44,7 +45,7 @@ class upsearch extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
         /* [st-sel]  Critères de recherche */
@@ -89,17 +90,17 @@ class upsearch extends upAction
         }
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         // controle cle de tri
         $list_sortkey = 'title,ordering, created,modified,publish_up, id, hits, text';
-        $this->options['sort-by'] = $this->ctrl_argument($this->options['sort-by'], $list_sortkey);
-        $this->options['sort-order'] = $this->ctrl_argument($this->options['sort-order'], 'asc,desc');
+        $this->options['sort-by'] = UpHelper::ctrl_argument($this,$this->options['sort-by'], $list_sortkey);
+        $this->options['sort-order'] = UpHelper::ctrl_argument($this,$this->options['sort-order'], 'asc,desc');
         // bbcode template
-        $this->options['template'] = $this->get_bbcode($this->options['template']);
+        $this->options['template'] = UpHelper::get_bbcode($this,$this->options['template']);
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // === LE TYPE DE RECHERCHE
         if (empty($this->options[__class__])) {
@@ -117,7 +118,7 @@ class upsearch extends upAction
                 // on accepte tiret et underscore
                 $regex .= str_replace('_', '[_-]', $action_name);
                 // recherche synonyme
-                $synonym = $this->get_dico_synonym($action_name);
+                $synonym = UpHelper::get_dico_synonym($this,$action_name);
                 if ($synonym) {
                     $regex .= '|' . str_replace(',', '|', $synonym);
                 }
@@ -191,8 +192,8 @@ class upsearch extends upAction
                         $url = Route::_($route);
                         $result['title-link'] = '<a href="' . $url . '" target="' . $this->options['target'] . '">' . $result['title'] . '</a>';
                     }
-                    $result['date-crea'] = $this->up_date_format($item->created, $this->options['date-format']);
-                    $result['date-modif'] = $this->up_date_format($item->modified, $this->options['date-format']);
+                    $result['date-crea'] = UpHelper::up_date_format($this,$item->created, $this->options['date-format']);
+                    $result['date-modif'] = UpHelper::up_date_format($this,$item->modified, $this->options['date-format']);
 
                     // mise en forme resultat
                     if ($this->options['maxlen'] && strlen($tmp) > (int) $this->options['maxlen']) {
@@ -270,7 +271,7 @@ class upsearch extends upAction
             $debug = $query->__toString();
             if (isset($this->options_user['debug'])) {
                 $debug = $query->__toString();
-                $this->msg_info(htmlentities($debug), 'Requete SQL');
+                UpHelper::msg_info($this,htmlentities($debug), 'Requete SQL');
             }
             $items = $db->loadObjectList();
             // --- RESULTATS MODULES
@@ -332,11 +333,11 @@ class upsearch extends upAction
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
 
         // code en retour
         $out = (empty($html)) ? '' : implode(PHP_EOL, $html);
-        $out = $this->set_attr_tag('div', $attr_main, $out);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_main, $out);
 
         return $out;
     }

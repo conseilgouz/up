@@ -32,7 +32,9 @@ use Joomla\Component\Media\Administrator\Exception\FileExistsException;
  */
 defined('_JEXEC') or die();
 
-class folder_list extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -44,7 +46,7 @@ class folder_list extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin relatif du dossier sur le serveur
@@ -89,9 +91,9 @@ class folder_list extends upAction
          * }
          */
         // === fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
-        $this->options['template'] = $this->get_bbcode($this->options['template']);
-        $this->options['template-folder'] = $this->get_bbcode($this->options['template-folder']);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options['template'] = UpHelper::get_bbcode($this,$this->options['template']);
+        $this->options['template-folder'] = UpHelper::get_bbcode($this,$this->options['template-folder']);
 
         // extraction des composantes de la recherche
         $path = $this->options[__class__];
@@ -112,7 +114,7 @@ class folder_list extends upAction
         }
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
 
         // === Recupération de la liste
         $this->result = array();
@@ -128,9 +130,9 @@ class folder_list extends upAction
         // attributs du bloc principal
         if ($this->options['main-tag']) {
             $attr_main['id'] = $this->options['id'];
-            $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
             // code en retour
-            $out = $this->set_attr_tag($this->options['main-tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
         }
 
         return $out;
@@ -180,13 +182,13 @@ class folder_list extends upAction
             $tmpl = $this->options['template'];
             $tmpl = str_ireplace("##file##", $file, $tmpl);
             if (strpos($tmpl, '##') !== false) { // v2.8.2
-                $info = pathinfo($this->get_url_absolute($file));
+                $info = pathinfo(UpHelper::get_url_absolute($this,$file));
                 $tmpl = str_ireplace("##dirname##", $info['dirname'], $tmpl);
                 $tmpl = str_ireplace("##basename##", $info['basename'], $tmpl);
                 $tmpl = str_ireplace("##filename##", $info['filename'], $tmpl);
                 $tmpl = str_ireplace("##extension##", $info['extension'], $tmpl);
-                $tmpl = str_ireplace("##size##", $this->human_filesize($file, $this->options['decimal']), $tmpl);
-                $tmpl = str_ireplace("##date##", $this->up_date_format(date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
+                $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this,$file, $this->options['decimal']), $tmpl);
+                $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this,date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
 
                 $relpath = trim(substr($info['dirname'], strlen($this->options[__class__])), "/");
                 $relpath .= ($relpath) ? '/' : '';
@@ -201,24 +203,6 @@ class folder_list extends upAction
         }
         $this->result[] = $tmpl;
     }
-
-    /*
-     * human_filesize
-     * --------------
-     */
-    function human_filesize($file, $decimals = 2)
-    {
-        $bytes = filesize($file);
-        $sz = 'BKMGTP';
-        $factor = floor((strlen($bytes) - 1) / 3);
-        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
-    }
-
-    function date_modif($file, $format = 'Y/m/d H:i')
-    {
-        return date($format, filemtime($file));
-    }
-
     // run
 }
 

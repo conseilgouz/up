@@ -22,20 +22,22 @@
  */
 defined('_JEXEC') or die();
 
-class countdown extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class countdown extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // ===== Ajout dans le head (une seule fois)
-        $this->load_file('timeTo.css');
-        $this->load_file('jquery.time-to.min.js');
+        UpHelper::load_file($this,'timeTo.css');
+        UpHelper::load_file($this,'jquery.time-to.min.js');
     }
 
     public function run()
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (hors JS)
         // il est indispensable de tous les définir ici
@@ -66,14 +68,14 @@ class countdown extends upAction
             'theme' => 'white' // style : white, black ou blue
         );
 
-        $tz = $this->get_action_pref('timezone', 'Europe/Paris');
+        $tz = UpHelper::get_action_pref($this,'timezone', 'Europe/Paris');
         date_default_timezone_set($tz);
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // === Filtrage
-        if ($this->filter_ok($options['filter']) !== true) {
+        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
             return '';
         }
 
@@ -108,8 +110,8 @@ class countdown extends upAction
         }
 
         // ---- conversion params JS en chaine JSON
-        $js_params = $this->only_using_options($js_options_def);
-        $js_params = $this->json_arrtostr($js_params);
+        $js_params = UpHelper::only_using_options($this,$js_options_def);
+        $js_params = UpHelper::json_arrtostr($this,$js_params);
 
         // -- initialisation
         // ==== le code JS
@@ -119,25 +121,25 @@ class countdown extends upAction
         }
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // ==== Attribut STYLE pour le div principal
         $attr_out['id'] = $options['id'];
         $attr_out['class'] = $options['class'];
-        $this->add_class($attr_out['class'], 'clear');
+        UpHelper::add_class($this,$attr_out['class'], 'clear');
         $attr_out['style'] = $options['style'];
-        $this->add_style($attr_out['style'], 'text-align', $options['align']);
+        UpHelper::add_style($this,$attr_out['style'], 'text-align', $options['align']);
         // correction bug : forcer hauteur si fontsize plus grand
         if (isset($options['fontSize'])) {
             $coef = 1.10;
             if (isset($options['displayCaptions']) && $options['displayCaptions']) {
                 $coef = 1.80;
             }
-            $this->add_style($attr_out['style'], 'height', ($options['fontSize'] * $coef) . 'px');
+            UpHelper::add_style($this,$attr_out['style'], 'height', ($options['fontSize'] * $coef) . 'px');
         }
 
         // ==== le HTML
-        $out = $this->set_attr_tag('div', $attr_out) . '</div>';
+        $out = UpHelper::set_attr_tag($this,'div', $attr_out) . '</div>';
 
         return $out;
     }

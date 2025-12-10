@@ -13,20 +13,22 @@
  */
 defined('_JEXEC') or die;
 
-class tooltip extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class tooltip extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('style/up-model.css');
-        $this->load_file('zebra_tooltips.min.js');
-        $this->load_file('init.js');
+        UpHelper::load_file($this,'style/up-model.css');
+        UpHelper::load_file($this,'zebra_tooltips.min.js');
+        UpHelper::load_file($this,'init.js');
         return true;
     }
 
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -34,7 +36,7 @@ class tooltip extends upAction {
         // - vide = page sur le site de UP
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // texte de la bulle. bbcode permis
@@ -54,22 +56,22 @@ class tooltip extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $txt = $this->get_bbcode($options[__class__]);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $txt = UpHelper::get_bbcode($this,$options[__class__]);
         $txt = str_replace('<', '&lt;', $txt);
         $txt = str_replace('>', '&gt;', $txt);
         $txt = str_replace('"', '&quot;', $txt);
 
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // attributs du bloc principal
         $attr_main['id'] = $options['id'];
         $attr_main['href'] = 'javascript: void(0)';
         $attr_main['class'] = 'Zebra_Tooltips';
         $attr_main['class'] .= ($options['open']) ? '_open' : '';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         $attr_main['data-ztt_content'] = $txt;
         // -- largeur maxi
@@ -81,7 +83,7 @@ class tooltip extends upAction {
         if ($opacity > 0 && $opacity <= 100 && $opacity != 95)
             $attr_main['data-ztt_opacity'] = (string) ($opacity / 100);
         // -- position latérale ('center', 'left' or 'right')
-        $position = $this->ctrl_argument($options['position'], 'center,left,right');
+        $position = UpHelper::ctrl_argument($this,$options['position'], 'center,left,right');
         if ($position != 'center')
             $attr_main['data-ztt_position'] = $position;
         // -- position verticale (below or above)
@@ -96,7 +98,7 @@ class tooltip extends upAction {
             $attr_main['data-ztt_class'] = $options['model'];
 
         // code en retour
-        $out = $this->set_attr_tag('a', $attr_main, $this->content);
+        $out = UpHelper::set_attr_tag($this,'a', $attr_main, $this->content);
 
         return $out;
     }

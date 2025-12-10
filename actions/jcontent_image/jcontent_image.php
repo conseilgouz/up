@@ -18,8 +18,9 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcontent_image extends upAction
+class jcontent_image extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -31,7 +32,7 @@ class jcontent_image extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin vers l'image pour intro et fulltext
@@ -51,7 +52,7 @@ class jcontent_image extends upAction
         );
 
         // ==== fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
         $this->options['full-size'] = (int) $this->options['full-size'];
         $this->options['intro-size'] = (int) $this->options['intro-size'];
 
@@ -89,7 +90,7 @@ class jcontent_image extends upAction
             list($w, $h) = getimagesize($img);
             $img = (isset($w)) ? $img : '';
             if (empty($img)) {
-                $this->msg_error('error image not valid : ' . $this->options[__class__]);
+                UpHelper::msg_error($this,'error image not valid : ' . $this->options[__class__]);
                 return '';
             }
             $imgList[] = $img;
@@ -157,7 +158,7 @@ class jcontent_image extends upAction
                 return '';
                 break;
             case '':
-                return $this->link_humanize($img);
+                return UpHelper::link_humanize($this,$img);
                 break;
             default:
                 return $val ;
@@ -239,7 +240,7 @@ class jcontent_image extends upAction
         if ($imgExt == 'png') { // PNG
             $img = imagecreatefrompng($imgSrc);
             if ($img === false) {
-                $this->msg_error('PNG-file-corrupt : '. $imgSrc);
+                UpHelper::msg_error($this,'PNG-file-corrupt : '. $imgSrc);
                 return;
             }
             $imgNew = imagecreatetruecolor($wDest, $hDest);
@@ -260,7 +261,7 @@ class jcontent_image extends upAction
             imagecopyresampled($imgNew, $img, 0, 0, 0, 0, $wDest, $hDest, $wSrc, $hSrc);
             imagejpeg($imgNew, $imgDest);
         } else {
-            $this->msg_error('error-type-image : ', $imgSrc);
+            UpHelper::msg_error($this,'error-type-image : ', $imgSrc);
         }
         // le chemin vers la vignette créée
         return $imgDest;

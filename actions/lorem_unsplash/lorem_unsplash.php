@@ -13,7 +13,9 @@
  */
 defined('_JEXEC') or die;
 
-class lorem_unsplash extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class lorem_unsplash extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -24,7 +26,7 @@ class lorem_unsplash extends upAction
     {
 
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -43,7 +45,7 @@ class lorem_unsplash extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // controle options
         $gravity_list = 'north,east,south,west,center';
@@ -51,7 +53,7 @@ class lorem_unsplash extends upAction
 
         // si le type existe, on affiche l'image
         $img_attr = array();
-        $this->get_attr_style($img_attr, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$img_attr, $options['class'], $options['style']);
         $img_attr['src'] = 'https://picsum.photos';
         if ($options["grayscale"]) {
             $img_attr['src'] .= '/g';
@@ -70,7 +72,7 @@ class lorem_unsplash extends upAction
             $src_options[] = 'blur';
         }
         if (empty($this->options_user['gravity'])) {
-            $gravity = $this->ctrl_argument($options['gravity'], ',' . $gravity_list);
+            $gravity = UpHelper::ctrl_argument($this,$options['gravity'], ',' . $gravity_list);
             if ($gravity > '') {
                 $src_options[] = 'gravity=' . $gravity;
             }
@@ -80,7 +82,7 @@ class lorem_unsplash extends upAction
             $img_attr['src'] .= '/?' . implode('&', $src_options);
         }
         // --
-        $txt = $this->set_attr_tag('img', $img_attr);
+        $txt = UpHelper::set_attr_tag($this,'img', $img_attr);
 
         return $txt;
     }

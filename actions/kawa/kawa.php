@@ -12,7 +12,9 @@
  */
 defined('_JEXEC') or die;
 
-class kawa extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class kawa extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -25,7 +27,7 @@ class kawa extends upAction
 
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
           __class__ => '', // vide = café court, long = café long
@@ -38,7 +40,7 @@ class kawa extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // ----- préparation commande
         $img = '';
@@ -67,10 +69,10 @@ class kawa extends upAction
         $attr_main = array();
         $attr_main['class'] = $options['class'];
         $attr_main['style'] = $options['style'];
-        $this->add_style($attr_main['style'], 'background', 'url(plugins/content/up/actions/kawa/img/bg.jpg) no-repeat');
-        $this->add_style($attr_main['style'], 'background-size', '100%,100%');
+        UpHelper::add_style($this,$attr_main['style'], 'background', 'url(plugins/content/up/actions/kawa/img/bg.jpg) no-repeat');
+        UpHelper::add_style($this,$attr_main['style'], 'background-size', '100%,100%');
         // code en retour
-        $out = $this->set_attr_tag('div', $attr_main);
+        $out = UpHelper::set_attr_tag($this,'div', $attr_main);
         $out .= $img;
         $out .= '</div>';
 

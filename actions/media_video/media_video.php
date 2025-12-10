@@ -20,12 +20,14 @@
  */
 defined('_JEXEC') or die();
 
-class media_video extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class media_video extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('media_video.css');
+        UpHelper::load_file($this,'media_video.css');
         return true;
     }
 
@@ -33,7 +35,7 @@ class media_video extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // chemin et nom du fichier vidéo. caractères joker autorisés
@@ -59,22 +61,22 @@ class media_video extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === analyse options
-        $ext_codecs = $this->strtoarray($options['codecs'], ';', ':', false);
+        $ext_codecs = UpHelper::strtoarray($this,$options['codecs'], ';', ':', false);
         $options['types'] = strtolower($options['types']) . ';jpg:img;png:img;gif:img;webp:img';
-        $ext_type = $this->strtoarray($options['types'], ';', ':', false);
+        $ext_type = UpHelper::strtoarray($this,$options['types'], ';', ':', false);
 
         $attr_legend['class'] = 'upvideo-caption';
-        $this->get_attr_style($attr_legend, $options['legend-style']);
+        UpHelper::get_attr_style($this,$attr_legend, $options['legend-style']);
 
         // attributs du bloc principal
         $attr_main['class'] = 'upvideo-box';
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // === liste des fichiers video
         if (is_dir($options[__class__])) {
@@ -107,18 +109,18 @@ class media_video extends upAction
             // ---
             if ($fileinfo['filename'] != $current) {
                 if (! empty($sources)) { // pas les images seules
-                    $out[] = $this->set_attr_tag('div', $attr_main);
+                    $out[] = UpHelper::set_attr_tag($this,'div', $attr_main);
                     $out[] = '<video ' . implode(' ', $vidoptions) . '>';
                     $out = array_merge($out, $sources);
                     $out[] = '<div class="upvideo-nosupport">' . $options['no-support'] . '</div>';
                     $out[] = '</video>';
                     if ($options['legend']) {
                         if ($options['legend'] == 1) {
-                            $legend = $this->link_humanize($current);
+                            $legend = UpHelper::link_humanize($this,$current);
                         } else {
-                            $legend = $this->get_bbcode($options['legend']);
+                            $legend = UpHelper::get_bbcode($this,$options['legend']);
                         }
-                        $out[] = $this->set_attr_tag('div', $attr_legend, $legend);
+                        $out[] = UpHelper::set_attr_tag($this,'div', $attr_legend, $legend);
                     }
                     $out[] = '</div>';
                 }

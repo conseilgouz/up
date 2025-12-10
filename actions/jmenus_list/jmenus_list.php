@@ -31,8 +31,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Menu\MenuFactoryInterface;
 use Joomla\CMS\Router\Route;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jmenus_list extends upAction
+class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -44,7 +45,7 @@ class jmenus_list extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // prefset, nom menutype ou vide pour tous
@@ -63,17 +64,17 @@ class jmenus_list extends upAction
         );
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['template-menutype'] = $this->get_bbcode($options['template-menutype'], false);
-        $options['template-menu'] = $this->get_bbcode($options['template-menu'], false);
-        $options['model-note'] = $this->get_bbcode($options['model-note'], false);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['template-menutype'] = UpHelper::get_bbcode($this,$options['template-menutype'], false);
+        $options['template-menu'] = UpHelper::get_bbcode($this,$options['template-menu'], false);
+        $options['model-note'] = UpHelper::get_bbcode($this,$options['model-note'], false);
         $isList = ($options['main-tag'] == 'ul');
 //         if (!$isList) {
 //             $options['template-menu'] = '<'.$options['main-tag'] .' class="level_##level##">'.$options['template-menu'].'</'.$options['main-tag'].'>';
 //         }
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === RECUP NIVEAU ACCES
         $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -113,7 +114,7 @@ class jmenus_list extends upAction
         $level = 0;
         $toplevel = 0;
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['style']);
 
         $menu = Factory::getContainer()->get(MenuFactoryInterface::class)->createMenu('site'); // Joomla 6.0
         $allMenuItems = $menu->getItems($attributes = array(), $values = array());
@@ -181,7 +182,7 @@ class jmenus_list extends upAction
             $out[] = 'No menu items.';
         }
 
-        return $this->set_attr_tag('div', $attr_main, implode(PHP_EOL, $out));
+        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $out));
     }
 
     // run
@@ -190,10 +191,10 @@ class jmenus_list extends upAction
     function get_lign_menutype($data, $options)
     {
         $out = $options['template-menutype'];
-        $this->kw_replace($out, 'id', $data['id']);
-        $this->kw_replace($out, 'menutype', $data['menutype']);
-        $this->kw_replace($out, 'title', $data['title']);
-        $this->kw_replace($out, 'description', $data['description']);
+        UpHelper::kw_replace($this,$out, 'id', $data['id']);
+        UpHelper::kw_replace($this,$out, 'menutype', $data['menutype']);
+        UpHelper::kw_replace($this,$out, 'title', $data['title']);
+        UpHelper::kw_replace($this,$out, 'description', $data['description']);
         return $out;
     }
 
@@ -203,22 +204,22 @@ class jmenus_list extends upAction
         $out = $options['template-menu'];
         if (strpos($out, '##image') !== false) {
             $image = $this->get_image($params);
-            $this->kw_replace($out, 'image', $image);
+            UpHelper::kw_replace($this,$out, 'image', $image);
         }
-        $this->kw_replace($out, 'level', $data->level); // v5.1
-        $this->kw_replace($out, 'id', $data->id);
-        $this->kw_replace($out, 'title', $data->title);
+        UpHelper::kw_replace($this,$out, 'level', $data->level); // v5.1
+        UpHelper::kw_replace($this,$out, 'id', $data->id);
+        UpHelper::kw_replace($this,$out, 'title', $data->title);
         // note
         $str = ($data->note == '') ? '' : sprintf($options['model-note'], $data->note);
-        $this->kw_replace($out, 'note', $str);
+        UpHelper::kw_replace($this,$out, 'note', $str);
         // niveau accés
-        $this->kw_replace($out, 'access', $nivacces[$data->access]);
+        UpHelper::kw_replace($this,$out, 'access', $nivacces[$data->access]);
         // language
         $str = ($data->language == '*') ? '' : $data->language;
-        $this->kw_replace($out, 'language', $str);
+        UpHelper::kw_replace($this,$out, 'language', $str);
         // component
         $str = (isset($data->query['view'])) ? '/' . $data->query['view'] : '';
-        $this->kw_replace($out, 'component', str_replace('com_', '', ($data->component ?? '')) . $str);
+        UpHelper::kw_replace($this,$out, 'component', str_replace('com_', '', ($data->component ?? '')) . $str);
         // lien
         if (strpos($out, '##link') !== false || strpos($out, '##title-link') !== false) { // v31
             $itemParams = $data->getParams();
@@ -262,13 +263,13 @@ class jmenus_list extends upAction
             } else {
                 $data->flink = Route::_($data->flink);
             }
-            $this->kw_replace($out, 'link', $data->flink);
-            $this->kw_replace($out, 'title-link', '<a href="' . $data->flink . '">' . $data->title . '</a>');
+            UpHelper::kw_replace($this,$out, 'link', $data->flink);
+            UpHelper::kw_replace($this,$out, 'title-link', '<a href="' . $data->flink . '">' . $data->title . '</a>');
             $text = "";
             if (!is_null($params->get('menu_show')) && ($params->get('menu_show') == 0)) {
-                $text = $this->kw_replace($out, 'hidden', Text::_('MENUS_HIDDEN'));
+                $text = UpHelper::kw_replace($this,$out, 'hidden', Text::_('MENUS_HIDDEN'));
             }
-            $this->kw_replace($out, 'hidden', $text);
+            UpHelper::kw_replace($this,$out, 'hidden', $text);
         }
 
         return $out;

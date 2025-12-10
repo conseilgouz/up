@@ -14,7 +14,9 @@
  */
 defined('_JEXEC') or die;
 
-class attr extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class attr extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         return true;
@@ -23,12 +25,12 @@ class attr extends upAction {
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // classe(s) et/ou style
@@ -48,13 +50,13 @@ class attr extends upAction {
         }
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // si attr!='', c'est un style/classe
-        $this->add_str($options['style'], $options[__class__], ';');
+        UpHelper::add_str($this,$options['style'], $options[__class__], ';');
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === la première balise interne
         // $tag : la balise complete
@@ -100,13 +102,13 @@ class attr extends upAction {
         unset($sc_attr['xxx']);
 
         // -- on fusionne les attributs de style
-        $this->get_attr_style($tagattr, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$tagattr, $options['class'], $options['style']);
         // -- on remplace les attributs de la balise
         foreach ($sc_attr AS $k => $v) {
             $tagattr[$k] = $v;
         }
         // on construit la nouvelle balise
-        $newTag = $this->set_attr_tag($tagname, $tagattr);
+        $newTag = UpHelper::set_attr_tag($this,$tagname, $tagattr);
 
         // code en retour
         $content = str_replace($tag, $newTag, $this->content);

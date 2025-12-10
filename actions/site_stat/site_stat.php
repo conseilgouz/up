@@ -39,8 +39,9 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class site_stat extends upAction
+class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public $dirLogs;
     
@@ -53,7 +54,7 @@ class site_stat extends upAction
     {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
              /*[st-main]Options pour enregistrement du suivi */
@@ -98,7 +99,7 @@ class site_stat extends upAction
         );
 
         // fusion et controle des options
-        $this->options = $this->ctrl_options($options_def);
+        $this->options = UpHelper::ctrl_options($this,$options_def);
 
         $this->dirLogs = JPATH_ROOT . '/' . trim($this->options['dir-logs'], '/') . '/';
         if (! is_dir($this->dirLogs)) {
@@ -129,17 +130,17 @@ class site_stat extends upAction
                 $this->report_datemin = date('Y-m', strtotime('-' . ($this->options['detail-max-month'] - 1) . ' month'));
             }
             // les templates
-            $this->tmpl_lign = $this->get_bbcode($this->options['tmpl-lign']);
-            $this->tmpl_detail_period = $this->get_bbcode($this->options['tmpl-detail-period']);
-            $this->tmpl_detail_period_lang = $this->get_bbcode($this->options['tmpl-detail-period-lang']);
-            $this->tmpl_total_detail_period = $this->get_bbcode($this->options['tmpl-total-detail-period']);
-            $this->tmpl_total_detail_PV = $this->get_bbcode($this->options['tmpl-total-detail-PV']);
+            $this->tmpl_lign = UpHelper::get_bbcode($this,$this->options['tmpl-lign']);
+            $this->tmpl_detail_period = UpHelper::get_bbcode($this,$this->options['tmpl-detail-period']);
+            $this->tmpl_detail_period_lang = UpHelper::get_bbcode($this,$this->options['tmpl-detail-period-lang']);
+            $this->tmpl_total_detail_period = UpHelper::get_bbcode($this,$this->options['tmpl-total-detail-period']);
+            $this->tmpl_total_detail_PV = UpHelper::get_bbcode($this,$this->options['tmpl-total-detail-PV']);
             // les cumuls
             $this->pv_days = array();
             $this->total_pages = 0;
             // attributs d'une ligne
             $this->attr_item = array();
-            $this->get_attr_style($this->attr_item, $this->options['item-class'], $this->options['item-style']);
+            UpHelper::get_attr_style($this,$this->attr_item, $this->options['item-class'], $this->options['item-style']);
 
             /* === liste des fichiers log pour les pages demandées */
             $filelist = $this->log_filelist();
@@ -179,22 +180,22 @@ class site_stat extends upAction
 
             // === La ligne total en fin avec nbpages-visitors
             if (count($filelist) > 1) {
-                $this->get_attr_style($attr_total, $this->options['total-style']);
+                UpHelper::get_attr_style($this,$attr_total, $this->options['total-style']);
                 $out = $this->stats_report_total();
-                $html[] = $this->set_attr_tag($this->options['item-tag'], $attr_total, $out);
+                $html[] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_total, $out);
             }
         }
 
         // === CSS-HEAD
-        $this->load_css_head($this->options['css-head']);
+        UpHelper::load_css_head($this,$this->options['css-head']);
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $this->options['id'];
-        $this->get_attr_style($attr_main, $this->options['class'], $this->options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
 
         // code en retour
         $out = implode(PHP_EOL, $html);
-        return $this->set_attr_tag($this->options['main-tag'], $attr_main, $out);
+        return UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
     }
 
     // run
@@ -448,8 +449,8 @@ class site_stat extends upAction
         $out_lign = str_ireplace('##title##', $data['title'], $out_lign);
         $out_lign = str_ireplace('##catid##', $data['catid'], $out_lign);
         $out_lign = str_ireplace('##catalias##', $data['catalias'], $out_lign);
-        $out_lign = str_ireplace('##created##', $this->up_date_format($data['created'], $this->options['date-format']), $out_lign);
-        $out_lign = str_ireplace('##modified##', $this->up_date_format($data['modified'], $this->options['date-format']), $out_lign);
+        $out_lign = str_ireplace('##created##', UpHelper::up_date_format($this,$data['created'], $this->options['date-format']), $out_lign);
+        $out_lign = str_ireplace('##modified##', UpHelper::up_date_format($this,$data['modified'], $this->options['date-format']), $out_lign);
 
         // --- totaux pour une ligne
         $curr_period = '';
@@ -506,7 +507,7 @@ class site_stat extends upAction
         $out_lign = str_ireplace('##detail##', $out_period_all, $out_lign);
 
         $this->total_pages += $cumul_item;
-        return $this->set_attr_tag($this->options['item-tag'], $this->attr_item, $out_lign);
+        return UpHelper::set_attr_tag($this,$this->options['item-tag'], $this->attr_item, $out_lign);
     }
 
     // fin stats_report
@@ -531,7 +532,7 @@ class site_stat extends upAction
             if ($this->options[__CLASS__] == '*') {
                 $out_lign = str_ireplace('##detail##', $this->detail_pages_visitors(), $out_lign);
             } else {
-                $out_lign = str_ireplace('##detail##', $this->trad_keyword('NO_STAT_VISITORS'), $out_lign);
+                $out_lign = str_ireplace('##detail##', UpHelper::trad_keyword($this,'NO_STAT_VISITORS'), $out_lign);
             }
         }
         return $out_lign;
@@ -683,7 +684,7 @@ class site_stat extends upAction
                     // $database->setQuery($query);
                     // $id = $database->loadResult();
                     if (empty($id)) {
-                        $this->msg_error('consolidation: alias fichier non trouvé. renommé en .error');
+                        UpHelper::msg_error($this,'consolidation: alias fichier non trouvé. renommé en .error');
                         $newfile = $this->dirLogs . $alias . '.error';
                         rename($file, $newfile);
                     } else {

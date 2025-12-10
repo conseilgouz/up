@@ -14,13 +14,14 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Uri\Uri;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class clocks_gmt extends upAction {
+class clocks_gmt extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
-        $this->load_file('jClocksGMT.fr.css');
-        $this->load_file('jClocksGMT.fr.js');
-        $this->load_file('jquery.rotate.js');
+        UpHelper::load_file($this,'jClocksGMT.fr.css');
+        UpHelper::load_file($this,'jClocksGMT.fr.js');
+        UpHelper::load_file($this,'jquery.rotate.js');
         return true;
     }
 
@@ -31,7 +32,7 @@ class clocks_gmt extends upAction {
     function run() {
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -75,47 +76,47 @@ class clocks_gmt extends upAction {
         $this->options_user['imgpath'] = Uri::root() . $this->actionPath;
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // =========== le code JS
         // les options saisies par l'utilisateur concernant le script JS
         // cela évite de toutes les renvoyer au script JS
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
         if ($options['base-js-params']) {
             $js_params = str_replace('{', '{' . $options['base-js-params'] . ',', $js_params);
         }
         $id = $options['id'];
 
         // === css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // -- initialisation
         $js_code = '$("#' . $options['id'] . '").jClocksGMT(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // === les règles CSS spécifiques
         if ($options['label-style'])
-            $this->load_css_head('#' . $options['id'] . ' .jcgmt-lbl{' . $options['label-style'] . '}');
+            UpHelper::load_css_head($this,'#' . $options['id'] . ' .jcgmt-lbl{' . $options['label-style'] . '}');
         if ($options['digital-style'])
-            $this->load_css_head('#' . $options['id'] . ' .jcgmt-digital{' . $options['digital-style'] . '}');
+            UpHelper::load_css_head($this,'#' . $options['id'] . ' .jcgmt-digital{' . $options['digital-style'] . '}');
         if ($options['date-style'])
-            $this->load_css_head('#' . $options['id'] . ' .jcgmt-date{' . $options['date-style'] . '}');
+            UpHelper::load_css_head($this,'#' . $options['id'] . ' .jcgmt-date{' . $options['date-style'] . '}');
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'clock_container';
-        $this->add_class($attr_main['class'], $options['class']);
+        UpHelper::add_class($this,$attr_main['class'], $options['class']);
         $attr_main['style'] = $options['style'];
 
         // -- le code en retour
-        return $this->set_attr_tag('div', $attr_main, true);
+        return UpHelper::set_attr_tag($this,'div', $attr_main, true);
     }
 
 // run

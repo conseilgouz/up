@@ -13,7 +13,9 @@
  */
 defined('_JEXEC') or die();
 
-class csv_info extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class csv_info extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
@@ -24,7 +26,7 @@ class csv_info extends upAction
     public function run()
     {
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // URL ou chemin et nom d'un fichier local
@@ -35,21 +37,21 @@ class csv_info extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // retour si cellule non trouvée
-        $out = $this->get_bbcode($options['default']);
+        $out = UpHelper::get_bbcode($this,$options['default']);
 
         // === Recuperation du contenu fichier CSV
         $filename = $options[__class__];
         if (! file_exists($filename)) {
-            $this->msg_error($this->trad_keyword('error-file-not-found') . $filename);
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-file-not-found') . $filename);
             return $out;
         }
 
         $lines = file($filename);
         if (empty($lines)) {
-            $this->msg_error($this->trad_keyword('error-file-empty') . $filename);
+            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-file-empty') . $filename);
             return $out;
         }
 

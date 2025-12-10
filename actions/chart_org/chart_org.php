@@ -14,13 +14,15 @@
  */
 defined('_JEXEC') or die();
 
-class chart_org extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class chart_org extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        $this->load_file('chart_org.css');
+        UpHelper::load_file($this,'chart_org.css');
         return true;
     }
 
@@ -28,7 +30,7 @@ class chart_org extends upAction
     {
 
         // si cette action a obligatoirement du contenu
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
@@ -37,7 +39,7 @@ class chart_org extends upAction
         // - URL complete = page disponible sur ce lien
         // - rien pour ne pas proposer d'aide
         // - 0 pour cacher l'action dans l'aide générale
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // aucun argument
@@ -58,10 +60,10 @@ class chart_org extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === CSS-HEAD
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // === CSS
         $css = '';
@@ -84,7 +86,7 @@ class chart_org extends upAction
             if ($options['border-' . $i])
                 $css .= 'ol#id > ' . $sniv . 'li > div {outline:' . $options['border-' . $i] . '}';
         }
-        $this->load_css_head($css);
+        UpHelper::load_css_head($this,$css);
 
         // Ajout bloc dans contenu
         $list = str_replace('<ul>', '<ol>', $this->content);
@@ -104,10 +106,10 @@ class chart_org extends upAction
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = $this->set_attr_tag('div', $attr_main, $this->content);
+        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, $this->content);
 
         return implode(PHP_EOL, $html);
     }

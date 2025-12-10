@@ -24,7 +24,9 @@
 
 defined('_JEXEC') or die;
 
-class imagemap extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class imagemap extends Lomart\Plugin\Content\Up\Extension\Up {
 
     /**
      * charger les ressources communes à toutes les instances de l'action
@@ -32,8 +34,8 @@ class imagemap extends upAction {
      * @return true
      */
     function init() {
-        $this->load_file('jquery.rwdImageMaps.min.js');
-        $this->load_jquery_code('$(\'img[usemap]\').rwdImageMaps();');
+        UpHelper::load_file($this,'jquery.rwdImageMaps.min.js');
+        UpHelper::load_jquery_code($this,'$(\'img[usemap]\').rwdImageMaps();');
         return true;
     }
 
@@ -44,12 +46,12 @@ class imagemap extends upAction {
     function run() {
 
         // si cette action a obligatoirement du contenu
-        if (!$this->ctrl_content_exists()) {
+        if (!UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -60,7 +62,7 @@ class imagemap extends upAction {
             'style' => '' // style inline ajouté au bloc principal
         );
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
 
         // === le code HTML
         // -- le tag img
@@ -72,13 +74,13 @@ class imagemap extends upAction {
         // -- les area. si saisi dans un éditeur WYSIWYG, il faut décoder
         // v2.3 : pour eviter effacemment, on peut remplacer les <> par [] (bbcode)
         $content = strip_tags($this->content);
-        $content = $this->get_bbcode($content, '+area');
+        $content = UpHelper::get_bbcode($this,$content, '+area');
         // supprimer les espaces de présentaion du shortcode
         $content = preg_replace('#\>[\xA0| |\xC2]*\<#', '><', $content);
         $content = substr($content, strpos($content, '<'));
 
         // -- le code en retour
-        $out = $this->set_attr_tag('img', $img_tag);
+        $out = UpHelper::set_attr_tag($this,'img', $img_tag);
         $out .= '<map name="' . $options['id'] . '">';
         $out .= $content;  // le contenu entre les shortcodes ouvrant et fermant
         $out .= '</map>';

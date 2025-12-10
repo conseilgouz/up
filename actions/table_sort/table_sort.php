@@ -14,7 +14,9 @@
  * */
 defined('_JEXEC') or die();
 
-class table_sort extends upAction
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     /**
@@ -25,7 +27,7 @@ class table_sort extends upAction
      */
     function init()
     {
-        $this->load_file('fancyTable.min.js');
+        UpHelper::load_file($this,'fancyTable.min.js');
         return true;
     }
 
@@ -38,12 +40,12 @@ class table_sort extends upAction
     {
 
         // cette action a obligatoirement du contenu : la table
-        if (! $this->ctrl_content_exists()) {
+        if (! UpHelper::ctrl_content_exists($this)) {
             return false;
         }
 
         // lien vers la page de demo
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
@@ -74,21 +76,21 @@ class table_sort extends upAction
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
 
         // ===== Analyse et MAJ de la table
         // ============================================================
         // balise ouvrante de la table originale et array des attributs
         preg_match('#<table.*>#U', $this->content, $table_opentag_old);
         $table_opentag_old = (! empty($table_opentag_old)) ? $table_opentag_old[0] : '';
-        $table_attr = $this->get_attr_tag($table_opentag_old);
+        $table_attr = UpHelper::get_attr_tag($this,$table_opentag_old);
         // si la table a une ID, on l'utilise
         if ($table_attr['id'] != '')
             $options['id'] = $table_attr['id'];
 
         // =========== le code JS
         // ============================================================
-        $js_options = $this->only_using_options($js_options_def);
+        $js_options = UpHelper::only_using_options($this,$js_options_def);
         if (! empty($this->options_user['pagination'])) {
             $js_options['pagination'] = ($options['pagination'] > 0);
             $js_options['perPage'] = $options['pagination'];
@@ -122,23 +124,23 @@ class table_sort extends upAction
         }
 
         // -- conversion en chaine Json
-        $js_params = $this->json_arrtostr($js_options);
+        $js_params = UpHelper::json_arrtostr($this,$js_options);
         // -- initialisation
         // on cible une classe car l'id a déjà pu être définie par le shortcode interne
         $js_code = '$("#' . $options['id'] . '").fancyTable(';
         $js_code .= $js_params;
         $js_code .= ');';
-        $this->load_jquery_code($js_code);
+        UpHelper::load_jquery_code($this,$js_code);
 
         // ==== actualisation attributs de la table
         // ============================================================
         $table_attr['id'] = $options['id'];
-        $this->get_attr_style($table_attr, $options['class'], $options['style']);
-        $table_opentag_new = $this->set_attr_tag('table', $table_attr);
+        UpHelper::get_attr_style($this,$table_attr, $options['class'], $options['style']);
+        $table_opentag_new = UpHelper::set_attr_tag($this,'table', $table_attr);
         $this->content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
         if (strpos($this->content, '<thead') === false)
-            $this->content = $this->msg_inline('la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
+            $this->content = UpHelper::msg_inline($this,'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
 
         // ==== Mode de tri selon données
         // ============================================================
@@ -178,7 +180,7 @@ class table_sort extends upAction
                 foreach ($col_date as $ind) {
                     if ($tds[$ind]) {
                         $tmp = $tds[$ind]->innertext();
-                        $tmp = $this->up_date_format($tmp, '%Y%m%d');
+                        $tmp = UpHelper::up_date_format($this,$tmp, '%Y%m%d');
                         $tds[$ind]->setAttribute('data-sortvalue', $tmp);
                     }
                 }
@@ -190,7 +192,7 @@ class table_sort extends upAction
 
         // === CSS-HEAD
         // ============================================================
-        $this->load_css_head($options['css-head'], $options['id']);
+        UpHelper::load_css_head($this,$options['css-head'], $options['id']);
 
         // fini
         // ============================================================

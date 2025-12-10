@@ -19,7 +19,9 @@
 
 defined('_JEXEC') or die;
 
-class googlefont extends upAction {
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
+class googlefont extends Lomart\Plugin\Content\Up\Extension\Up {
 
     function init() {
         // charger les ressources communes à toutes les instances de l'action
@@ -28,7 +30,7 @@ class googlefont extends upAction {
 
     function run() {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         // ===== valeur paramétres par défaut
         // il est indispensable de tous les définir ici
@@ -45,9 +47,9 @@ class googlefont extends upAction {
         );
 
         // fusion et controle des options
-        $options = $this->ctrl_options($options_def);
+        $options = UpHelper::ctrl_options($this,$options_def);
         if ($options['size'])
-            $options['size'] = $this->ctrl_unit($options['size'], 'px, rem, %');
+            $options['size'] = UpHelper::ctrl_unit($this,$options['size'], 'px, rem, %');
 
         // === Ajout dans le head
         // --- on charge la première police
@@ -58,7 +60,7 @@ class googlefont extends upAction {
             $link = '<link href="https://fonts.googleapis.com/css?family=';
             $link .= $font;
             $link .= '" rel="stylesheet">';
-            $this->load_custom_code_head($link);
+            UpHelper::load_custom_code_head($this,$link);
         }
 
         // --- on crée la classe
@@ -70,19 +72,19 @@ class googlefont extends upAction {
         }
         // la propriété font-family
         $css = 'font-family:"' . str_replace('+', ' ', explode(':', $font)[0]) . '"';
-        $this->add_str($css, strip_tags($options['family']), ',');
+        UpHelper::add_str($this,$css, strip_tags($options['family']), ',');
 
         // la propriété font-size
         if ($options['size']) {
-            $this->add_style($css, 'font-size', strip_tags($options['size']));
-            $this->add_style($css, 'line-height', '120%');
+            UpHelper::add_style($this,$css, 'font-size', strip_tags($options['size']));
+            UpHelper::add_style($this,$css, 'line-height', '120%');
         }
 
         // le code user
-        $this->add_str($css, strip_tags($options['css-head']), ';');
+        UpHelper::add_str($this,$css, strip_tags($options['css-head']), ';');
 
         // ajout du css dans le head
-        $this->load_css_head('.' . $options['className'] . '{' . $css . '}');
+        UpHelper::load_css_head($this,'.' . $options['className'] . '{' . $css . '}');
 
         // -- le code en retour
         $out = '';
@@ -92,7 +94,7 @@ class googlefont extends upAction {
             // si le contenu contient des block, on remplace span par div
             if ((strpos($this->content, '</p>') !== false) || (strpos($this->content, '</div>') !== false))
                 $options['tag'] = 'div';
-            $out = $this->set_attr_tag($options['tag'], $attr_main, $this->content);
+            $out = UpHelper::set_attr_tag($this,$options['tag'], $attr_main, $this->content);
         }
 
         return $out;

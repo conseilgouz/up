@@ -22,8 +22,9 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\CMS\Categories\Categories;
 use Joomla\Database\DatabaseInterface;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class jcategories_list extends upAction
+class jcategories_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
 
     function init()
@@ -35,7 +36,7 @@ class jcategories_list extends upAction
     function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
-        $this->set_demopage();
+        UpHelper::set_demopage($this);
 
         $options_def = array(
             __class__ => '', // id catégorie ou vide pour toutes
@@ -55,9 +56,9 @@ class jcategories_list extends upAction
         );
 
         // ======> fusion et controle des options
-        $options = $this->ctrl_options($options_def);
-        $options['template'] = $this->get_bbcode($options['template'], false);
-        $options['model-note'] = $this->get_bbcode($options['model-note'], false);
+        $options = UpHelper::ctrl_options($this,$options_def);
+        $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
+        $options['model-note'] = UpHelper::get_bbcode($this,$options['model-note'], false);
 
         $options['main-tag'] = ($options['main-tag'] == '0') ? '' : $options['main-tag'];
         $options['item-tag'] = ($options['item-tag'] == '0') ? '' : $options['item-tag'];
@@ -75,7 +76,7 @@ class jcategories_list extends upAction
             $this->nivacces[$res->id] = $res->title;
 
         // css-head
-        $this->load_css_head($options['css-head']);
+        UpHelper::load_css_head($this,$options['css-head']);
 
         // Variables globales pour l'appel récursif
         $this->out = array();
@@ -84,12 +85,12 @@ class jcategories_list extends upAction
 
         // === MISE EN FORME
         $attr_main['id'] = $options['id'];
-        $this->get_attr_style($attr_main, $options['style']);
+        UpHelper::get_attr_style($this,$attr_main, $options['style']);
 
         // contruction de l'arbre des catégorie par aooel récursif
         $this->get_children($options[__class__], $options);
 
-        return $this->set_attr_tag('div', $attr_main, implode(PHP_EOL, $this->out));
+        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $this->out));
     }
 
     // run
@@ -124,26 +125,26 @@ class jcategories_list extends upAction
         $url = 'index.php?option=com_content&view=category&layout=blog&id=' . $data->id;
         $out = $options['template'];
 //         $out = str_ireplace('##id##', $data->id, $out);
-        $this->kw_replace($out, 'id', $data->id);
+        UpHelper::kw_replace($this,$out, 'id', $data->id);
 //         $out = str_ireplace('##title##', $data->title, $out);
-        $this->kw_replace($out, 'title', $data->title);
+        UpHelper::kw_replace($this,$out, 'title', $data->title);
 //         $out = str_ireplace('##title-link##', '<a href="' . $url . '">' . $data->title . '</a>', $out);
-        $this->kw_replace($out, 'title-link', '<a href="' . $url . '">' . $data->title . '</a>');
+        UpHelper::kw_replace($this,$out, 'title-link', '<a href="' . $url . '">' . $data->title . '</a>');
         // note
         $str = ($data->note == '') ? '' : sprintf($options['model-note'], $data->note);
 //         $out = str_ireplace('##note##', $str, $out);
-        $this->kw_replace($out, 'note', $str);
+        UpHelper::kw_replace($this,$out, 'note', $str);
         // niveau accés
         $str = ($data->access > 1) ? $this->nivacces[$data->access] : '';
 //         $out = str_ireplace('##access##', $str, $out);
-        $this->kw_replace($out, 'access', $str);
+        UpHelper::kw_replace($this,$out, 'access', $str);
         // language
         $str = ($data->language == '*') ? '' : $data->language;
 //         $out = str_ireplace('##language##', $str, $out);
-        $this->kw_replace($out, 'language', $str);
+        UpHelper::kw_replace($this,$out, 'language', $str);
         // component
 //         $out = str_ireplace('##extension##', str_replace('com_', '', $data->extension) . $str, $out);
-        $this->kw_replace($out, 'extension', str_replace('com_', '', $data->extension) . $str);
+        UpHelper::kw_replace($this,$out, 'extension', str_replace('com_', '', $data->extension) . $str);
 
         return $out;
     }
