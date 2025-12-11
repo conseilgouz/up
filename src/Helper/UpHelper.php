@@ -2212,8 +2212,9 @@ class UpHelper
         if (isset($tmp[$key])) {
             $out = $tmp[$key];
             $values = func_get_args(); // v2.4
-            if (count($values) > 1) {
+            if (count($values) > 2) {
                 unset($values[0]);
+                unset($values[1]);
                 $out = vsprintf($out, $values);
             }
         }
