@@ -476,7 +476,7 @@ class UpHelper
     /* ==== versions raccourcies de str_append qui modifie directement la chaine d'origine */
     static public function add_str($up,&$str, $add, $sep = ' ', $prefix = '', $suffix = '')
     {
-        $str = self::str_append($str, $add, $sep, $prefix, $suffix);
+        $str = self::str_append($up,$str, $add, $sep, $prefix, $suffix);
         return $str;
     }
 
@@ -488,7 +488,7 @@ class UpHelper
 
     static public function add_style($up,&$str, $property, $val)
     {
-        $str = (string) self::str_append($str, $val, ';', $property . ':');
+        $str = (string) self::str_append($up,$str, $val, ';', $property . ':');
         return $str;
     }
 
