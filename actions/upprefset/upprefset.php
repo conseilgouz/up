@@ -74,7 +74,7 @@ class upprefset extends Lomart\Plugin\Content\Up\Extension\Up
         // les actions concernées
         if ($options[__class__] == '') {
             // toutes les actions
-            $actionsList = $this->up_actions_list();
+            $actionsList = UpHelper::up_actions_list($this);
         } else {
             // uniquement celles demandées
             // TODO : voir à conserver $dico en global
@@ -91,7 +91,7 @@ class upprefset extends Lomart\Plugin\Content\Up\Extension\Up
             }
             // les actions à exclure
             if ($options['action-exclude'] == '1') {
-                $actionsList = array_diff($this->up_actions_list(), $actionsList);
+                $actionsList = array_diff(UpHelper::up_actions_list($this), $actionsList);
             }
         }
 

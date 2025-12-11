@@ -100,7 +100,7 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         //
         // ==== Liste des actions
         if ($this->options[__class__] == '') {
-            $actionsList = $this->up_actions_list();
+            $actionsList = UpHelper::up_actions_list($this);
         } else {
             // uniquement celles demandées
             $tmp = array_map('trim', explode(',', $this->options[__class__]));
