@@ -2009,7 +2009,7 @@ class UpHelper
             if (preg_match($regex, $tmp, $deflist)) {
                 $search = array(
                     '__class__',
-                    '$up->name'
+                    '$this->name'
                 );
                 $deflist = str_replace($search, '\'' . $action_name . '\'', $deflist[1]);
                 // les lignes avec une option
