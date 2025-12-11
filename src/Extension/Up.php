@@ -46,9 +46,9 @@ class UP extends CMSPlugin implements SubscriberInterface
     public $options,$options_user,$out;
     public $replace_len,$replace_deb,$result;
     public $srcset_path, $styles_main;
-    public $tags_list_attr,$tarteaucitron,$tradaction,$tradup,$trimA0;
+    public $tags_list_attr,$tarteaucitron,$tradaction,$trad,$tradup,$trimA0;
     public $urlhelpsite,$usehelpsite;
-    public $valid_type,$varStyle,$varStyleString;
+    public $valid_type,$varStyle,$varStyleString,$withoutCustom;
 
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';

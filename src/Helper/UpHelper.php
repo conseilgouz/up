@@ -1808,7 +1808,7 @@ class UpHelper
      */
     static public function up_actions_list($up,$exclude_prefix = '_,x_')
     {
-        $actionsFolder = __DIR__ . DIRECTORY_SEPARATOR . 'actions' . DIRECTORY_SEPARATOR;
+        $actionsFolder = $up->upPath . 'actions' . DIRECTORY_SEPARATOR;
         $list = array(); // retour si vide
         $actionsPathList = glob($actionsFolder . '*', GLOB_ONLYDIR);
 
@@ -3414,7 +3414,7 @@ class UpHelper
     */
     static public function getGithubAction($up,$dir)
     {
-        $url = $up->githuburl.$dir;
+        $url = $up->githuburl.$dir.'?ref=UP6';
         try {
             $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
             $curl = curl_init();

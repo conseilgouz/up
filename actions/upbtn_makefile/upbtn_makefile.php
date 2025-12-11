@@ -66,7 +66,7 @@ class upbtn_makefile extends Lomart\Plugin\Content\Up\Extension\Up
 
         // === récupération liste actions dans la langue
         // liste des sous-dossiers du dossier actions (sauf _exemple)
-        $actionsList = $this->up_actions_list();
+        $actionsList = UpHelper::up_actions_list($this);
         if ($options[__class__] == '') {
             // toutes les actions
             $actionsListSelect = $actionsList;
