@@ -110,7 +110,7 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
         // === liste des sous-dossiers du dossier actions (sauf _exemple)
         if ($options[__class__] == '') {
             // toutes sauf celles avec préfix
-            $actionsList = $this->up_actions_list($options['exclude-prefix']);
+            $actionsList = UpHelper::up_actions_list($this,$options['exclude-prefix']);
         } else {
             // uniquement celles demandées
             // TODO : voir à conserver $dico en global
@@ -172,7 +172,7 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
 
                     // === récupération des infos et options
                     $actinfos = UpHelper::up_action_infos($this,$actionName);
-                    $actoptions = $this->up_action_options($actionName, true);
+                    $actoptions = UpHelper::up_action_options($this,$actionName, true);
                     // la traduction anglaise des options - v2.9
                     $gb_file = $this->upPath . 'actions/' . $actionName . '/up/en-GB.ini';
                     $options_gb = parse_ini_file($gb_file);
