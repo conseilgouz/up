@@ -8,14 +8,13 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Filter\OutputFilter;
+use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class File_Download {
+class File_Download extends Lomart\Plugin\Content\Up\Extension\Up {
 
     static function goAjax($input) {
         $actionName = 'file_download';  // v4
-        $upPath = 'plugins/content/up/';
-        include_once $upPath . 'upAction.php';
-        $action = new upAction($actionName);
+        $action = new $actionName($actionName);
         $data = $input->get('data', '', 'string');
 
         $output = array();
