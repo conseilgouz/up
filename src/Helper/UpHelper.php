@@ -3440,6 +3440,7 @@ class UpHelper
         if ($zip->open($actionsPath.'/'.$action->name) === TRUE) {
             $zip->extractTo($actionsPath);
             $zip->close();
+            unlink($actionsPath.'/'.$action->name);
         } else {
             echo 'failed';
         }

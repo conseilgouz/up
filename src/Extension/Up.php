@@ -326,7 +326,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                         }
                     } else {
                         if (!UpHelper::getGithubActionRec($this,'actions/'.$actionClassName)) {
-                        continue;  // error  ignore it
+                            continue;  // error  ignore it
                         }
                     }
                     // exceptions : appel croisé dans les actions
