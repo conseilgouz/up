@@ -4,6 +4,7 @@
 
 - UP devient un "service provider"
 - déplacement des fonctions dans UpHelper
+- scssphp version 2.1.0
 
 ## 06/12/2025 - version 5.4.12
 
