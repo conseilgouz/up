@@ -52,9 +52,9 @@ class UP extends CMSPlugin implements SubscriberInterface
 
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
-    public $api_token_1 = 'github#pat#';
-    public $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
-    public $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
+    public $api_token_1 = '';
+    public $api_token_2 = '';
+    public $api_token_3 = ''; // default api key
     public $actionsha256 = [];
 
     /**
