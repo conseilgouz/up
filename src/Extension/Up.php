@@ -316,7 +316,16 @@ class UP extends CMSPlugin implements SubscriberInterface
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                    if (!UpHelper::getGithubActionRec($this,'actions/'.$actionClassName)) {
+                    if (($actionClassName == 'pdf') 
+                        or ($actionClassName == 'meteo_concept')
+                        or ($actionClassName == 'slider_tiny')
+                        or ($actionClassName == 'upscsscompiler')) {
+                        // récupération de l'action sous format zip (pour les 'grosses' actions)
+                        if (!UpHelper::getGithubActionZip($this,'actions/'.$actionClassName)) {
+                            continue;  // error  ignore it
+                        }
+                    } else {
+                        if (!UpHelper::getGithubActionRec($this,'actions/'.$actionClassName)) {
                         continue;  // error  ignore it
                     }
                     // exceptions : appel croisé dans les actions
@@ -332,7 +341,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                     }
                     if ($actionClassName == 'pdf_gallery') {
                         if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
-                            if (!UpHelper::getGithubActionRec($this,'actions/pdf')) {
+                            if (!UpHelper::getGithubActionZip($this,'actions/pdf')) {
                                 continue;  // error  ignore it
                             }
                         }

@@ -2989,7 +2989,7 @@ class UpHelper
             $tmpl = str_ireplace('##' . $field . '##', $val, $tmpl);
         }
 
-        return ($tmpl) ? $tmpl : $keys;
+        return ($tmpl) ? $tmpl : $key;
     }
 
     /*
@@ -3410,6 +3410,42 @@ class UpHelper
         return true;
     }
     /*
+    * ==== getGithubActionZip
+    * chargement d'une action au format zip
+    *
+    * pour les actions avec des librairies complexes telles que pdf/scsscompiler
+    */
+    static public function getGithubActionZip($up,$dir, $admin = '')
+    {
+        if (!$response = self::getGithubAction($up,$dir.'.zip')) {
+            $msg = 'Action '.$dir.' -> Erreur appel Github';
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $action = json_decode($response);
+        if (isset($action->message)) { // message d'erreur de github
+            $msg = 'Action '.$dir.' -> '.$action->message;
+            Factory::getApplication()->enqueueMessage($msg);
+            return false;
+        }
+        $info = pathinfo( $dir );
+        $name = $info['filename'];
+        $actionDir = $admin.$up->upPath.'actions/'.$name;
+        if (!is_dir($actionDir)) {
+            mkdir($actionDir);
+        }
+        $actionsPath = $admin.$up->upPath.'actions';
+        copy($action->download_url, $actionsPath.'/'.$action->name);
+        $zip = new \ZipArchive;
+        if ($zip->open($actionsPath.'/'.$action->name) === TRUE) {
+            $zip->extractTo($actionsPath);
+            $zip->close();
+        } else {
+            echo 'failed';
+        }
+        return true;
+    }    
+    /*
     * ==== getGithubAction
     * chargement d'un répertoire de github
     */
@@ -3432,7 +3468,7 @@ class UpHelper
                 $up->githubapikey = str_replace('#','_',$up->githubapikey);
             }
             curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                        "Authorization: token ".$up->githubapikey,
+                        // "Authorization: token ".$up->githubapikey,
                         "User-Agent: PHP"
             ]);
 
