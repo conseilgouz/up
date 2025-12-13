@@ -317,7 +317,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                    if ( (in_array($actionClassName,$this->actionsZip) ) {
+                    if (in_array($actionClassName,$this->actionsZip) ) {
                         // récupération de l'action sous format zip (pour les 'grosses' actions)
                         if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
                             continue;  // error  ignore it
