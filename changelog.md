@@ -1,4 +1,4 @@
-## 13/12/2025 - version 6.0.0
+## 15/12/2025 - version 6.0.0
 
 ### modification interne
 
