@@ -475,9 +475,18 @@ class UP extends CMSPlugin implements SubscriberInterface
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
             if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
-                $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                if (!UpHelper::getGithubActionRec($this,'actions/'.$exist, '../')) {
-                    return false; // non trouvé : erreur
+                //$this->githubapikey = UpHelper::get_action_pref($this,'github-key');
+                if (($exist == 'pdf') 
+                or ($exist == 'meteo_concept')
+                or ($exist == 'slider_tiny')
+                or ($exist == 'upscsscompiler')) { // récupération de l'action sous format zip (pour les 'grosses' actions)
+                    if (!UpHelper::getGithubActionZip($this,'actions/'.$exist,'../')) {
+                        return false; // non trouvé : erreur
+                    }
+                } else {
+                    if (!UpHelper::getGithubActionRec($this,'actions/'.$exist,'../')) {
+                        return false; // non trouvé : erreur
+                    }
                 }
             }
             return true;
