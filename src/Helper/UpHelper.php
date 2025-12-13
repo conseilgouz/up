@@ -3466,12 +3466,12 @@ class UpHelper
             curl_setopt($curl, CURLOPT_TIMEOUT, 10);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            //if (!$up->githubapikey) { // pas de clé définie, on prend la clé par défaut
-            //    $up->githubapikey = $up->api_token_1.$up->api_token_2.$up->api_token_3;
-            //    $up->githubapikey = str_replace('#','_',$up->githubapikey);
-            //}
+            if (!$up->githubapikey) { // pas de clé définie, on prend la clé par défaut
+                $up->githubapikey = $up->api_token_1.$up->api_token_2.$up->api_token_3;
+                $up->githubapikey = str_replace('#','_',$up->githubapikey);
+            }
             curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                        // "Authorization: token ".$up->githubapikey,
+                         "Authorization: token ".$up->githubapikey,
                         "User-Agent: PHP"
             ]);
 

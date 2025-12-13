@@ -52,11 +52,12 @@ class UP extends CMSPlugin implements SubscriberInterface
 
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
-    public $api_token_1 = '';
-    public $api_token_2 = '';
-    public $api_token_3 = ''; // default api key
+    public $api_token_1 = 'github#pat#';
+    public $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
+    public $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
     public $actionsha256 = [];
-
+    // liste des actions disponibles dans le répertoire zip de Github
+    public $actionsZip = ['box', 'image_gallery','mapael','marquee','meteo_concept','pdf','slider_tiny','upscsscompiler'];
     /**
      * @inheritDoc
      *
@@ -316,10 +317,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                    if (($actionClassName == 'pdf') 
-                        or ($actionClassName == 'meteo_concept')
-                        or ($actionClassName == 'slider_tiny')
-                        or ($actionClassName == 'upscsscompiler')) {
+                    if ( (in_array($actionClassName,$this->actionsZip) ) {
                         // récupération de l'action sous format zip (pour les 'grosses' actions)
                         if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
                             continue;  // error  ignore it
@@ -475,11 +473,8 @@ class UP extends CMSPlugin implements SubscriberInterface
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
             if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
-                //$this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                if (($exist == 'pdf') 
-                or ($exist == 'meteo_concept')
-                or ($exist == 'slider_tiny')
-                or ($exist == 'upscsscompiler')) { // récupération de l'action sous format zip (pour les 'grosses' actions)
+                $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
+                if (in_array($exist,$this->actionsZip) ) { // récupération de l'action sous format zip (pour les 'grosses' actions)
                     if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$exist,'../')) {
                         $event->addResult(false); // non trouvé : erreur
                     }
