@@ -321,7 +321,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                         or ($actionClassName == 'slider_tiny')
                         or ($actionClassName == 'upscsscompiler')) {
                         // récupération de l'action sous format zip (pour les 'grosses' actions)
-                        if (!UpHelper::getGithubActionZip($this,'actions/'.$actionClassName)) {
+                        if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
                             continue;  // error  ignore it
                         }
                     } else {
@@ -480,16 +480,16 @@ class UP extends CMSPlugin implements SubscriberInterface
                 or ($exist == 'meteo_concept')
                 or ($exist == 'slider_tiny')
                 or ($exist == 'upscsscompiler')) { // récupération de l'action sous format zip (pour les 'grosses' actions)
-                    if (!UpHelper::getGithubActionZip($this,'actions/'.$exist,'../')) {
-                        return false; // non trouvé : erreur
+                    if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$exist,'../')) {
+                        $event->addResult(false); // non trouvé : erreur
                     }
                 } else {
                     if (!UpHelper::getGithubActionRec($this,'actions/'.$exist,'../')) {
-                        return false; // non trouvé : erreur
+                        $event->addResult(false); // non trouvé : erreur
                     }
                 }
             }
-            return true;
+            return $event->addResult(true);
         }
         // autres appels ajax
         $data = $input->get('data', '', 'string');
