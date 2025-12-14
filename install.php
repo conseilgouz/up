@@ -117,35 +117,13 @@ class plgContentUpInstallerScript {
         $actionsList = [];
 		if ($type =='update'){ // clean up updated actions
             if ($previous_version < '6.0.0') { // on était avant la version 6.0.0
-                $actionsList = $this->up_actions_list(); // toutes les actions UP ont été modifiées
+                $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $this->delete_directory($dir);
             }
         }
-    }
-    function up_actions_list($exclude_prefix = '_,x_')
-    {
-        $path = JPATH_ROOT . '/plugins/content/up/';
-        $actionsFolder = $path . 'actions' . DIRECTORY_SEPARATOR;
-        $list = array(); // retour si vide
-        $actionsPathList = glob($actionsFolder . '*', GLOB_ONLYDIR);
-
-        $prefix = array_map('trim', explode(',', $exclude_prefix));
-        foreach ($actionsPathList as $e) {
-            $file = substr($e, strlen($actionsFolder));
-            $ok = true;
-            foreach ($prefix as $p) {
-                $res = stripos($file, $p);
-                $ok = ($ok && stripos($file, $p) !== 0);
-            }
-            $phpfile = $actionsFolder . $file . DIRECTORY_SEPARATOR . $file . '.php'; // v2.6 si dossier vide
-            if ($ok && file_exists($phpfile)) {
-                $list[] = $file;
-            }
-        }
-        return $list;
     }
     // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
     function up_actions() {
