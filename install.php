@@ -80,7 +80,13 @@ class plgContentUpInstallerScript {
 			$this->uninstallInstaller();
 			return false;
 		}
+        // vérifie s'il y a des actions personnalisées non compatibles avec UP 6.0
         
+        $actionsList = $this->up_actions();
+        $other = $this->up_otheractions_list($actionsList);
+        if (count($other)) { // des actions non compatibles ont été détectées
+            return false;
+        }
         $app = Factory::getApplication();
         // $app->enqueueMessage('<p>actions avant l\'installation/mise à jour/désinstallation du plugin</p>');
         $path = JPATH_ROOT . '/plugins/content/up/';
@@ -141,7 +147,72 @@ class plgContentUpInstallerScript {
         }
         return $list;
     }
+    // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
+    function up_actions() {
+        $upPath = JPATH_ROOT .'/plugins/content/up/';
+        $file = $upPath.'assets/UP-list-actions-version.txt';
+        $actions = [];
+        if (!is_file($file)) {
+            return false;
+        }
+        $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
+        if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
+            return '';
+        }
+        foreach ($readBuffer as $line) {
+            $one = explode(':', $line);
+            if (sizeof($one) > 1) {
+                $actions[] = $one[0];
+            }
+        }
+        return $actions;
+    }
+    function up_otheractions_list($actions, $exclude_prefix = '_,x_')
+    {
+        $path = JPATH_ROOT . '/plugins/content/up/';
+        $actionsFolder = $path . 'actions' . DIRECTORY_SEPARATOR;
+        $list = array(); // retour si vide
+        $actionsPathList = glob($actionsFolder . '*', GLOB_ONLYDIR);
 
+        $prefix = array_map('trim', explode(',', $exclude_prefix));
+        foreach ($actionsPathList as $e) {
+            $file = substr($e, strlen($actionsFolder));
+            if (in_array($file,$actions)) {
+                continue;
+            }
+            $ok = true;
+            foreach ($prefix as $p) {
+                $res = stripos($file, $p);
+                $ok = ($ok && stripos($file, $p) !== 0);
+            }
+            $phpfile = $actionsFolder . $file . DIRECTORY_SEPARATOR . $file . '.php'; // v2.6 si dossier vide
+            if ($ok && file_exists($phpfile)) {
+                $ret = $this->checkVersion($file,$path.'actions/' . $file . '/' . $file . '.php');
+                if (!$ret) { // action incompatible UP 6.0
+                    $list[] = $file;
+                }
+            }
+        }
+        return $list;
+    }
+    function checkVersion($action,$file) {
+        $app = Factory::getApplication();
+        try {
+            @include_once $file;
+        } catch (\Throwable $throwable) {
+            if (strpos($throwable->getMessage(),"Lomart\Plugin\Content\Up\Extension\Up")) {
+            // classe UP6  mais le namespace n'a pas encore été installé
+                return true;
+            }
+            // on doit être sur une autre classe.
+			Factory::getApplication()->enqueueMessage(
+				'Action incompatible avec UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage(),
+				'error'
+			);
+            return false;
+        }
+        return true;
+    }
     /**
      * Method to run after an install/update/uninstall method
      * $parent is the class calling this method
