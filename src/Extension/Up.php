@@ -317,15 +317,9 @@ class UP extends CMSPlugin implements SubscriberInterface
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                    if (in_array($actionClassName,$this->actionsZip) ) {
-                        // récupération de l'action sous format zip (pour les 'grosses' actions)
-                        if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
-                            continue;  // error  ignore it
-                        }
-                    } else {
-                        if (!UpHelper::getGithubActionRec($this,'actions/'.$actionClassName)) {
-                            continue;  // error  ignore it
-                        }
+                   // récupération de l'action sous format zip
+                    if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
+                       continue;  // error  ignore it
                     }
                     // exceptions : appel croisé dans les actions
                     if (($actionClassName == 'pdf_gallery')
@@ -333,7 +327,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
                         if (!is_file($this->upPath.'actions/modal/modal.php')) {
-                            if (!UpHelper::getGithubActionRec($this,'actions/modal')) {
+                            if (!UpHelper::getGithubActionZip($this,'actions/modal')) {
                                 continue;  // error  ignore it
                             }
                         }
@@ -474,14 +468,8 @@ class UP extends CMSPlugin implements SubscriberInterface
             // Mini UP : chargement des actions au 1er appel
             if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
                 $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                if (in_array($exist,$this->actionsZip) ) { // récupération de l'action sous format zip (pour les 'grosses' actions)
-                    if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$exist,'../')) {
-                        $event->addResult(false); // non trouvé : erreur
-                    }
-                } else {
-                    if (!UpHelper::getGithubActionRec($this,'actions/'.$exist,'../')) {
-                        $event->addResult(false); // non trouvé : erreur
-                    }
+                if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$exist,'../')) {
+                    $event->addResult(false); // non trouvé : erreur
                 }
             }
             return $event->addResult(true);
