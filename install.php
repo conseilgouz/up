@@ -126,9 +126,10 @@ class plgContentUpInstallerScript {
         }
     }
     // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
+    // tel que défini dans l'installation
     function up_actions() {
-        $upPath = JPATH_ROOT .'/plugins/content/up/';
-        $file = $upPath.'assets/UP-list-actions-version.txt';
+        $upPath = __DIR__; // répertoire d'installation
+        $file = $upPath.'/assets/UP-list-actions-version.txt';
         $actions = [];
         if (!is_file($file)) {
             return false;
@@ -147,7 +148,7 @@ class plgContentUpInstallerScript {
     }
     function up_otheractions_list($actions, $exclude_prefix = '_,x_')
     {
-        $path = JPATH_ROOT . '/plugins/content/up/';
+        $path = JPATH_ROOT . '/plugins/content/up/'; // répertoire actuel de UP
         $actionsFolder = $path . 'actions' . DIRECTORY_SEPARATOR;
         $list = array(); // retour si vide
         $actionsPathList = glob($actionsFolder . '*', GLOB_ONLYDIR);
