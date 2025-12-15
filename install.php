@@ -185,7 +185,7 @@ class plgContentUpInstallerScript {
             }
             // on doit être sur une autre classe.
 			Factory::getApplication()->enqueueMessage(
-				'Action incompatible avec UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage(),
+				'Action incompatible avec UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
 				'error'
 			);
             return false;
