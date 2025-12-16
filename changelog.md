@@ -5,8 +5,9 @@
 - UP devient un "service provider"
 - déplacement des fonctions dans UpHelper
 - scssphp version 2.1.0 + uri 7.7.0
-- install : vérifie la version minimale de Joomla et PHP 
-- actions complexes dans un fichier zip pour chargement mini UP
+- install : vérifie la version minimale de Joomla et PHP
+- install : vérifie s'il y a des actions incompatibles UP v6.0 avant installation 
+- chaque action dans un fichier zip
 
 ## 06/12/2025 - version 5.4.12
 
