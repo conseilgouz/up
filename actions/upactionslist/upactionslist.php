@@ -262,7 +262,7 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
                     foreach ($actionsList as $actionName) {
                         // === récupération des infos et options
                         $actinfos = UpHelper::up_action_infos($this,$actionName, $lang);
-                        $actoptions = $this->up_action_options($actionName, false, $lang);
+                        $actoptions = UpHelper::up_action_options($this,$actionName, false, $lang);
 
                         $actionName .= UpHelper::str_append($this,'', UpHelper::get_dico_synonym($this,$actionName), ' ', ' (', ')');
                         $actionName = str_replace('_', '-', $actionName);
