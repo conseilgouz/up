@@ -327,14 +327,14 @@ class UP extends CMSPlugin implements SubscriberInterface
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
                         if (!is_file($this->upPath.'actions/modal/modal.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'actions/modal')) {
+                            if (!UpHelper::getGithubActionZip($this,'actionsZip/modal')) {
                                 continue;  // error  ignore it
                             }
                         }
                     }
                     if ($actionClassName == 'pdf_gallery') {
                         if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'actions/pdf')) {
+                            if (!UpHelper::getGithubActionZip($this,'actionsZip/pdf')) {
                                 continue;  // error  ignore it
                             }
                         }

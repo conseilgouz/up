@@ -3,7 +3,9 @@
 ### modification interne
 
 - Action upactionslist : correction sur action interne
+- Action pdf : ajout de la librairie wasm
 - Mise à jour de UP-list-actions-version.txt
+- Chargement des actions liées (pdf/modal) incorrect
 
 ## 15/12/2025 - version 6.0.0
 
