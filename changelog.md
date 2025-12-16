@@ -1,3 +1,10 @@
+## 16/12/2025 - version 6.0.1
+
+### modification interne
+
+- Action upactionslist : correction sur action interne
+- Mise à jour de UP-list-actions-version.txt
+
 ## 15/12/2025 - version 6.0.0
 
 ### modification interne
