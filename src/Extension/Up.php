@@ -52,6 +52,7 @@ class UP extends CMSPlugin implements SubscriberInterface
 
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
+    public $githuburlzip = 'https://api.github.com/repos/conseilgouz/up6-actionszip/contents/';
     public $api_token_1 = 'github#pat#';
     public $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
     public $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
@@ -318,7 +319,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
                    // récupération de l'action sous format zip
-                    if (!UpHelper::getGithubActionZip($this,'actionsZip/'.$actionClassName)) {
+                    if (!UpHelper::getGithubActionZip($this,$actionClassName)) {
                        continue;  // error  ignore it
                     }
                     // exceptions : appel croisé dans les actions
@@ -327,14 +328,14 @@ class UP extends CMSPlugin implements SubscriberInterface
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
                         if (!is_file($this->upPath.'actions/modal/modal.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'actionsZip/modal')) {
+                            if (!UpHelper::getGithubActionZip($this,'modal')) {
                                 continue;  // error  ignore it
                             }
                         }
                     }
                     if ($actionClassName == 'pdf_gallery') {
                         if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'actionsZip/pdf')) {
+                            if (!UpHelper::getGithubActionZip($this,'pdf')) {
                                 continue;  // error  ignore it
                             }
                         }

@@ -3454,7 +3454,7 @@ class UpHelper
     */
     static public function getGithubAction($up,$dir)
     {
-        $url = $up->githuburl.$dir.'?ref=UP6';
+        $url = $up->githuburlzip.$dir.'?ref=UP6';
         try {
             $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
             $curl = curl_init();
