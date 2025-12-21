@@ -34,19 +34,19 @@ class UP extends CMSPlugin implements SubscriberInterface
     public $upPath = 'plugins/content/up/';
     public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
     public $basepath;
-    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg;
-    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico;
+    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg,$catIndex;
+    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico,$dirLogs;
     public $ext_types;
-    public $filepath,$firstInstance,$folders_exclude;
-    public $inedit,$inprod;
+    public $filepath,$firstInstance,$folders_exclude,$frequency;
+    public $inedit,$inprod,$info,$invalid;
     public $J4;
     public $level,$link;
     public $main_class,$multicpt;
     public $name,$nivacces;
-    public $options,$options_user,$out;
+    public $options,$options_user,$out,$priority;
     public $replace_len,$replace_deb,$result;
     public $srcset_path, $styles_main;
-    public $tags_list_attr,$tarteaucitron,$tradaction,$trad,$tradup,$trimA0;
+    public $tags_list_attr,$tarteaucitron,$tradaction,$trad,$tradup,$trimA0,$today;
     public $urlhelpsite,$usehelpsite;
     public $valid_type,$varStyle,$varStyleString,$withoutCustom;
 

@@ -19,16 +19,14 @@
  */
 defined('_JEXEC') or die();
 
-use Lomart\Plugin\Content\Up\Helper\UpHelper;
-
-class listup extends Lomart\Plugin\Content\Up\Extension\Up
+class listup extends upAction
 {
     public $kwc_formula = [];
     public $kwc_pref = [];
 
     public function init()
     {
-        UpHelper::load_file($this,'listup.css');
+        $this->load_file('listup.css');
         return true;
     }
 
@@ -36,12 +34,12 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
     {
 
         // si cette action a obligatoirement du contenu
-        if (! UpHelper::ctrl_content_exists($this)) {
+        if (! $this->ctrl_content_exists()) {
             return false;
         }
 
         // lien vers la page de demo
-        UpHelper::set_demopage($this);
+        $this->set_demopage();
 
         $options_def = array(
             __class__ => '', // style des puces (séparateur point-virgule) par niveaux (markers) (séparateur virgule)
@@ -73,7 +71,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
         // --- les bullets définis par le webmaster
         $pref_user_file = $this->actionPath . 'custom/prefs.ini';
         if (file_exists($pref_user_file)) {
-            $pref_user = UpHelper::load_inifile($this,$this->actionPath . 'custom/prefs.ini', true);
+            $pref_user = $this->load_inifile($this->actionPath . 'custom/prefs.ini', true);
             if ($pref_user !== false && isset($pref_user['bullets'])) {
                 $this->kwc_pref = array_merge($this->kwc_pref, $pref_user['bullets']);
             }
@@ -124,7 +122,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options = $this->ctrl_options($options_def);
 
         // les types autorisés par laa classe upli-type
         $this->valid_type = array_map('trim', explode(',', $this->options['valid-type']));
@@ -143,7 +141,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
         // $this->styles_main = array_pad(explode(',', $this->options[__class__]), 8, '');
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$this->options['css-head']);
+        $this->load_css_head($this->options['css-head']);
 
         // le contenu
         require_once($this->upPath . '/assets/lib/simple_html_dom.php');
@@ -179,7 +177,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
             }
             $attr['id'] = $this->options['id'];
             $this->main_class = $attr['class'];
-            UpHelper::get_attr_style($this,$attr, $this->options['class'], $this->options['style']);
+            $this->get_attr_style($attr, $this->options['class'], $this->options['style']);
             $this->multicpt = (strpos($attr['style'], 'counters') !== false);
             if ($this->options['start']) {
                 if (strpos($attr['class'], 'upli-type') !== false) {
@@ -215,7 +213,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
         while ($child) {
             if ($child->tag == 'li') {
                 $text = trim($child->plaintext);
-                if ($text[0] == '[') {
+                if (substr($text,0,1) == '[') {
                     $style = substr($text, 1, strpos($text, ']') - 1);
                     $attr = $this->get_elem_style('li', $style);
                     foreach ($attr as $k => $v) {
@@ -289,7 +287,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
                         $v = trim($v, '\'\"');
                         $varcss[$k] = '\'' . $v . '\'';
                     } else {
-                        UpHelper::msg_error($this,'ERR_STYLE', $k);
+                        $this->msg_error('ERR_STYLE', $k);
                     }
                 } elseif (strpos($info, '.') !== false) {
                     // une image (par defaut dans le dossier icon de l'action)
@@ -322,7 +320,7 @@ class listup extends Lomart\Plugin\Content\Up\Extension\Up
                     $varcss['type'] = $info_min;
                     $varcss['content'] = '';
                 } else {
-                    UpHelper::msg_error($this,'ERR_ATTRIBUT : '. $info); // v52
+                    $this->msg_error('ERR_ATTRIBUT : '. $info); // v52
                 }
             }
         } while (count($args) > 0);

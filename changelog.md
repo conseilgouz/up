@@ -4,6 +4,8 @@
 
 - Action upactionslist : correction sur action interne
 - Action pdf : ajout de la librairie wasm
+- Action sitemap : suppression des zones non définies (erreur Deprecated: Creation of dynamic property ...)
+- Action listup : suppression notice en ligne 216
 - Mise à jour de UP-list-actions-version.txt
 - Chargement des actions liées (pdf/modal) incorrect
 - install : suppression de la couleur d'arrière-plan dans le message d'installation
