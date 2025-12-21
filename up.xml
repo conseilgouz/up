@@ -23,7 +23,6 @@
         <folder>actions</folder>
         <folder>language</folder>
         <folder>upbtn</folder>
-        <folder>fields</folder>
     </files>
     <config>
         <fields name="params">
