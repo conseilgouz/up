@@ -23,11 +23,12 @@
         <folder>actions</folder>
         <folder>language</folder>
         <folder>upbtn</folder>
+        <folder>layouts</folder>
     </files>
     <config>
         <fields name="params">
-            <fieldset name="basic" addfieldpath="plugins/content/up/fields/">
-                <field name="version" type="version"  marginright="1em" margintop="-5em" extension="plugin/up"/>
+            <fieldset name="basic" addfieldprefix="Lomart\Plugin\Content\Up\Field">
+                <field name="version" type="Version"  marginright="1em" margintop="-5em" extension="plugin/up"/>
                 <field
                     name="actionprefsnote"
                     type="note"
@@ -59,6 +60,39 @@
                     <option value="1">JYES</option>
                     <option value="0">JNO</option>
                 </field>
+                <field name="notemq" type="note" showon="loadcss:1"
+                label="UP_BREAK_NOTE" description="UP_BREAK_NOTE_DESC"/>
+                <field name="breaks" showon="loadcss:1"
+                       type="number"
+                       default="480"
+                       label="UP_BREAKS_LABEL"
+                       description="UP_BREAKS_DESC" >
+                </field>
+                <field name="breaksl" showon="loadcss:1"
+                       type="number"
+                       default=""
+                       label="UP_BREAKSL_LABEL"
+                       description="UP_BREAKSL_DESC" >
+                </field>
+                <field name="breakm" showon="loadcss:1"
+                       type="number"
+                       default="760"
+                       label="UP_BREAKM_LABEL"
+                       description="UP_BREAKM_DESC" >
+                </field>
+                <field name="breakl" showon="loadcss:1"
+                       type="number"
+                       default=""
+                       label="UP_BREAKL_LABEL"
+                       description="UP_BREAKL_DESC" >
+                </field>
+                <field name="breakxl" showon="loadcss:1"
+                       type="number"
+                       default=""
+                       label="UP_BREAKXL_LABEL"
+                       description="UP_BREAKXL_DESC" >
+                </field>
+                <field name="compile" type="compile" showon="loadcss:1"/>
                 <field name="usehelpsite"
                        type="radio"
                        class="btn-group"
