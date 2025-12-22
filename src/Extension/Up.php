@@ -551,7 +551,7 @@ class UP extends CMSPlugin implements SubscriberInterface
         $actionfile = 'actions/upscsscompiler/upscsscompiler.php';
         if (!is_file('../'.$this->upPath.$actionfile)) { // action non chargée
            $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-           if (!UpHelper::getGithubActionZip($this,$exist,'../')) {
+           if (!UpHelper::getGithubActionZip($this,'upscsscompiler','../')) {
                return false;
            }
         }
