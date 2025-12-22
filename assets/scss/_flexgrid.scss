@@ -173,24 +173,51 @@ $shrink :1;  // facteur de rétrecissement par défaut
 // ==== REGLES DEPENDANTES MEDIAQUERIES
 // ==============================================================================
 
+// agrandit les cellules pour remplir la ligne
+.#{$prefix}grow > * {flex-grow:1}
+
 // les règles sans bp sont par défaut
 @include make_autogrid();
 @include make_cell();
 @include make_order();
 
-// agrandit les cellules pour remplir la ligne
-.#{$prefix}grow > * {flex-grow:1}
-
-@media all and (max-width:$breakpoint-s) {
+@media all and (max-width:$breakpoint-s) { // w < 480
 	.#{$prefix}row > [class*="#{$prefix}c"] {width:100%} // sur mobile 100% sauf précison
 	@include make_autogrid('s',4);
 	@include make_cell('s');
 	@include make_order('s');
 }
 
-@media all and (min-width:$breakpoint-s) and (max-width:$breakpoint-m) {
-	@include make_autogrid('m');
-	@include make_cell('m');
-	@include make_order('m');
+@media all and (min-width:$breakpoint-s+1) and (max-width:$breakpoint-m){ // 480 < w < 768
+    @include make_autogrid('m');
+    @include make_cell('m');
+    @include make_order('m');
 }
 
+@if variable-exists(breakpoint-sl) { // w < 991 et lanscape
+    @media all and (max-width:$breakpoint-sl) and (orientation:landscape) {
+        @include make_autogrid('sl');
+        @include make_cell('sl');
+        @include make_order('sl');
+    }
+}
+
+@if variable-exists(breakpoint-l) { 
+    @media all and (min-width:$breakpoint-m+1) and (max-width:$breakpoint-l) { // 768 < w < 1024
+        @include make_autogrid('l');
+        @include make_cell('l');
+        @include make_order('l');
+    }
+}
+@if variable-exists(breakpoint-xl) {
+    @media all and (min-width:$breakpoint-l+1) and (max-width:$breakpoint-xl) { // 1024 < w < 1200
+         @include make_autogrid('xl');
+         @include make_cell('xl');
+         @include make_order('xl');
+    }
+    @media all and (min-width:$breakpoint-xl+1) {  // w > 1200
+        @include make_autogrid('xxl');
+        @include make_cell('xxl');
+        @include make_order('xxl');
+    }
+}

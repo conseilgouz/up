@@ -49,6 +49,31 @@
   @include rwd-spacing('p','padding','m');
 }
 
+@if variable-exists(breakpoint-sl) { // w < 991 et lanscape
+    @media all and (max-width:$breakpoint-sl) and (orientation:landscape) {
+        @include rwd-spacing('m','margin','sl');
+        @include rwd-spacing('p','padding','sl');
+    }
+}
+
+@if variable-exists(breakpoint-l) { 
+    @media all and (min-width:$breakpoint-m+1) and (max-width:$breakpoint-l) { // 768 < w < 1024
+        @include rwd-spacing('m','margin','l');
+        @include rwd-spacing('p','padding','l');
+    }
+}
+@if variable-exists(breakpoint-xl) {
+    @media all and (min-width:$breakpoint-l+1) and (max-width:$breakpoint-xl) { // 1024 < w < 1200
+        @include rwd-spacing('m','margin','xl');
+        @include rwd-spacing('p','padding','xl');
+    }
+    @media all and (min-width:$breakpoint-xl+1) {  // w > 1200
+        @include rwd-spacing('m','margin','xxl');
+        @include rwd-spacing('p','padding','xxl');
+    }
+}
+
+
 // --- supression des marges sur premier et dernier bloc
 .m-remove > *:first-child,
 .m-remove-1 > * > *:first-child,

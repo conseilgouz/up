@@ -51,3 +51,35 @@
 	@include rwd-maxwidth-vw();
 }
 
+@if variable-exists(breakpoint-sl) { // w < 991 et lanscape
+    @media all and (max-width:$breakpoint-sl) and (orientation:landscape) {
+        @include rwd-width-12('sl');
+        @include rwd-minheight('sl');
+        @include rwd-maxwidth('sl');
+        @include rwd-maxwidth-vw();
+    }
+}
+
+@if variable-exists(breakpoint-l) { 
+    @media all and (min-width:$breakpoint-m+1) and (max-width:$breakpoint-l) { // 768 < w < 1024
+        @include rwd-width-12('l');
+        @include rwd-minheight('l');
+        @include rwd-maxwidth('l');
+        @include rwd-maxwidth-vw();
+    }
+}
+@if variable-exists(breakpoint-xl) {
+    @media all and (min-width:$breakpoint-l+1) and (max-width:$breakpoint-xl) { // 1024 < w < 1200
+        @include rwd-width-12('xl');
+        @include rwd-minheight('xl');
+        @include rwd-maxwidth('xl');
+        @include rwd-maxwidth-vw();
+    }
+    @media all and (min-width:$breakpoint-xl+1) {  // w > 1200
+        @include rwd-width-12('xxl');
+        @include rwd-minheight('xxl');
+        @include rwd-maxwidth('xxl');
+        @include rwd-maxwidth-vw();
+    }
+}
+
