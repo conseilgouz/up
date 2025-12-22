@@ -24,7 +24,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Version;
 use Joomla\Event\SubscriberInterface;
-use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 // #[AllowDynamicProperties] // php 8.4
@@ -204,7 +204,7 @@ class UP extends CMSPlugin implements SubscriberInterface
 
             // ===== RECHERCHE DE TOUS LES SHORTCODES OUVRANTS
             if (! preg_match_all($regexopen, $article->text, $matches, PREG_OFFSET_CAPTURE)) {
-                $this->info_debug('Error up.php 132');
+                UpHelper::info_debug($this,'Error up.php 132');
             }
             $nbSC = count($matches[0]);
             for ($i = 0; $i < $nbSC; $i++) {
@@ -478,8 +478,30 @@ class UP extends CMSPlugin implements SubscriberInterface
         // autres appels ajax
         $data = $input->get('data', '', 'string');
         parse_str($data, $output);
-        if (! isset($output['action'])) {
-            return 'err : action incorrect';
+        if (isset($output['compil'])) { // SCSS compil ?
+            $arr = [];
+            $arr['s'] = $input->get('s', '', 'integer');
+            $arr['sl'] = $input->get('sl', '', 'integer');
+            $arr['m'] = $input->get('m', '', 'integer');
+            $arr['l'] = $input->get('l', '', 'integer');
+            $arr['xl'] = $input->get('xl', '', 'integer');
+            // mise à jour du fichier assets/custom/_variables.scss
+            $this->store_scss($arr);
+            // lancement de l'action upscsscompiler
+            $this->compile_scss();
+            // clear cache
+            $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+            $cache = $cacheModel->getCache() ??null;
+            if ($cache) {
+                foreach ($cache->getAll() as $group) {
+                    $cache->clean($group->group);
+                }
+            }
+            $res = $event->addResult(true);
+            return $res;
+        } else if (! isset($output['action'])) { // message incorrect
+            $res = [false,'err : action incorrect'];
+            return $event->addResult(json_encode($res));
         }
         $actionClassName = $output['action'];
         $actionfile = $this->upPath . 'actions/' . $actionClassName . '/ajax_' . $actionClassName . '.php';
@@ -492,8 +514,67 @@ class UP extends CMSPlugin implements SubscriberInterface
             return 'err : ' . $text;
         }
     }
-
-
+    // sauvegarde des valeurs saisies et écriture dans custom/_variables.scss
+    function store_scss($sizes) {
+        $basePath = JPATH_SITE .'/'. $this->upPath.'assets/';
+        $scss_file = JPATH_SITE .'/'. $this->upPath.'assets/custom/_variables.scss';
+        copy($scss_file, $basePath . 'custom/_variables.scss.bak');
+        $current = [];
+        $out = '';
+        $readBuffer = file($scss_file, FILE_IGNORE_NEW_LINES);
+        foreach ($readBuffer as $line) {
+            if (substr($line,0,12) != '$breakpoint-') {
+                $out .= $line.PHP_EOL;
+                continue;
+            }
+            $one = explode(':',$line);
+            $b = trim($one[0],'$breakpoint-');
+            $s = trim($one[1],'px;');
+            $current[$b] = $s;
+        }
+        foreach($sizes as $size=>$val) {
+            if ($val) {
+                if (isset($current[$size])) {
+                    $current[$size] = $val;
+                } else {
+                    $current[$size] = $val;
+                }
+            }
+        }
+        foreach ($current as $size=>$val) {
+            $out .= '$breakpoint-'.$size.':'.$val.'px;'.PHP_EOL;
+        }
+        File::write($scss_file, $out);
+    }
+    // compilation des scss avec le fichier custom 
+    function compile_scss() {
+        $actionfile = 'actions/upscsscompiler/upscsscompiler.php';
+        if (!is_file('../'.$this->upPath.$actionfile)) { // action non chargée
+           $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
+           if (!UpHelper::getGithubActionZip($this,$exist,'../')) {
+               return false;
+           }
+        }
+        if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
+            require JPATH_SITE .'/'. $this->upPath.'actions/upscsscompiler/vendor/autoload.php';
+        }
+        $scss_compiler = new \ScssPhp\ScssPhp\Compiler();
+        $basePath = JPATH_SITE .'/'. $this->upPath.'assets/';
+        $fileScss = $basePath . 'up.scss';
+        $fileCss = str_replace('.scss', '.css', $fileScss);
+        $scss_compiler->setImportPaths(pathinfo($fileScss, PATHINFO_DIRNAME));
+        try {
+            $string_sass = file_get_contents($fileScss);
+            $result = $scss_compiler->compileString($string_sass);
+            if ($result > '') {
+                file_put_contents($fileCss, $result->getCss());
+            }
+        } catch (\Exception $e) {
+            $msg = UpHelper::trad_keyword($this,'COMPIL_ERR');
+            $msg .= str_replace($basePath, '', $fileScss);
+            UpHelper::msg_error($this,$msg . '<br>' . $e->getmessage());
+        }
+    }
 }
 
 // class

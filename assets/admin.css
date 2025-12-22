@@ -1,0 +1,56 @@
+/**
+ * @package		UP content plugin
+ * @author		Lomart
+ * @copyright	Copyright (C) 2025 ConseilGouz. All rights reserved.
+ * @license		GNU/GPL v3; see LICENSE.php
+ * 
+ *						>>>	CSS for Admin display plugin's parameters  <<<
+ */
+ 
+#general .col-lg-9 {
+    .control-group:nth-of-type(9){ /* mobile */
+        float:left;width:45%;
+    }
+    .control-group:nth-of-type(10){ /* Mobile Paysage */
+        float:right;width:45%;
+    }
+    .control-group:nth-of-type(11){ /* Tablette */
+        clear:both;float:left;width:45%;
+    }
+    .control-group:nth-of-type(12){ /* large */
+        float:right;width:45%;
+    }
+    .control-group:nth-of-type(13){ /* x-large */
+        clear:both;float:left;width:45%;
+    }
+    .control-group:nth-of-type(15){ /**/
+        clear:both;
+}
+.switching {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 5px 30%;
+    position: relative;
+    color: #9E9E9E;
+    box-sizing: border-box;
+    animation: animswitch 2s linear infinite;
+}
+@keyframes animswitch {
+  0% {
+    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+  }
+  25% {
+    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 2px;
+  }
+  50% {
+    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 2px,  -38px 0 0 -2px;
+  }
+  75% {
+    box-shadow: 14px 0 0 2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+  }
+  100% {
+    box-shadow: 14px 0 0 -2px,  38px 0 0 2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+  }
+}
