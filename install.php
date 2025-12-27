@@ -32,7 +32,7 @@ class plgContentUpInstallerScript {
 	private $min_joomla_version      = '5.2.0';
 	private $min_php_version         = '8.1';
     private $installerName = 'plgcontentupinstaller';
-
+    private $actions_obsoletes = ['article_category','facebook','jmetadata','lorempixel'];
 	public function __construct()
 	{
 		$this->dir = __DIR__;
@@ -118,6 +118,7 @@ class plgContentUpInstallerScript {
 		if ($type =='update'){ // clean up updated actions
             if ($previous_version < '6.0.0') { // on était avant la version 6.0.0
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
+                $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
@@ -146,6 +147,14 @@ class plgContentUpInstallerScript {
         }
         return $actions;
     }
+    // récupère la liste des actions UP obsolètes en 6.0.0
+    function up_actions_obsoletes($actions) {
+        
+        foreach ($this->actions_obsoletes as $one) {
+            $actions[] = $one;
+        }
+        return $actions;
+    }
     function up_otheractions_list($actions, $exclude_prefix = '_,x_')
     {
         $path = JPATH_ROOT . '/plugins/content/up/'; // répertoire actuel de UP
@@ -156,7 +165,10 @@ class plgContentUpInstallerScript {
         $prefix = array_map('trim', explode(',', $exclude_prefix));
         foreach ($actionsPathList as $e) {
             $file = substr($e, strlen($actionsFolder));
-            if (in_array($file,$actions)) {
+            if (in_array($file,$actions)) { // dans les actions standards ?
+                continue;
+            }
+            if (in_array($file,$this->actions_obsoletes)) { //dans les actions obsoletes ?
                 continue;
             }
             $ok = true;
