@@ -32,7 +32,7 @@ class plgContentUpInstallerScript {
 	private $min_joomla_version      = '5.2.0';
 	private $min_php_version         = '8.1';
     private $installerName = 'plgcontentupinstaller';
-    private $actions_obsoletes = ['article_category','facebook','jmetadata','lorempixel'];
+    private $actions_obsoletes = ['add-html','article_category','audio','facebook','googlemap','jmetadata','jnews','lorempixel','lorem_placeimg','video','vimeo','youtube'];
 	public function __construct()
 	{
 		$this->dir = __DIR__;
