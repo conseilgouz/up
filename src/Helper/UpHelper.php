@@ -3454,7 +3454,11 @@ class UpHelper
     */
     static public function getGithubAction($up,$dir)
     {
-        $url = $up->githuburlzip.$dir.'?ref=UP6';
+        if ($dir == 'assets/UP-list-actions-version.txt') { // fichier version sur github
+            $url = $up->githuburl.$dir.'?ref=UP6';
+        } else { // les autres fichiers sont des fichiers zip
+            $url = $up->githuburlzip.$dir.'?ref=UP6';
+        }
         try {
             $agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.3";
             $curl = curl_init();
@@ -3569,7 +3573,7 @@ class UpHelper
         }
         if ($up->params->def('checkgithub', 0)) {
         // récupération du dernier fichier sur github
-            Self::getGithubFile($up,'assets/UP-list-actions-version.txt');
+            self::getGithubFile($up,'assets/UP-list-actions-version.txt');
         }
         $file = $up->upPath.'/assets/UP-list-actions-version.txt';
         if (!is_file($file)) {
