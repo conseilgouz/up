@@ -213,6 +213,22 @@ class plgContentUpInstallerScript {
                     $app->enqueueMessage('suppression : ' . $file);
             }
         }
+        // enable plugin
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $conditions = array(
+            $db->qn('type') . ' = ' . $db->q('plugin'),
+            $db->qn('folder') . ' = ' . $db->q('content'),
+            $db->qn('element') . ' = ' . $db->quote('up')
+        );
+        $fields = array($db->qn('enabled') . ' = 1');
+        $query = $db->getQuery(true);
+        $query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
+        $db->setQuery($query);
+        try {
+            $db->execute();
+        } catch (RuntimeException $e) {
+            $app->enqueueMessage('-------->  Erreur à l\'activation du plugin UP <-----------');
+        }
         // nettoyage des fichiers checkfile
         $filelist = glob($path .'assets/up_checkfile.*');
         foreach ($filelist AS $file) {
