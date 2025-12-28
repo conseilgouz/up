@@ -355,7 +355,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                     }
                     $timeStart = microtime(true);
                 }
-
+                include_once $this->upPath . 'upAction.php'; // compatibilité UP avant 6
                 // --- instanciation de l'action
                 // si premier appel de l'action
                 if ($text == '') {
