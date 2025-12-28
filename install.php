@@ -80,13 +80,10 @@ class plgContentUpInstallerScript {
 			$this->uninstallInstaller();
 			return false;
 		}
-        // vérifie s'il y a des actions personnalisées non compatibles avec UP 6.0
-        
+        // vérifie s'il y a des actions personnalisées à migrer en UP 6.0
         $actionsList = $this->up_actions();
-        $other = $this->up_otheractions_list($actionsList);
-        if (count($other)) { // des actions non compatibles ont été détectées
-            return false;
-        }
+        $other = $this->up_otheractions_list($actionsList); 
+
         $app = Factory::getApplication();
         // $app->enqueueMessage('<p>actions avant l\'installation/mise à jour/désinstallation du plugin</p>');
         $path = JPATH_ROOT . '/plugins/content/up/';
@@ -179,7 +176,7 @@ class plgContentUpInstallerScript {
             $phpfile = $actionsFolder . $file . DIRECTORY_SEPARATOR . $file . '.php'; // v2.6 si dossier vide
             if ($ok && file_exists($phpfile)) {
                 $ret = $this->checkVersion($file,$path.'actions/' . $file . '/' . $file . '.php');
-                if (!$ret) { // action incompatible UP 6.0
+                if (!$ret) { // action à migrer en UP 6.0
                     $list[] = $file;
                 }
             }
@@ -197,7 +194,7 @@ class plgContentUpInstallerScript {
             }
             // on doit être sur une autre classe.
 			Factory::getApplication()->enqueueMessage(
-				'Action incompatible avec UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
+				'Action à migrer en UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
 				'error'
 			);
             return false;

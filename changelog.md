@@ -2,6 +2,7 @@
 
 ### modification interne
 
+- UP devient un "service provider"
 - Action upactionslist : correction sur action interne
 - Action pdf : ajout de la librairie wasm
 - Action sitemap : suppression des zones non définies (erreur Deprecated: Creation of dynamic property ...)
@@ -10,16 +11,10 @@
 - Chargement des actions liées (pdf/modal) incorrect
 - install : suppression de la couleur d'arrière-plan dans le message d'installation
 - install : activation automatique du plugin UP
-
-## 15/12/2025 - version 6.0.0
-
-### modification interne
-
-- UP devient un "service provider"
 - déplacement des fonctions dans UpHelper
 - scssphp version 2.1.0 + uri 7.7.0
 - install : vérifie la version minimale de Joomla et PHP
-- install : vérifie s'il y a des actions incompatibles UP v6.0 avant installation 
+- install : vérifie s'il y a des actions à migrer en UP v6.0 avant installation 
 - chaque action dans un fichier zip
 
 ## 06/12/2025 - version 5.4.12
