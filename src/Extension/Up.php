@@ -533,12 +533,10 @@ class UP extends CMSPlugin implements SubscriberInterface
             $current[$b] = $s;
         }
         foreach($sizes as $size=>$val) {
-            if ($val) {
-                if (isset($current[$size])) {
-                    $current[$size] = $val;
-                } else {
-                    $current[$size] = $val;
-                }
+            if (($val === 0) && isset($current[$size])) {
+                unset( $current[$size]);
+            } else if ($val) {
+                $current[$size] = $val;
             }
         }
         foreach ($current as $size=>$val) {

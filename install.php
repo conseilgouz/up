@@ -8,6 +8,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Version;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
@@ -250,6 +251,34 @@ class plgContentUpInstallerScript {
 			copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');
 			$app->enqueueMessage('<p>Le fichier "assets/custom/_variables.scss" est inchangé.</p>');
 		}
+        // vérifie si besoin de recompiler le scss avec des nouvelles valeurs de breakpoints
+        // 1. récupération des valeurs définies dans les paramètres généraux de UP
+        $up_params = (array) PluginHelper::getPlugin('content', 'up');
+        $params = json_decode($up_params['params']);
+        $sizes = [];
+        if (isset($params->breaks) && $params->breaks) {
+            $sizes['s'] =  $params->breaks;
+        }
+        if (isset($params->breakm) && $params->breakm ) {
+            $sizes['m'] = $params->breakm;
+        }
+        if (isset($params->breaksl) && $params->breaksl) {
+            $sizes['sl'] = $params->breaksl;
+        }
+        if (isset($params->breakl) && $params->breakl) {
+            $sizes['l'] =  $params->breakl;
+        }
+        if (isset($params->breakxl) && $params->breakxl) {
+            $sizes['xl'] =  $params->breakxl;
+        }
+        if (count($sizes)) {
+        // on a saisi des paramètres breakpoints : regénération du fichier up.css
+            $val = '';
+            $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+            $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
+            $up->compile_scss();      // génération du fichier up.css
+            $app->enqueueMessage('<p>Fichier up.css généré avec vos personnalisations.</p>');
+        }
         // nettoyage du cache
         $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
         $cache = $cacheModel->getCache() ??null;
