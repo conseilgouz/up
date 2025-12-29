@@ -256,20 +256,22 @@ class plgContentUpInstallerScript {
         $up_params = (array) PluginHelper::getPlugin('content', 'up');
         $params = json_decode($up_params['params']);
         $sizes = [];
-        if (isset($params->breaks) && $params->breaks) {
-            $sizes['s'] =  $params->breaks;
-        }
-        if (isset($params->breakm) && $params->breakm ) {
-            $sizes['m'] = $params->breakm;
-        }
-        if (isset($params->breaksl) && $params->breaksl) {
-            $sizes['sl'] = $params->breaksl;
-        }
-        if (isset($params->breakl) && $params->breakl) {
-            $sizes['l'] =  $params->breakl;
-        }
-        if (isset($params->breakxl) && $params->breakxl) {
-            $sizes['xl'] =  $params->breakxl;
+        if ($params->loadcss == 1) { // utilisation du css de UP
+            if (isset($params->breaks) && $params->breaks) {
+                $sizes['s'] =  $params->breaks;
+            }
+            if (isset($params->breakm) && $params->breakm ) {
+                $sizes['m'] = $params->breakm;
+            }
+            if (isset($params->breaksl) && $params->breaksl) {
+                $sizes['sl'] = $params->breaksl;
+            }
+            if (isset($params->breakl) && $params->breakl) {
+                $sizes['l'] =  $params->breakl;
+            }
+            if (isset($params->breakxl) && $params->breakxl) {
+                $sizes['xl'] =  $params->breakxl;
+            }
         }
         if (count($sizes)) {
         // on a saisi des paramètres breakpoints : regénération du fichier up.css
