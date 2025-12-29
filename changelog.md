@@ -3,19 +3,25 @@
 ### modification interne
 
 - UP devient un "service provider"
+- déplacement des fonctions dans UpHelper
+- upAction.php : classe assurant la compatibilité avec les versions avant UP 6.0
+- Mise à jour de UP-list-actions-version.txt
+- Chargement des actions liées (pdf/modal) incorrect
+- scssphp version 2.1.0 + uri 7.7.0
+- install : vérifie la version minimale de Joomla et PHP
+- install : vérifie s'il y a des actions à migrer en UP v6.0 avant installation 
+- install : suppression de la couleur d'arrière-plan dans le message d'installation
+- install : activation automatique du plugin UP
+- chaque action dans un fichier zip
+
+#### Modifications actions
+
 - Action upactionslist : correction sur action interne
 - Action pdf : ajout de la librairie wasm
 - Action sitemap : suppression des zones non définies (erreur Deprecated: Creation of dynamic property ...)
 - Action listup : suppression notice en ligne 216
-- Mise à jour de UP-list-actions-version.txt
-- Chargement des actions liées (pdf/modal) incorrect
-- install : suppression de la couleur d'arrière-plan dans le message d'installation
-- install : activation automatique du plugin UP
-- déplacement des fonctions dans UpHelper
-- scssphp version 2.1.0 + uri 7.7.0
-- install : vérifie la version minimale de Joomla et PHP
-- install : vérifie s'il y a des actions à migrer en UP v6.0 avant installation 
-- chaque action dans un fichier zip
+- Action flexauto : ajout mobile-l,large, xlarge, xxlarge
+- Action flexbox : ajout mobile-l,large, xlarge, xxlarge
 
 ## 06/12/2025 - version 5.4.12
 
