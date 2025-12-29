@@ -280,7 +280,7 @@ class upbtn_makefile extends Lomart\Plugin\Content\Up\Extension\Up
         if (strpos($actinfos['_credit'], '@tags') === false) { // v2.8
             UpHelper::msg_error($this,UpHelper::trad_keyword($this,'TAG_NOT_FOUND', $actionName));
         }
-        $actoptions = $this->up_action_options($actionName, true, $lang);
+        $actoptions = UpHelper::up_action_options($this,$actionName, true, $lang);
         $this->update_default($actionName, $actoptions);
         // --- fichier des types pour options
         $options_type = array();
