@@ -13,6 +13,8 @@
 - install : suppression de la couleur d'arrière-plan dans le message d'installation
 - install : activation automatique du plugin UP
 - chaque action dans un fichier zip
+- définition des breakpoints mediaqueries spécifiques dans les paramètres UP 
+- install : regénération de up.css si des breakpoints ont été définis dans UP
 
 #### Modifications actions
 
