@@ -24,6 +24,7 @@
  * - optimisation chargement simple_html_dom.php
  * - prise en charge class2style
  * - ajout option no-content-html
+ * v6.0 - ajout mobile-l,large, xlarge, xxlarge
  */
 defined('_JEXEC') or die();
 
@@ -52,6 +53,10 @@ class flexbox extends Lomart\Plugin\Content\Up\Extension\Up
             __class__ => '', // nombre de colonnes ou prefset sous la forme x-x-x-x
             'tablet' => '', // nombre de colonnes sur moyen écran sous la forme x-x-x-x
             'mobile' => '', // nombre de colonnes sur petit écran sous la forme x-x-x-x
+            'mobile-l' => '', // nombre de colonnes sur petit écran en mode payage sous la forme x-x-x-x
+            'large' => '', // nombre de colonnes sur écran large sous la forme x-x-x-x
+            'xlarge' => '', // nombre de colonnes sur écran xlarge sous la forme x-x-x-x
+            'xxlarge' => '', // nombre de colonnes sur écran xxlarge sous la forme x-x-x-x
             'alternate' => '0', // valeur du breapoint pour inverser l'ordre des colonnes sur les lignes paires. option sans argument ou 1=480
             /* [st-css] Style bloc principal */
             'id' => '', // identifiant du bloc principal
@@ -93,6 +98,14 @@ class flexbox extends Lomart\Plugin\Content\Up\Extension\Up
         // v2.3 si non défini, force colonne à 100% en mobile
         $tmp = UpHelper::str_append($this,$options['mobile'], '12-12-12-12-12-12', '-');
         $colSize[2] = explode('-', $tmp);
+        $tmp = UpHelper::str_append($this,$options['mobile-l'], 'x-x-x-x-x-x', '-');
+        $colSize[3] = explode('-', $tmp);
+        $tmp = UpHelper::str_append($this,$options['large'], 'x-x-x-x-x-x', '-');
+        $colSize[4] = explode('-', $tmp);
+        $tmp = UpHelper::str_append($this,$options['xlarge'], 'x-x-x-x-x-x', '-');
+        $colSize[5] = explode('-', $tmp);
+        $tmp = UpHelper::str_append($this,$options['xxlarge'], 'x-x-x-x-x-x', '-');
+        $colSize[6] = explode('-', $tmp);
         // ======== css-head
         $css = $options['css-head'];
         $css .= ($options['bloc-style']) ? '#id > *[' . $options['bloc-style'] . ']' : '';
@@ -121,6 +134,10 @@ class flexbox extends Lomart\Plugin\Content\Up\Extension\Up
             $class = 'fg-c' . $colSize[0][$i];
             $class .= ($colSize[1][$i] != 'x') ? ' fg-cm' . $colSize[1][$i] : '';
             $class .= ($colSize[2][$i] != 'x') ? ' fg-cs' . $colSize[2][$i] : '';
+            $class .= ($colSize[3][$i] != 'x') ? ' fg-csl' . $colSize[3][$i] : '';
+            $class .= ($colSize[4][$i] != 'x') ? ' fg-cl' . $colSize[4][$i] : '';
+            $class .= ($colSize[5][$i] != 'x') ? ' fg-cxl' . $colSize[5][$i] : '';
+            $class .= ($colSize[6][$i] != 'x') ? ' fg-cxxl' . $colSize[6][$i] : '';
             $class .= ' '. $options['class-' . ($i + 1)];
             $colClass[$i + 1]['class'] = $class;
         }

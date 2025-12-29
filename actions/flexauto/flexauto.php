@@ -21,6 +21,7 @@
  * v5.1.2 - ajout options class-col et class-row
  * v5.2 - optimisation chargement simple_html_dom.php & prise en charge class2style
  * - ajout option no-content-html
+ * v6.0 - ajout mobile-l,large, xlarge, xxlarge
  */
 defined('_JEXEC') or die();
 
@@ -47,6 +48,10 @@ class flexauto extends Lomart\Plugin\Content\Up\Extension\Up
             __class__ => '3', // nombre de colonnes sur grand écran ou ordi-tablet-mobile
             'tablet' => '2', // nombre de colonnes sur moyen écran
             'mobile' => '1', // nombre de colonnes sur petit écran
+            'mobile-l' => '', // nombre de colonnes sur petit écran en landscape
+            'large' => '', // nombre de colonnes sur écran large
+            'xlarge' => '', // nombre de colonnes sur écran xlarge
+            'xxlarge' => '', // nombre de colonnes sur écran xxlarge 
             /* [st-css] Style bloc principal */
             'id' => '', // identifiant
             'class' => '', // class ou style pour le bloc principal
@@ -101,7 +106,12 @@ class flexauto extends Lomart\Plugin\Content\Up\Extension\Up
 
         // -- ajout options utilisateur dans la div principale
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, 'fg-row fg-auto-' . $options[__class__], 'fg-auto-m' . $options['tablet'], 'fg-auto-s' . $options['mobile'], $options['class'], $options['style']);
+        $sl = $options['mobile-l'] ? 'fg-auto-sl'.$options['mobile-l'].' ' : '';
+        $l = $options['large'] ? 'fg-auto-l'.$options['large'].' ' : '';
+        $xl = $options['xlarge'] ? 'fg-auto-xl'.$options['xlarge'].' ' : '';
+        $xxl = $options['xxlarge'] ? 'fg-auto-xxl'.$options['xxlarge'].' ' : '';
+        $options_w = 'fg-row fg-auto-' . $options[__class__].' fg-auto-m' . $options['tablet'].' fg-auto-s' . $options['mobile'].' '.$sl.$l.$xl.$xxl;
+        UpHelper::get_attr_style($this,$attr_main, $options_w ,$options['class'], $options['style']);
 
         // -- ajout des styles pour les colonnes
         // note: le style général est toujours appliqué
