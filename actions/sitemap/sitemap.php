@@ -38,7 +38,7 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
 
         // lien vers la page de demo
         // - 0 pour cacher le lien vers demo car inexistante
-        $this->set_demopage(0);
+        UpHelper::set_demopage($this,0);
 
         $options_def = array(
             __class__ => '', // nom menutype exclus. séparateur: virgule
