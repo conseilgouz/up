@@ -1962,11 +1962,13 @@ class UpHelper
 
         // Site de démonstration
         $out['_demopage'] = '';
-        if (preg_match('#\$this->set_demopage\([w"]?(.*)[w"]?\)#', $tmp, $arrtmp) === 1) {
-            if ($arrtmp[1] == '') {
+        if ( (preg_match('#\$this->set_demopage\([w"]?(.*)[w"]?\)#', $tmp, $arrtmp) === 1) || 
+             (preg_match('#\::set_demopage\([w"]?(.*)[w"]?\)#', $tmp, $arrtmp) === 1) ) { // UP 6.0
+            if (($arrtmp[1] == '') || ($arrtmp[1] == '$this')) {
                 $out['_demopage'] = $up->urlhelpsite . '/demo/action-' . str_replace('_', '-', $action_name);
             } else {
-                $out['_demopage'] = $arrtmp[1];
+                $out['_demopage'] = trim($arrtmp[1],'$this,'); // UP 6.0
+                $out['_demopage'] = trim($out['_demopage'],"'"); //  UP 6.0
             }
         }
         return $out;

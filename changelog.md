@@ -1,6 +1,6 @@
-## 01/01/2026 - version 6.0.2
+## 02/01/2026 - version 6.0.3
 
-### modification interne
+#### modifications internes
 
 - UP devient un "service provider"
 - déplacement des fonctions dans UpHelper
