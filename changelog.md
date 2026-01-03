@@ -1,4 +1,4 @@
-## 02/01/2026 - version 6.0.3
+## 03/01/2026 - version 6.0.4
 
 #### modifications internes
 

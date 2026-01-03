@@ -33,7 +33,7 @@ class plgContentUpInstallerScript {
 	private $min_joomla_version      = '5.2.0';
 	private $min_php_version         = '8.1';
     private $installerName = 'plgcontentupinstaller';
-    private $actions_obsoletes = ['add-html','article_category','audio','facebook','googlemap','jmetadata','jnews','lorempixel','lorem_placeimg','video','vimeo','youtube'];
+    private $actions_obsoletes = ['add-html','animate','article_category','audio','facebook','googlemap','jmetadata','jnews','lorempixel','lorem_placeimg','video','vimeo','youtube'];
 	public function __construct()
 	{
 		$this->dir = __DIR__;
@@ -196,7 +196,7 @@ class plgContentUpInstallerScript {
             // on doit être sur une autre classe.
 			Factory::getApplication()->enqueueMessage(
 				'Action à migrer en UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
-				'error'
+				'warning'
 			);
             return false;
         }
