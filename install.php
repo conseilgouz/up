@@ -129,7 +129,7 @@ class plgContentUpInstallerScript {
     function save_actions() {
 
         $this->zip('*',JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
-		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sour le nom actions_avant_up6.zip.</p>');
+		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sous le nom <b>actions_avant_up6.zip</b>.</p>');
     }
     function zip($source, $destination, $include_dir = false, $exclusions = false){
     // Remove existing archive
