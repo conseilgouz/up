@@ -115,6 +115,7 @@ class plgContentUpInstallerScript {
         $actionsList = [];
 		if ($type =='update'){ // clean up updated actions
             if ($previous_version < '6.0.0') { // on était avant la version 6.0.0
+                $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             }
@@ -124,6 +125,57 @@ class plgContentUpInstallerScript {
             }
         }
     }
+    // sauvegarde des actions avant installation de la version 6.0 de UP
+    function save_actions() {
+
+        $this->zip('*',JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
+		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sour le nom actions_avant_up6.zip.</p>');
+    }
+    function zip($source, $destination, $include_dir = false, $exclusions = false){
+    // Remove existing archive
+        if (file_exists($destination)) {
+            unlink ($destination);
+        }
+        $zip = new \ZipArchive();
+        if (!$zip->open($destination, \ZIPARCHIVE::CREATE)) {
+            return false;
+        }
+
+        $folder = JPATH_ROOT . '/plugins/content/up/actions';
+
+        $zip = $this->zip_r($folder, $zip, 'actions',$exclusions);
+        if ($zip) {
+            $zip->close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function zip_r($from, $zip, $base=false,$exclusions=false) {
+        if (!file_exists($from)){
+            Factory::getApplication()->enqueueMessage('Fichier '.$from.' non trouvé','error');
+            return false;
+        }
+        if (!extension_loaded('zip')) {
+            Factory::getApplication()->enqueueMessage("ZipArchive n'est pas actif sur votre site","error");
+            return false;
+        }
+        if (!$base) {
+            $base = $from;
+        }  
+        $zip->addEmptyDir($base);
+       
+        $dir = opendir($from);
+        while (false !== ($file = readdir($dir))) {
+            if ($file == '.' OR $file == '..') {continue;}
+            if (is_dir($from . '/' . $file)) {
+                $zip = $this->zip_r($from . '/' . $file, $zip, $base . '/' . $file);
+            } else {
+                $zip->addFile($from . '/' . $file, $base.'/'.$file);
+            }
+        }
+        return $zip;
+    }    
     // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
     // tel que défini dans l'installation
     function up_actions() {
