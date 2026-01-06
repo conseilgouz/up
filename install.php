@@ -7,6 +7,9 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\Archive\Archive;
+use Joomla\Archive\Zip;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Version;
@@ -128,10 +131,6 @@ class plgContentUpInstallerScript {
     }
     // sauvegarde des actions avant installation de la version 6.0 de UP
     function save_actions() {
-   		if (!class_exists('\ZipArchive')) {
-			Factory::getApplication()->enqueueMessage('Your server does not support the ZipArchive extension. Please use a different Archiver Engine and retry backing up your site');
-            return;
-		}
         $this->zip('*',JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
 		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sous le nom <b>actions_avant_up6.zip</b>.</p>');
     }
@@ -140,46 +139,34 @@ class plgContentUpInstallerScript {
         if (file_exists($destination)) {
             unlink ($destination);
         }
-        $zip = new \ZipArchive();
-        if (!$zip->open($destination, \ZIPARCHIVE::CREATE)) {
-            return false;
-        }
-
+        $zip = (new Archive())->getAdapter('zip');
         $folder = JPATH_ROOT . '/plugins/content/up/actions';
-
-        $zip = $this->zip_r($folder, $zip, 'actions',$exclusions);
-        if ($zip) {
-            $zip->close();
-            return true;
-        } else {
-            return false;
-        }
+        $zipFilesArray = [];
+        $zipFilesArray = $this->ziplist($zipFilesArray,$folder);
+        $zip->create($destination, $zipFilesArray);
     }
-    function zip_r($from, $zip, $base=false,$exclusions=false) {
+    function ziplist(&$arr,$from,$base=false) {
         if (!file_exists($from)){
             Factory::getApplication()->enqueueMessage('Fichier '.$from.' non trouvé','error');
             return false;
         }
-        if (!extension_loaded('zip')) {
-            Factory::getApplication()->enqueueMessage("ZipArchive n'est pas actif sur votre site","error");
-            return false;
-        }
-        if (!$base) {
-            $base = $from;
-        }  
-        $zip->addEmptyDir($base);
-       
         $dir = opendir($from);
+        if (!$base) {
+            $base = 'actions';
+        }  
         while (false !== ($file = readdir($dir))) {
             if ($file == '.' OR $file == '..') {continue;}
             if (is_dir($from . '/' . $file)) {
-                $zip = $this->zip_r($from . '/' . $file, $zip, $base . '/' . $file);
+                $zip = $this->ziplist($arr,$from . '/' . $file,$base.'/'.$file);
             } else {
-                $zip->addFile($from . '/' . $file, $base.'/'.$file);
+                $name = $base . '/' . $file;
+                $data = file_get_contents($from . '/' . $file) ;
+                $arr[] = ['name' => $name, 'data' => $data];
             }
         }
-        return $zip;
-    }    
+        return $arr;
+
+    }
     // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
     // tel que défini dans l'installation
     function up_actions() {

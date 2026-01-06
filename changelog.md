@@ -4,6 +4,7 @@
 
 - action jmenus_metadata : correction de l'erreur sur get_db_value
 - install/update/uninstall : check ZipArchive, check previous version, erreur sur is_dir
+- install : utilisation de zip de Joomla au lieu de ZipArchive
 
 ## 05/01/2026 - version 6.0.6
 
