@@ -1,3 +1,9 @@
+## 06/01/2026 - version 6.0.7
+
+#### modifications internes
+
+- action jmenus_metadata : correction de l'erreur sur get_db_value
+
 ## 05/01/2026 - version 6.0.6
 
 #### modifications internes
