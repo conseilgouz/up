@@ -1,3 +1,9 @@
+## 06/01/2026 - version 6.0.9
+
+#### modifications internes
+
+- UpHelper : ajout de JPATH_SITE lors de l'utilisation de zip de Joomla pour récupérer les actions
+
 ## 06/01/2026 - version 6.0.8
 
 #### modifications internes

@@ -3433,15 +3433,14 @@ class UpHelper
         }
         $info = pathinfo( $dir );
         $name = $info['filename'];
-        $actionDir = $admin.$up->upPath.'actions/'.$name;
+        $actionDir = JPATH_SITE.'/'.$admin.$up->upPath.'actions/'.$name;
         if (!is_dir($actionDir)) {
             mkdir($actionDir);
         }
-        $actionsPath = $admin.$up->upPath.'actions';
+        $actionsPath = JPATH_SITE.'/'.$admin.$up->upPath.'actions';
         copy($action->download_url, $actionsPath.'/'.$action->name);
         $zip = (new Archive())->getAdapter('zip');
         $ret = $zip->extract($actionsPath.'/'.$action->name,$actionsPath);
-        //$zip = new \ZipArchive;
         if ($ret) {
             unlink($actionsPath.'/'.$action->name);
         } else {
