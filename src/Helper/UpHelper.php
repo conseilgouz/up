@@ -13,7 +13,8 @@
  */
 namespace  Lomart\Plugin\Content\Up\Helper;
 defined('_JEXEC') or die();
-
+use Joomla\Archive\Archive;
+use Joomla\Archive\Zip;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Factory;
@@ -3438,10 +3439,10 @@ class UpHelper
         }
         $actionsPath = $admin.$up->upPath.'actions';
         copy($action->download_url, $actionsPath.'/'.$action->name);
-        $zip = new \ZipArchive;
-        if ($zip->open($actionsPath.'/'.$action->name) === TRUE) {
-            $zip->extractTo($actionsPath);
-            $zip->close();
+        $zip = (new Archive())->getAdapter('zip');
+        $ret = $zip->extract($actionsPath.'/'.$action->name,$actionsPath);
+        //$zip = new \ZipArchive;
+        if ($ret) {
             unlink($actionsPath.'/'.$action->name);
         } else {
             echo 'failed';
