@@ -3,6 +3,7 @@
 #### modifications internes
 
 - action jmenus_metadata : correction de l'erreur sur get_db_value
+- install/update/uninstall : check ZipArchive, check previous version, erreur sur is_dir
 
 ## 05/01/2026 - version 6.0.6
 

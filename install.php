@@ -110,11 +110,12 @@ class plgContentUpInstallerScript {
 				}
 			}
 		}
-		$xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
-		$previous_version = $xml->version;
+        $previous_version = false;
         $actionsList = [];
-		if ($type =='update'){ // clean up updated actions
-            if ($previous_version < '6.0.0') { // on était avant la version 6.0.0
+        if ($type =='update'){// clean up updated actions
+		    $xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
+		    $previous_version = $xml->version;
+            if ($previous_version && $previous_version < '6.0.0') { // on était avant la version 6.0.0
                 $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
@@ -127,7 +128,10 @@ class plgContentUpInstallerScript {
     }
     // sauvegarde des actions avant installation de la version 6.0 de UP
     function save_actions() {
-
+   		if (!class_exists('\ZipArchive')) {
+			Factory::getApplication()->enqueueMessage('Your server does not support the ZipArchive extension. Please use a different Archiver Engine and retry backing up your site');
+            return;
+		}
         $this->zip('*',JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
 		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sous le nom <b>actions_avant_up6.zip</b>.</p>');
     }
@@ -263,6 +267,9 @@ class plgContentUpInstallerScript {
      */
     function postflight($type, $parent) {
         // echo('<p>actions après l\'installation/mise à jour/désinstallation du plugin</p>');
+        if ($type != 'install' || $type != 'update') {
+            return;
+        }
         $app = Factory::getApplication();
         $path = JPATH_ROOT . '/plugins/content/up/';
         $ficVariablesBak = 'assets/custom/_variables.v' . $parent->getManifest()->version . '.scss.bak';
@@ -306,32 +313,34 @@ class plgContentUpInstallerScript {
         // vérifie si besoin de recompiler le scss avec des nouvelles valeurs de breakpoints
         // 1. récupération des valeurs définies dans les paramètres généraux de UP
         $up_params = (array) PluginHelper::getPlugin('content', 'up');
-        $params = json_decode($up_params['params']);
-        $sizes = [];
-        if ($params->loadcss == 1) { // utilisation du css de UP
-            if (isset($params->breaks) && $params->breaks) {
-                $sizes['s'] =  $params->breaks;
+        if (isset($up_params['params'])) {
+            $params = json_decode($up_params['params']);
+            $sizes = [];
+            if ($params->loadcss == 1) { // utilisation du css de UP
+                if (isset($params->breaks) && $params->breaks) {
+                    $sizes['s'] =  $params->breaks;
+                }
+                if (isset($params->breakm) && $params->breakm ) {
+                    $sizes['m'] = $params->breakm;
+                }
+                if (isset($params->breaksl) && $params->breaksl) {
+                    $sizes['sl'] = $params->breaksl;
+                }
+                if (isset($params->breakl) && $params->breakl) {
+                    $sizes['l'] =  $params->breakl;
+                }
+                if (isset($params->breakxl) && $params->breakxl) {
+                    $sizes['xl'] =  $params->breakxl;
+                }
             }
-            if (isset($params->breakm) && $params->breakm ) {
-                $sizes['m'] = $params->breakm;
-            }
-            if (isset($params->breaksl) && $params->breaksl) {
-                $sizes['sl'] = $params->breaksl;
-            }
-            if (isset($params->breakl) && $params->breakl) {
-                $sizes['l'] =  $params->breakl;
-            }
-            if (isset($params->breakxl) && $params->breakxl) {
-                $sizes['xl'] =  $params->breakxl;
-            }
-        }
-        if (count($sizes)) {
+            if (count($sizes)) {
         // on a saisi des paramètres breakpoints : regénération du fichier up.css
-            $val = '';
-            $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
-            $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
-            $up->compile_scss();      // génération du fichier up.css
-            $app->enqueueMessage('<p>Fichier up.css généré avec vos personnalisations.</p>');
+                $val = '';
+                $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+                $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
+                $up->compile_scss();      // génération du fichier up.css
+                $app->enqueueMessage('<p>Fichier up.css généré avec vos personnalisations.</p>');
+            }
         }
         // nettoyage du cache
         $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
@@ -410,7 +419,7 @@ class plgContentUpInstallerScript {
 	}
 	private function uninstallInstaller()
 	{
-		if ( ! is_dir::exists(JPATH_PLUGINS . '/system/' . $this->installerName)) {
+		if ( ! is_dir(JPATH_PLUGINS . '/system/' . $this->installerName)) {
 			return;
 		}
 		$this->delete([
