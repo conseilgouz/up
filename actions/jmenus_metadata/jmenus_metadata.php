@@ -351,7 +351,7 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         $tmpl = $this->options['template-menu'];
 
         $root = Uri::getInstance()->root();
-        $url = $root . $this->get_db_value('path', 'menu', 'id=' . $menu->id);
+        $url = $root . UpHelper::get_db_value($this,'path', 'menu', 'id=' . $menu->id);
 
         UpHelper::kw_replace($this,$tmpl, 'id', $menu->id);
         UpHelper::kw_replace($this,$tmpl, 'title', $menu->title);
@@ -364,8 +364,8 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         UpHelper::kw_replace($this,$tmpl, 'state', $menu->published);
         // date publish
         if (stripos($tmpl, '##publish_') !== false) {
-            UpHelper::kw_replace($this,$tmpl, 'publish_up', $this->get_db_value('publish_up', 'menu', 'id=' . $menu->id));
-            UpHelper::kw_replace($this,$tmpl, 'publish_down', $this->get_db_value('publish_down', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this,$tmpl, 'publish_up', UpHelper::get_db_value($this,'publish_up', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this,$tmpl, 'publish_down', UpHelper::get_db_value($this,'publish_down', 'menu', 'id=' . $menu->id));
         }
         //
         $robots = explode(',', $robots);
@@ -399,10 +399,10 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 $str = $str_context . ': ';
                 switch ($link['view']) {
                     case 'article':
-                        $str .= $this->get_db_value('title', 'content', 'id=' . $link['id']) . ')';
+                        $str .= UpHelper::get_db_value($this,'title', 'content', 'id=' . $link['id']) . ')';
                         break;
                     case 'category':
-                        $str .= $this->get_db_value('title', 'categories', 'id=' . $link['id']) . ')';
+                        $str .= UpHelper::get_db_value($this,'title', 'categories', 'id=' . $link['id']) . ')';
                         break;
                     default:
                         $str .= (isset($link['id'])) ? ' #' . $link['id'] : '';
@@ -420,8 +420,8 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                     $itemParams = json_decode($menu->params);
                     $idalias = $itemParams->aliasoptions;
                     $str = 'alias menu : ';
-                    $str .= $this->get_db_value('menutype', 'menu', 'id=' . $idalias) . '/';
-                    $str .= $this->get_db_value('title', 'menu', 'id=' . $idalias);
+                    $str .= UpHelper::get_db_value($this,'menutype', 'menu', 'id=' . $idalias) . '/';
+                    $str .= UpHelper::get_db_value($this,'title', 'menu', 'id=' . $idalias);
                     break;
                 default:
                     $str = $menu->type;
