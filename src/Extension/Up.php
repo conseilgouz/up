@@ -33,7 +33,7 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class UP extends CMSPlugin implements SubscriberInterface
 {
-    public $upPath = JPATH_SITE .'/'.'plugins/content/up/';
+    public $upPath = 'plugins/content/up/';
     public $actionPath;
     public $actionprefs;
     public $actionUserName;
@@ -221,7 +221,7 @@ class UP extends CMSPlugin implements SubscriberInterface
             // include_once $this->upPath . 'upAction.php';
 
             // charger le dictionnaire
-            $this->dico = file_get_contents($this->upPath.'dico.json');
+            $this->dico = file_get_contents(JPATH_SITE.'/'.$this->upPath.'dico.json');
             $this->dico = json_decode($this->dico, true);
 
             /*
@@ -369,7 +369,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                     UpHelper::checkactionsha256($this, $actionClassName);
                 }
                 // Mini UP : chargement des actions au 1er appel
-                if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
+                if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
                     // récupération de l'action sous format zip
                     if (!UpHelper::getGithubActionZip($this, $actionClassName)) {
@@ -380,14 +380,14 @@ class UP extends CMSPlugin implements SubscriberInterface
                         || ($actionClassName == 'pdf')
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
-                        if (!is_file($this->upPath.'actions/modal/modal.php')) {
+                        if (!is_file(JPATH_SITE.'/'.$this->upPath.'actions/modal/modal.php')) {
                             if (!UpHelper::getGithubActionZip($this, 'modal')) {
                                 continue;  // error  ignore it
                             }
                         }
                     }
                     if ($actionClassName == 'pdf_gallery') {
-                        if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
+                        if (!is_file(JPATH_SITE.'/'.$this->upPath.'actions/pdf/pdf.php')) {
                             if (!UpHelper::getGithubActionZip($this, 'pdf')) {
                                 continue;  // error  ignore it
                             }
@@ -408,13 +408,13 @@ class UP extends CMSPlugin implements SubscriberInterface
                     }
                     $timeStart = microtime(true);
                 }
-                include_once $this->upPath . 'upAction.php'; // compatibilité UP avant 6
+                include_once JPATH_SITE.'/'.$this->upPath . 'upAction.php'; // compatibilité UP avant 6
                 // --- instanciation de l'action
                 // si premier appel de l'action
                 if ($text == '') {
                     if (array_key_exists($actionClassName, $classObjList) == false) {
                         // on charge la classe de l'action
-                        if (@include_once $this->upPath.$actionfile) {
+                        if (@include_once JPATH_SITE.'/'.$this->upPath.$actionfile) {
                             $classObjList[$actionClassName] = new $actionClassName($actionClassName);
                             $classObjList[$actionClassName]->actionUserName = $this->actionUserName;
                             $classObjList[$actionClassName]->firstInstance = true; // pour action unique par page dans run
@@ -520,7 +520,7 @@ class UP extends CMSPlugin implements SubscriberInterface
         if ($exist) { // check plugin loaded
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
-            if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
+            if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // mini UP : action non chargée
                 $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
                 if (!UpHelper::getGithubActionZip($this, $exist)) {
                     $event->addResult(false); // non trouvé : erreur
@@ -557,7 +557,7 @@ class UP extends CMSPlugin implements SubscriberInterface
             return $event->addResult(json_encode($res));
         }
         $actionClassName = $output['action'];
-        $actionfile = $this->upPath . 'actions/' . $actionClassName . '/ajax_' . $actionClassName . '.php';
+        $actionfile = JPATH_SITE.'/'.$this->upPath . 'actions/' . $actionClassName . '/ajax_' . $actionClassName . '.php';
 
         if (@include_once $actionfile) {
             $return = $actionClassName::goAjax($input);
@@ -570,8 +570,8 @@ class UP extends CMSPlugin implements SubscriberInterface
     // sauvegarde des valeurs saisies et écriture dans custom/_variables.scss
     public function store_scss($sizes)
     {
-        $basePath = $this->upPath.'assets/';
-        $scss_file = $this->upPath.'assets/custom/_variables.scss';
+        $basePath = JPATH_SITE.'/'.$this->upPath.'assets/';
+        $scss_file = JPATH_SITE.'/'.$this->upPath.'assets/custom/_variables.scss';
         copy($scss_file, $basePath . 'custom/_variables.scss.bak');
         $current = [];
         $out = '';
@@ -602,17 +602,17 @@ class UP extends CMSPlugin implements SubscriberInterface
     public function compile_scss()
     {
         $actionfile = 'actions/upscsscompiler/upscsscompiler.php';
-        if (!is_file('../'.$this->upPath.$actionfile)) { // action non chargée
+        if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // action non chargée
             $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
             if (!UpHelper::getGithubActionZip($this, 'upscsscompiler', '../')) {
                 return false;
             }
         }
         if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
-            require $this->upPath.'actions/upscsscompiler/vendor/autoload.php';
+            require JPATH_SITE.'/'.$this->upPath.'actions/upscsscompiler/vendor/autoload.php';
         }
         $scss_compiler = new \ScssPhp\ScssPhp\Compiler();
-        $basePath = $this->upPath.'assets/';
+        $basePath = JPATH_SITE.'/'.$this->upPath.'assets/';
         $fileScss = $basePath . 'up.scss';
         $fileCss = str_replace('.scss', '.css', $fileScss);
         $scss_compiler->setImportPaths(pathinfo($fileScss, PATHINFO_DIRNAME));
