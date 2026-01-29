@@ -1,3 +1,9 @@
+## 29/01/2026 - version 6.0.10
+
+#### modifications internes
+
+- Up.php : ajout de JPATH_SITE dans la variable upPath utilisée sur tous les appels de fichiers
+
 ## 06/01/2026 - version 6.0.9
 
 #### modifications internes

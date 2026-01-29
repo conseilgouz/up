@@ -10,11 +10,12 @@
  * */
 /*
 v5.3.3 : php 8.4/8.5 compatibility
-v5.3.3 : check/load actions from github 
+v5.3.3 : check/load actions from github
 v5.4.1 : variables publiques dans up.php
 v5.4.2 : cleanup checkfiles
 */
-namespace  Lomart\Plugin\Content\Up\Extension;
+
+namespace Lomart\Plugin\Content\Up\Extension;
 
 defined('_JEXEC') or die('Restricted access');
 
@@ -27,28 +28,79 @@ use Joomla\Event\SubscriberInterface;
 use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 // #[AllowDynamicProperties] // php 8.4
 
 class UP extends CMSPlugin implements SubscriberInterface
 {
-    public $upPath = 'plugins/content/up/';
-    public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
+    public $upPath = JPATH_SITE .'/'.'plugins/content/up/';
+    public $actionPath;
+    public $actionprefs;
+    public $actionUserName;
+    public $array_subtitle;
+    public $article;
+    public $artid;
+    public $art_attr;
+    public $art_model;
+    public $attr;
+    public $attr_download;
+    public $attr_style_icon_image;
+    public $attr_view;
     public $basepath;
-    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg,$catIndex;
-    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico,$dirLogs;
+    public $categories;
+    public $catItems;
+    public $catRootIDs;
+    public $cat_attr;
+    public $cat_model;
+    public $class2style;
+    public $content;
+    public $cssmsg;
+    public $catIndex;
+    public $date_terms;
+    public $debug;
+    public $debugMsg;
+    public $decorate;
+    public $demopage;
+    public $dico;
+    public $dirLogs;
     public $ext_types;
-    public $filepath,$firstInstance,$folders_exclude,$frequency;
-    public $inedit,$inprod,$info,$invalid;
+    public $filepath;
+    public $firstInstance;
+    public $folders_exclude;
+    public $frequency;
+    public $inedit;
+    public $inprod;
+    public $info;
+    public $invalid;
     public $J4;
-    public $level,$link;
-    public $main_class,$multicpt;
-    public $name,$nivacces;
-    public $options,$options_user,$out,$priority;
-    public $replace_len,$replace_deb,$result;
-    public $srcset_path, $styles_main;
-    public $tags_list_attr,$tarteaucitron,$tradaction,$trad,$tradup,$trimA0,$today;
-    public $urlhelpsite,$usehelpsite;
-    public $valid_type,$varStyle,$varStyleString,$withoutCustom;
+    public $level;
+    public $link;
+    public $main_class;
+    public $multicpt;
+    public $name;
+    public $nivacces;
+    public $options;
+    public $options_user;
+    public $out;
+    public $priority;
+    public $replace_len;
+    public $replace_deb;
+    public $result;
+    public $srcset_path;
+    public $styles_main;
+    public $tags_list_attr;
+    public $tarteaucitron;
+    public $tradaction;
+    public $trad;
+    public $tradup;
+    public $trimA0;
+    public $today;
+    public $urlhelpsite;
+    public $usehelpsite;
+    public $valid_type;
+    public $varStyle;
+    public $varStyleString;
+    public $withoutCustom;
 
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
@@ -75,13 +127,13 @@ class UP extends CMSPlugin implements SubscriberInterface
     }
 
 
-    public function __construct(&$subject,$config = [])
+    public function __construct(&$subject, $config = [])
     {
         parent::__construct($subject, $config);
         if (!$config) { // on vient d'une action : recharger les paramètres généraux du plugin
-            $up = PluginHelper::getPlugin('content','up');
+            $up = PluginHelper::getPlugin('content', 'up');
             $this->params = new Registry();
-            $this->params->set('def',json_decode($up->params));
+            $this->params->set('def', json_decode($up->params));
         }
         $this->LoadLanguage();
         UpHelper::loadActionsSha256($this);
@@ -93,6 +145,7 @@ class UP extends CMSPlugin implements SubscriberInterface
         $article = $event->getItem();
         $params = $event->getParams();
         $app = Factory::getApplication();
+
         $tdeb = microtime(true);
         $debug = false;
 
@@ -204,7 +257,7 @@ class UP extends CMSPlugin implements SubscriberInterface
 
             // ===== RECHERCHE DE TOUS LES SHORTCODES OUVRANTS
             if (! preg_match_all($regexopen, $article->text, $matches, PREG_OFFSET_CAPTURE)) {
-                UpHelper::info_debug($this,'Error up.php 132');
+                UpHelper::info_debug($this, 'Error up.php 132');
             }
             $nbSC = count($matches[0]);
             for ($i = 0; $i < $nbSC; $i++) {
@@ -271,7 +324,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                         $value = (count($param) == 2) ? trim($param[1]) : '';
                         // le mot clé traduit pour le script action
                         $key = str_replace('-', '_', $key); // tel que le script (14/12/19)
-                        if (array_key_exists($key, $this->dico)) {
+                        if ($this->dico && array_key_exists($key, $this->dico)) {
                             $key = $this->dico[$key];
                         }
                         $key = str_replace('-', '_', $key); // tel que le script
@@ -313,14 +366,14 @@ class UP extends CMSPlugin implements SubscriberInterface
                 $actionfile = 'actions/' . $actionClassName . '/' . $actionClassName . '.php';
                 if ($this->params->def('checkgithub', 0)) {
                     // contrôle de version de l'action sur github
-                    UpHelper::checkactionsha256($this,$actionClassName);
+                    UpHelper::checkactionsha256($this, $actionClassName);
                 }
                 // Mini UP : chargement des actions au 1er appel
                 if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
-                    $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                   // récupération de l'action sous format zip
-                    if (!UpHelper::getGithubActionZip($this,$actionClassName)) {
-                       continue;  // error  ignore it
+                    $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
+                    // récupération de l'action sous format zip
+                    if (!UpHelper::getGithubActionZip($this, $actionClassName)) {
+                        continue;  // error  ignore it
                     }
                     // exceptions : appel croisé dans les actions
                     if (($actionClassName == 'pdf_gallery')
@@ -328,14 +381,14 @@ class UP extends CMSPlugin implements SubscriberInterface
                         || ($actionClassName == 'file_explorer')
                         || ($actionClassName == '_upgesterror')) {
                         if (!is_file($this->upPath.'actions/modal/modal.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'modal')) {
+                            if (!UpHelper::getGithubActionZip($this, 'modal')) {
                                 continue;  // error  ignore it
                             }
                         }
                     }
                     if ($actionClassName == 'pdf_gallery') {
                         if (!is_file($this->upPath.'actions/pdf/pdf.php')) {
-                            if (!UpHelper::getGithubActionZip($this,'pdf')) {
+                            if (!UpHelper::getGithubActionZip($this, 'pdf')) {
                                 continue;  // error  ignore it
                             }
                         }
@@ -379,17 +432,17 @@ class UP extends CMSPlugin implements SubscriberInterface
                             $app->enqueueMessage($text, 'error');
                         }
                     } else {
-                            $classObjList[$actionClassName] = new $actionClassName($actionClassName);
-                            $classObjList[$actionClassName]->actionUserName = $this->actionUserName;
-                            $classObjList[$actionClassName]->firstInstance = false; // pour action unique par page dans run
-                            $classObjList[$actionClassName]->article = $article; // pour load_js_file_head
-                            $objVersion = new Version(); // v2.6
-                            $classObjList[$actionClassName]->J4 = ((int) $objVersion->getShortVersion() >= 4);
-                            $classObjList[$actionClassName]->inedit = (!(isset($article->id) && empty($article->checked_out))); // v3.1
-                            $classObjList[$actionClassName]->name = $actionClassName;
-                            $classObjList[$actionClassName]->upPath =  str_replace('/', DIRECTORY_SEPARATOR, $this->upPath);
-                            $classObjList[$actionClassName]->actionPath = $this->upPath . 'actions' . DIRECTORY_SEPARATOR . $actionClassName . DIRECTORY_SEPARATOR;
-                            $classObjList[$actionClassName]->init();
+                        $classObjList[$actionClassName] = new $actionClassName($actionClassName);
+                        $classObjList[$actionClassName]->actionUserName = $this->actionUserName;
+                        $classObjList[$actionClassName]->firstInstance = false; // pour action unique par page dans run
+                        $classObjList[$actionClassName]->article = $article; // pour load_js_file_head
+                        $objVersion = new Version(); // v2.6
+                        $classObjList[$actionClassName]->J4 = ((int) $objVersion->getShortVersion() >= 4);
+                        $classObjList[$actionClassName]->inedit = (!(isset($article->id) && empty($article->checked_out))); // v3.1
+                        $classObjList[$actionClassName]->name = $actionClassName;
+                        $classObjList[$actionClassName]->upPath =  str_replace('/', DIRECTORY_SEPARATOR, $this->upPath);
+                        $classObjList[$actionClassName]->actionPath = $this->upPath . 'actions' . DIRECTORY_SEPARATOR . $actionClassName . DIRECTORY_SEPARATOR;
+                        $classObjList[$actionClassName]->init();
                     }
                 }
 
@@ -467,9 +520,9 @@ class UP extends CMSPlugin implements SubscriberInterface
         if ($exist) { // check plugin loaded
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
-            if (!is_file('../'.$this->upPath.$actionfile)) { // mini UP : action non chargée
-                $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-                if (!UpHelper::getGithubActionZip($this,$exist,'../')) {
+            if (!is_file($this->upPath.$actionfile)) { // mini UP : action non chargée
+                $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
+                if (!UpHelper::getGithubActionZip($this, $exist)) {
                     $event->addResult(false); // non trouvé : erreur
                 }
             }
@@ -491,7 +544,7 @@ class UP extends CMSPlugin implements SubscriberInterface
             $this->compile_scss();
             // clear cache
             $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
-            $cache = $cacheModel->getCache() ??null;
+            $cache = $cacheModel->getCache() ?? null;
             if ($cache) {
                 foreach ($cache->getAll() as $group) {
                     $cache->clean($group->group);
@@ -499,7 +552,7 @@ class UP extends CMSPlugin implements SubscriberInterface
             }
             $res = $event->addResult(true);
             return $res;
-        } else if (! isset($output['action'])) { // message incorrect
+        } elseif (! isset($output['action'])) { // message incorrect
             $res = [false,'err : action incorrect'];
             return $event->addResult(json_encode($res));
         }
@@ -515,49 +568,51 @@ class UP extends CMSPlugin implements SubscriberInterface
         }
     }
     // sauvegarde des valeurs saisies et écriture dans custom/_variables.scss
-    function store_scss($sizes) {
-        $basePath = JPATH_SITE .'/'. $this->upPath.'assets/';
-        $scss_file = JPATH_SITE .'/'. $this->upPath.'assets/custom/_variables.scss';
+    public function store_scss($sizes)
+    {
+        $basePath = $this->upPath.'assets/';
+        $scss_file = $this->upPath.'assets/custom/_variables.scss';
         copy($scss_file, $basePath . 'custom/_variables.scss.bak');
         $current = [];
         $out = '';
         $readBuffer = file($scss_file, FILE_IGNORE_NEW_LINES);
         foreach ($readBuffer as $line) {
-            if (substr($line,0,12) != '$breakpoint-') {
+            if (substr($line, 0, 12) != '$breakpoint-') {
                 $out .= $line.PHP_EOL;
                 continue;
             }
-            $one = explode(':',$line);
-            $b = trim($one[0],'$breakpoint-');
-            $s = trim($one[1],'px;');
+            $one = explode(':', $line);
+            $b = trim($one[0], '$breakpoint-');
+            $s = trim($one[1], 'px;');
             $current[$b] = $s;
         }
-        foreach($sizes as $size=>$val) {
+        foreach ($sizes as $size => $val) {
             if (($val === 0) && isset($current[$size])) {
-                unset( $current[$size]);
-            } else if ($val) {
+                unset($current[$size]);
+            } elseif ($val) {
                 $current[$size] = $val;
             }
         }
-        foreach ($current as $size=>$val) {
+        foreach ($current as $size => $val) {
             $out .= '$breakpoint-'.$size.':'.$val.'px;'.PHP_EOL;
         }
         File::write($scss_file, $out);
     }
-    // compilation des scss avec le fichier custom 
-    function compile_scss() {
+    // compilation des scss avec le fichier custom
+    public function compile_scss()
+    {
         $actionfile = 'actions/upscsscompiler/upscsscompiler.php';
         if (!is_file('../'.$this->upPath.$actionfile)) { // action non chargée
-           $this->githubapikey = UpHelper::get_action_pref($this,'github-key');
-           if (!UpHelper::getGithubActionZip($this,'upscsscompiler','../')) {
-               return false;
-           }
+            $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
+            if (!UpHelper::getGithubActionZip($this, 'upscsscompiler', '../')) {
+                return false;
+            }
         }
         if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
-            require JPATH_SITE .'/'. $this->upPath.'actions/upscsscompiler/vendor/autoload.php';
+            require $this->upPath.'actions/upscsscompiler/vendor/autoload.php';
         }
         $scss_compiler = new \ScssPhp\ScssPhp\Compiler();
-        $basePath = JPATH_SITE .'/'. $this->upPath.'assets/';
+        $basePath = $this->upPath.'assets/';
         $fileScss = $basePath . 'up.scss';
         $fileCss = str_replace('.scss', '.css', $fileScss);
         $scss_compiler->setImportPaths(pathinfo($fileScss, PATHINFO_DIRNAME));
@@ -568,9 +623,9 @@ class UP extends CMSPlugin implements SubscriberInterface
                 file_put_contents($fileCss, $result->getCss());
             }
         } catch (\Exception $e) {
-            $msg = UpHelper::trad_keyword($this,'COMPIL_ERR');
+            $msg = UpHelper::trad_keyword($this, 'COMPIL_ERR');
             $msg .= str_replace($basePath, '', $fileScss);
-            UpHelper::msg_error($this,$msg . '<br>' . $e->getmessage());
+            UpHelper::msg_error($this, $msg . '<br>' . $e->getmessage());
         }
     }
 }
