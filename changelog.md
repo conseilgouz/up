@@ -2,7 +2,7 @@
 
 #### modifications internes
 
-- Up.php : ajout de JPATH_SITE dans la variable upPath pour le contrôle/chargement des fichiers
+- Up.php : ignore les appels UP en provenance de l'API
 
 ## 06/01/2026 - version 6.0.9
 
