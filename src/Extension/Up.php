@@ -96,7 +96,7 @@ class UP extends CMSPlugin implements SubscriberInterface
         $tdeb = microtime(true);
         $debug = false;
 
-        if ($app instanceOf("Joomla\CMS\Application\ApiApplication")) { // API call : ignore
+        if ($app->isClient('api')) { // API call : ignore
             return;
         }
 
