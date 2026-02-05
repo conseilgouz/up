@@ -13,6 +13,7 @@
  */
 
 /*
+ * v6.0.10 : erreur sur l'adresse facebook (manque :)
  * v5.3 : facebook.js : update sdk de la version 13.0 vers 23.0. 
  *        bug sur data-tabs : https://developers.facebook.com/support/bugs/584988619248795/
  * v2.8 : facebook.js : update sdk de la version 2.5 vers 13.0. Ajout options defer et paramètre crossorigin
@@ -66,7 +67,7 @@ class facebook_timeline extends Lomart\Plugin\Content\Up\Extension\Up
 
         // attributs pour div interne
         $attr_in['class'] = 'fb-page';
-        $attr_in['data-href'] = 'https//www.facebook.com/' . $options[__class__];
+        $attr_in['data-href'] = 'https://www.facebook.com/' . $options[__class__];
         $attr_in['data-small-header'] = $options['smallheader'];
         // ne fonctionne pas : bug facebook https://developers.facebook.com/support/bugs/584988619248795/
         if ($options['tabs'] == 'timeline') {

@@ -1,3 +1,10 @@
+## 05/02/2026
+
+#### Modifications actions
+
+- facebook-timeline : erreur sur l'adresse facebook.com (manque un : )
+- jmenus_metadata : erreur de packaging dans fichier zip
+
 ## 30/01/2026 - version 6.0.10
 
 #### modifications internes
