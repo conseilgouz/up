@@ -1,4 +1,8 @@
-## 05/02/2026
+## 08/02/2026 - version 6.0.11
+
+#### modifications internes
+
+- Up.php : gestion les appels UP en provenance de l'API et de l'administration : ajout JPATH_SITE à upPath
 
 #### Modifications actions
 
