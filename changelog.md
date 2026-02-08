@@ -1,9 +1,10 @@
-## 08/02/2026 - version 6.0.11
+## 08/02/2026 - version 6.0.12
 
 #### modifications internes
 
 - Up.php : gestion les appels UP en provenance de l'API et de l'administration : ajout JPATH_SITE à upPath
 - Admin.js : SCSS compiler : sur reception de notices, on suppose que la compilation est correcte (conflit avec League/Uri d'Astroid)
+- Installation : postflight non effectué
 
 #### Modifications actions
 

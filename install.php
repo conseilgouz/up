@@ -9,7 +9,6 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\Archive\Archive;
 use Joomla\Archive\Zip;
-
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Version;
@@ -29,20 +28,20 @@ use Joomla\Database\DatabaseInterface;
  *  - restauration des fichiers de configuration
  */
 
-class plgContentUpInstallerScript {
-    
-	private $dir  = null;
-	private $lang = null;
-	private $min_joomla_version      = '5.2.0';
-	private $min_php_version         = '8.1';
+class plgContentUpInstallerScript
+{
+    private $dir  = null;
+    private $lang = null;
+    private $min_joomla_version      = '5.2.0';
+    private $min_php_version         = '8.1';
     private $installerName = 'plgcontentupinstaller';
     private $actions_obsoletes = ['add-html','animate','article_category','audio','facebook','googlemap','jmetadata','jnews','lorempixel','lorem_placeimg','video','vimeo','youtube'];
-	public function __construct()
-	{
-		$this->dir = __DIR__;
-		$this->lang = Factory::getApplication()->getLanguage();
-		$this->lang->load('plg_content_up');
-	}
+    public function __construct()
+    {
+        $this->dir = __DIR__;
+        $this->lang = Factory::getApplication()->getLanguage();
+        $this->lang->load('plg_content_up');
+    }
 
     /**
      * Method to install the extension
@@ -50,7 +49,8 @@ class plgContentUpInstallerScript {
      *
      * @return void
      */
-    public function install($parent) {
+    public function install($parent)
+    {
         echo('<p>Le plugin a été installé</p>');
     }
 
@@ -60,7 +60,8 @@ class plgContentUpInstallerScript {
      *
      * @return void
      */
-    public function uninstall($parent) {
+    public function uninstall($parent)
+    {
         echo('<p>Le plugin a été désinstallé</p>');
     }
 
@@ -71,22 +72,21 @@ class plgContentUpInstallerScript {
      *
      * @return void
      */
-    public function preflight($type, $parent) {
-        
-		if ( ! $this->passMinimumJoomlaVersion())
-		{
-			$this->uninstallInstaller();
-			return false;
-		}
+    public function preflight($type, $parent)
+    {
 
-		if ( ! $this->passMinimumPHPVersion())
-		{
-			$this->uninstallInstaller();
-			return false;
-		}
+        if (! $this->passMinimumJoomlaVersion()) {
+            $this->uninstallInstaller();
+            return false;
+        }
+
+        if (! $this->passMinimumPHPVersion()) {
+            $this->uninstallInstaller();
+            return false;
+        }
         // vérifie s'il y a des actions personnalisées à migrer en UP 6.0
         $actionsList = $this->up_actions();
-        $other = $this->up_otheractions_list($actionsList); 
+        $other = $this->up_otheractions_list($actionsList);
 
         $app = Factory::getApplication();
         // $app->enqueueMessage('<p>actions avant l\'installation/mise à jour/désinstallation du plugin</p>');
@@ -100,24 +100,24 @@ class plgContentUpInstallerScript {
         }
         // renommer tous les fichiers ACTION/up/options.ini en upbtn-options.ini
         $filelist = glob($path . 'actions/*/up/options.ini');
-        foreach ($filelist AS $file) {
+        foreach ($filelist as $file) {
             rename($file, dirname($file) . '/upbtn-options.ini');
         }
         // si un fichier perso existe
-		if ($type!='uninstall'){
-			if (file_exists($path . 'assets/custom/_variables.scss')) {
-				// si pas deja sauve pour cette version
-				if (file_exists($path . $ficVariablesBak) === false) {
-					copy($path . 'assets/custom/_variables.scss', $path . $ficVariablesBak);
-					$app->enqueueMessage('<p>Une copie du fichier assets/_variables.scss a été créée sour le nom ' . $ficVariablesBak . '</p>');
-				}
-			}
-		}
+        if ($type != 'uninstall') {
+            if (file_exists($path . 'assets/custom/_variables.scss')) {
+                // si pas deja sauve pour cette version
+                if (file_exists($path . $ficVariablesBak) === false) {
+                    copy($path . 'assets/custom/_variables.scss', $path . $ficVariablesBak);
+                    $app->enqueueMessage('<p>Une copie du fichier assets/_variables.scss a été créée sour le nom ' . $ficVariablesBak . '</p>');
+                }
+            }
+        }
         $previous_version = false;
         $actionsList = [];
-        if ($type =='update'){// clean up updated actions
-		    $xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
-		    $previous_version = $xml->version;
+        if ($type == 'update') {// clean up updated actions
+            $xml = simplexml_load_file(JPATH_SITE . '/plugins/content/up/up.xml');
+            $previous_version = $xml->version;
             if ($previous_version && $previous_version < '6.0.0') { // on était avant la version 6.0.0
                 $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
@@ -130,34 +130,39 @@ class plgContentUpInstallerScript {
         }
     }
     // sauvegarde des actions avant installation de la version 6.0 de UP
-    function save_actions() {
-        $this->zip('*',JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
-		Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sous le nom <b>actions_avant_up6.zip</b>.</p>');
+    public function save_actions()
+    {
+        $this->zip('*', JPATH_ROOT . '/plugins/content/up/actions_avant_up6.zip');
+        Factory::getApplication()->enqueueMessage('<p>Un fichier zip du répertoire actions a été créée sous le nom <b>actions_avant_up6.zip</b>.</p>');
     }
-    function zip($source, $destination, $include_dir = false, $exclusions = false){
-    // Remove existing archive
+    public function zip($source, $destination, $include_dir = false, $exclusions = false)
+    {
+        // Remove existing archive
         if (file_exists($destination)) {
-            unlink ($destination);
+            unlink($destination);
         }
         $zip = (new Archive())->getAdapter('zip');
         $folder = JPATH_ROOT . '/plugins/content/up/actions';
         $zipFilesArray = [];
-        $zipFilesArray = $this->ziplist($zipFilesArray,$folder);
+        $zipFilesArray = $this->ziplist($zipFilesArray, $folder);
         $zip->create($destination, $zipFilesArray);
     }
-    function ziplist(&$arr,$from,$base=false) {
-        if (!file_exists($from)){
-            Factory::getApplication()->enqueueMessage('Fichier '.$from.' non trouvé','error');
+    public function ziplist(&$arr, $from, $base = false)
+    {
+        if (!file_exists($from)) {
+            Factory::getApplication()->enqueueMessage('Fichier '.$from.' non trouvé', 'error');
             return false;
         }
         $dir = opendir($from);
         if (!$base) {
             $base = 'actions';
-        }  
+        }
         while (false !== ($file = readdir($dir))) {
-            if ($file == '.' OR $file == '..') {continue;}
+            if ($file == '.' or $file == '..') {
+                continue;
+            }
             if (is_dir($from . '/' . $file)) {
-                $zip = $this->ziplist($arr,$from . '/' . $file,$base.'/'.$file);
+                $zip = $this->ziplist($arr, $from . '/' . $file, $base.'/'.$file);
             } else {
                 $name = $base . '/' . $file;
                 $data = file_get_contents($from . '/' . $file) ;
@@ -169,7 +174,8 @@ class plgContentUpInstallerScript {
     }
     // récupère la liste des actions UP à partir du fichier UP-list-actions-versions.txt
     // tel que défini dans l'installation
-    function up_actions() {
+    public function up_actions()
+    {
         $upPath = __DIR__; // répertoire d'installation
         $file = $upPath.'/assets/UP-list-actions-version.txt';
         $actions = [];
@@ -189,14 +195,15 @@ class plgContentUpInstallerScript {
         return $actions;
     }
     // récupère la liste des actions UP obsolètes en 6.0.0
-    function up_actions_obsoletes($actions) {
-        
+    public function up_actions_obsoletes($actions)
+    {
+
         foreach ($this->actions_obsoletes as $one) {
             $actions[] = $one;
         }
         return $actions;
     }
-    function up_otheractions_list($actions, $exclude_prefix = '_,x_')
+    public function up_otheractions_list($actions, $exclude_prefix = '_,x_')
     {
         $path = JPATH_ROOT . '/plugins/content/up/'; // répertoire actuel de UP
         $actionsFolder = $path . 'actions' . DIRECTORY_SEPARATOR;
@@ -206,10 +213,10 @@ class plgContentUpInstallerScript {
         $prefix = array_map('trim', explode(',', $exclude_prefix));
         foreach ($actionsPathList as $e) {
             $file = substr($e, strlen($actionsFolder));
-            if (in_array($file,$actions)) { // dans les actions standards ?
+            if (in_array($file, $actions)) { // dans les actions standards ?
                 continue;
             }
-            if (in_array($file,$this->actions_obsoletes)) { //dans les actions obsoletes ?
+            if (in_array($file, $this->actions_obsoletes)) { //dans les actions obsoletes ?
                 continue;
             }
             $ok = true;
@@ -219,7 +226,7 @@ class plgContentUpInstallerScript {
             }
             $phpfile = $actionsFolder . $file . DIRECTORY_SEPARATOR . $file . '.php'; // v2.6 si dossier vide
             if ($ok && file_exists($phpfile)) {
-                $ret = $this->checkVersion($file,$path.'actions/' . $file . '/' . $file . '.php');
+                $ret = $this->checkVersion($file, $path.'actions/' . $file . '/' . $file . '.php');
                 if (!$ret) { // action à migrer en UP 6.0
                     $list[] = $file;
                 }
@@ -227,20 +234,21 @@ class plgContentUpInstallerScript {
         }
         return $list;
     }
-    function checkVersion($action,$file) {
+    public function checkVersion($action, $file)
+    {
         $app = Factory::getApplication();
         try {
             @include_once $file;
         } catch (\Throwable $throwable) {
-            if (strpos($throwable->getMessage(),"Lomart\Plugin\Content\Up\Extension\Up")) {
-            // classe UP6  mais le namespace n'a pas encore été installé
+            if (strpos($throwable->getMessage(), "Lomart\Plugin\Content\Up\Extension\Up")) {
+                // classe UP6  mais le namespace n'a pas encore été installé
                 return true;
             }
             // on doit être sur une autre classe.
-			Factory::getApplication()->enqueueMessage(
-				'Action à migrer en UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
-				'warning'
-			);
+            Factory::getApplication()->enqueueMessage(
+                'Action à migrer en UP 6.0 détectée : ' . $action .' : '.$throwable->getMessage().'<br>Informations complementaires dans <a href="https://up.lomart.fr/docs/aide-memoire/aide-memoire-developpeur-bis" target="_blank">Aide Mémoire Développeur UP</a>',
+                'warning'
+            );
             return false;
         }
         return true;
@@ -252,9 +260,10 @@ class plgContentUpInstallerScript {
      *
      * @return void
      */
-    function postflight($type, $parent) {
+    public function postflight($type, $parent)
+    {
         // echo('<p>actions après l\'installation/mise à jour/désinstallation du plugin</p>');
-        if ($type != 'install' || $type != 'update') {
+        if ($type != 'install' && $type != 'update') {
             return;
         }
         $app = Factory::getApplication();
@@ -263,10 +272,11 @@ class plgContentUpInstallerScript {
 
         // nettoyage anciens fichiers inutiles
         $filelist[] = 'assets/scss/print.scss'; // remplacé par _print.scss
-        foreach ($filelist AS $file) {
+        foreach ($filelist as $file) {
             if (file_exists($path . $file)) {
-                if (unlink($path . $file))
+                if (unlink($path . $file)) {
                     $app->enqueueMessage('suppression : ' . $file);
+                }
             }
         }
         // enable plugin
@@ -287,16 +297,16 @@ class plgContentUpInstallerScript {
         }
         // nettoyage des fichiers checkfile
         $filelist = glob($path .'assets/up_checkfile.*');
-        foreach ($filelist AS $file) {
+        foreach ($filelist as $file) {
             if (file_exists($file)) {
                 unlink($file);
             }
         }
         // on ecrase le fichier (vide) _variables.scss par celui sauvegardé
-		if (file_exists($path . $ficVariablesBak)===true && $type != 'uninstall') {
-			copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');
-			$app->enqueueMessage('<p>Le fichier "assets/custom/_variables.scss" est inchangé.</p>');
-		}
+        if (file_exists($path . $ficVariablesBak) === true && $type != 'uninstall') {
+            copy($path . $ficVariablesBak, $path . 'assets/custom/_variables.scss');
+            $app->enqueueMessage('<p>Le fichier "assets/custom/_variables.scss" est inchangé.</p>');
+        }
         // vérifie si besoin de recompiler le scss avec des nouvelles valeurs de breakpoints
         // 1. récupération des valeurs définies dans les paramètres généraux de UP
         $up_params = (array) PluginHelper::getPlugin('content', 'up');
@@ -307,7 +317,7 @@ class plgContentUpInstallerScript {
                 if (isset($params->breaks) && $params->breaks) {
                     $sizes['s'] =  $params->breaks;
                 }
-                if (isset($params->breakm) && $params->breakm ) {
+                if (isset($params->breakm) && $params->breakm) {
                     $sizes['m'] = $params->breakm;
                 }
                 if (isset($params->breaksl) && $params->breaksl) {
@@ -321,7 +331,7 @@ class plgContentUpInstallerScript {
                 }
             }
             if (count($sizes)) {
-        // on a saisi des paramètres breakpoints : regénération du fichier up.css
+                // on a saisi des paramètres breakpoints : regénération du fichier up.css
                 $val = '';
                 $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
                 $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
@@ -331,7 +341,7 @@ class plgContentUpInstallerScript {
         }
         // nettoyage du cache
         $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
-        $cache = $cacheModel->getCache() ??null;
+        $cache = $cacheModel->getCache() ?? null;
         if ($cache) {
             foreach ($cache->getAll() as $group) {
                 $cache->clean($group->group);
@@ -340,10 +350,10 @@ class plgContentUpInstallerScript {
         }
         return;
     }
-    /* 
+    /*
     * from https://www.w3docs.com/snippets/php/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dirs-in-php.html
     *
-    * supprime les fichiers d'un répertoire, sauf le répertoire custom pour les actions 
+    * supprime les fichiers d'un répertoire, sauf le répertoire custom pour les actions
     */
     private function delete_directory($dir)
     {
@@ -366,70 +376,68 @@ class plgContentUpInstallerScript {
                 return false;
             }
         }
-        if ($empty){
+        if ($empty) {
             rmdir($dir);
-        } 
+        }
         return true;
     }
-	// Check if Joomla version passes minimum requirement
-	private function passMinimumJoomlaVersion()
-	{
-		$j = new Version();
-		$version=$j->getShortVersion(); 
-		if (version_compare($version, $this->min_joomla_version, '<'))
-		{
-			Factory::getApplication()->enqueueMessage(
-				'Incompatible Joomla version : found <strong>' . $version . '</strong>, Minimum : <strong>' . $this->min_joomla_version . '</strong>',
-				'error'
-			);
+    // Check if Joomla version passes minimum requirement
+    private function passMinimumJoomlaVersion()
+    {
+        $j = new Version();
+        $version = $j->getShortVersion();
+        if (version_compare($version, $this->min_joomla_version, '<')) {
+            Factory::getApplication()->enqueueMessage(
+                'Incompatible Joomla version : found <strong>' . $version . '</strong>, Minimum : <strong>' . $this->min_joomla_version . '</strong>',
+                'error'
+            );
 
-			return false;
-		}
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	// Check if PHP version passes minimum requirement
-	private function passMinimumPHPVersion()
-	{
+    // Check if PHP version passes minimum requirement
+    private function passMinimumPHPVersion()
+    {
 
-		if (version_compare(PHP_VERSION, $this->min_php_version, '<'))
-		{
-			Factory::getApplication()->enqueueMessage(
-					'Incompatible PHP version : found  <strong>' . PHP_VERSION . '</strong>, Minimum <strong>' . $this->min_php_version . '</strong>',
-				'error'
-			);
-			return false;
-		}
+        if (version_compare(PHP_VERSION, $this->min_php_version, '<')) {
+            Factory::getApplication()->enqueueMessage(
+                'Incompatible PHP version : found  <strong>' . PHP_VERSION . '</strong>, Minimum <strong>' . $this->min_php_version . '</strong>',
+                'error'
+            );
+            return false;
+        }
 
-		return true;
-	}
-	private function uninstallInstaller()
-	{
-		if ( ! is_dir(JPATH_PLUGINS . '/system/' . $this->installerName)) {
-			return;
-		}
-		$this->delete([
-			JPATH_PLUGINS . '/system/' . $this->installerName . '/language',
-			JPATH_PLUGINS . '/system/' . $this->installerName,
-		]);
-		$db = Factory::getContainer()->get(DatabaseInterface::class);
-		$query = $db->createQuery()
-			->delete('#__extensions')
-			->where($db->quoteName('element') . ' = ' . $db->quote($this->installerName))
-			->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
-			->where($db->quoteName('type') . ' = ' . $db->quote('plugin'));
-		$db->setQuery($query);
-		$db->execute();
+        return true;
+    }
+    private function uninstallInstaller()
+    {
+        if (! is_dir(JPATH_PLUGINS . '/system/' . $this->installerName)) {
+            return;
+        }
+        $this->delete([
+            JPATH_PLUGINS . '/system/' . $this->installerName . '/language',
+            JPATH_PLUGINS . '/system/' . $this->installerName,
+        ]);
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        $query = $db->createQuery()
+            ->delete('#__extensions')
+            ->where($db->quoteName('element') . ' = ' . $db->quote($this->installerName))
+            ->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
+            ->where($db->quoteName('type') . ' = ' . $db->quote('plugin'));
+        $db->setQuery($query);
+        $db->execute();
         $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
-        $cache = $cacheModel->getCache() ??null;
+        $cache = $cacheModel->getCache() ?? null;
         if ($cache) {
             foreach ($cache->getAll() as $group) {
                 $cache->clean($group->group);
             }
             Factory::getApplication()->enqueueMessage('<p>Cache Ok.</p>');
         }
-	}
+    }
     public function delete($files = [])
     {
         foreach ($files as $file) {
