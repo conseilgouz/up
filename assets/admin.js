@@ -66,7 +66,11 @@ function compil_scss() {
 		method : 'POST',
 		url : url,
 		onSuccess: function(data, xhr) {
-            let result = JSON.parse(data);
+            try{
+                result = JSON.parse(data);
+            } catch(err) {
+                result = 1; // receiving notices, suppose ok
+            }
             if (!result) {
                 window.alert(data);
             }

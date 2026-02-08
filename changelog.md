@@ -3,6 +3,7 @@
 #### modifications internes
 
 - Up.php : gestion les appels UP en provenance de l'API et de l'administration : ajout JPATH_SITE à upPath
+- Admin.js : SCSS compiler : sur reception de notices, on suppose que la compilation est correcte (conflit avec League/Uri d'Astroid)
 
 #### Modifications actions
 
