@@ -1,10 +1,4 @@
-## 08/02/2026 - version 6.0.13
-
-#### Modifications actions
-
-- pdf : suppresion ligne RewriteOptions dans le fichier .htaccess de l'action (PR #1 d'Alain)
-
-## 08/02/2026 - version 6.0.12
+## 09/02/2026 - version 6.0.13
 
 #### modifications internes
 
@@ -16,6 +10,7 @@
 
 - facebook-timeline : erreur sur l'adresse facebook.com (manque un : )
 - jmenus_metadata : erreur de packaging dans fichier zip
+- pdf : suppresion ligne RewriteOptions dans le fichier .htaccess de l'action (PR #1 d'Alain)
 
 ## 30/01/2026 - version 6.0.10
 
