@@ -1,3 +1,9 @@
+## 08/02/2026 - version 6.0.13
+
+#### Modifications actions
+
+- pdf : suppresion ligne RewriteOptions dans le fichier .htaccess de l'action (PR #1 d'Alain)
+
 ## 08/02/2026 - version 6.0.12
 
 #### modifications internes

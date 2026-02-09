@@ -1,3 +1,3 @@
-RewriteOptions inherit
+## RewriteOptions inherit (PR #1)
 
 AddType application/javascript .mjs
