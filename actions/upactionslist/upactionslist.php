@@ -10,15 +10,15 @@
  *
  *
  *
- * @version  UP-1.0
  * @author   Lomart
- * @update   2019-10-25
+ * @update   2026-02-10
  * @license  <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags UP
  */
 // No direct access
 defined('_JEXEC') or die();
 
+use Joomla\CMS\HTML\HTMLHelper;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 /*
@@ -36,6 +36,7 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
  * v2.9 - ajout trad GB et upbtn dans doc-actions.csv
  * - prise en charge sous-titre dans l'aide intégrée
  * v5.1 - ajout blink pour lire la doc
+ * v6.0.14 : utilisation de bootstrap collapse
  */
 class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
 {
@@ -43,10 +44,8 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
     function init()
     {
         // ===== Ajout dans le head (une seule fois)
-        UpHelper::load_file($this,'/plugins/content/up/assets/js/faq.js');
-
-        $css_code = '.upfaq {width: 100%;}';
-        $css_code .= '.upfaq-button {';
+        $css_code = '.upfactions {width: 100%;}';
+        $css_code .= '.upfactions-button {';
         $css_code .= '	background-color: #069;';
         $css_code .= '	border-bottom: 1px solid #FFFFFF;';
         $css_code .= '	cursor: pointer;';
@@ -54,20 +53,17 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
         $css_code .= '	color: #FFFFFF;';
         $css_code .= '	font-weight:bold;';
         $css_code .= '}';
-        $css_code .= '.upfaq-button small{color:#ddd}';
-        $css_code .= '.upfaq-content{border-bottom:#369 3px solid}';
-        $css_code .= '.upfaq ul{margin:0;list-style:square}';
+        $css_code .= '.upfactions-button small{color:#ddd}';
+        $css_code .= '.upfactions-content{border-bottom:#369 3px solid}';
+        $css_code .= '.upfactions ul{margin:0;list-style:square}';
 
-        $css_code .= '.upfaq-content {';
-        $css_code .= '	background-color: ##ddd;';
-        $css_code .= '	display: none;';
+        $css_code .= '.upfactions-content {';
+        $css_code .= '	background-color: #f9f9f9;';
+        $css_code .= 'color:var(--body-color);font-weight:initial;';
         $css_code .= '	padding: 10px;';
         $css_code .= '}';
-
-        $css_code .= '.upfaq-subtitle {margin:5px 0 0 0;padding:2px;background:#CFDEE5;color:#01457F;text-align:center;font-weight:bold}';
-
+        $css_code .= '.upfactions-subtitle {margin:5px 0 0 0;padding:2px;background:#CFDEE5;color:#01457F;text-align:center;font-weight:bold}';
         $css_code .= '.bg-grey{background-color:#aaa;margin:5px 0;padding:5px}';
-
         $css_code .= '.blink{animation: blinker 1.5s linear infinite;}';
         $css_code .= '@keyframes blinker{50% {opacity:20;color:yellow;}}';
 
@@ -289,20 +285,20 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // === CODE HTML EN RETOUR ===
-        // <div id="upfaq">
-        // <div class="upfaq-button">Button 1</div>
-        // <div class="upfaq-content">Content<br />More Content<br /></div>
-        // <div class="upfaq-button">Button 2</div>
-        // <div class="upfaq-content">Content</div>
+        // <div id="upfactions">
+        // <div class="upfactions-button">Button 1</div>
+        // <div class="upfactions-content">Content<br />More Content<br /></div>
+        // <div class="upfactions-button">Button 2</div>
+        // <div class="upfactions-content">Content</div>
         // </div>
         // === code HTML
-        $attr_main['class'] = 'upfaq';
+        $attr_main['class'] = 'upfactions';
         UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
 
         $txt = UpHelper::set_attr_tag($this,'div', $attr_main);
-
+        $i = 0;
         foreach ($actionsList as $actionName) {
-
+            $i++;
             // === récupération des infos et options
             $actinfos = UpHelper::up_action_infos($this,$actionName);
             $actoptions = UpHelper::up_action_options($this,$actionName);
@@ -315,38 +311,37 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
             // if ($actinfos['_demopage'] == '0' && $options[__class__] == '') {
             // continue;
             // }
+            $identifier = 'upfactions-'. $options['id'].'-'.($i + 1);
+            HTMLHelper::_('bootstrap.collapse', '#' . $identifier);
 
-            $txt .= '<div class="upfaq-button bloc">';
-            $txt .= '&#x1F199; ' . $actionName; // fleche et nom action
-            $txt .= UpHelper::str_append($this,'', UpHelper::get_dico_synonym($this,$actionName), ' ', ' (', ')');
-            $txt .= UpHelper::str_append($this,'', $actinfos['_shortdesc'], ' ', ' : <small>', '</small>');
-
+            $tmp = '&#x1F199; ' . $actionName; // fleche et nom action
+            $tmp .= UpHelper::str_append($this,'', UpHelper::get_dico_synonym($this,$actionName), ' ', ' (', ')');
+            $tmp .= UpHelper::str_append($this,'', $actinfos['_shortdesc'], ' ', ' : <small>', '</small>');
+            // incitation à cliquer pour lire la doc sur les pages demo où demo=0
+            $tmp .= '<p style="float:right;margin:0"><small class="blink">Cliquer pour lire la documentation</small></p>';
+            // $txt .= '</div>';
+            $title = '<div id="'.$identifier.'" data-bs-toggle="collapse" data-bs-target="#panel'.$identifier.'" aria-expanded="" aria-controls="panel'.$identifier.'" class="upfactions-button bloc" style="">'.$tmp.'</div>';
+            
+            // la description longue
+            $tmp = ($actinfos['_longdesc']) ? $actinfos['_longdesc'] : '';
             // ajout URL pour démo ()remplace _ par - pour alias Joomla
             // > 5 : pas une URL mais un mot-clé - LM-v2
             $demo = ($actinfos['_demopage'] != '0' && $options['demo'] == 1 && $this->usehelpsite > 0);
             if ($demo && strlen($actinfos['_demopage']) > 5) {
-                $txt .= ' <small>&#x27A0; <a style="color:yellow;float:right;margin:0" href="';
-                $txt .= $actinfos['_demopage'] . '"';
+                $tmp .= ' <small>&#x27A0; <a style="background-color: #069;color:yellow;float:right;padding:5px;font-weight:bold;text-decoration:none" href="';
+                $tmp .= $actinfos['_demopage'] . '"';
                 if ($this->usehelpsite == 2) {
-                    $txt .= ' target = "_blank"';
+                    $tmp .= ' target = "_blank"';
                 }
-                $txt .= '>DEMO</a></small>';
-            } else {
-                // incitation à cliquer pour lire la doc sur les pages demo où demo=0
-                $txt .= '<p style="float:right;margin:0"><small class="blink">Cliquer pour lire la documentation</small></p>';
+                $tmp .= '>DEMO</a></small>';
             }
-            $txt .= '</div>';
-
-            $txt .= '<div class="upfaq-content">';
-            // la description longue
-            $txt .= ($actinfos['_longdesc']) ? $actinfos['_longdesc'] : '';
             // les infos du sous-dossier custom
             if (empty($options['without-custom'])) {
-                $txt .= UpHelper::up_help_txt($this,$actionName);
-                $txt .= UpHelper::up_prefset_list($this,$actionName);
+                $tmp .= UpHelper::up_help_txt($this,$actionName);
+                $tmp .= UpHelper::up_prefset_list($this,$actionName);
             }
             // les mots-clés
-            $txt .= '<div style="background:#bbb;padding:3px">';
+            $tmp .= '<div style="background:#bbb;padding:3px">';
             /*
              * foreach ($actinfos as $key => $val) {
              * if ($key[0] != '_') {
@@ -354,20 +349,21 @@ class upactionslist extends Lomart\Plugin\Content\Up\Extension\Up
              * }
              * }
              */
-            $txt .= $actinfos['_credit'];
-            $txt .= '</div>';
+            $tmp .= $actinfos['_credit'];
+            $tmp .= '</div>';
             // les options
-            $txt .= '<ul>';
+            $tmp .= '<ul>';
             foreach ($actoptions as $key => $val) {
                 if (is_integer($key)) {
-                    $txt .= '</ul><p class="upfaq-subtitle">' . $val . '</p><ul>';
+                    $tmp .= '</ul><p class="upfactions-subtitle">' . $val . '</p><ul>';
                 } else {
-                    $txt .= '<li><strong>' . $key . '</strong>: ' . $val . '</li>';
+                    $tmp .= '<li><strong>' . $key . '</strong>: ' . $val . '</li>';
                 }
             }
-            $txt .= '</ul>';
+            $tmp .= '</ul>';
 
-            $txt .= '</div>';
+            $texte = '<div class="collapse upfactions-content" id="panel'.$identifier.'">'.$tmp.'</div>';
+            $txt .= $title.$texte;
         }
         $txt .= '</div>';
 

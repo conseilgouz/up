@@ -1,3 +1,10 @@
+## 10/02/2026 - version 6.0.14
+
+#### Modifications actions
+
+- Action faq : utilisation de collapse de bootstrap 
+- Action upactionslist : utilisation de collapse de bootstrap 
+
 ## 09/02/2026 - version 6.0.13
 
 #### modifications internes

@@ -11,9 +11,8 @@
  *
  *
  * @author    lomart
- * @version   UP-1.0
+ * @version   UP-6.0.14
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
- * @credit    <a href="http://jsfiddle.net/ryanstemkoski/6gbq0yLv/" target="_blank">ryans temkoski</a>
  * @tags layout-dynamic
  */
 
@@ -24,24 +23,20 @@
  * v2.9 - ajout option title-tag-preserve
  * v5.1 - ajout option filter
  * - class et style confondu
+ * 6.0.14 : utilisation de bootstrap collapse
  */
 defined('_JEXEC') or die();
-
+use Joomla\CMS\HTML\HTMLHelper;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class faq extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
-        // ===== Ajout dans le head (une seule fois)
-        UpHelper::load_file($this,'faq.css');
-
-        // -- le JS
-        UpHelper::load_file($this,'/plugins/content/up/assets/js/faq.js');
+        UpHelper::load_file($this, 'faq.css');
     }
 
-    function run()
+    public function run()
     {
         // cette action a obligatoirement du contenu
         if (! UpHelper::ctrl_content_exists($this)) {
@@ -66,22 +61,22 @@ class faq extends Lomart\Plugin\Content\Up\Extension\Up
             /* [st-content] Définition des panneaux */
             'content-class' => '', // classe et/ou style inline pour le contenu
             'content-style' => '', // classe et/ou style inline pour le contenu
-            /* [st-annexe] style et options secondaires */
+            /* [st-annexe] Style et options secondaires */
             'id' => '', // identifiant
             'css-head' => '', // style ajouté dans le HEAD
             /* [st-divers] Divers */
             'filter' => '' // conditions. Voir doc action filter
         );
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // === Filtrage
-        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
+        if (UpHelper::filter_ok($this, $options['filter']) !== true) {
             return '';
         }
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // === code spécifique à l'action
         // qui doit retourner le code pour remplacer le shortcode
@@ -93,13 +88,11 @@ class faq extends Lomart\Plugin\Content\Up\Extension\Up
         // </div>
         // -- les styles
         $attr_title['class'] = 'upfaq-button';
-        UpHelper::get_attr_style($this,$attr_title, $options['title-class'], $options['title-style']);
-        $attr_title_bak = $attr_title;
-
+        UpHelper::get_attr_style($this, $attr_title, $options['title-class'], $options['title-style']);
+        $back_attr_title = $attr_title;
         $attr_content['class'] = 'upfaq-content';
-        UpHelper::get_attr_style($this,$attr_content, $options['content-class'], $options['content-style']);
-        $attr_content_bak = $attr_content;
-
+        UpHelper::get_attr_style($this, $attr_content, $options['content-class'], $options['content-style']);
+        $back_attr_content = $attr_content;
         // -- titre + contenu RESTE A REPRENDRE STYLE DU H4
         $tag = $options['title-tag'];
         $regex_title = '#<' . $tag . '.*>(.*)</' . $tag . '>#siU';
@@ -111,13 +104,17 @@ class faq extends Lomart\Plugin\Content\Up\Extension\Up
         // -- code retour
         $title_tag = ($options['title-tag-preserve']) ? $options['title-tag'] : 'div';
         $out = '<div class="upfaq" id="' . $options['id'] . '">';
-        for ($i = 0; $i < $nb; $i ++) {
+        for ($i = 0; $i < $nb; $i++) {
+            $attr_title = $back_attr_title;
+            $attr_content = $back_attr_content;
+            $tag = [];
             $attr_title['class'] .= ' upfaq-title-' . ($i + 1);
             $attr_content['class'] .= ' upfaq-content-' . ($i + 1);
-            $out .= UpHelper::set_attr_tag($this,$title_tag, $attr_title, $array_title[1][$i]);
-            $out .= UpHelper::set_attr_tag($this,'div', $attr_content, $array_txt[1][$i]);
-            $attr_title = $attr_title_bak;
-            $attr_content = $attr_content_bak;
+            $identifier = 'upfaq-'.$options['id'].'-'. ($i + 1);
+            HTMLHelper::_('bootstrap.collapse', '#' . $identifier);
+            $tag[1] = '<'.$title_tag.' id="'.$identifier.'" data-bs-toggle="collapse" data-bs-target="#panel'.$identifier.'" aria-expanded="" aria-controls="panel'.$identifier.'" class="'.$attr_title["class"].'" style="'.$attr_title["style"].'">'.$array_title[1][$i].'</'.$title_tag.'>';
+            $tag[2] = '<div class="collapse '.$attr_content["class"].'" style="'.$attr_content["style"].'" id="panel'.$identifier.'">'.$array_txt[1][$i].'</div>';
+            $out .= $tag[1] . $tag[2];
         }
         $out .= '</div>';
 
