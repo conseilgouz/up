@@ -1,5 +1,9 @@
 ## 10/02/2026 - version 6.0.14
 
+#### modifications internes
+
+- Up.php : gestion les appels UP en provenance de l'administration uniquement si contexte = com_content.article
+
 #### Modifications actions
 
 - Action faq : utilisation de collapse de bootstrap 

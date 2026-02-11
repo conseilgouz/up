@@ -4,7 +4,7 @@
  *
  * @package plg_UP for Joomla!
  * @author Lomart
- * @copyright (c) 2025 Lomart
+ * @copyright (c) 2026 Lomart
  * @license   <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  *
  * */
@@ -13,6 +13,7 @@ v5.3.3 : php 8.4/8.5 compatibility
 v5.3.3 : check/load actions from github
 v5.4.1 : variables publiques dans up.php
 v5.4.2 : cleanup checkfiles
+v6.0.14 : activer si API ou administrator
 */
 
 namespace Lomart\Plugin\Content\Up\Extension;
@@ -101,9 +102,9 @@ class UP extends CMSPlugin implements SubscriberInterface
         $debug = false;
 
         // ========> DOIT-ON EXECUTER ?
-        //        if ($app->isClient('api')) { // API call : ignore
-        //            return;
-        //        }
+        if ($app->isClient('administrator') && ($context != 'com_content.article')) {
+            return;
+        }
         if ($context == 'com_search.search') { // v2.9
             return;
         }
@@ -129,9 +130,12 @@ class UP extends CMSPlugin implements SubscriberInterface
             return;
         }
 
-        // uniquement en frontend
-        if ($app->isClient('administrator')) {
-            // return false;
+        // sortie directe si pas de texte a traiter
+        if (! isset($article->text)) {
+            return false;
+        }
+        if (trim($article->text) == '') {
+            return false;
         }
         // Chargement systematique de la feuile de style
         if ($this->params->def('loadcss', '1')) {
@@ -143,14 +147,6 @@ class UP extends CMSPlugin implements SubscriberInterface
             } catch (\Exception $e) {
                 // ignore
             }
-        }
-
-        // sortie directe si pas de texte a traiter
-        if (! isset($article->text)) {
-            return false;
-        }
-        if (trim($article->text) == '') {
-            return false;
         }
         // pas d'analyse pour les listes d'articles
         if ($context == "com_content.category") {
