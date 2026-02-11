@@ -274,6 +274,7 @@ class plgContentUpInstallerScript
 
         // nettoyage anciens fichiers inutiles
         $filelist[] = 'assets/scss/print.scss'; // remplacé par _print.scss
+        $filelist[] = 'assets/js/faq.js'; // 6.0.14 : utilisation bootstrap collapse
         foreach ($filelist as $file) {
             if (file_exists($path . $file)) {
                 if (unlink($path . $file)) {

@@ -3,6 +3,7 @@
 #### modifications internes
 
 - Up.php : gestion les appels UP en provenance de l'administration uniquement si contexte = com_content.article
+- Install : suppression fichier assets/js/faq.js devenu inutile (actions faq et upactionslist utilisent bootstrap)
 
 #### Modifications actions
 
