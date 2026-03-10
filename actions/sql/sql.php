@@ -41,8 +41,8 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'sql.css');
-        UpHelper::load_file($this,'stupidtable.min.js');
+        UpHelper::load_file($this, 'sql.css');
+        UpHelper::load_file($this, 'stupidtable.min.js');
         return true;
     }
 
@@ -93,19 +93,19 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         // fusion et controle des options
         // 3e arg : '#\-(?:format|model)$#' autorise les options dont le nom se termine par -format ou -model
         $optmask = '#\-(?:format|model|rowclass|colclass)$#';
-        $options = UpHelper::ctrl_options($this,$options_def, [], $optmask);
+        $options = UpHelper::ctrl_options($this, $options_def, [], $optmask);
 
         if ($options[__class__] && empty($options['no-prefix-auto'])) {
             $options[__class__] = '#__' . ltrim($options[__class__], '#_');
         }
         if ($options['template']) { // v3
             // gestion BBCode
-            $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
+            $options['template'] = UpHelper::get_bbcode($this, $options['template'], false);
             // on reactive les tags HTML
             $options['template'] = html_entity_decode($options['template']);
         }
         // tableau des balises de présentation
-        $options['presentation'] = UpHelper::ctrl_argument($this,$options['presentation'], 'list,table,div,0,,1');
+        $options['presentation'] = UpHelper::ctrl_argument($this, $options['presentation'], 'list,table,div,0,,1');
 
         // type des colonnes pour ajouter attribut 'data-sort-value'
         $sortcol_type = array(
@@ -126,7 +126,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 foreach ($rows as $row) {
                     $out .= ($out) ? ' &#x25cf; ' . $row[0] : $row[0];
                 }
-                UpHelper::msg_info($this,$out, UpHelper::trad_keyword($this,'TITLE_TABLE'));
+                UpHelper::msg_info($this, $out, UpHelper::trad_keyword($this, 'TITLE_TABLE'));
                 return ''; // juste infos sur tables
             } else {
                 $db->setQuery('DESCRIBE ' . $db->quoteName($options[__class__]));
@@ -136,7 +136,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                     $field = ($col['Key'] == 'PRI') ? '<b>' . $field . '</b>' : $field;
                     $out .= $field . ' <small>' . $col['Type'] . '</small>  ';
                 }
-                UpHelper::msg_info($this,$out, UpHelper::trad_keyword($this,'TITLE_COLUMNS', $options[__class__]));
+                UpHelper::msg_info($this, $out, UpHelper::trad_keyword($this, 'TITLE_COLUMNS', $options[__class__]));
                 unset($rows);
             }
         }
@@ -199,16 +199,16 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             if ($input->get('upstart')) {
                 $nb = $input->get('upstart');
             }
-            $query->setLimit($options['perpage'],$nb);
+            $query->setLimit($options['perpage'], $nb);
             $pagination = new Joomla\CMS\Pagination\Pagination($options['setlimit'], $nb, $options['perpage']);
             $lapagination = $pagination->getPagesLinks($this->params);
-            $lapagination = str_replace('?start=','?upstart=',$lapagination);
+            $lapagination = str_replace('?start=', '?upstart=', $lapagination);
             // ne pas mettre la page en cache et nettoyage du cache
             Factory::getContainer()->get(Joomla\CMS\Cache\CacheControllerFactoryInterface::class)
             ->createCacheController('callback', ['defaultgroup' => 'com_content', 'caching' => false]);
             /** @var CallbackController $cache */
             $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
-            $cache = $cacheModel->getCache() ??null;
+            $cache = $cacheModel->getCache() ?? null;
             if ($cache) {
                 foreach ($cache->getAll() as $group) {
                     $cache->clean($group->group);
@@ -222,12 +222,12 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         $db->setQuery($query);
         if (isset($this->options_user['debug'])) {
             $debug = $query->__toString();
-            UpHelper::msg_info($this,htmlentities($debug), 'Requete SQL');
+            UpHelper::msg_info($this, htmlentities($debug), 'Requete SQL');
         }
         try {
             $row_tmp = $db->loadAssocList();
         } catch (RuntimeException $e) {
-            UpHelper::msg_error($this,reset(explode('Stack', $e)));
+            UpHelper::msg_error($this, reset(explode('Stack', $e)));
         }
         // si pas de résultat
         if (empty($row_tmp)) {
@@ -274,9 +274,10 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         $tags_order = array(); // [0] ##keyword## [1] keyName origine
         $tags = array(); // [key][tag|format|rowclass|colclass|model] info sur chaque cle
         if (preg_match_all('/##(.*)##/U', $options['template'], $tags_order) === false) {
-            return UpHelper::info_debug($this,'option "template" is empty');
+            return UpHelper::info_debug($this, 'option "template" is empty');
         }
         foreach ($tags_order[1] as $tag) {
+            $tag = strtolower($tag); // v6.0.15
             list($tagBase) = explode('.', $tag); // si json
             if (array_key_exists(strtolower($tagBase), $rows[0])) { // v311
                 $tags[$tag]['tag'] = '##' . $tag . '##';
@@ -294,10 +295,10 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 // --- ANALYSE MODEL
                 if (isset($options[$tag . '-model'])) {
                     // $tags[$tag]['model'] = html_entity_decode($options[$tag . '-model']);
-                    $tags[$tag]['model'] = UpHelper::get_bbcode($this,$options[$tag . '-model'], false);
+                    $tags[$tag]['model'] = UpHelper::get_bbcode($this, $options[$tag . '-model'], false);
                 }
             } else {
-                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_COLUMN', $tag));
+                UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'UNKNOWN_COLUMN', $tag));
             }
         }
         // === Récupération ordre de tri initial pour SORT
@@ -314,7 +315,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         foreach ($options as $key => $val) {
             if (preg_match($optmask, $key, $tmp)) {
                 if (! isset($tags[$tmp[1]])) {
-                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_TAG', $key));
+                    UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'UNKNOWN_TAG', $key));
                 }
             }
         }
@@ -333,7 +334,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             th.eq(data.column).append('<span class="arrow">' + arrow +'</span>');
             });
             JS;
-            UpHelper::load_jquery_code($this,$js);
+            UpHelper::load_jquery_code($this, $js);
         }
 
         // ================================
@@ -341,12 +342,12 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         // ================================
         $html = array(); // pour retour
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // === ENTETE
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['main-class'], $options['main-style']);
         $is_table = false;
         switch ($options['presentation']) {
             case 'table':
@@ -356,7 +357,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 if ($options['overflow']) {
                     $html[] = '<div style="max-width:100%;overflow:auto;">';
                 }
-                $html[] = UpHelper::set_attr_tag($this,'table', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this, 'table', $attr_main);
                 // entete avec attributs pour tri
                 if ($options['sort'] || $options['header']) {
                     $sort = $this->table_col_sort($options['sort'], $primary_sort, count($tags));
@@ -377,13 +378,13 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 $col_tag = 'td';
                 break;
             case 'div':
-                $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this, 'div', $attr_main);
                 $close_main = '</div>';
                 $row_tag = 'div';
                 $col_tag = 'span';
                 break;
             case 'list':
-                $html[] = UpHelper::set_attr_tag($this,'ul', $attr_main);
+                $html[] = UpHelper::set_attr_tag($this, 'ul', $attr_main);
                 $close_main = '</ul>';
                 $row_tag = 'li';
                 $col_tag = 'span';
@@ -445,10 +446,10 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
 
                 // ===== SET COLONNE
                 if ($is_table) {
-                    $out .= UpHelper::set_attr_tag($this,$col_tag, $attr_col, $val);
+                    $out .= UpHelper::set_attr_tag($this, $col_tag, $attr_col, $val);
                 } else {
                     if (! empty($attr_col['class'])) {
-                        $val = UpHelper::set_attr_tag($this,$col_tag, $attr_col, $val);
+                        $val = UpHelper::set_attr_tag($this, $col_tag, $attr_col, $val);
                     }
                     if (!$val) { // pas de valeur pour un tag : on le cache
                         $val = "";
@@ -458,9 +459,9 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             } // fin col
             // ===== SET LIGNE
             if ($is_table) {
-                $html[] = UpHelper::set_attr_tag($this,'tr', $attr_row, $out);
+                $html[] = UpHelper::set_attr_tag($this, 'tr', $attr_row, $out);
             } elseif ($row_tag != '') {
-                $html[] = UpHelper::set_attr_tag($this,$row_tag, $attr_row, $out);
+                $html[] = UpHelper::set_attr_tag($this, $row_tag, $attr_row, $out);
             } else {
                 $html[] = $out;
             }
@@ -475,7 +476,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 echo $lapagination ;
             } else { // bottom
                 $ret .= '<div style="width:100% !important">'.$lapagination.'</div>' ;
-        }
+            }
         }
         return $ret;
         // run
@@ -506,9 +507,9 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 case 'min':
                 case 'max':
                 case 'regex':
-                case 'route': 
+                case 'route':
                     // list[1:un, 2:deux]
-                    $out[$type] = UpHelper::strtoarray($this,$arg, ',', ':', false);
+                    $out[$type] = UpHelper::strtoarray($this, $arg, ',', ':', false);
                     break;
                     // case 'regex' :
                     // // regex[regex:class]
@@ -529,8 +530,8 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                     );
                     break;
                 default:
-                    UpHelper::msg_error($this,'Type inconnu pour ' . $type);
-                    UpHelper::msg_error($this,UpHelper::trad_keyword($this,'UNKNOWN_TYPE', $type));
+                    UpHelper::msg_error($this, 'Type inconnu pour ' . $type);
+                    UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'UNKNOWN_TYPE', $type));
                     break;
             }
         }
@@ -576,7 +577,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                     }
                     break;
                 case 'date':
-                    $out = (empty($val)) ? '' : UpHelper::up_date_format($this,$val, key($arg)); // v2.9
+                    $out = (empty($val)) ? '' : UpHelper::up_date_format($this, $val, key($arg)); // v2.9
                     break;
                 case 'replace':
                     $out = str_ireplace($arg['old'], $arg['new'], $val);
@@ -588,7 +589,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                         $size = ($w > $h) ? ' width' : ' height';
                         $size .= '="' . key($arg) . 'px"';
                     }
-                    $out = '<img src="' . $val . '" alt="' . UpHelper::link_humanize($this,$val) . '"' . $size . '>';
+                    $out = '<img src="' . $val . '" alt="' . UpHelper::link_humanize($this, $val) . '"' . $size . '>';
                     break;
                 case 'route':
                     $out = Route::_(RouteHelper::getArticleRoute($val));
@@ -670,7 +671,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 }
             }
         }
-        UpHelper::load_css_head($this,$css);
+        UpHelper::load_css_head($this, $css);
     }
 
     // class
