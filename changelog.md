@@ -1,4 +1,8 @@
-## 10/03/2026 - version 6.0.15
+## 12/03/2026 - version 6.0.15
+
+#### Modifications actions
+
+- Image Gallery : mode shuffle : option random ne fonctionne pas
 
 #### modifications internes
 
