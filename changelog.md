@@ -2,12 +2,12 @@
 
 #### Modifications actions
 
-- Image Gallery : mode shuffle : option random ne fonctionne pas
+- image-gallery : mode shuffle : option random ne fonctionne pas
+- sql : normalisation des noms de champ (noms de zones en minuscule/majuscules)
 
 #### modifications internes
 
 - suppression de faq.js du package Up
-- sql : normalisation des noms de champ (noms de zones en minuscule/majuscules)
 
 ## 11/02/2026 - version 6.0.14
 
