@@ -16,6 +16,9 @@ class UpShuffle {
 	if (document.querySelector('.filter-options').getAttribute('data-random')) { // random display required
 		this.shuffle.sort({randomize:true}); // random order
 	}
+	if (document.querySelector('.filter-options').getAttribute('data-reverse')) { // sort reverse order required
+        this.shuffle.sort({reverse:true}); // reverse order
+    }
   }
 
   addFilterButtons() {

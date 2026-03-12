@@ -1,3 +1,13 @@
+## 12/03/2026 - version 6.0.16
+
+#### Modifications actions
+
+- image-gallery : mode shuffle : activatio de l'option sort-desc
+
+#### modifications internes
+
+- suppression de faq.js du package Up
+
 ## 12/03/2026 - version 6.0.15
 
 #### Modifications actions

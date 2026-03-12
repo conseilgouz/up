@@ -30,6 +30,7 @@
  * - nouvelle version humanise et option legend-template
  * v3.1 - ajout option grid-ratio pour layout=grid
  * v5.2 - ajout option sort-by-date
+ * v6.0.16 : shuffle : sort-desc
  */
 defined('_JEXEC') or die();
 
@@ -434,7 +435,11 @@ class image_gallery extends Lomart\Plugin\Content\Up\Extension\Up
         if (!empty($options['random'])) { // random order
             $random = " data-random='true'";
         }
-        $out[] = '<div class="btn-group filter-options display-block pl1 ' . $flex . '" ' . $random . '><button class="btn active" data-group="all" data-order="name">TOUT</button>';
+        $sortdesc = "";
+        if ($options['sort-desc']) { // sort desc
+            $sortdesc = " data-reverse='true'";
+        }
+        $out[] = '<div class="btn-group filter-options display-block pl1 ' . $flex . '" ' . $random . $sortdesc .'><button class="btn active" data-group="all" data-order="name">TOUT</button>';
         foreach ($imgList as $key => $dir) {
             $out[] = '<button class="btn" data-group="' . $key . '" style="margin:2px auto">' . UpHelper::link_humanize($this, $key) . '</button>';
             foreach ($dir as $img) {
