@@ -51,7 +51,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
             __class__ => '', // Aucun argument
-            'col-type' => '', // mode de tri des colonnes. n=numerique, a=alphanum, i=alphanum case insensitive, d=date
+            'col-type' => '', // mode de tri des colonnes. n=numerique, a=alphanum, i=alphanum case insensitive, d=date, l=link case insensitive, L=link case sensitive
             'col-init' => '', // n° de la colonne triée au chargement et sens (asc, desc)
             /* [st-rech] champs pour recherche */
             'placeholder' => 'lang[en=Search;fr=Rechercher]', // texte dans la zone recherche
