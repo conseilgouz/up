@@ -12,7 +12,7 @@
  * @tags    layout-dynamic
  *
  * V 6.0.18 : ajout de col-type l et L
- * 
+ *
  */
 defined('_JEXEC') or die();
 
@@ -51,7 +51,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
             __class__ => '', // Aucun argument
-            'col-type' => '', // mode de tri des colonnes. n=numerique, a=alphanum, i=alphanum case insensitive, d=date, l=link case insensitive, L=link case sensitive
+            'col-type' => '', // mode de tri des colonnes. n=numerique, a=alphanum, i=alphanum case insensitive, d=date, l=link case insensitive
             'col-init' => '', // n° de la colonne triée au chargement et sens (asc, desc)
             /* [st-rech] champs pour recherche */
             'placeholder' => 'lang[en=Search;fr=Rechercher]', // texte dans la zone recherche
@@ -150,7 +150,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ==== Mode de tri selon données
         // ============================================================
-        // n=numerique, a=alpha (defaut), i=alpha insensitive, d = date, l = link case insensitive, L = link case sensitive
+        // n=numerique, a=alpha (defaut), i=alpha insensitive, d = date, l = link case insensitive
         $col_date = array();
         $col_link = array();
         if ($options['col-type']) {
@@ -161,11 +161,13 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
             for ($i = 0; $i < count($col_type); $i++) {
                 if ($col_type[$i][0] == 'd') { // date
                     $col_date[] = $i;
-                } elseif ($col_type[$i][0] == 'l') { // link case insensitive
+                } elseif ($col_type[$i][0] == 'l') { // link is case insensitive
                     $col_link[] = $i;
                     $sort = ' data-sortas="case-insensitive"';
-                } elseif ($col_type[$i][0] == 'L') { // link case sensitive
-                    $col_link[] = $i;
+                    if (isset($headers[0][$i])) { // v2.9
+                        $this->content = str_replace($headers[0][$i], '<th ' . $headers[1][$i] . $sort . '>' . $headers[2][$i] . '</th>', $this->content);
+                    }
+
                 } else {
                     $sort = '';
                     if ($col_type[$i][0] == 'i') {
