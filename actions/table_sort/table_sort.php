@@ -11,23 +11,24 @@
  * @credit    <a href="https://www.jqueryscript.net/table/sorting-filtering-pagination-fancytable.html" target"_blank">script jQuery fancyTable de myspace-nu</a>
  * @tags    layout-dynamic
  *
- * */
+ * V 6.0.18 : ajout de col-type l et L
+ * 
+ */
 defined('_JEXEC') or die();
 
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
     /**
      * charger les ressources communes à toutes les instances de l'action
      * cette fonction n'est lancée qu'une fois pour la première instance
      *
      * @return true
      */
-    function init()
+    public function init()
     {
-        UpHelper::load_file($this,'fancyTable.min.js');
+        UpHelper::load_file($this, 'fancyTable.min.js');
         return true;
     }
 
@@ -36,7 +37,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
      *
      * @return [string] [code HTML pour remplacer le shortcode]
      */
-    function run()
+    public function run()
     {
 
         // cette action a obligatoirement du contenu : la table
@@ -76,33 +77,36 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this, $options_def, $js_options_def);
 
         // ===== Analyse et MAJ de la table
         // ============================================================
         // balise ouvrante de la table originale et array des attributs
         preg_match('#<table.*>#U', $this->content, $table_opentag_old);
         $table_opentag_old = (! empty($table_opentag_old)) ? $table_opentag_old[0] : '';
-        $table_attr = UpHelper::get_attr_tag($this,$table_opentag_old);
+        $table_attr = UpHelper::get_attr_tag($this, $table_opentag_old);
         // si la table a une ID, on l'utilise
-        if ($table_attr['id'] != '')
+        if ($table_attr['id'] != '') {
             $options['id'] = $table_attr['id'];
+        }
 
         // =========== le code JS
         // ============================================================
-        $js_options = UpHelper::only_using_options($this,$js_options_def);
+        $js_options = UpHelper::only_using_options($this, $js_options_def);
         if (! empty($this->options_user['pagination'])) {
             $js_options['pagination'] = ($options['pagination'] > 0);
             $js_options['perPage'] = $options['pagination'];
         }
         $tmp = $this->options_user;
-        if (! empty($this->options_user['pagination-class']))
+        if (! empty($this->options_user['pagination-class'])) {
             $js_options['paginationClass'] = $options['pagination-class'];
-        if (! empty($this->options_user['pagination-class-active']))
+        }
+        if (! empty($this->options_user['pagination-class-active'])) {
             $js_options['paginationClassActive'] = $options['pagination-class-active'];
+        }
 
         if (! empty($this->options_user['col-init'])) {
-            list ($ind, $sens) = explode(',', $this->options_user['col-init'] . ',asc');
+            list($ind, $sens) = explode(',', $this->options_user['col-init'] . ',asc');
             $js_options['sortColumn'] = intval($ind) - 1;
             $js_options['sortOrder'] = $sens;
         }
@@ -115,61 +119,72 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
                 // liste des colonnes utilisées pour la recherche globale
                 $colarg = array_map('intval', explode(',', $this->options_user['globalsearch']));
                 $nbcol = substr_count($this->content, '</th>');
-                for ($i = 1; $i <= $nbcol; $i ++) {
-                    if (! in_array($i, $colarg))
+                for ($i = 1; $i <= $nbcol; $i++) {
+                    if (! in_array($i, $colarg)) {
                         $colsearch[] = $i;
+                    }
                 }
                 $js_options['globalSearchExcludeColumns'] = $colsearch;
             }
         }
 
         // -- conversion en chaine Json
-        $js_params = UpHelper::json_arrtostr($this,$js_options);
+        $js_params = UpHelper::json_arrtostr($this, $js_options);
         // -- initialisation
         // on cible une classe car l'id a déjà pu être définie par le shortcode interne
         $js_code = '$("#' . $options['id'] . '").fancyTable(';
         $js_code .= $js_params;
         $js_code .= ');';
-        UpHelper::load_jquery_code($this,$js_code);
+        UpHelper::load_jquery_code($this, $js_code);
 
         // ==== actualisation attributs de la table
         // ============================================================
         $table_attr['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$table_attr, $options['class'], $options['style']);
-        $table_opentag_new = UpHelper::set_attr_tag($this,'table', $table_attr);
+        UpHelper::get_attr_style($this, $table_attr, $options['class'], $options['style']);
+        $table_opentag_new = UpHelper::set_attr_tag($this, 'table', $table_attr);
         $this->content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
-        if (strpos($this->content, '<thead') === false)
-            $this->content = UpHelper::msg_inline($this,'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
+        if (strpos($this->content, '<thead') === false) {
+            $this->content = UpHelper::msg_inline($this, 'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
+        }
 
         // ==== Mode de tri selon données
         // ============================================================
-        // n=numerique, a=alpha (defaut), i=alpha insensitive
+        // n=numerique, a=alpha (defaut), i=alpha insensitive, d = date, l = link case insensitive, L = link case sensitive
         $col_date = array();
+        $col_link = array();
         if ($options['col-type']) {
             $col_type = strtolower($options['col-type']);
             $col_type = array_map('trim', explode('-', $col_type));
             $regex = '#<th(.*)>(.*)</th>#';
             preg_match_all($regex, $this->content, $headers);
-            for ($i = 0; $i < count($col_type); $i ++) {
-                if ($col_type[$i][0] == 'd') {
+            for ($i = 0; $i < count($col_type); $i++) {
+                if ($col_type[$i][0] == 'd') { // date
                     $col_date[] = $i;
+                } elseif ($col_type[$i][0] == 'l') { // link case insensitive
+                    $col_link[] = $i;
+                    $sort = ' data-sortas="case-insensitive"';
+                } elseif ($col_type[$i][0] == 'L') { // link case sensitive
+                    $col_link[] = $i;
                 } else {
                     $sort = '';
-                    if ($col_type[$i][0] == 'i')
+                    if ($col_type[$i][0] == 'i') {
                         $sort = ' data-sortas="case-insensitive"';
-                    if ($col_type[$i][0] == 'n')
+                    }
+                    if ($col_type[$i][0] == 'n') {
                         $sort = ' data-sortas="numeric"';
-                    if (isset($headers[0][$i])) // v2.9
+                    }
+                    if (isset($headers[0][$i])) { // v2.9
                         $this->content = str_replace($headers[0][$i], '<th ' . $headers[1][$i] . $sort . '>' . $headers[2][$i] . '</th>', $this->content);
+                    }
                 }
             }
         }
 
         // ==== Valeurs de tri dans <td data-sortvalue="xxx">
         // ============================================================
-        if (! empty($col_date)) {
-            require_once ($this->upPath . '/assets/lib/simple_html_dom.php');
+        if (! empty($col_date)  || ! empty($col_link)) {
+            require_once($this->upPath . '/assets/lib/simple_html_dom.php');
             // http://petit-dev.com/parsez-le-contenu-dun-site-avec-simple-html-dom-parser/
             $html = new simple_html_dom();
             $html->load($this->content);
@@ -177,11 +192,18 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
             $trs = $html->find('tbody tr');
             foreach ($trs as $tr) {
                 $tds = $tr->find('td');
-                foreach ($col_date as $ind) {
+                foreach ($col_date as $ind) { // date : make it YYYYMMDD as key
                     if ($tds[$ind]) {
                         $tmp = $tds[$ind]->innertext();
-                        $tmp = UpHelper::up_date_format($this,$tmp, '%Y%m%d');
+                        $tmp = UpHelper::up_date_format($this, $tmp, '%Y%m%d');
                         $tds[$ind]->setAttribute('data-sortvalue', $tmp);
+                    }
+                }
+                foreach ($col_link as $ind) { // link : take text as key
+                    if ($tds[$ind]) {
+                        $tmp = $tds[$ind]->innertext();
+                        preg_match('/<a href="(.+)">(.+)<\/a>/', $tmp, $output_array);
+                        $tds[$ind]->setAttribute('data-sortvalue', $output_array[2]);
                     }
                 }
             }
@@ -192,7 +214,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
 
         // === CSS-HEAD
         // ============================================================
-        UpHelper::load_css_head($this,$options['css-head'], $options['id']);
+        UpHelper::load_css_head($this, $options['css-head'], $options['id']);
 
         // fini
         // ============================================================
@@ -203,4 +225,3 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
 }
 
 // class
-

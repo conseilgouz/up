@@ -1,8 +1,14 @@
+## 01/04/2026 - version 6.0.18
+
+#### Modifications actions
+
+- table-sort : col-type : ajout l lien case insensible, L lien case sensible 
+
 ## 12/03/2026 - version 6.0.17
 
 #### Modifications actions
 
-- image-gallery : mode shuffle : activatio de l'option sort-desc
+- image-gallery : mode shuffle : activation de l'option sort-desc
 
 #### modifications internes
 
