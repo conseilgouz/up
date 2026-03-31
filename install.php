@@ -124,6 +124,8 @@ class plgContentUpInstallerScript
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             } else if ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
                 $actionsList[] = "pdf";
+            } else if ($previous_version && $previous_version < '6.0.18') { // 6.0.13 : mise à jour de l'action table_sort
+                $actionsList[] = "table_sort";
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;

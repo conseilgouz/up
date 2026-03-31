@@ -160,6 +160,10 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
             preg_match_all($regex, $this->content, $headers);
             for ($i = 0; $i < count($col_type); $i++) {
                 if ($col_type[$i][0] == 'd') { // date
+                    $sort = ' data-sortas="numeric"';  // 6.0.18 : force as numeric
+                    if (isset($headers[0][$i])) { 
+                        $this->content = str_replace($headers[0][$i], '<th ' . $headers[1][$i] . $sort . '>' . $headers[2][$i] . '</th>', $this->content);
+                    }
                     $col_date[] = $i;
                 } elseif ($col_type[$i][0] == 'l') { // link is case insensitive
                     $col_link[] = $i;

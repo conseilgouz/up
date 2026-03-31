@@ -2,7 +2,7 @@
 
 #### Modifications actions
 
-- table-sort : col-type : ajout l lien case insensible, L lien case sensible 
+- table-sort : col-type : ajout l lien, force la colonne date e numérique pour le tri,  fancyTable version 1.0.36
 
 ## 12/03/2026 - version 6.0.17
 
