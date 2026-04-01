@@ -3,7 +3,7 @@
 #### Modifications actions
 
 - table-sort : col-type : ajout l lien,force la colonne date e numérique pour le tri,  fancyTable version 1.0.36, JCE: tous les th sur une ligne 
-- corner : erreur sur UpHelper::trad_keyword en ligne 142
+- corner : si angle incorrect, erreur sur UpHelper::trad_keyword en ligne 142
 
 ## 12/03/2026 - version 6.0.17
 
