@@ -11,7 +11,11 @@
  * @credit    <a href="https://www.jqueryscript.net/table/sorting-filtering-pagination-fancytable.html" target"_blank">script jQuery fancyTable de myspace-nu</a>
  * @tags    layout-dynamic
  *
- * V 6.0.18 : ajout de col-type l et L
+ * V 6.0.18 : 
+ *  col-type : ajout l lien,
+ *  force la colonne date e numérique pour le tri,
+ *  fancyTable version 1.0.36,
+ *  JCE: tous les th sur une ligne
  *
  */
 defined('_JEXEC') or die();
@@ -156,7 +160,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         if ($options['col-type']) {
             $col_type = strtolower($options['col-type']);
             $col_type = array_map('trim', explode('-', $col_type));
-            $regex = '#<th(.*)>(.*)</th>#';
+            $regex = '/<th(.*)>(.*)<\/th>/U'; // 6.0.18 : JCE met tous les th sur une seule ligne
             preg_match_all($regex, $this->content, $headers);
             for ($i = 0; $i < count($col_type); $i++) {
                 if ($col_type[$i][0] == 'd') { // date

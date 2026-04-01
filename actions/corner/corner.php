@@ -15,6 +15,7 @@
 
 /*
  * v1.63 - ajout option filter, suppression datemin et datemax
+ * v6.0.18 : erreur sur UpHelper::trad_keyword en ligne 142
  */
 
 defined('_JEXEC') or die;
@@ -139,7 +140,7 @@ class corner extends Lomart\Plugin\Content\Up\Extension\Up {
                 $pp = ($position == 'tr' || $position == 'br') ? 'left' : 'right';
                 $style[] = 'padding-' . $pp . ':' . $offset_padding . 'px';
             } else {
-                UpHelper::msg_error($this,UpHelper::trad_keyword('ERR_ANGLE'));
+                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ERR_ANGLE'));
             }
         }
 
