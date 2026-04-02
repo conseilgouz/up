@@ -16,7 +16,7 @@
  *  force la colonne date e numérique pour le tri,
  *  fancyTable version 1.0.36,
  *  JCE: tous les th sur une ligne
- *
+ * V 6.0.19 : col-type lien : vérifie qu'il y a bien un lien
  */
 defined('_JEXEC') or die();
 
@@ -213,7 +213,9 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
                     if ($tds[$ind]) {
                         $tmp = $tds[$ind]->innertext();
                         preg_match('/<a href="(.+)">(.+)<\/a>/', $tmp, $output_array);
-                        $tds[$ind]->setAttribute('data-sortvalue', $output_array[2]);
+                        if (isset($output_array[2])) { // 6.0.19 : vérif. qu'il y a bien un <a></a>
+                            $tds[$ind]->setAttribute('data-sortvalue', $output_array[2]);
+                        }
                     }
                 }
             }

@@ -1,3 +1,9 @@
+## 02/04/2026 - version 6.0.19
+
+#### Modifications actions
+
+- table-sort : col-type l : vérifie qu'il y a bien un lien
+
 ## 01/04/2026 - version 6.0.18
 
 #### Modifications actions
