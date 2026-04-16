@@ -3,6 +3,7 @@
 #### Modifications actions
 
 - table-sort : col-type l : vérifie qu'il y a bien un lien
+- faq : suppression des warning Undefined array key "style"
 
 ## 01/04/2026 - version 6.0.18
 
