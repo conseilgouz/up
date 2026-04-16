@@ -112,8 +112,12 @@ class faq extends Lomart\Plugin\Content\Up\Extension\Up
             $attr_content['class'] .= ' upfaq-content-' . ($i + 1);
             $identifier = 'upfaq-'.$options['id'].'-'. ($i + 1);
             HTMLHelper::_('bootstrap.collapse', '#' . $identifier);
-            $tag[1] = '<'.$title_tag.' id="'.$identifier.'" data-bs-toggle="collapse" data-bs-target="#panel'.$identifier.'" aria-expanded="" aria-controls="panel'.$identifier.'" class="'.$attr_title["class"].'" style="'.$attr_title["style"].'">'.$array_title[1][$i].'</'.$title_tag.'>';
-            $tag[2] = '<div class="collapse '.$attr_content["class"].'" style="'.$attr_content["style"].'" id="panel'.$identifier.'">'.$array_txt[1][$i].'</div>';
+            $title_class = isset($attr_title["class"]) ? $attr_title["class"] : "" ;
+            $title_style = isset($attr_title["style"]) ? $attr_title["style"] : "";
+            $tag[1] = '<'.$title_tag.' id="'.$identifier.'" data-bs-toggle="collapse" data-bs-target="#panel'.$identifier.'" aria-expanded="" aria-controls="panel'.$identifier.'" class="'.$title_class .'" style="'.$title_style.'">'.$array_title[1][$i].'</'.$title_tag.'>';
+            $content_class = isset($attr_content["class"]) ? $attr_content["class"] : "" ;
+            $content_style = isset($attr_content["style"]) ? $attr_content["style"] : "";
+            $tag[2] = '<div class="collapse '.$content_class.'" style="'.$content_style.'" id="panel'.$identifier.'">'.$array_txt[1][$i].'</div>';
             $out .= $tag[1] . $tag[2];
         }
         $out .= '</div>';
