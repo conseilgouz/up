@@ -1,4 +1,4 @@
-## 20/04/2026 - version 6.0.19
+## 20/04/2026 - version 6.0.20
 
 #### Modifications actions
 
