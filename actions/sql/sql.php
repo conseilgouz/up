@@ -27,6 +27,7 @@
  * v5.4.5 : ajout du paramètre perpage => pagination, position de pagination pospage => bottom/top
  *          ajout de route-format : calcul du lien vers un article
  *          suppression du cache si pagination
+ * v6.0.19 : plusieurs innerjoin/outerjoin/leftjoin/rightjoin séparés par virgule
  */
 defined('_JEXEC') or die();
 
@@ -58,10 +59,10 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             'where' => '', // commande SQL : where
             'order' => '', // commande SQL : order
             'group' => '', // commande SQL : group
-            'innerjoin' => '', // commande SQL : innerjoin
-            'outerjoin' => '', // commande SQL : outerjoin
-            'leftjoin' => '', // commande SQL : leftjoin
-            'rightjoin' => '', // commande SQL : rightjoin
+            'innerjoin' => '', // commande SQL : innerjoin, plusieurs séparés par virgule
+            'outerjoin' => '', // commande SQL : outerjoin, plusieurs séparés par virgule
+            'leftjoin' => '', // commande SQL : leftjoin, plusieurs séparés par virgule
+            'rightjoin' => '', // commande SQL : rightjoin, plusieurs séparés par virgule
             'setlimit' => '', // commande SQL : setlimit, peut contenir un nombre ou une requête sql
             'perpage'  => '', // pagination : nb d'elements par page
             'pospage'  => 'bottom', // pagination : position bottom ou top
@@ -165,16 +166,28 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         $query->select($options['select']);
         $query->from($options[__class__]);
         if ($options['innerjoin']) {
-            $query->innerjoin($options['innerjoin']);
+            $joins =  explode(',', $options['innerjoin']);
+            foreach ($joins as $join) {
+                $query->innerjoin($join);
+            }
         }
         if ($options['outerjoin']) {
-            $query->outerjoin($options['outerjoin']);
+            $joins =  explode(',', $options['outerjoin']);
+            foreach ($joins as $join) {
+                $query->outerjoin($join);
+            }
         }
         if ($options['leftjoin']) {
-            $query->leftjoin($options['leftjoin']);
+            $joins =  explode(',', $options['leftjoin']);
+            foreach ($joins as $join) {
+                $query->leftjoin($join);
+            }
         }
         if ($options['rightjoin']) {
-            $query->rightjoin($options['rightjoin']);
+            $joins =  explode(',', $options['rightjoin']);
+            foreach ($joins as $join) {
+                $query->rightjoin($join);
+            }
         }
         if ($options['where']) {
             $query->where(html_entity_decode($options['where']));

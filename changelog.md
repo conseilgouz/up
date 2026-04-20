@@ -1,9 +1,10 @@
-## 02/04/2026 - version 6.0.19
+## 20/04/2026 - version 6.0.19
 
 #### Modifications actions
 
 - table-sort : col-type l : vérifie qu'il y a bien un lien
 - faq : suppression des warning Undefined array key "style"
+- sql : plusieurs innerjoin/outerjoin/leftjoin/rightjoin séparés par virgule
 
 ## 01/04/2026 - version 6.0.18
 
