@@ -14,6 +14,7 @@ v5.3.3 : check/load actions from github
 v5.4.1 : variables publiques dans up.php
 v5.4.2 : cleanup checkfiles
 v6.0.14 : activer si API ou administrator
+v6.0.21 : suppression de l'appel à upAction.php
 */
 
 namespace Lomart\Plugin\Content\Up\Extension;
@@ -355,7 +356,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                     }
                     $timeStart = microtime(true);
                 }
-                include_once JPATH_SITE.'/'.$this->upPath . 'upAction.php'; // compatibilité UP avant 6
+                // include_once JPATH_SITE.'/'.$this->upPath . 'upAction.php'; // compatibilité UP avant 6
                 // --- instanciation de l'action
                 // si premier appel de l'action
                 if ($text == '') {
