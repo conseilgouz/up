@@ -1,3 +1,11 @@
+## 19/05/2026 - version 6.0.21
+
+#### Modifications internes
+
+- install : action get : ne pas supprimer le répertoire lib
+- UpHelper : ne pas supprimer le répertoire lib de l'action get en mise à jour auto
+- installation : suppression du fichier obsolete upAction.php 
+
 ## 20/04/2026 - version 6.0.20
 
 #### Modifications actions

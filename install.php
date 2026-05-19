@@ -122,16 +122,20 @@ class plgContentUpInstallerScript
                 $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
-            } else if ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
+            } elseif ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
                 $actionsList[] = "pdf";
-            } 
-			// 6.0.20 : mise à jour de l'action table_sort/faq
-            $actionsList[] = "table_sort";
-            $actionsList[] = "faq";
-            $actionsList[] = "sql";
+            } elseif ($previous_version && $previous_version < '6.0.20') { // 6.0.20 
+                $actionsList[] = "table_sort";
+                $actionsList[] = "faq";
+                $actionsList[] = "sql";
+            }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
-                $this->delete_directory($dir);
+                $ignore = ['.','..','custom']; // ignore custom folder
+                if ($action == 'get') {
+                    $ignore[] = 'lib'; // action get : ignore lib folder
+                }
+                $this->delete_directory($dir, $ignore);
             }
         }
     }
@@ -362,7 +366,7 @@ class plgContentUpInstallerScript
     *
     * supprime les fichiers d'un répertoire, sauf le répertoire custom pour les actions
     */
-    private function delete_directory($dir)
+    private function delete_directory(string $dir, $ignore = [])
     {
         if (!file_exists($dir)) {
             return true;
@@ -371,15 +375,13 @@ class plgContentUpInstallerScript
             return unlink($dir);
         }
         $empty = true;
+
         foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..') {
-                continue;
-            }
-            if ($item == 'custom') { // keep custom folder
+            if (in_array($item, $ignore)) { // keep ingored folders
                 $empty = false;
                 continue;
             }
-            if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
+            if (!$this->delete_directory($dir . DIRECTORY_SEPARATOR . $item, $ignore)) {
                 return false;
             }
         }

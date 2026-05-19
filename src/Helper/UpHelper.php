@@ -10,6 +10,7 @@
 v5.3.3 : php 8.4 compatibility
 v5.4.1 : variables publiques dans up.php
 v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
+v6.0.21 : action get : ne pas supprimer le répertoire lib en mise à jour auto
 */
 
 namespace Lomart\Plugin\Content\Up\Helper;
@@ -3621,7 +3622,11 @@ class UpHelper
         $hash = hash_file('sha256', $file);
         if (array_key_exists($action, $up->actionsha256)) {
             if ($up->actionsha256[$action] != $hash) { // différent : suppression du répertoire
-                self::delete_directory($up, $dir);
+                $ignore = ['.','..','custom'];
+                if ($action == 'get') {
+                    $ignore[] = 'lib';
+                }
+                self::delete_directory($up, $dir, $ignore);
             }
         }
     }
@@ -3630,7 +3635,7 @@ class UpHelper
     *
     * supprime les fichiers d'une action, sauf le répertoire custom
     */
-    public static function delete_directory($up, $dir)
+    public static function delete_directory($up, $dir, $ignore)
     {
         if (!file_exists($dir)) {
             return true;
@@ -3639,10 +3644,10 @@ class UpHelper
             return unlink($dir);
         }
         foreach (scandir($dir) as $item) {
-            if ($item == '.' || $item == '..' || $item == 'custom') {
+            if (in_array($item, $ignore)) {
                 continue;
             }
-            if (!self::delete_directory($up, $dir . DIRECTORY_SEPARATOR . $item)) {
+            if (!self::delete_directory($up, $dir . DIRECTORY_SEPARATOR . $item, $ignore)) {
                 return false;
             }
         }
