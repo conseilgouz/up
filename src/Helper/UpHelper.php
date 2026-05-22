@@ -11,6 +11,7 @@ v5.3.3 : php 8.4 compatibility
 v5.4.1 : variables publiques dans up.php
 v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
 v6.0.21 : action get : ne pas supprimer le répertoire lib en mise à jour auto
+          set github key if defined
 */
 
 namespace Lomart\Plugin\Content\Up\Helper;
@@ -3488,14 +3489,11 @@ class UpHelper
             curl_setopt($curl, CURLOPT_TIMEOUT, 10);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-            if (!$up->githubapikey) { // pas de clé définie, on prend la clé par défaut
-                $up->githubapikey = $up->api_token_1.$up->api_token_2.$up->api_token_3;
-                $up->githubapikey = str_replace('#', '_', $up->githubapikey);
+            $header = ["User-Agent: PHP"];
+            if ($up->githubapikey) {
+                $header[] =  "Authorization: token ".$up->githubapikey;
             }
-            curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                         "Authorization: token ".$up->githubapikey,
-                        "User-Agent: PHP"
-            ]);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 
             $response = curl_exec($curl);
             return $response;

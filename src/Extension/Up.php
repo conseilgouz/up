@@ -15,6 +15,7 @@ v5.4.1 : variables publiques dans up.php
 v5.4.2 : cleanup checkfiles
 v6.0.14 : activer si API ou administrator
 v6.0.21 : suppression de l'appel à upAction.php
+          set github key if defined
 */
 
 namespace Lomart\Plugin\Content\Up\Extension;
@@ -59,9 +60,6 @@ class UP extends CMSPlugin implements SubscriberInterface
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
     public $githuburlzip = 'https://api.github.com/repos/conseilgouz/up6-actionszip/contents/';
-    public $api_token_1 = 'github#pat#';
-    public $api_token_2 = '11AEUI53Q09kiUG4jTXBZD#';
-    public $api_token_3 = 'NxhHfoiAknnIC6F5qyzR9gVt63lw8dS2pWs8tF6etlpE7PJGBIPdGU2Qz6S'; // default api key
     public $actionsha256 = [];
     // liste des actions disponibles dans le répertoire zip de Github
     public $actionsZip = ['box', 'image_gallery','mapael','marquee','meteo_concept','pdf','slider_tiny','upscsscompiler'];
