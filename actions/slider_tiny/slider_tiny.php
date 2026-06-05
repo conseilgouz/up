@@ -42,8 +42,8 @@ class slider_tiny extends Lomart\Plugin\Content\Up\Extension\Up
      */
     public function init()
     {
-        UpHelper::load_file($this,'tiny-slider.css');
-        UpHelper::load_file($this,'tiny-slider-min.js');
+        UpHelper::load_file($this,'lib/tiny-slider.css');
+        UpHelper::load_file($this,'lib/tiny-slider-min.js');
         // UpHelper::load_file($this,'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js');
         return true;
     }
@@ -271,7 +271,7 @@ class slider_tiny extends Lomart\Plugin\Content\Up\Extension\Up
             if (! empty($options['maxi'])) {
                 $images = array_slice($images, 0, (int) $options['maxi']);
             }
-
+            UpHelper::get_attr_style($this, $attr_image, $options['image-style']); // 6.0.21
             foreach ($images as $img) {
                 $attr_image['src'] = $img;
                 $attr_image['alt'] = UpHelper::link_humanize($this,str_replace($options['zoom-suffix'] . '.', '.', $img));

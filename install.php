@@ -122,12 +122,16 @@ class plgContentUpInstallerScript
                 $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
-            } elseif ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
-                $actionsList[] = "pdf";
-            } elseif ($previous_version && $previous_version < '6.0.20') { // 6.0.20 
-                $actionsList[] = "table_sort";
-                $actionsList[] = "faq";
-                $actionsList[] = "sql";
+            } else {
+                if ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
+                    $actionsList[] = "pdf";
+                } 
+                if ($previous_version && $previous_version < '6.0.20') { // 6.0.20 
+                    $actionsList[] = "table_sort";
+                    $actionsList[] = "faq";
+                    $actionsList[] = "sql";
+                }
+                $actionsList[] = "slider_tiny"; // 6.0.21
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;

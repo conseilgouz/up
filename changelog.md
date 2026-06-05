@@ -1,4 +1,4 @@
-## 22/05/2026 - version 6.0.21
+## 05/06/2026 - version 6.0.21
 
 #### Modifications internes
 
@@ -6,6 +6,11 @@
 - UpHelper : ne pas supprimer le répertoire lib de l'action get en mise à jour auto
 - installation : suppression du fichier obsolete upAction.php
 - github : utilisation de la clé github si elle est définie dans la clé github-key de préferences actions
+
+#### Modifications actions
+
+- slider_tiny : affichage répertoire : utilisation de image-style
+- slider_tiny : js/css dans répertoire lib
 
 ## 20/04/2026 - version 6.0.20
 
