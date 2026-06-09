@@ -348,6 +348,12 @@ class plgContentUpInstallerScript
             if (count($sizes)) {
                 // on a saisi des paramètres breakpoints : regénération du fichier up.css
                 $val = '';
+                try {
+                    $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+                } catch (\Throwable $e) { // depuis UP 5 : erreur chargement de la classe
+                    JLoader::registerNamespace('Lomart\Plugin\Content\Up', JPATH_ROOT . '/plugins/content/up/src');
+                    $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+                }
                 $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
                 $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
                 $up->compile_scss();      // génération du fichier up.css

@@ -1,3 +1,9 @@
+## 05/06/2026 - version 6.0.22
+
+#### Modifications internes
+
+- install : mise à jour impossible depuis la version 5 de UP : internal error 
+
 ## 05/06/2026 - version 6.0.21
 
 #### Modifications internes
