@@ -350,13 +350,11 @@ class plgContentUpInstallerScript
                 $val = '';
                 try {
                     $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+                    $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
+                    $up->compile_scss();      // génération du fichier up.css
                 } catch (\Throwable $e) { // depuis UP 5 : erreur chargement de la classe
-                    JLoader::registerNamespace('Lomart\Plugin\Content\Up', JPATH_ROOT . '/plugins/content/up/src');
-                    $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
+                    // on ne devrait pas passer par ici => ignore
                 }
-                $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
-                $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss
-                $up->compile_scss();      // génération du fichier up.css
                 $app->enqueueMessage('<p>Fichier up.css généré avec vos personnalisations.</p>');
             }
         }

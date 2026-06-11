@@ -1,4 +1,10 @@
-## 05/06/2026 - version 6.0.22
+## 11/06/2026 - version 6.0.23
+
+#### Modifications internes
+
+- install : simplification du correctif de la version 6.0.23
+
+## 08/06/2026 - version 6.0.22
 
 #### Modifications internes
 
