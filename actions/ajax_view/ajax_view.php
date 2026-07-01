@@ -106,7 +106,6 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
         // code en retour
         $html[] = UpHelper::set_attr_tag($this,$options['btn-tag'], $attr_btn, $options['btn-label']);
         $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_result, true);
-
         return implode(PHP_EOL, $html);
     }
     

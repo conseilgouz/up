@@ -1,3 +1,9 @@
+## 01/07/2026 - version 6.0.24
+
+#### Modifications actions
+
+- ajax_view : suppression de jquery, contrôle d'accès lors l'appel des articles
+
 ## 11/06/2026 - version 6.0.23
 
 #### Modifications internes

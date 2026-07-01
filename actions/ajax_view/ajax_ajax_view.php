@@ -26,15 +26,15 @@ class Ajax_View extends Lomart\Plugin\Content\Up\Extension\Up
 
         parse_str($data, $output);
         if (isset($output['action']) && $output['action'] != $actionName) {
-            return $action->lang('en=Error : wrong action;fr=Erreur : action incorrecte');
+            return UpHelper::lang($action, 'en=Error : wrong action;fr=Erreur : action incorrecte');
         }
         if (! isset($output['content'])) {
-            return $action->lang('en=Error : no arg content;fr=Erreur : aucun argument content');
+            return UpHelper::lang($action, 'en=Error : no arg content;fr=Erreur : aucun argument content');
         }
 
         if (isset($output['md5'])) {
             if (! password_verify($output['pwd'], $output['md5'])) {
-                return $action->lang('en=Erreur : wrong password;fr=Erreur : mot de passe incorrect');
+                return UpHelper::lang($action, 'en=Erreur : wrong password;fr=Erreur : mot de passe incorrect');
             }
             $key = file_get_contents('plugins/content/up/actions/ajax_view/info.key');
             $output['content'] = openssl_decrypt($output['content'], 'aes128', $key, 0, '1234567812345678');
@@ -60,6 +60,8 @@ class Ajax_View extends Lomart\Plugin\Content\Up\Extension\Up
                 $user = Factory::getApplication()->getIdentity();
                 $authorised = Access::getAuthorisedViewLevels($user->id);
                 $model->setState('filter.access', $access);
+                $model->setState('filter.viewlevels', $authorised);
+
                 // Article filter
                 $model->setState('filter.article_id', (int) $output['content']);
 
@@ -76,10 +78,10 @@ class Ajax_View extends Lomart\Plugin\Content\Up\Extension\Up
 
             case 'text':
                 $out = file_get_contents($output['content']);
-                $out = UpHelper::clean_HTML($action,$out, $output['html'], $output['eol']);
+                $out = UpHelper::clean_HTML($action, $out, $output['html'], $output['eol']);
                 break;
             case 'image':
-                $out = '<img src="' . UpHelper::get_url_relative($action,$output['content']) . '">';
+                $out = '<img src="' . UpHelper::get_url_relative($action, $output['content']) . '">';
                 break;
             default:
                 $out = 'Error, Type incorrect';
