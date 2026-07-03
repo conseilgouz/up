@@ -131,7 +131,10 @@ class plgContentUpInstallerScript
                     $actionsList[] = "faq";
                     $actionsList[] = "sql";
                 }
-                $actionsList[] = "slider_tiny"; // 6.0.21
+                if ($previous_version && $previous_version < '6.0.21') { // 6.0.21
+                    $actionsList[] = "slider_tiny"; // 6.0.21
+                }
+                $actionsList[] = "ajax_view"; // 6.0.24
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
@@ -359,13 +362,17 @@ class plgContentUpInstallerScript
             }
         }
         // nettoyage du cache
-        $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
-        $cache = $cacheModel->getCache() ?? null;
-        if ($cache) {
-            foreach ($cache->getAll() as $group) {
-                $cache->clean($group->group);
+        try {
+            $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+            $cache = $cacheModel->getCache() ?? null;
+            if ($cache) {
+                foreach ($cache->getAll() as $group) {
+                    $cache->clean($group->group);
+                }
+                $app->enqueueMessage('<p>Cache OK.</p>');
             }
-            $app->enqueueMessage('<p>Cache OK.</p>');
+        } catch (\Throwable $e ) {
+                $app->enqueueMessage('<p>No Cache cleaning.</p>');
         }
         return;
     }

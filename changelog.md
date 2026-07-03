@@ -1,5 +1,9 @@
 ## 01/07/2026 - version 6.0.24
 
+#### Modifications internes
+
+- install : le nettoyage du cache peut générer une exception (throwable)
+
 #### Modifications actions
 
 - ajax_view : suppression de jquery, contrôle d'accès lors l'appel des articles
