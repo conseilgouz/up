@@ -134,7 +134,10 @@ class plgContentUpInstallerScript
                 if ($previous_version && $previous_version < '6.0.21') { // 6.0.21
                     $actionsList[] = "slider_tiny"; // 6.0.21
                 }
-                $actionsList[] = "ajax_view"; // 6.0.24
+                if ($previous_version && $previous_version < '6.0.24') { // 6.0.24
+                    $actionsList[] = "ajax_view"; // 6.0.24
+                }
+                $actionsList[] = "upscsscompiler"; // 6.0.25
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;

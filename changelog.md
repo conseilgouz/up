@@ -1,3 +1,13 @@
+## 05/07/2026 - version 6.0.25
+
+#### Modifications internes
+
+- UpHelper : up_date_format : lib/intl non installé : gérer l'erreur
+
+#### Modifications actions
+
+- upscsscompiler : suppression des répertoires inutiles
+
 ## 03/07/2026 - version 6.0.24
 
 #### Modifications internes

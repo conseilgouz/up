@@ -12,6 +12,7 @@ v5.4.1 : variables publiques dans up.php
 v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
 v6.0.21 : action get : ne pas supprimer le répertoire lib en mise à jour auto
           set github key if defined
+v6.0.25 : up_date_format : lib/intl non installé : gérer l'erreur
 */
 
 namespace Lomart\Plugin\Content\Up\Helper;
@@ -2258,6 +2259,7 @@ class UpHelper
         } else {
             $date = self::up_strtotime($up, $date);
         }
+        $format_org = $format;
         // le format d'affichage (conversion)
         if (! is_null($format)) {
             $fmt_old = array(
@@ -2308,18 +2310,25 @@ class UpHelper
             }
         }
         // la locale de Joomla par defaut
-        if (empty($locale)) {
-            if ($http) {
-                $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'fr_FR'); // v5.2
-            } else {
-                $locale = Factory::getApplication()->getLanguage()->getTag();
-                $locale .= ',' . str_replace('-', '_', $locale);
+        try {
+            if (empty($locale)) {
+                if ($http) {
+                    $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'fr_FR'); // v5.2
+                } else {
+                    $locale = Factory::getApplication()->getLanguage()->getTag();
+                    $locale .= ',' . str_replace('-', '_', $locale);
+                }
             }
+            // le formatteur et retour
+            $fmt = datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, \IntlDateFormatter::GREGORIAN, $format);
+            return datefmt_format($fmt, $date);
+        } catch (\Throwable $e) {
+            // on ne devrait pas passer par là sauf si le paramètre intl de php n'est pas actif
+            $format = str_replace('%M', 'i', $format_org);
+            $format = str_replace('%', '', $format);
+            $tz = Factory::getApplication()->getIdentity()->getTimezone();
+            return Factory::getDate()->setTimezone($tz)->setTimeStamp($date)->format($format, true);
         }
-
-        // le formatteur et retour
-        $fmt = datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, \IntlDateFormatter::GREGORIAN, $format);
-        return datefmt_format($fmt, $date);
     }
 
     /*

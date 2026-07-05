@@ -25,12 +25,9 @@
  * v2.9 - update SCSSPHP version 1.11.0
  * v5.2 - update SCSSPHP version 2.0.1
  *  - add option map
+ * v6.0.25 : suppression des répertoires inutiles
  */
 defined('_JEXEC') or die();
-
-if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
-    require 'vendor/autoload.php';
-}
 
 use ScssPhp\ScssPhp\Compiler;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
