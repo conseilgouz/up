@@ -7,7 +7,7 @@
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
 	<authorEmail>lomart@lomart.fr</authorEmail>
-    <version>6.0.26</version>
+    <version>6.0.27</version>
     <description>PLG_CONTENT_UP_DESC</description>
 	<namespace path="src">Lomart\Plugin\Content\Up</namespace>
     <files>
