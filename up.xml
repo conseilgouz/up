@@ -2,12 +2,12 @@
 <extension version="5.0" type="plugin" group="content" method="upgrade">
     <name>Content - UP</name>
     <author>LOMART</author>
-    <creationDate>2026-07-05</creationDate>
+    <creationDate>2026-07-18</creationDate>
     <copyright>Copyright (c) 2026 LOMART. All rights reserved.</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
 	<authorEmail>lomart@lomart.fr</authorEmail>
-    <version>6.0.25</version>
+    <version>6.0.26</version>
     <description>PLG_CONTENT_UP_DESC</description>
 	<namespace path="src">Lomart\Plugin\Content\Up</namespace>
     <files>

@@ -1,3 +1,9 @@
+## 18/07/2026 - version 6.0.26
+
+#### Modifications actions
+
+- pdf : pdfjs version 6.1.200
+
 ## 05/07/2026 - version 6.0.25
 
 #### Modifications internes
