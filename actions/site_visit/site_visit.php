@@ -22,6 +22,7 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags    Expert
  *
+ * v6.0.30 : handle  locale_accept_from_http error
  */
 defined('_JEXEC') or die();
 
@@ -211,8 +212,12 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ===> log : liste des visites avec date, ip, lang
         if ($this->options['log']) {
-            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-            $lang = locale_accept_from_http($lang);
+            try {
+                $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+                $lang = locale_accept_from_http($lang);
+            } catch (\Throwable $e) {
+                $lang = false;
+            }
             $content = date('Y-m-d H:i') . '#' . $lang . '#' . $ip;
             file_put_contents($dirLogs . $row['alias'] . '.log', $content . PHP_EOL, FILE_APPEND | LOCK_EX);
         }

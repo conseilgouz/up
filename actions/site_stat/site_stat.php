@@ -29,6 +29,7 @@
  * @credit    <a href="" target"_blank">script xxx de xxx</a>
  * @tags    Expert
  *
+ * v6.0.30 : handle  locale_accept_from_http error
  */
 
 /*
@@ -288,8 +289,12 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ===> log : liste des visites avec date, ip, lang
         $fileLogs = $this->dirLogs . $id . '-' . $row['alias'] . '.log';
-        $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-        $lang = locale_accept_from_http($lang);
+        try {
+            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            $lang = locale_accept_from_http($lang);
+        } catch( catch (\Throwable $e) {
+            $lang = false;
+        }
         $lang = ($lang) ? $lang : 'xx';
         $content = date('Y-m-d-H:i') . '#' . $lang . '#' . $ip;
         file_put_contents($fileLogs, $content . "\n", FILE_APPEND | LOCK_EX);

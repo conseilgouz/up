@@ -1,3 +1,15 @@
+## 23/08/2026 - version 6.0.30
+
+#### Modifications actions
+
+- lang : replace locale_accept_from_http
+- site_stats : handle  locale_accept_from_http error
+- site_visits : handle  locale_accept_from_http error
+
+#### Modifications internes
+
+- assets/lib/data.php : handle  locale_accept_from_http error
+
 ## 18/07/2026 - version 6.0.29
 
 #### Modifications actions

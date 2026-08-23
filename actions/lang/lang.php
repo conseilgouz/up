@@ -19,6 +19,7 @@
  * - seuls les 2 premiers caractères du tag langue sont pris en compte (en-US => en)
  * v3.1 - retourne le code langue si pas d'argument autre que lang-order
  * permet {html=img | src=images/foo_{up lang}.png} 
+ * v6.0.30 :replace locale_accept_from_http
  */
 defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
@@ -87,11 +88,11 @@ class lang extends Lomart\Plugin\Content\Up\Extension\Up
         
         // === la langue demandée
         if ($options[__class__] == '') {
-            if ($options['http']) {
-                $userlang = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-            } else {
+            //if ($options['http']) {
+            //    $userlang = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            //} else {
                 $userlang = Factory::getApplication()->getLanguage()->getTag();
-            }
+            //}
         } else {
             // la langue à utiliser pour tester le rendu
             $userlang = $options[__class__];

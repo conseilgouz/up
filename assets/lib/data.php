@@ -3,6 +3,8 @@
 /*
  * @version  UP-3.0
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
+ *
+ * v6.0.30 : handle locale_accept_from_http error
  */
 
 defined('_JEXEC') or die();
@@ -604,12 +606,12 @@ function up_date_format($date, $format = null, $locale = '', $http = true)
     }
     // la locale de Joomla par defaut
     if (empty($locale)) {
-        if ($http) {
-            $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        } else {
+        //if ($http) {
+        //    $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        //} else {
             $locale = Factory::getApplication()->getLanguage()->getTag();
             $locale .= ',' . str_replace('-', '_', $locale);
-        }
+        //}
     }
 
     // le formatteur et retour
