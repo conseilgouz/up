@@ -2,7 +2,9 @@
 
 #### Sécurité : merci à Phyl Taylor de mysites.guru d'avoir signalé les failles et proposé des corrections
 
-- nouveau paramétre : liste des actions réservées aux administrateurs (admin/super admin) 
+Les failles ont été enrgistrées sur CVE par Joomla Security Tean sous les numéros CVE-2026-97160, CVE-2026-97161, CVE-2026-97162, CVE-2026-97163.
+
+- nouveau paramétre : liste des actions réservées aux administrateurs (admin/super admin)
 - UP : contrôle de session sur les commandes AJAX, contrôle des actions réservées
 - chargement des actions depuis github : ajout du contrôle SSL dans les commandes curl
 - action ajax_view (admin): contrôle des types de fichier, blocage accès transversal
