@@ -2,7 +2,7 @@
 
 #### Sécurité : merci à Phyl Taylor de mysites.guru d'avoir signalé les failles et proposé des corrections
 
-Les failles ont été enrgistrées sur CVE par Joomla Security Tean sous les numéros CVE-2026-97160, CVE-2026-97161, CVE-2026-97162, CVE-2026-97163.
+Les failles ont été enrgistrées sur CVE par David Jardin de Joomla Security Team sous les numéros CVE-2026-97160, CVE-2026-97161, CVE-2026-97162, CVE-2026-97163.
 
 - nouveau paramétre : liste des actions réservées aux administrateurs (admin/super admin)
 - UP : contrôle de session sur les commandes AJAX, contrôle des actions réservées
