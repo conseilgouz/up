@@ -1,36 +1,35 @@
 /* 
- * UP LOMART 5.2
+ * UP LOMART 6.1
  */
-jQuery(function($) {
+document.addEventListener('DOMContentLoaded', function() {
 	var up_id;
-	$(".upfilescleaner-btn").click(function() {
-		up_id = this.getAttribute('data-id');
-		var requete = 'action=upfilescleaner';
-		requete += '&backup=' + this.getAttribute('data-backup');
-		requete += '&folder-purge=' + this.getAttribute('data-folder-purge');
-		
-		request = {
-			'option': 'com_ajax',
-			'group': 'content',
-			'plugin': 'up',
-			'data': requete,
-			'format': 'raw'
-		};
-		var req = $.ajax({
-			type: 'POST',
-			data: request
-		});
-		req.done(function(response) {
-			if (response.slice(0, 3) == 'Err') {
-				$('#' + up_id + ' .upfilescleaner-result').css({'color':'red','font-size':'150%'});
-				$('#' + up_id + ' .upfilescleaner-result').html(response);
-			}
-			$('#' + up_id + ' .upfilescleaner-btn').hide();
-			$('#' + up_id + ' .upfilescleaner-warning').hide();
-			$('#' + up_id + ' .upfilescleaner-result').show();
-		});
-		req.fail(function(jqXHR, textStatus) {
-			alert("Request failed: " + textStatus);
-		});
-	});
+    ajax_buttons =  document.querySelectorAll('.upfilescleaner-btn');
+	for (var t=0;t < ajax_buttons.length;t++ ) {
+        ['click', 'touchstart'].forEach(type => {
+            ajax_buttons[t].addEventListener(type,function(e) {
+                up_id = this.getAttribute('data-id');
+                var requete = 'upid%3D' + up_id;
+                url = '?option=com_ajax&group=content&plugin=up&format=raw&data='+requete;
+                var token = Joomla.getOptions('csrf.token', '');
+                var req = Joomla.request({
+                    type: 'POST',
+                    headers: { 'X-CSRF-Token': token },
+                    url: url,
+                    onSuccess: function(data, xhr) {
+                        if (data.slice(0, 3) == 'Err') {
+                            document.querySelector('#' + up_id + ' .upfilescleaner-result').style.color = 'red';
+                            document.querySelector('#' + up_id + ' .upfilescleaner-result').style.fontSize = '150%';
+                            document.querySelector('#' + up_id + ' .upfilescleaner-result').innerHTML = data;
+                        }
+                        document.querySelector('#' + up_id + ' .upfilescleaner-btn').style.display = 'none';
+                        document.querySelector('#' + up_id + ' .upfilescleaner-warning').style.display = 'none';
+                        document.querySelector('#' + up_id + ' .upfilescleaner-result').style.display = 'block';
+                    },
+                    onError: function(message) {
+                        alert("Request failed: " + message);
+                    }
+                });
+            });
+        });
+    }
 });

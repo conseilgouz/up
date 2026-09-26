@@ -14,12 +14,12 @@
  * ##image## icon ou class ?
  * ##publish_up## ##publish_down## ##index## ##follow##
  *
- * MOTS-CLES ARTICLES 
+ * MOTS-CLES ARTICLES
  * ##id##, ##title##, ##title-link', ##title-size##, ##alias##, ##state##, ##access##, ##featured##,
  * ##created##, ##modified##, ##publish_up##, ##publish_down##
  * ##catid##, ##catname##, ##language##, ##index##, ##follow##
  * ##featured_up## ##featured_down##
- * Les clés des champs JSON 
+ * Les clés des champs JSON
  * ##attribs.key## ##metada.key## ##images.key## ##urls.key##
  *
  * @author   LOMART
@@ -30,24 +30,22 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Menu\AbstractMenu;
-use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Router\Route;
-use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Component\Users\Administrator\Model\LevelsModel;
+use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         UpHelper::set_demopage($this);
@@ -78,34 +76,32 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // ======> fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
-        $this->options['template-menutype'] = UpHelper::get_bbcode($this,$this->options['template-menutype'], false);
-        $this->options['template-menu'] = UpHelper::get_bbcode($this,$this->options['template-menu'], false);
-        $this->options['template-article'] = UpHelper::get_bbcode($this,$this->options['template-article'], false);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
+        $this->options['template-menutype'] = UpHelper::get_bbcode($this, $this->options['template-menutype'], false);
+        $this->options['template-menu'] = UpHelper::get_bbcode($this, $this->options['template-menu'], false);
+        $this->options['template-article'] = UpHelper::get_bbcode($this, $this->options['template-article'], false);
         $isList = ($this->options['main-tag'] == 'ul');
         if (! $isList) {
             $this->options['template-menu'] = '<' . $this->options['main-tag'] . ' class="level_##level##">' . $this->options['template-menu'] . '</' . $this->options['main-tag'] . '>';
         }
-        $this->options['article-sort-by'] = UpHelper::ctrl_argument($this,$this->options['article-sort-by'], 'title,ordering,created,modified,publish_up,id,hits,random');
-        $this->options['article-sort-order'] = UpHelper::ctrl_argument($this,$this->options['article-sort-order'], 'asc,desc');
+        $this->options['article-sort-by'] = UpHelper::ctrl_argument($this, $this->options['article-sort-by'], 'title,ordering,created,modified,publish_up,id,hits,random');
+        $this->options['article-sort-order'] = UpHelper::ctrl_argument($this, $this->options['article-sort-order'], 'asc,desc');
 
         $now = date('Y-m-d H:i:s');
         $this->options['template-menu'] = str_ireplace('#now', $now, $this->options['template-menu']);
-        if (! empty($this->options['template-article']))
+        if (! empty($this->options['template-article'])) {
             $this->options['template-article'] = str_ireplace('#now', $now, $this->options['template-article']);
+        }
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$this->options['css-head']);
+        UpHelper::load_css_head($this, $this->options['css-head']);
 
         // === RECUP NIVEAU ACCES
-        $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->createQuery();
-        $query->select('*');
-        $query->from($db->quoteName('#__viewlevels'));
-        $db->setQuery($query);
-        $results = $db->loadObjectList();
-        foreach ($results as $res)
+        $modelLevels = new LevelsModel();
+        $viewLevels = $modelLevels->getItems();
+        foreach ($viewLevels as $res) {
             $this->nivacces[$res->id] = $res->title;
+        }
 
         // --- robots index - config par défaut
         $app = Factory::getApplication();
@@ -132,14 +128,15 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         $level = 0;
         $toplevel = 0;
         $attr_main['id'] = $this->options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $this->options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $this->options['style']);
 
         // $menu = AbstractMenu::getInstance('site');
 
         $out = array(); // v2.8.1
         foreach ($all_menutype as $menutype) {
-            if ($this->options['template-menutype'] != '0' && $isList)
+            if ($this->options['template-menutype'] != '0' && $isList) {
                 $out[] = $this->getLignMenutype($menutype);
+            }
 
             $all_menuitem = $this->getMenus($menutype);
 
@@ -157,8 +154,9 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                         }
                         $params = json_decode($menuItem->params);
                         $robots_menu = $params->robots ?? '';
-                        if (empty($robots_menu))
+                        if (empty($robots_menu)) {
                             $robots_menu = $robots_config;
+                        }
 
                         $str = $this->getLignMenu($menuItem, $robots_menu);
                         if ($isList) {
@@ -177,10 +175,12 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                                 foreach ($articles as $article) {
                                     // si robot categorie est global, on prend celui du menu et à défaut la config generale
                                     $robots_article = $robots_category[$article->catid];
-                                    if (empty($robots_article))
+                                    if (empty($robots_article)) {
                                         $robots_article = $robots_menu;
-                                    if (empty($robots_article))
+                                    }
+                                    if (empty($robots_article)) {
                                         $robots_article = $robots_config;
+                                    }
                                     $out[] = '<li class="list-article">' . $this->getLignArticle($article, $robots_article) . '</li>';
                                 }
                                 $out[] = '</ul>'; // $art_block_tag
@@ -190,19 +190,21 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                         $level = (int) $menuItem->level;
                     }
                 }
-                for ($level; $level > 0; $level --)
-                    if ($isList)
+                for ($level; $level > 0; $level--) {
+                    if ($isList) {
                         $out[] = ($isList) ? '</li></ul>' : '';
+                    }
+                }
             } else {
                 $out[] = 'No menu items.';
             }
         }
 
-        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $out));
+        return UpHelper::set_attr_tag($this, 'div', $attr_main, implode(PHP_EOL, $out));
     }
 
     // run
-    function getMenutypes()
+    public function getMenutypes()
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->createQuery();
@@ -212,26 +214,26 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 
         if (! empty($this->options['menutype-exclude'])) {
             $exclus = array_map('trim', explode(',', $this->options['menutype-exclude']));
-            $exclus = $db->quote($exclus);
-            $exclus = implode(',', $exclus);
+            $exclus = $query->bindArray($exclus,\Joomla\Database\ParameterType::STRING);
         }
         $foo = $this->options[__class__];
         if (! empty($this->options[__class__])) {
             $inclus = array_map('trim', explode(',', $this->options[__class__]));
-            $inclus = $db->quote($inclus);
-            $inclus = implode(',', $inclus);
+            $inclus = $query->bindArray($inclus,\Joomla\Database\ParameterType::STRING);
         }
-        if (isset($inclus))
-            $query->where($db->quoteName('menutype') . ' IN (' . $inclus . ')');
-        if (isset($exclus))
-            $query->where($db->quoteName('menutype') . 'NOT IN (' . $exclus . ')');
+        if (isset($inclus)) {
+            $query->where($db->quoteName('menutype') . ' IN (' . implode(',', $inclus) . ')');
+        }
+        if (isset($exclus)) {
+            $query->where($db->quoteName('menutype') . 'NOT IN (' . implode(',', $exclus) . ')');
+        }
 
         $db->setQuery($query);
         $menutypes = $db->loadObjectList();
         return $menutypes;
     }
 
-    function getMenus($menutype)
+    public function getMenus($menutype)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->createQuery();
@@ -255,11 +257,15 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         )));
         $query->from($db->quoteName('#__menu'));
         // $query->where($db->quoteName('client_id') . '= 0');
-        if (! empty($menutype))
+        if (! empty($menutype)) {
             $query->where($db->quoteName('menutype') . '=' . $db->quote($menutype->menutype));
-        $query->where($db->quoteName('published') . ' IN (' . $this->options['menu-state-show'] . ')');
-        if ($this->options['public-only'])
+        }
+        $state = array_map('trim', explode(',', $this->options['menu-state-show']));
+        $state = $query->bindArray($state);
+        $query->where($db->quoteName('published') . ' IN (' . implode(',', $state) . ')');
+        if ($this->options['public-only']) {
             $query->where($db->quoteName('access') . '> 0');
+        }
         $query->order('lft ASC');
         $db->setQuery($query);
         $results = $db->loadObjectList();
@@ -267,7 +273,7 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
     }
 
     // end getMenus
-    function getArticles($menulink)
+    public function getArticles($menulink)
     {
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->createQuery();
@@ -298,22 +304,33 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             $query->select($db->quoteName('d.featured_down', 'featured_down'));
             $query->join('LEFT', $db->quoteName('#__content_frontpage', 'd') . ' ON (' . $db->quoteName('d.content_id') . ' = ' . $db->quoteName('a.id') . ')');
         }
-        if ($this->options['public-only'])
+        if ($this->options['public-only']) {
             $query->where($db->quoteName('a.access') . '=1');
+        }
         // ---- les critères spécifiques
         $link = parse_url($menulink);
-        if (empty($link['query']))
+        if (empty($link['query'])) {
             $foo = 'debug';
+        }
         parse_str($link['query'], $params);
         switch ($params['view']) {
             case 'article':
                 // article : index.php?option=com_content&view=article&id=150
-                $query->where($db->quoteName('a.id') . '=' . $params['id']);
+                $query->where($db->quoteName('a.id') . '= :id');
+                $id = (int)$params['id'];
+                $query->bind(':id', $id, \Joomla\Database\ParameterType::INTEGER);
                 break;
             case 'archive':
                 // articles archivés : index.php?option=com_content&view=archive&catid[0]=8&catid[1]=17
                 $state = 2;
-                $query->where($db->quoteName('a.catid') . ' IN (' . implode(',', $params['catid']) . ')');
+                $catlist = [];
+                foreach ($params['catid'] as $one) {
+                    if (trim($one) != '') {
+                        $catlist[] = trim($one);
+                    }
+                }
+                $cats = $query->bindArray($catlist);
+                $query->where($db->quoteName('a.catid') . ' IN (' . implode(',', $cats) . ')');
                 break;
             case 'featured':
                 // articles épinglés : index.php?option=com_content&view=featured
@@ -322,13 +339,22 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             case 'category':
                 // blog d'une catégorie : index.php?option=com_content&view=category&layout=blog&id=17
                 // liste articles d'une catégorie : index.php?option=com_content&view=category&id=8
-                $query->where($db->quoteName('a.catid') . '=' . $params['id']);
+                $query->where($db->quoteName('a.catid') . '= :catid');
+                $catid = (int)$params['id'];
+                $query->bind(':catid', $catid, \Joomla\Database\ParameterType::INTEGER);
                 break;
         }
-        $query->where($db->quoteName('a.state') . ' IN (' . $this->options['article-state-show'] . ')');
+        $states = [];
+        foreach (explode(',', $this->options['article-state-show']) as $one) {
+            if (trim($one) != '') {
+                $states[] = trim($one);
+            }
+        }
+        $states = $query->bindArray($states);
+        $query->where($db->quoteName('a.state') . ' IN (' . implode(',', $states) . ')');
         // ---- fin des critères spécifiques
 
-        $query->order('a.' . $this->options['article-sort-by'] . ' ' . strtoupper($this->options['article-sort-order']));
+        $query->order('a.' . $db->quoteName($this->options['article-sort-by']) . ' ' . strtoupper($this->options['article-sort-order']));
 
         $db->setQuery($query);
         $results = $db->loadObjectList();
@@ -336,51 +362,51 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         return $results;
     }
 
-    function getLignMenutype($menutype)
+    public function getLignMenutype($menutype)
     {
         $tmpl = $this->options['template-menutype'];
-        UpHelper::kw_replace($this,$tmpl, 'id', $menutype->id);
-        UpHelper::kw_replace($this,$tmpl, 'title', $menutype->title);
-        UpHelper::kw_replace($this,$tmpl, 'menutype', $menutype->menutype);
-        UpHelper::kw_replace($this,$tmpl, 'description', $menutype->description);
+        UpHelper::kw_replace($this, $tmpl, 'id', $menutype->id);
+        UpHelper::kw_replace($this, $tmpl, 'title', $menutype->title);
+        UpHelper::kw_replace($this, $tmpl, 'menutype', $menutype->menutype);
+        UpHelper::kw_replace($this, $tmpl, 'description', $menutype->description);
         return $tmpl;
     }
 
-    function getLignMenu($menu, $robots)
+    public function getLignMenu($menu, $robots)
     {
         $tmpl = $this->options['template-menu'];
 
         $root = Uri::getInstance()->root();
-        $url = $root . UpHelper::get_db_value($this,'path', 'menu', 'id=' . $menu->id);
+        $url = $root . UpHelper::get_db_value($this, 'path', 'menu', 'id=' . $menu->id);
 
-        UpHelper::kw_replace($this,$tmpl, 'id', $menu->id);
-        UpHelper::kw_replace($this,$tmpl, 'title', $menu->title);
-        UpHelper::kw_replace($this,$tmpl, 'title-link', '<a href="' . $url . '">' . $menu->title . '</a>');
-        UpHelper::kw_replace($this,$tmpl, 'menutype', $menu->menutype);
-        UpHelper::kw_replace($this,$tmpl, 'home', $menu->home);
-        UpHelper::kw_replace($this,$tmpl, 'access', $this->nivacces[$menu->access]);
-        UpHelper::kw_replace($this,$tmpl, 'level', $menu->level);
-        UpHelper::kw_replace($this,$tmpl, 'note', $menu->note);
-        UpHelper::kw_replace($this,$tmpl, 'state', $menu->published);
+        UpHelper::kw_replace($this, $tmpl, 'id', $menu->id);
+        UpHelper::kw_replace($this, $tmpl, 'title', $menu->title);
+        UpHelper::kw_replace($this, $tmpl, 'title-link', '<a href="' . $url . '">' . $menu->title . '</a>');
+        UpHelper::kw_replace($this, $tmpl, 'menutype', $menu->menutype);
+        UpHelper::kw_replace($this, $tmpl, 'home', $menu->home);
+        UpHelper::kw_replace($this, $tmpl, 'access', $this->nivacces[$menu->access]);
+        UpHelper::kw_replace($this, $tmpl, 'level', $menu->level);
+        UpHelper::kw_replace($this, $tmpl, 'note', $menu->note);
+        UpHelper::kw_replace($this, $tmpl, 'state', $menu->published);
         // date publish
         if (stripos($tmpl, '##publish_') !== false) {
-            UpHelper::kw_replace($this,$tmpl, 'publish_up', UpHelper::get_db_value($this,'publish_up', 'menu', 'id=' . $menu->id));
-            UpHelper::kw_replace($this,$tmpl, 'publish_down', UpHelper::get_db_value($this,'publish_down', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this, $tmpl, 'publish_up', UpHelper::get_db_value($this, 'publish_up', 'menu', 'id=' . $menu->id));
+            UpHelper::kw_replace($this, $tmpl, 'publish_down', UpHelper::get_db_value($this, 'publish_down', 'menu', 'id=' . $menu->id));
         }
         //
         $robots = explode(',', $robots);
-        UpHelper::kw_replace($this,$tmpl, 'index', trim($robots[0]));
-        UpHelper::kw_replace($this,$tmpl, 'follow', trim($robots[1]));
+        UpHelper::kw_replace($this, $tmpl, 'index', trim($robots[0]));
+        UpHelper::kw_replace($this, $tmpl, 'follow', trim($robots[1]));
 
         // ============================================================
         if (strpos($tmpl, '##image') !== false) {
             // $itemParams = json_decode($menu->params);
             $image = $this->get_image($menu->params);
-            UpHelper::kw_replace($this,$tmpl, 'image', $image);
+            UpHelper::kw_replace($this, $tmpl, 'image', $image);
         }
         // language
         $str = ($menu->language == '*') ? '' : $menu->language;
-        UpHelper::kw_replace($this,$tmpl, 'language', $str);
+        UpHelper::kw_replace($this, $tmpl, 'language', $str);
 
         // type
         if ($menu->type == 'component') {
@@ -388,21 +414,24 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             $tmp = parse_url($menu->link);
             parse_str($tmp['query'], $link);
             $str_context = '';
-            if (isset($link['layout']))
+            if (isset($link['layout'])) {
                 $str_context .= $link['layout'] . ' ';
-            if (isset($link['view']))
+            }
+            if (isset($link['view'])) {
                 $str_context .= $link['view'] . ' ';
-            if (isset($link['id']))
+            }
+            if (isset($link['id'])) {
                 $str_context .= '#' . $link['id'];
+            }
             // ----
             if ($link['option'] == 'com_content') {
                 $str = $str_context . ': ';
                 switch ($link['view']) {
                     case 'article':
-                        $str .= UpHelper::get_db_value($this,'title', 'content', 'id=' . $link['id']) . ')';
+                        $str .= UpHelper::get_db_value($this, 'title', 'content', 'id=' . $link['id']) . ')';
                         break;
                     case 'category':
-                        $str .= UpHelper::get_db_value($this,'title', 'categories', 'id=' . $link['id']) . ')';
+                        $str .= UpHelper::get_db_value($this, 'title', 'categories', 'id=' . $link['id']) . ')';
                         break;
                     default:
                         $str .= (isset($link['id'])) ? ' #' . $link['id'] : '';
@@ -420,19 +449,19 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                     $itemParams = json_decode($menu->params);
                     $idalias = $itemParams->aliasoptions;
                     $str = 'alias menu : ';
-                    $str .= UpHelper::get_db_value($this,'menutype', 'menu', 'id=' . $idalias) . '/';
-                    $str .= UpHelper::get_db_value($this,'title', 'menu', 'id=' . $idalias);
+                    $str .= UpHelper::get_db_value($this, 'menutype', 'menu', 'id=' . $idalias) . '/';
+                    $str .= UpHelper::get_db_value($this, 'title', 'menu', 'id=' . $idalias);
                     break;
                 default:
                     $str = $menu->type;
             }
         }
-        UpHelper::kw_replace($this,$tmpl, 'type', $str);
+        UpHelper::kw_replace($this, $tmpl, 'type', $str);
 
         return $tmpl;
     }
 
-    function getLignArticle($article, $robots)
+    public function getLignArticle($article, $robots)
     {
         $tmpl = $this->options['template-article'];
 
@@ -448,28 +477,28 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
         $robots = (empty($metadata['robots'])) ? $robots : $metadata['robots'];
         $robots = explode(',', $robots);
 
-//         if ($article->id==290)
-//             $debug=true;
-        
-        UpHelper::kw_replace($this,$tmpl, 'id', $article->id);
-        UpHelper::kw_replace($this,$tmpl, 'title', $article->title);
-        UpHelper::kw_replace($this,$tmpl, 'title-link', '<a href="' . $url . '">' . $article->title . '</a>');
-        UpHelper::kw_replace($this,$tmpl, 'title-size', strlen($article->title));
-        UpHelper::kw_replace($this,$tmpl, 'alias', $article->alias);
-        UpHelper::kw_replace($this,$tmpl, 'state', $article->state);
-        UpHelper::kw_replace($this,$tmpl, 'access', $this->nivacces[$article->access]);
-        UpHelper::kw_replace($this,$tmpl, 'created', UpHelper::up_date_format($this,$article->created, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'modified', UpHelper::up_date_format($this,$article->modified, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'publish_up', UpHelper::up_date_format($this,$article->publish_up, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'publish_down', UpHelper::up_date_format($this,$article->publish_down, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'catid', $article->catid);
-        UpHelper::kw_replace($this,$tmpl, 'catname', $article->catname);
-        UpHelper::kw_replace($this,$tmpl, 'featured', $article->featured);
-        UpHelper::kw_replace($this,$tmpl, 'featured_up', UpHelper::up_date_format($this,$article->featured_up, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'featured_down', UpHelper::up_date_format($this,$article->featured_down, $this->options['date-format'], $this->options['date-locale']));
-        UpHelper::kw_replace($this,$tmpl, 'language', $article->language);
-        UpHelper::kw_replace($this,$tmpl, 'index', trim($robots[0]));
-        UpHelper::kw_replace($this,$tmpl, 'follow', trim($robots[1]));
+        //         if ($article->id==290)
+        //             $debug=true;
+
+        UpHelper::kw_replace($this, $tmpl, 'id', $article->id);
+        UpHelper::kw_replace($this, $tmpl, 'title', $article->title);
+        UpHelper::kw_replace($this, $tmpl, 'title-link', '<a href="' . $url . '">' . $article->title . '</a>');
+        UpHelper::kw_replace($this, $tmpl, 'title-size', strlen($article->title));
+        UpHelper::kw_replace($this, $tmpl, 'alias', $article->alias);
+        UpHelper::kw_replace($this, $tmpl, 'state', $article->state);
+        UpHelper::kw_replace($this, $tmpl, 'access', $this->nivacces[$article->access]);
+        UpHelper::kw_replace($this, $tmpl, 'created', UpHelper::up_date_format($this, $article->created, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'modified', UpHelper::up_date_format($this, $article->modified, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'publish_up', UpHelper::up_date_format($this, $article->publish_up, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'publish_down', UpHelper::up_date_format($this, $article->publish_down, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'catid', $article->catid);
+        UpHelper::kw_replace($this, $tmpl, 'catname', $article->catname);
+        UpHelper::kw_replace($this, $tmpl, 'featured', $article->featured);
+        UpHelper::kw_replace($this, $tmpl, 'featured_up', UpHelper::up_date_format($this, $article->featured_up, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'featured_down', UpHelper::up_date_format($this, $article->featured_down, $this->options['date-format'], $this->options['date-locale']));
+        UpHelper::kw_replace($this, $tmpl, 'language', $article->language);
+        UpHelper::kw_replace($this, $tmpl, 'index', trim($robots[0]));
+        UpHelper::kw_replace($this, $tmpl, 'follow', trim($robots[1]));
 
 
         // des mots-clés JSON
@@ -496,26 +525,26 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                     $res = array();
             }
             $val = $res[$key] ?? 'error';
-            UpHelper::kw_replace($this,$tmpl, $matches[1][0] . '.' . $matches[2][0], $val);
+            UpHelper::kw_replace($this, $tmpl, $matches[1][0] . '.' . $matches[2][0], $val);
         }
-        
+
         return $tmpl;
     }
 
     // ===================================================================================
     //
     // Retourne une ligne formatée pour le menutype
-    function get_lign_menutype($menutype)
+    public function get_lign_menutype($menutype)
     {
         $tmpl = $this->options['template-menutype'];
-        UpHelper::kw_replace($this,$tmpl, 'id', $menutype['id']);
-        UpHelper::kw_replace($this,$tmpl, 'menutype', $menutype['menutype']);
-        UpHelper::kw_replace($this,$tmpl, 'title', $menutype['title']);
-        UpHelper::kw_replace($this,$tmpl, 'description', $menutype['description']);
+        UpHelper::kw_replace($this, $tmpl, 'id', $menutype['id']);
+        UpHelper::kw_replace($this, $tmpl, 'menutype', $menutype['menutype']);
+        UpHelper::kw_replace($this, $tmpl, 'title', $menutype['title']);
+        UpHelper::kw_replace($this, $tmpl, 'description', $menutype['description']);
         return $tmpl;
     }
 
-    function get_image($data)
+    public function get_image($data)
     {
         $params = json_decode($data);
         if (! empty($params->menu_icon_css)) {
@@ -534,10 +563,3 @@ class jmenus_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 
 
 // class
-
-
-
-
-
-
-

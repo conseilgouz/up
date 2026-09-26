@@ -11,6 +11,11 @@
  * - ajout bouton 'insere SO+SF'
  * - br pour numpart pour faciliter wysiwyg
 */
+/*
+ * 6.1.0 : security
+ * - add X-CSRF-Token in AJAX Request
+ *
+*/
 
 'use strict';
 
@@ -111,12 +116,19 @@ function showReponse() {
         let actionpart = tmpurl[tmpurl.length - 1].split('.');
         waitaction = actionpart[1];
         waitlang = actionpart[0];
+        let param_token = window.parent.Joomla.getOptions('csrf.token');
         let loc = window.location.pathname.split('/');
         let base = window.location.origin;
+        const parent = window.parent;
         if (base.indexOf('://localhost') > 0 ) base += '/'+loc[1];
-        let url = base+'/administrator/index.php?option=com_ajax&group=content&plugin=up&exist='+waitaction+'&format=json';
+        let adminstr = "";
+        if (parent.location.href.indexOf('/administrator/') > 0) {
+            adminstr = '/administrator';
+        }
+        let url = base+adminstr+'/index.php?option=com_ajax&group=content&plugin=up&exist='+waitaction+'&format=json';
         httpRequest = new XMLHttpRequest();
-        httpRequest.open('GET',url,true);
+        httpRequest.open('PUT',url,true);
+        httpRequest.setRequestHeader('X-CSRF-Token', param_token);
         httpRequest.onload = loadReponse;
         httpRequest.onerror = () => {
             console.error(`Network error while trying to load options for action: ${waitaction}`);

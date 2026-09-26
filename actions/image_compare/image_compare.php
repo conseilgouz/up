@@ -13,7 +13,9 @@
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @credit  script de <a href="https://github.com/sylvaincombes/jquery-images-compare" target="_blank">Sylvain Combes</a>
  * @tags    image
- */
+
+ * v6.1.0 : check images
+**/
 defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
@@ -21,17 +23,16 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class image_compare extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'images-compare.css');
-        UpHelper::load_file($this,'jquery.images-compare.min.js');
-        HTMLHelper::script('https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js');
+        UpHelper::load_file($this, 'images-compare.css');
+        UpHelper::load_file($this, 'jquery.images-compare.min.js');
+        UpHelper::load_file($this, 'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js');
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // cette action a obligatoirement du contenu
@@ -63,14 +64,26 @@ class image_compare extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this, $options_def, $js_options_def);
 
         $regeximg = '#<img .*>#U';
         preg_match_all($regeximg, $this->content, $img);
 
+        if ((strpos($img[0][0], '//') !== false) || (strpos($img[0][0], '..') !== false)
+         || (strpos($img[0][1], '//') !== false) || (strpos($img[0][1], '..') !== false)) { // not on your server
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid image : ;fr= image invalide : ') . $img[0][0].'/'.$img[0][1]));
+        }
+        preg_match('@src="([^"]+)"@', $img[0][0], $match);
+        if (!is_file($match[1])) {
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Image not found  : ;fr= image absente : ') . $match[1]));
+        }
+        preg_match('@src="([^"]+)"@', $img[0][1], $match);
+        if (!is_file($match[1])) {
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Image not found  : ;fr= image absente : ') . $match[1]));
+        }
         // =========== le code JS
         // les options saisis par l'utilisateur concernant le script JS
-        $js_options = UpHelper::only_using_options($this,$js_options_def);
+        $js_options = UpHelper::only_using_options($this, $js_options_def);
 
         // conversion params JS en chaine JSON
         $js_params = '';
@@ -82,7 +95,7 @@ class image_compare extends Lomart\Plugin\Content\Up\Extension\Up
         $js_code = '$("#' . $options['id'] . '").imagesCompare(';
         $js_code .= $js_params;
         $js_code .= ');';
-        UpHelper::load_jquery_code($this,$js_code);
+        UpHelper::load_jquery_code($this, $js_code);
 
         // === le code HTML
         // -- ajout options utilisateur dans la div principale
@@ -91,7 +104,7 @@ class image_compare extends Lomart\Plugin\Content\Up\Extension\Up
         $outer_div['style'] = $options['style'];
 
         // -- le code en retour
-        $out = UpHelper::set_attr_tag($this,'div', $outer_div);
+        $out = UpHelper::set_attr_tag($this, 'div', $outer_div);
         $out .= '<div style="display: none;">';
         $out .= $img[0][0];
         $out .= '</div>';

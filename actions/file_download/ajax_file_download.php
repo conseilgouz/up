@@ -6,47 +6,57 @@ defined('_JEXEC') or die;
   /* @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  */
 
-use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class File_Download extends Lomart\Plugin\Content\Up\Extension\Up {
-
-    static function goAjax($input) {
+class File_Download extends Lomart\Plugin\Content\Up\Extension\Up
+{
+    public static function goAjax($input)
+    {
         $actionName = 'file_download';  // v4
         $action = new $actionName($actionName);
         $data = $input->get('data', '', 'string');
+        $session = Factory::getApplication()->getSession();
 
         $output = array();
         parse_str($data, $output);
-        if (!isset($output['action']) || !isset($output['file'])) {
-            return $action->lang('en=Error : wrong format;fr=Erreur : format incorrect');
-        }
-        if ($output['action'] != 'file_download') {
-            return $action->lang('en=Error : wrong action;fr=Erreur : action incorrecte');
-        }
+        $up = $output['upid'];
 
+        if (!isset($output['file'])) {
+            return UpHelper::lang($action,'en=Error : wrong format;fr=Erreur : format incorrect');
+        }
         if (isset($output['md5'])) {
-            if (!password_verify($output['pwd'], $output['md5']))
-                return $action->lang('en=Erreur : wrong password;fr=Erreur : mot de passe incorrect');
+            $pass = $session->get($up.'filedownload.password');
+            // clear password : not needed anymore
+            if (!password_verify($output['pwd'], $pass)) {
+                return UpHelper::lang($action, 'en=Erreur : wrong password;fr=Erreur : mot de passe incorrect');
+            }
         }
         $custom = (file_exists('plugins/content/up/actions/file_download/' . 'custom/updownload.cfg') === true) ? 'custom/' : '';
         $cfg = parse_ini_file('plugins/content/up/actions/file_download/' . $custom . 'updownload.cfg');
         $extensions = array_map('trim', explode(',', $cfg['extensions']));
         $ext_blacklist = array('exe', 'bat', 'cmd', 'com', 'php', 'dll', 'cfg', 'sql', 'ini', 'inc', 'py', 'cgi', 'jsp', 'sh', 'pl');
 
-        $action = $output['action'];
-        $file = $output['file'];
+        $fileid = $output['file'];
+        $file = $session->get($up.$fileid);
         $fileName = basename($file);
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         if (!in_array($ext, $extensions) || in_array($ext, $ext_blacklist)) {
-            return $action->lang('en=Error : wrong file type;fr=Erreur : type fichier incorrect');
+            return UpHelper::lang($action, 'en=Error : wrong file type;fr=Erreur : type fichier incorrect');
         }
-        $subdir = (Uri::base(true) == '') ? '/' : '';
+        $subdir = Uri::base();
+
         $filecls = OutputFilter::stringURLSafe('up-cls-' . str_replace('.', '-', $fileName));
         $out = "";
-
+        if (strpos($file, '../') !== false) {
+            return  'Error :  file error';
+        }
         $url = JPATH_ROOT . '/' . rtrim($cfg['root'], '/') . '/' . htmlentities($file, ENT_QUOTES);
+        if (!is_file($url)) {
+            return  'Error :  file not found';
+        }
         // url fichier stat
         $url_log = dirname($url) . '/.log/' . basename($url);
         $nb = 0;
@@ -61,7 +71,7 @@ class File_Download extends Lomart\Plugin\Content\Up\Extension\Up {
             file_put_contents($url_log . '.log', date('Y-m-d H:i:s') . '|' . $_SERVER['REMOTE_ADDR'] . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
         $time = date('d/m/Y H:i');
-        $out .= 'ok,' . $subdir . ',' . rtrim($cfg['root'], '/') . ',' . $filecls . ',' . $nb . ',' . $time;
+        $out .= 'ok,' . $subdir . ',' . rtrim($cfg['root'], '/') . ',' . $file . ',' . $nb . ',' . $time;
         return $out;
     }
 

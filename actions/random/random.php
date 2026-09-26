@@ -55,7 +55,7 @@ class random extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
         $options['csv-numcol'] = (int) $options['csv-numcol'];
         $options['csv-title'] = (int) $options['csv-title'];
 
@@ -63,12 +63,15 @@ class random extends Lomart\Plugin\Content\Up\Extension\Up
         $data = $options[__class__];
         if (! empty($this->content)) {
             // liste entre shortcode
-            $datalist = UpHelper::get_content_parts($this,$this->content);
+            $datalist = UpHelper::get_content_parts($this, $this->content);
         } elseif (is_file($data)) {
             // fichier texte avec valeurs
             if (pathinfo($data, PATHINFO_EXTENSION) == 'csv') {
-                $data = UpHelper::get_html_contents($this,$data);
-                $data = UpHelper::get_content_csv($this,$data, false);
+                if (strpos($data, '..') !== false) {
+                    return "Erreur : le fichier ".$data." contient des caractères interdits";
+                }
+                $data = UpHelper::get_html_contents($this, $data);
+                $data = UpHelper::get_content_csv($this, $data, false);
                 if (! empty($data)) {
                     if ($options['csv-title']) {
                         unset($data[0]);
@@ -84,14 +87,50 @@ class random extends Lomart\Plugin\Content\Up\Extension\Up
                         $datalist = $data;
                     }
                 }
-            } else {
+            } elseif (pathinfo($data, PATHINFO_EXTENSION) == 'txt') {
+                if (strpos($data, '..') !== false) {
+                    return "Erreur : le fichier ".$data." contient des caractères interdits";
+                }
                 // fichier texte avec une donnée par ligne
-                $data = UpHelper::get_html_contents($this,$data);
+                $data = UpHelper::get_html_contents($this, $data);
                 $datalist = array_values(array_filter(explode(PHP_EOL, $data))); // ote lignes vides
+            } else {
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'unauthorized_file: '.$data));
             }
         } elseif (is_dir($data)) {
             // les fichiers d'un dossier
-            $data = rtrim($data, '/\\') . '/' . UpHelper::get_code($this,$options['mask']);
+            if (strpos($data, '..') !== false) {
+                return "Erreur : le fichier ".$data." contient des caractères interdits";
+            }
+            // check mask if it exists
+            $authorized_arr = ['txt','csv','html','png','jpg','webp','avi','gif','mp4','webm','ogg'];
+            $authorized_txt = '[txt,csv,html,png,jpg,webp,avi,gif,mp4,webm,ogg]';
+            $mask = $options['mask'];
+            $exts = explode('.', $mask);
+            if (count($exts) < 2) { // no extension : add authorized
+                $options['mask'] .= '.'.$authorized_txt;
+            } else {
+                // cherche mask finissant par .*
+                $ext = $exts[count($exts) - 1];
+                if ($ext == '*') {
+                    $options['mask'] = '';
+                    $options['mask'] .= $exts[0].'.';
+                    for ($i = 1; $i < count($exts) - 1; $i++) {
+                        $options['mask'] .= $exts[$i].'.';
+                    }
+                    $options['mask'] .= $authorized_txt;
+                } else {
+                    $ext = trim($ext, '[]'); // multiple ext ?
+                    $exts = explode(',', $ext);
+                    for ($i = 0; $i < count($exts) - 1; $i++) {
+                        if ($exts[$i] && !in_array($exts[$i], $authorized_arr)) {
+                            return "Erreur : extension interdite ".$options['mask']." pour le fichier ".$data;
+                        }
+                    }
+                }
+
+            }
+            $data = rtrim($data, '/\\') . '/' . UpHelper::get_code($this, $options['mask']);
             //$data = UpHelper::get_url_absolute($this,$data);
             $datalist = glob($data, GLOB_BRACE);
         } else {
@@ -109,13 +148,13 @@ class random extends Lomart\Plugin\Content\Up\Extension\Up
                 $out = $datalist; // le retour est déjà fait
             } else {
                 // liste simple
-                $data = UpHelper::get_bbcode($this,$data);
+                $data = UpHelper::get_bbcode($this, $data);
                 $datalist = explode($options['sep-in'], $data);
             }
         }
         // --- sortie si vide
         if (empty($datalist)) {
-            return UpHelper::msg_inline($this,$options['msg-empty']);
+            return UpHelper::msg_inline($this, $options['msg-empty']);
         }
 
         // === préparation retour
@@ -137,19 +176,19 @@ class random extends Lomart\Plugin\Content\Up\Extension\Up
             return implode($options['sep-out'], $out);
         } else {
             // attributs du bloc principal
-            UpHelper::load_css_head($this,$options['css-head']);
+            UpHelper::load_css_head($this, $options['css-head']);
             $attr_main = array();
             $attr_main['id'] = $options['id'];
-            UpHelper::get_attr_style($this,$attr_main, $options['main-style']);
-            UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
+            UpHelper::get_attr_style($this, $attr_main, $options['main-style']);
+            UpHelper::get_attr_style($this, $attr_item, $options['item-style']);
 
             for ($i = 0; $i < count($out); $i++) {
                 if (! empty($out[$i])) {
-                    $out[$i] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $out[$i]);
+                    $out[$i] = UpHelper::set_attr_tag($this, $options['item-tag'], $attr_item, $out[$i]);
                 }
             }
             // code en retour
-            return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, implode(PHP_EOL, $out));
+            return UpHelper::set_attr_tag($this, $options['main-tag'], $attr_main, implode(PHP_EOL, $out));
         }
     }
 

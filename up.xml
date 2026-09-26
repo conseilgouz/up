@@ -2,12 +2,12 @@
 <extension version="5.0" type="plugin" group="content" method="upgrade">
     <name>Content - UP</name>
     <author>LOMART</author>
-    <creationDate>2026-08-23</creationDate>
+    <creationDate>2026-09-21</creationDate>
     <copyright>Copyright (c) 2026 LOMART. All rights reserved.</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
     <authorUrl>lomart.fr</authorUrl>
 	<authorEmail>lomart@lomart.fr</authorEmail>
-    <version>6.0.30</version>
+    <version>6.1.0</version>
     <description>PLG_CONTENT_UP_DESC</description>
 	<namespace path="src">Lomart\Plugin\Content\Up</namespace>
     <files>
@@ -43,6 +43,15 @@
                     rows="10"
                     cols="40"
                 />
+                <field
+                    name="actionadmin"
+                    type="textarea"
+                    label="UP_ACTIONADMIN_LABEL"
+                    description="UP_ACTIONADMIN_DESC"
+                    default="addclass,addcsshead,addcodehead,addfilehead,addhtml,addscript,cache_cleaner,get,html,image_secure,jextensions_list,jmenus_list,jmenus_metadata,jmodules_list,php,php_error,site_stat,site_visit,sitemap,snippet,sql,upactionslist,upbtn_makefile,upclass2style,upfilescleaner,upscsscompiler,upprefset"
+                    rows="5"
+                    cols="80"
+                    />
                 <field
                     name="tagname"
                     type="text"

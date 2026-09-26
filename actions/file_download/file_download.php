@@ -27,16 +27,16 @@
  * v5.1 - ajout options file-max et sort-by-date
  */
 defined('_JEXEC') or die();
-
+use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\OutputFilter;
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Session\Session;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class file_download extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        UpHelper::load_file($this,'updownload.js');
+        UpHelper::load_file($this, 'updownload.js');
         return true;
     }
 
@@ -86,17 +86,17 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
-        $options['template'] = UpHelper::get_bbcode($this,$options['template']);
+        $options = UpHelper::ctrl_options($this, $options_def);
+        $options['template'] = UpHelper::get_bbcode($this, $options['template']);
 
         // Filtrage
-        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
+        if (UpHelper::filter_ok($this, $options['filter']) !== true) {
             return '';
         }
         // === chemin du dossier racine des téléchargement (unique pour le site)
         // le webmaster peut le changer en dupliquant le fichier en
         // si vide, les chemins seront relatifs à la racine du site
-        $cfg_file = UpHelper::get_custom_path($this,'updownload.cfg');
+        $cfg_file = UpHelper::get_custom_path($this, 'updownload.cfg');
         if ($cfg_file === false) {
             return '';
         }
@@ -125,6 +125,9 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
             $this->filepath = rtrim($cfg['root'], '/') . '/' . rtrim($options[__class__], '/') . '/';
             // tous les fichiers d'un dossier selon un masque sur extensions
             $folder = $options[__class__];
+            if (strpos($folder, '../') !== false) {
+                return  'Error :  path error';
+            }
             $folder = rtrim($folder, '/') . '/';
             $dirStat = $rootFolderAbs . $folder . '.log';
             $mask = ($options['file-mask']) ? $options['file-mask'] : '*';
@@ -148,16 +151,19 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
         } else {
             // chemin pour icon
             $this->filepath = rtrim($cfg['root'], '/') . '/' . dirname($options[__class__]) . '/';
+            if (strpos($this->filepath, '../') !== false) {
+                return  'Error :  path error';
+            }
             // un unique fichier
             $ext = strtolower(pathinfo($options[__class__], PATHINFO_EXTENSION));
             if (! in_array($ext, $cfg_extensions)) {
-                return UpHelper::msg_inline($this,UpHelper::lang($this,'en=File type prohibited;fr=Type de fichier interdit :') . ' ' . $ext);
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'en=File type prohibited;fr=Type de fichier interdit :') . ' ' . $ext);
             }
             // nouvelle version
             $tmp = glob($rootFolderAbs . $options[__class__], GLOB_BRACE);
 
             if (empty($tmp)) {
-                return UpHelper::msg_inline($this,UpHelper::lang($this,'en=File not found :;fr=Fichier non trouvé :') . ' ' . $options[__class__]);
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'en=File not found :;fr=Fichier non trouvé :') . ' ' . $options[__class__]);
             }
             $fileList[] = end($tmp);
             $folder = dirname($options[__class__]);
@@ -174,30 +180,41 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
             mkdir($dirStat);
         }
         // === css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
         // attributs du bloc principal
-        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
         $attr_main['id'] = $options['id'];
         // attributs d'un bloc fichier
-        UpHelper::get_attr_style($this,$attr_item, $options['item-class'], $options['item-style']);
+        UpHelper::get_attr_style($this, $attr_item, $options['item-class'], $options['item-style']);
         // attributs d'un lien fichier (balise a)
         $attr_link['class'] = 'updownload';
         $attr_link['href'] = '#dontmove';
+        $session = Factory::getApplication()->getSession();
+        $up = $options['id'];
+        $session->set($up, 'file_download');
+        $session->set($up.'filedownload.password', '');
         if ($options['password']) {
-            $attr_link['md5'] = password_hash($options['password'], PASSWORD_DEFAULT);
+            $attr_link['md5'] = '1';
+            $session->set($up.'filedownload.password', password_hash($options['password'], PASSWORD_DEFAULT));
         }
         // === sortie HTML
         $html = array();
-        $html[] = ($options['main-tag'] != '0') ? UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, false) : '';
+        $fileid = 0;
+        $html[] = ($options['main-tag'] != '0') ? UpHelper::set_attr_tag($this, $options['main-tag'], $attr_main, false) : '';
         foreach ($fileList as $file) {
             // --- reset valeur pour file
             $tmpl = $options['template'];
             $fileRel = substr($file, strlen($rootFolderAbs)); // relatif à rootFolder
             $fileName = basename($fileRel);
             $file_attr = $attr_link;
+
+            $fileid++;
+            $session_file = 'filedownload.file'.$fileid;
+            $session->set($up.'filedownload.file'.$fileid, $fileRel);
+
             $file_attr['data-up-id'] = $options['id'];
-            $file_attr['data-file'] = $fileRel;
+            $file_attr['data-file'] = $session_file;
             // les infos fichier sont au format ini (info & icon) ou uniqument texte info
             unset($file_info);
             if (file_exists($file . '.info')) {
@@ -210,21 +227,17 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
             // ==== creation ligne de sortie
             // LINK exemple : ##link## ##icon## texte ##/link##
             if (stripos($tmpl, '##link') !== false) {
-                $str = UpHelper::set_attr_tag($this,'a', $file_attr);
-                UpHelper::kw_replace($this,$tmpl, 'link', $str);
+                $str = UpHelper::set_attr_tag($this, 'a', $file_attr);
+                UpHelper::kw_replace($this, $tmpl, 'link', $str);
                 $tmpl = str_replace('##/link##', '</a>', $tmpl);
-            }
-            if (stripos($tmpl, '##/link##') !== false) {
-                // déjà traité. Plus aucun sens
-                $tmpl = str_replace('##/link##', '', $tmpl); // v1.9.3
             }
             // FILENAME
             if (stripos($tmpl, '##filename-link##') !== false) {
-                $str = UpHelper::set_attr_tag($this,'a', $file_attr, $fileName);
-                UpHelper::kw_replace($this,$tmpl, 'filename-link', $str);
+                $str = UpHelper::set_attr_tag($this, 'a', $file_attr, $fileName);
+                UpHelper::kw_replace($this, $tmpl, 'filename-link', $str);
             }
             if (stripos($tmpl, '##filename##') !== false) {
-                UpHelper::kw_replace($this,$tmpl, 'filename', $fileName);
+                UpHelper::kw_replace($this, $tmpl, 'filename', $fileName);
             }
             // HITS & LASTDOWNLOAD
             if (stripos($tmpl, '##hit##') || stripos($tmpl, '##lastdownload##')) {
@@ -236,43 +249,44 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
                 }
                 $filecls = OutputFilter::stringURLSafe('up-cls-' . str_replace('.', '-', $fileName));
                 $nb = '<span class="up-tmpl-hits ' . $filecls . '">' . $nb . '</span>';
-                UpHelper::kw_replace($this,$tmpl, 'hit', ($nb) ? sprintf($options['model-hit'], $nb) : '');
+                UpHelper::kw_replace($this, $tmpl, 'hit', ($nb) ? sprintf($options['model-hit'], $nb) : '');
                 $time = ($time) ? date($options['format-date'], strtotime($time)) : '';
                 $time = '<span class="up-tmpl-time ' . $filecls . '">' . $time . '</span>';
-                UpHelper::kw_replace($this,$tmpl, 'lastdownload', ($time) ? sprintf($options['model-lastdownload'], $time) : '');
+                UpHelper::kw_replace($this, $tmpl, 'lastdownload', ($time) ? sprintf($options['model-lastdownload'], $time) : '');
             }
             // INFO dans fichier $filename.info
             if (stripos($tmpl, '##info##')) {
                 $str = (isset($file_info['info'])) ? $file_info['info'] : '';
-                UpHelper::kw_replace($this,$tmpl, 'info', ($str) ? sprintf($options['model-info'], $str) : '');
+                UpHelper::kw_replace($this, $tmpl, 'info', ($str) ? sprintf($options['model-info'], $str) : '');
             }
             // ICON
             if (stripos($tmpl, '##icon##') !== false) {
                 $icon = (isset($file_info['icon'])) ? $file_info['icon'] : $options['icon'];
-                $tmpl = str_replace('##icon##', UpHelper::icon($this,$icon, $file), $tmpl);
-                UpHelper::kw_replace($this,$tmpl, 'icon', UpHelper::icon($this,$icon, $file));
+                $tmpl = str_replace('##icon##', UpHelper::icon($this, $icon, $file), $tmpl);
+                UpHelper::kw_replace($this, $tmpl, 'icon', UpHelper::icon($this, $icon, $file));
             }
             if (stripos($tmpl, '##icon-link##') !== false) {
                 $icon = (isset($file_info['icon'])) ? $file_info['icon'] : $options['icon'];
-                $str = UpHelper::set_attr_tag($this,'a', $file_attr, UpHelper::icon($this,$icon, $file));
-                UpHelper::kw_replace($this,$tmpl, 'icon-link', $str);
+                $str = UpHelper::set_attr_tag($this, 'a', $file_attr, UpHelper::icon($this, $icon, $file));
+                UpHelper::kw_replace($this, $tmpl, 'icon-link', $str);
             }
             // SIZE
             if (stripos($tmpl, '##size##') !== false) {
-                UpHelper::kw_replace($this,$tmpl, 'size', UpHelper::filesize($this,$file, 2));
+                UpHelper::kw_replace($this, $tmpl, 'size', UpHelper::filesize($this, $file, 2));
             }
             // DATE
             if (stripos($tmpl, '##date##')) {
-                UpHelper::kw_replace($this,$tmpl, 'date', date($options['format-date'], filemtime($file)));
+                UpHelper::kw_replace($this, $tmpl, 'date', date($options['format-date'], filemtime($file)));
             }
             // habillage bloc ligne fichier
             if ($options['item-tag'] != '0') {
-                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $attr_item, $tmpl);
+                $html[] = UpHelper::set_attr_tag($this, $options['item-tag'], $attr_item, $tmpl);
             } else {
                 $html[] = $tmpl . PHP_EOL;
             }
         } // foreach $file
         $html[] = ($options['main-tag'] != '0') ? '</' . $options['main-tag'] . '>' : '';
+        $html[] = '<input id="token" type="hidden" name="' . Session::getFormToken() . '" value="1" />';
         return implode(PHP_EOL, $html);
     }
 

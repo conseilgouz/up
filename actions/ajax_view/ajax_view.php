@@ -13,10 +13,13 @@
  * @version  UP-2.9
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags Editor
+ *
+ * 6.1.0 : security update
  */
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Session\Session;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
@@ -24,7 +27,7 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'ajax_ajax_view.js');
+        UpHelper::load_file($this, 'ajax_ajax_view.js');
         return true;
     }
 
@@ -55,11 +58,11 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
-        $options['btn-label'] = UpHelper::get_bbcode($this,$options['btn-label']);
+        $options = UpHelper::ctrl_options($this, $options_def);
+        $options['btn-label'] = UpHelper::get_bbcode($this, $options['btn-label']);
 
         // === css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // controle validite contenu
         $target = $options[__CLASS__];
@@ -73,7 +76,7 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
             } elseif (in_array($ext, explode(',', 'txt,html,csv'))) {
                 $type = 'text';
             } else {
-                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'unauthorized_file', $target)); //v31
+                return UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'unauthorized_file', $target)); //v31
             }
         }
 
@@ -90,25 +93,32 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
         // === attributs du bouton
         $attr_btn = array();
         $attr_btn['data-id'] = $options['id'];
-        $attr_btn['data-content'] = $target;
-        $attr_btn['data-type'] = $type;
-        $attr_btn['data-html'] = $options['HTML'];
-        $attr_btn['data-eol'] = $options['EOL'];
+        $session = Factory::getApplication()->getSession();
+        $me = $options['id'];
+        $session->clear($me.'ajaxview.md5');
+        $session->set($me,'ajax_view');
         if (! empty($options['password'])) {
-            $attr_btn['data-md5'] = password_hash($options['password'], PASSWORD_DEFAULT);
+            $session->set($me.'ajaxview.md5', password_hash($options['password'], PASSWORD_DEFAULT));
+            $session->set($me.'ajaxview.target', $target);
+            $attr_btn['data-md5'] = "1";
         }
-        UpHelper::get_attr_style($this,$attr_btn, $options['btn-style'], 'ajax-view-btn', $options['id']);
+        $session->set($me.'ajaxview.content',$target);
+        $session->set($me.'ajaxview.type',$type);
+        $session->set($me.'ajaxview.html',$options['HTML']);
+        $session->set($me.'ajaxview.eol',$options['EOL']);
+        $session->set($me.'ajaxview.extimages', $options['ext-images']);
+        UpHelper::get_attr_style($this, $attr_btn, $options['btn-style'], 'ajax-view-btn', $options['id']);
 
         // attributs du bloc résultat (le principal)
         $attr_result = array();
-        UpHelper::get_attr_style($this,$attr_result, $options['class'], $options['style'], $options['id'], 'ajax-view-result;display:none');
+        UpHelper::get_attr_style($this, $attr_result, $options['class'], $options['style'], $options['id'], 'ajax-view-result;display:none');
 
         // code en retour
-        $html[] = UpHelper::set_attr_tag($this,$options['btn-tag'], $attr_btn, $options['btn-label']);
-        $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $attr_result, true);
+        $html[] = UpHelper::set_attr_tag($this, $options['btn-tag'], $attr_btn, $options['btn-label']);
+        $html[] = UpHelper::set_attr_tag($this, $options['main-tag'], $attr_result, true);
         return implode(PHP_EOL, $html);
     }
-    
+
     // run
 
 }

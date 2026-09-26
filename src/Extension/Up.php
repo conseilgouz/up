@@ -16,6 +16,8 @@ v5.4.2 : cleanup checkfiles
 v6.0.14 : activer si API ou administrator
 v6.0.21 : suppression de l'appel à upAction.php
           set github key if defined
+v6.1.0 : add admin actions list
+         secure ajax calls
 */
 
 namespace Lomart\Plugin\Content\Up\Extension;
@@ -24,37 +26,89 @@ defined('_JEXEC') or die('Restricted access');
 
 use Joomla\CMS\Event\Content\ContentPrepareEvent;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Version;
 use Joomla\Event\SubscriberInterface;
 use Joomla\Filesystem\File;
 use Joomla\Registry\Registry;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
+use Joomla\Component\Content\Administrator\Model\ArticleModel;
+use Joomla\Component\Modules\Administrator\Model\ModuleModel;
 
 // #[AllowDynamicProperties] // php 8.4
 
 class UP extends CMSPlugin implements SubscriberInterface
 {
     public $upPath = 'plugins/content/up/';
-    public $actionPath,$actionprefs,$actionUserName,$array_subtitle,$article,$artid,$art_attr,$art_model,$attr,$attr_download,$attr_style_icon_image,$attr_view;
+    public $actionPath;
+    public $actionprefs;
+    public $actionUserName;
+    public $array_subtitle;
+    public $article;
+    public $artid;
+    public $art_attr;
+    public $art_model;
+    public $attr;
+    public $attr_download;
+    public $attr_style_icon_image;
+    public $attr_view;
     public $basepath;
-    public $categories,$catItems,$catRootIDs,$cat_attr,$cat_model,$class2style,$content,$cssmsg,$catIndex;
-    public $date_terms,$debug,$debugMsg,$decorate,$demopage,$dico,$dirLogs;
+    public $categories;
+    public $catItems;
+    public $catRootIDs;
+    public $cat_attr;
+    public $cat_model;
+    public $class2style;
+    public $content;
+    public $cssmsg;
+    public $catIndex;
+    public $date_terms;
+    public $debug;
+    public $debugMsg;
+    public $decorate;
+    public $demopage;
+    public $dico;
+    public $dirLogs;
     public $ext_types;
-    public $filepath,$firstInstance,$folders_exclude,$frequency;
-    public $inedit,$inprod,$info,$invalid;
+    public $filepath;
+    public $firstInstance;
+    public $folders_exclude;
+    public $frequency;
+    public $inedit;
+    public $inprod;
+    public $info;
+    public $invalid;
     public $J4;
-    public $level,$link;
-    public $main_class,$multicpt;
-    public $name, $nivacces;
-    public $options,$options_user,$out;
+    public $level;
+    public $link;
+    public $main_class;
+    public $multicpt;
+    public $name;
+    public $nivacces;
+    public $options;
+    public $options_user;
+    public $out;
     public $priority;
-    public $replace_len,$replace_deb,$result;
-    public $srcset_path,$styles_main;
-    public $tags_list_attr,$tarteaucitron,$tradaction,$trad,$tradup,$trimA0,$today;
-    public $urlhelpsite,$usehelpsite;
-    public $valid_type,$varStyle,$varStyleString;
+    public $replace_len;
+    public $replace_deb;
+    public $result;
+    public $srcset_path;
+    public $styles_main;
+    public $tags_list_attr;
+    public $tarteaucitron;
+    public $tradaction;
+    public $trad;
+    public $tradup;
+    public $trimA0;
+    public $today;
+    public $urlhelpsite;
+    public $usehelpsite;
+    public $valid_type;
+    public $varStyle;
+    public $varStyleString;
     public $withoutCustom;
 
     public $githubapikey = null;
@@ -63,6 +117,11 @@ class UP extends CMSPlugin implements SubscriberInterface
     public $actionsha256 = [];
     // liste des actions disponibles dans le répertoire zip de Github
     public $actionsZip = ['box', 'image_gallery','mapael','marquee','meteo_concept','pdf','slider_tiny','upscsscompiler'];
+    public $admin_actions = ['addclass','addcsshead','addcodehead','addfilehead','addhtml','addscript','cache_cleaner','get','html','image_secure','jextensions_list','jmenus_list','jmenus_metadata',
+                             'jmodules_list','php','php_error','site_stat','site_visit','sitemap','snippet','sql','upactionslist','upbtn_makefile','upclass2style',
+                             'upfilescleaner','upscsscompiler','upprefset'
+                             ];
+
     /**
      * @inheritDoc
      *
@@ -73,8 +132,10 @@ class UP extends CMSPlugin implements SubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'onContentPrepare' 	=> 'onContentPrepare',
-            'onAjaxUp'  => 'onAjaxUp'
+            'onContentPrepare' 	    => 'onContentPrepare',
+            'onContentBeforeSave'   => 'onContentBeforeSave',
+            'onExtensionBeforeSave'  => 'onExtensionBeforeSave',
+            'onAjaxUp'              => 'onAjaxUp'
         ];
     }
 
@@ -90,7 +151,162 @@ class UP extends CMSPlugin implements SubscriberInterface
         $this->LoadLanguage();
         UpHelper::loadActionsSha256($this);
     }
+    public function onExtensionBeforeSave(\Joomla\CMS\Event\Model\BeforeSaveEvent $event)
+    {
+        $context = $event->getContext();
+        if ($context != 'com_modules.module') {
+            return;
+        }
+        $user = Factory::getApplication()->getIdentity();
+        if ($user->authorise('core.manage')) {
+            return;
+        }
+        $table   = $event->getItem();
+        $isNew   = $event->getIsNew();
+        $data    = $event->getData();
+        $model = new ModuleModel();
+        $old = $model->getItem($data['id']);
+        $oldtext = $old->content;
+        $newtext = $data['content'];
+        $this->checkUPAdmin($event, $newtext, $oldtext);
+    }
+    public function onContentBeforeSave(\Joomla\CMS\Event\Model\BeforeSaveEvent $event)
+    {
+        $context = $event->getContext();
+        $table   = $event->getItem();
+        $isNew   = $event->getIsNew();
+        $data    = $event->getData();
+        $user = Factory::getApplication()->getIdentity();
+        if ($user->authorise('core.manage')) {
+            return;
+        }
+        if ($context != 'com_content.article' && $context != 'com_content.form' && $context != 'com_categories.category') {
+            $tag = $this->params->def('tagname', 'up');
+            foreach ($data as $one) {
+                if (is_string($one) && strpos($one, '{'.$tag.' ') !== false) {
+                    $event->addResult(false);
+                    $this->getApplication()->enqueueMessage('Non autorisé : up dans '.$context, 'error');
+                    return false;
+                }
+            }
+            return;
+        }
+        if ($context == 'com_categories.category') {
+            $model = new \Joomla\Component\Categories\Administrator\Model\CategoryModel();
+            $newtext = $data['description'];
+            $old = $model->getItem($data['id']);
+            $oldtext = $old->description;
+        } else {// article
+            $model = new ArticleModel();
+            $newtext = $data['articletext'];
+            $old = $model->getItem($data['id']);
+            $oldtext = $old->introtext.$old->fulltext;
+        }
+        $this->checkUPAdmin($event, $newtext, $oldtext);
+    }
+    private function checkUPAdmin($event, $newtext, $oldtext)
+    {
+        $tag = $this->params->def('tagname', 'up');
+        $regexopen = '/\{(?:' . $tag . ') *([^\s\=\|\{\}]+)/si';
+        if (! preg_match($regexopen, $newtext)) {
+            return true; // pas de UP
+        }
+        $admin_actions = $this->params->def('actionadmin', '');
+        if (!$admin_actions) {// non défini : on prend les valeurs par défaut
+            $admin_actions = $this->admin_actions;
+            ;
+        } else {
+            $admin_actions = explode(',', $admin_actions);
+        }
+        $regex = '#(<p>)(\{\/?' . $tag . '\b.*\})(</p>)#U';
+        // récuperation de l'ancienne version
+        $oldtext = preg_replace($regex, '$2', $oldtext);
+        // on a des balises UP : vérification des balises réservées
+        $newtext = preg_replace($regex, '$2', $newtext);
+        // ===== RECHERCHE DE TOUS LES SHORTCODES OUVRANTS
+        if (! preg_match_all($regexopen, $newtext, $matches, PREG_OFFSET_CAPTURE)) {
+            UpHelper::info_debug($this, 'Error up.php 132');
+        }
+        $nbSC = count($matches[0]);
+        $openSC = [];
+        $ix = 0;
+        for ($i = 0; $i < $nbSC; $i++) {
+            $deb = $matches[1][$i][1];
+            $end = strpos($newtext, '}', $matches[1][$i][1]);
+            $str = substr($newtext, $deb, $end - $deb);
+            $one = $this->normalize_action_name($str);
+            if (!in_array($one, $admin_actions)) {
+                continue;
+            }
+            $openSC[$ix]['posDeb'] = $deb;
+            $openSC[$ix]['posEnd'] = $end;
+            $openSC[$ix]['actionName'] = $one;
+            $ix++;
+        }
+        $nbSC = count($openSC);
+        if (!$nbSC) { // aucun mot réservé : on sort
+            return;
+        }
+        // check in previous version
+        if (! preg_match_all($regexopen, $oldtext, $matches, PREG_OFFSET_CAPTURE)) {
+            UpHelper::info_debug($this, 'Error up.php 132');
+        }
+        $nbOldSC = count($matches[0]);
+        $oldActions = [];
+        for ($i = 0; $i < $nbOldSC; $i++) {
+            $deb = $matches[1][$i][1];
+            $end = strpos($oldtext, '}', $matches[1][$i][1]);
+            $str = substr($oldtext, $deb, $end - $deb);
+            $one = $this->normalize_action_name($str);
+            if (!in_array($one, $admin_actions)) {
+                continue;
+            }
+            $oldActions[] = str_replace('<br />', '<br>', substr($oldtext, $deb, $end - $deb)); // normalize <br>
+        }
+        $nbOldSC = count($oldActions);
+        // les actions non autorisées étaient-elles dans l'ancienne version ?
+        // Si oui et qu'elles n'ont pas été modifiées, c'est OK
+        // Si non, erreur
+        for ($i = 0; $i < $nbSC; $i++) {
+            $actionNew = substr($newtext, $openSC[$i]['posDeb'], $openSC[$i]['posEnd'] - $openSC[$i]['posDeb']);
+            $actionNew = str_replace('<br />', '<br>', $actionNew); // normalize <br>
+            if (in_array($actionNew, $oldActions)) {
+                continue;
+            }
+            $event->addResult(false);
+            $this->getApplication()->enqueueMessage('Non autorisé : '.$actionNew, 'error');
+            // return false;
+        }
 
+    }
+    private function normalize_action_name(String $action): String
+    {
+        // charger le dictionnaire
+        if (!$this->dico) {
+            $this->dico = file_get_contents(JPATH_SITE.'/'.$this->upPath.'dico.json');
+            $this->dico = json_decode($this->dico, true);
+        }
+        $param = preg_split("/=/", trim($action, " \t\n\r\0\x0B\xA0\xC2"), 2); // permet = dans argument
+        $action = str_ireplace(array(
+                    '<p>',
+                    '</p>',
+                    '<br>',
+                    '<br/>',
+                    '<br />',
+                    '&nbsp;',
+                    PHP_EOL,
+                    '{',
+                    '}'
+                ), '', $param[0]);
+        $action = str_replace('-', '_', $action);
+        $action = trim(strtolower($action));
+        if (isset($this->dico[$action])) {
+            $action = $this->dico[$action];
+            $action = str_replace('-', '_', $action); // tel que le script
+            $action = trim(strtolower($action));
+        }
+        return $action;
+    }
     public function onContentPrepare(ContentPrepareEvent $event) // ($context, &$article, &$params, $limitstart = 0)
     {
         $context = $event->getContext();
@@ -109,13 +325,13 @@ class UP extends CMSPlugin implements SubscriberInterface
         }
         if ($context == 'com_finder.indexer') { // v2.9
             // les identificateurs autorisés pour UP
-            $tags = $this->params->def('tagname', 'up|xx');
+            $tags = $this->params->def('tagname', 'up');
             // les actions pour lesquelles il est dangereux de montrer le contenu
             // et celles avec des shortcodes internes
             $ActionMaskedContent = $this->params->def('searchActionMaskedContent', 'note|filter');
 
             // 1 - effacer les shortcodes et contenus des actions confidentielles
-            $regex = '#(\{(?:' . $tags . ')\s*(?:' . $ActionMaskedContent . ').*\{\/(?:up|xx)\s*(?:' . $ActionMaskedContent . ').*\})#Ui';
+            $regex = '#(\{(?:' . $tags . ') *(?:' . $ActionMaskedContent . ').*\{\/(?:up)\s*(?:' . $ActionMaskedContent . ').*\})#Ui';
             $article->text = preg_replace($regex, '', $article->text);
 
             // 2 - masquer les shortcodes ouvrants et/ou uniques
@@ -157,7 +373,7 @@ class UP extends CMSPlugin implements SubscriberInterface
         while (true && $loopId < 10) {
 
             // liste des shortcodes utilisables
-            $tag = $this->params->def('tagname', 'up|xx');
+            $tag = $this->params->def('tagname', 'up');
             $regexopen = '/\{(?:' . $tag . ') *([^\s\=\|\{\}]+)/si';
             // retour direct si pas de upAction dans l'article
             if (! preg_match($regexopen, $article->text)) {
@@ -256,6 +472,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                 $SC = substr($SC, strpos($SC, ' '));
                 // // -- analyse des options du shortcode
                 $allParams = explode('|', $SC);
+                $actionClassName = "";
                 foreach ($allParams as $param) {
                     // v1.8 supprime espace dur de TinyMCE
                     $param = preg_split("/=/", trim($param, " \t\n\r\0\x0B\xA0\xC2"), 2); // permet = dans argument
@@ -308,6 +525,22 @@ class UP extends CMSPlugin implements SubscriberInterface
                     // maj positions remplacement
                     $replaceLen = $replaceLen + $content_len + strlen($matches[0][0]);
                 }
+                // action autorisée ?
+                $contexts = ['com_content.featured','com_content.article','com_content.form',
+                             'com_content.category','com_content.categories','com_categories.category',
+                             'com_modules.module','mod_custom.content'];
+                if (!in_array($context, $contexts)) {
+                    $admin_actions = $this->params->def('actionadmin', '');
+                    if (!$admin_actions) {// non défini : on prend les valeurs par défaut
+                        $admin_actions = $this->admin_actions;
+                    } else {
+                        $admin_actions = explode(',', $admin_actions);
+                    }
+                    $user = Factory::getApplication()->getIdentity();
+                    if (!$user->authorise('core.manage') && in_array(strtolower($actionClassName), $admin_actions)) {
+                        continue; // non autorisé : on passe
+                    }
+                }
                 // ==== EXECUTION DE L'ACTION
                 $text = '';
                 // le chemin du script
@@ -317,7 +550,7 @@ class UP extends CMSPlugin implements SubscriberInterface
                     UpHelper::checkactionsha256($this, $actionClassName);
                 }
                 // Mini UP : chargement des actions au 1er appel
-                if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // mini UP : action non chargée
+                if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile) && $this->is_github_action($actionClassName)) { // mini UP : action non chargée
                     $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
                     // récupération de l'action sous format zip
                     if (!UpHelper::getGithubActionZip($this, $actionClassName)) {
@@ -460,24 +693,50 @@ class UP extends CMSPlugin implements SubscriberInterface
      */
     public function onAjaxUp($event)
     {
+        Session::checkToken() or die(Text::_('JINVALID_TOKEN'));
+
         $input = Factory::getApplication()->getInput();
+        $data = $input->get('data', '', 'string');
+
         // Vérifie que l'action existe, sinon la charger (appel par upbtn.js)
         $exist = $input->get('exist', '', 'string');
         if ($exist) { // check plugin loaded
+            // securité : seuls les admin peuvent activer une action absente
+            $user = Factory::getApplication()->getIdentity();
+            if (!$user->authorise('core.manage')) {
+                return 'Error : action non chargée';
+            }
             $actionfile = 'actions/' . $exist . '/' . $exist . '.php';
             // Mini UP : chargement des actions au 1er appel
-            if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // mini UP : action non chargée
-                $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
-                if (!UpHelper::getGithubActionZip($this, $exist)) {
-                    $event->addResult(false); // non trouvé : erreur
+            if ($this->is_github_action($exist)) { // mini UP : action non chargée
+                if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // mini UP : action non chargée
+                    $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
+                    if (!UpHelper::getGithubActionZip($this, $exist)) {
+                        return $event->addResult(false); // non trouvé : erreur
+                    }
                 }
+            } else {
+                // $event->addMessage('Non trouvé');
+                return $event->addResult(false);
             }
             return $event->addResult(true);
         }
-        // autres appels ajax
-        $data = $input->get('data', '', 'string');
         parse_str($data, $output);
+        $up = $output['upid'];
+        if (!$up || strpos($up, 'up-') === false) {
+            die('No UP');
+        }
+        $session = Factory::getApplication()->getSession();
+        $actionClassName = $session->get($up);
+        if (!$actionClassName || !is_file(JPATH_SITE.'/'.$this->upPath . 'actions/' . $actionClassName . '/ajax_' . $actionClassName . '.php')) {
+            die('No session');
+        }
+        // autres appels ajax
         if (isset($output['compil'])) { // SCSS compil ?
+            $user = Factory::getApplication()->getIdentity();
+            if (!$user->authorise('core.manage')) {
+                return 'Error : non autorisé';
+            }
             $arr = [];
             $arr['s'] = $input->get('s', '', 'integer');
             $arr['sl'] = $input->get('sl', '', 'integer');
@@ -498,20 +757,39 @@ class UP extends CMSPlugin implements SubscriberInterface
             }
             $res = $event->addResult(true);
             return $res;
-        } elseif (! isset($output['action'])) { // message incorrect
+        }
+        if (!$actionClassName) { // message incorrect
             $res = [false,'err : action incorrect'];
             return $event->addResult(json_encode($res));
         }
-        $actionClassName = $output['action'];
         $actionfile = JPATH_SITE.'/'.$this->upPath . 'actions/' . $actionClassName . '/ajax_' . $actionClassName . '.php';
-
         if (@include_once $actionfile) {
             $return = $actionClassName::goAjax($input);
             return $event->addResult($return);
         } else {
-            $text = 'Action Ajax ' . $actionClassName . ' non trouvée / not found';
-            return 'err : ' . $text;
+            echo 'Action Ajax non trouvée / not found';
+            return $event->addResult(false);
         }
+    }
+    // check that action exists on github
+    private function is_github_action(String $exist)
+    {
+        $file = JPATH_SITE.'/'.$this->upPath.'assets/UP-list-actions-version.txt';
+        $actions = [];
+        if (!is_file($file)) {
+            return false;
+        }
+        $readBuffer = file($file, FILE_IGNORE_NEW_LINES);
+        if (!$readBuffer) {// `file` couldn't read the htaccess we can't do anything at this point
+            return '';
+        }
+        foreach ($readBuffer as $line) {
+            $one = explode(':', $line);
+            if (sizeof($one) > 1) {
+                $actions[] = $one[0];
+            }
+        }
+        return in_array($exist, $actions);
     }
     // sauvegarde des valeurs saisies et écriture dans custom/_variables.scss
     public function store_scss($sizes)
@@ -550,12 +828,12 @@ class UP extends CMSPlugin implements SubscriberInterface
         $actionfile = 'actions/upscsscompiler/upscsscompiler.php';
         if (!is_file(JPATH_SITE.'/'.$this->upPath.$actionfile)) { // action non chargée
             $this->githubapikey = UpHelper::get_action_pref($this, 'github-key');
-            if (!UpHelper::getGithubActionZip($this, 'upscsscompiler', '../')) {
+            if (!UpHelper::getGithubActionZip($this, 'upscsscompiler')) {
                 return false;
             }
         }
         if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
-            require JPATH_SITE .'/'. $this->upPath.'actions/upscsscompiler/vendor/autoload.php';
+            require_once(JPATH_SITE.'/'.$this->upPath.'actions/upscsscompiler/vendor/autoload.php');
         }
         $scss_compiler = new \ScssPhp\ScssPhp\Compiler();
         $basePath = JPATH_SITE .'/'. $this->upPath.'assets/';
@@ -568,10 +846,11 @@ class UP extends CMSPlugin implements SubscriberInterface
             if ($result > '') {
                 file_put_contents($fileCss, $result->getCss());
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $msg = UpHelper::trad_keyword($this, 'COMPIL_ERR');
             $msg .= str_replace($basePath, '', $fileScss);
             UpHelper::msg_error($this, $msg . '<br>' . $e->getmessage());
+            return false;
         }
     }
 }

@@ -26,19 +26,18 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // lien vers la page de demo
         // - 0 pour cacher le lien vers demo car inexistante
-        UpHelper::set_demopage($this,0);
+        UpHelper::set_demopage($this, 0);
 
         $options_def = array(
             __class__ => '', // nom menutype exclus. séparateur: virgule
@@ -51,7 +50,7 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
 
         // === CRON : exécution périodique
         if ($this->cron_ok($this->options['cron']) !== true) {
@@ -66,12 +65,8 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         $this->priority = ($this->options['priority']) ? '<priority>' . $this->options['priority'] . '</priority>' : '';
 
         // ==== l'option principale peut contenir les menutypes a exclure
-        $this->options['menutype-exclude'] = UpHelper::str_append($this,$this->options['menutype-exclude'], $this->options[__class__], ',');
+        $this->options['menutype-exclude'] = UpHelper::str_append($this, $this->options['menutype-exclude'], $this->options[__class__], ',');
         $menus = array_map('trim', explode(',', $this->options['menutype-exclude']));
-        $menutypeExclus = '';
-        foreach ($menus as $menu) {
-            UpHelper::add_str($this,$menutypeExclus, $menu, ',', '"', '"');
-        }
 
         // ==== Variables globales
         $this->info = ''; // le compte-rendu si option info=1
@@ -84,8 +79,9 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         $tmp = $app->getCfg('robots', 'index, follow');
         $okk = stripos($app->getCfg('robots', 'index, follow'), 'noindex');
         $cfgIndex = (stripos($app->getCfg('robots', 'index, follow'), 'noindex') === false);
-        if ($this->options['info'])
-            $this->info .= '<br>' . UpHelper::trad_keyword($this,'VAL_CONFIG_INDEX', (($cfgIndex) ? 'index' : 'no-index'));
+        if ($this->options['info']) {
+            $this->info .= '<br>' . UpHelper::trad_keyword($this, 'VAL_CONFIG_INDEX', (($cfgIndex) ? 'index' : 'no-index'));
+        }
         // ==== les catégories
         // $this->catIndex[catid] = true si robots index pour la catégorie
         $db = Factory::getContainer()->get(DatabaseInterface::class);
@@ -101,8 +97,9 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
                 $this->catIndex[$res->id] = $cfgIndex;
             } else {
                 $this->catIndex[$res->id] = (stripos($meta['robots'], 'noindex') === false);
-                if (! $this->catIndex[$res->id] && $this->options['info'])
-                    $this->info .= '<br>' . UpHelper::trad_keyword($this,'VAL_CAT_INDEX', $res->id, $res->title);
+                if (! $this->catIndex[$res->id] && $this->options['info']) {
+                    $this->info .= '<br>' . UpHelper::trad_keyword($this, 'VAL_CAT_INDEX', $res->id, $res->title);
+                }
             }
         }
 
@@ -125,11 +122,19 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         )));
         $query->from($db->quoteName('#__menu'));
         $query->where($db->quoteName('client_id') . '= 0');
-        if ($menutypeExclus)
-            $query->where($db->quoteName('menutype') . 'NOT IN (' . $menutypeExclus . ')');
+        if ($this->options['menutype-exclude']) {
+            $menus = explode(',', $this->options['menutype-exclude']);
+            $menutypes = [];
+            foreach ($menus as $one) {
+                if (trim($one) != '') {
+                    $menutypes[] = trim($one) ;
+                }
+            }
+            $menutypeExclus = $query->bindArray($menutypes, \Joomla\Database\ParameterType::STRING);
+            $query->where($db->quoteName('menutype') . ' NOT IN (' . implode(',', $menutypeExclus) . ')');
+        }
         $query->where($db->quoteName('published') . '= 1');
         $query->where($db->quoteName('access') . '= 1');
-
         // $foo = $query->__toString();
         $db->setQuery($query);
         $results = $db->loadObjectList();
@@ -201,7 +206,7 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
     /*
      * ajoute la liste des liens à indexer
      */
-    function get_article_links($link)
+    public function get_article_links($link)
     {
 
         // ==== TOUS LES ARTICLES PUBLIQUEs AVEC ROBOTS:INDEX
@@ -232,12 +237,21 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         switch ($params['view']) {
             case 'article':
                 // article : index.php?option=com_content&view=article&id=150
-                $query->where($db->quoteName('a.ID') . '=' . $params['id']);
+                $query->where($db->quoteName('a.id') . '= :id');
+                $id = (int)$params['id'];
+                $query->bind(':id', $id, \Joomla\Database\ParameterType::INTEGER);
                 break;
             case 'archive':
                 // articles archivés : index.php?option=com_content&view=archive&catid[0]=8&catid[1]=17
                 $state = 2;
-                $query->where($db->quoteName('a.catid') . ' IN (' . implode(',', $params['catid']) . ')');
+                $catlist = [];
+                foreach ($params['catid'] as $one) {
+                    if (trim($one) != '') {
+                        $catlist[] = trim($one);
+                    }
+                }
+                $cats = $query->bindArray($catlist);
+                $query->where($db->quoteName('a.catid') . ' IN (' . implode(',', $cats) . ')');
                 break;
             case 'featured':
                 // articles épinglés : index.php?option=com_content&view=featured
@@ -246,10 +260,13 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
             case 'category':
                 // blog d'une catégorie : index.php?option=com_content&view=category&layout=blog&id=17
                 // liste articles d'une catégorie : index.php?option=com_content&view=category&id=8
-                $query->where($db->quoteName('a.catid') . '=' . $params['id']);
+                $query->where($db->quoteName('a.catid') . '= :catid');
+                $catid = (int)$params['id'];
+                $query->bind(':catid', $catid, \Joomla\Database\ParameterType::INTEGER);
                 break;
         }
-        $query->where($db->quoteName('a.state') . '=' . $state);
+        $query->where($db->quoteName('a.state') . '= :state');
+        $query->bind(':state', $state, \Joomla\Database\ParameterType::INTEGER);
         // ---- fin des critères spécifiques
 
         $query->order('a.modified DESC');
@@ -300,17 +317,19 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
      * $interval : delai en secondes ou + 1 jour 1 heure
      * $datetime_first : dateheure (YYYYMMDDHHMM) première exécution (non utilisé ici)
      */
-    function cron_ok($interval, $datetime_first = null)
+    public function cron_ok($interval, $datetime_first = null)
     {
-        if (empty($interval))
-            return true; // toujours
+        if (empty($interval)) {
+            return true;
+        } // toujours
 
         date_default_timezone_set('Europe/Paris');
 
         // première exécution
         if (! is_null($datetime_first = null)) {
-            if ((date('YmdHi') <= $datetime_first))
+            if ((date('YmdHi') <= $datetime_first)) {
                 return false;
+            }
         }
 
         // lire fichier
@@ -318,8 +337,9 @@ class sitemap extends Lomart\Plugin\Content\Up\Extension\Up
         if (file_exists($filename)) {
             $lastdate = file_get_contents($filename);
             $date = date('YmdHis');
-            if (date('YmdHis') < $lastdate)
-                return false; // l'heure n'est pas arrivée
+            if (date('YmdHis') < $lastdate) {
+                return false;
+            } // l'heure n'est pas arrivée
         }
         // MAJ fichier
         if ($interval[0] == '+') {

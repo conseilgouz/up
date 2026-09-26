@@ -43,8 +43,8 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        UpHelper::load_file($this,'jquery-rbox.css');
-        UpHelper::load_file($this,'jquery-rbox.js');
+        UpHelper::load_file($this, 'jquery-rbox.css');
+        UpHelper::load_file($this, 'jquery-rbox.js');
         return true;
     }
 
@@ -110,9 +110,9 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
-        $this->options['template'] = UpHelper::get_bbcode($this,$this->options['template']);
-        $this->options['template-folder'] = UpHelper::get_bbcode($this,$this->options['template-folder']);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
+        $this->options['template'] = UpHelper::get_bbcode($this, $this->options['template']);
+        $this->options['template-folder'] = UpHelper::get_bbcode($this, $this->options['template-folder']);
 
         $this->options['file-exclude'] = array_map('trim', explode(',', strtolower($this->options['file-exclude'])));
         if (empty($this->options['icon-path'])) {
@@ -122,13 +122,15 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         $this->options['icon-path'] .= '/' . $this->options['icon-size'] . '/';
 
         // =========== le code JS
-        UpHelper::load_jquery_code($this,'$(".up-rbox").rbox({' . $this->options['js-params'] . '});');
+        UpHelper::load_jquery_code($this, '$(".up-rbox").rbox({' . $this->options['js-params'] . '});');
 
         // extraction des composantes de la recherche
         $path = trim($this->options[__class__], ' /\\');
-        $mask = $this->options['mask'];
+        if (strpos($path, '..') !== false) {
+            return UpHelper::lang($this, 'en=Error : folder error '.$path.';fr=Erreur : répertoire incorrect '.$path);
+        }
         $this->basepath = $path;
-
+        $mask = $this->options['mask'];
         // annuler les echappements du shortcode UP
         $mask = str_replace('\[', '§{', $mask);
         $mask = str_replace('\]', '§}', $mask);
@@ -139,15 +141,15 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
 
         // === relation extension et type des fichiers
         $this->ext_types = array();
-        UpHelper::init_ext_types($this,'image', 'jpg,png,webp,gif');
-        UpHelper::init_ext_types($this,'pdf', 'pdf'); // iframe
-        UpHelper::init_ext_types($this,'office', 'doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx'); // iframe
-        UpHelper::init_ext_types($this,'audio', 'mp3,ogg'); // html
-        UpHelper::init_ext_types($this,'video', 'mp4,ogv,webm'); // video
-        UpHelper::init_ext_types($this,'ajax', 'txt,csv,html,url'); // ajax
-        UpHelper::init_ext_types($this,'iframe', ''); // iframe
-        UpHelper::init_ext_types($this,'download-only', 'zip,rar');
-        UpHelper::init_ext_types($this,'none', '');
+        UpHelper::init_ext_types($this, 'image', 'jpg,png,webp,gif');
+        UpHelper::init_ext_types($this, 'pdf', 'pdf'); // iframe
+        UpHelper::init_ext_types($this, 'office', 'doc,docx,odt,xls,xlsx,ods,pps,ppsx,pptx'); // iframe
+        UpHelper::init_ext_types($this, 'audio', 'mp3,ogg'); // html
+        UpHelper::init_ext_types($this, 'video', 'mp4,ogv,webm'); // video
+        UpHelper::init_ext_types($this, 'ajax', 'txt,csv,html,url'); // ajax
+        UpHelper::init_ext_types($this, 'iframe', ''); // iframe
+        UpHelper::init_ext_types($this, 'download-only', 'zip,rar');
+        UpHelper::init_ext_types($this, 'none', '');
 
         // === si le shortcode modifie au moins l'une des balises
         // si main-tag == ul -> item-tag=li
@@ -163,14 +165,14 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         // === ATTRIBUT POUR TEMPLATE
         // - view
         $this->attr_view = array();
-        UpHelper::get_attr_style($this,$this->attr_view, $this->options['view-style']);
-        $this->options['view-label'] = UpHelper::get_bbcode($this,$this->options['view-label']);
+        UpHelper::get_attr_style($this, $this->attr_view, $this->options['view-style']);
+        $this->options['view-label'] = UpHelper::get_bbcode($this, $this->options['view-label']);
         // - download
         $this->attr_download = array();
-        UpHelper::get_attr_style($this,$this->attr_download, $this->options['download-style']);
-        $this->options['download-label'] = UpHelper::get_bbcode($this,$this->options['download-label']);
+        UpHelper::get_attr_style($this, $this->attr_download, $this->options['download-style']);
+        $this->options['download-label'] = UpHelper::get_bbcode($this, $this->options['download-label']);
         // - image
-        $iconsize = (int) UpHelper::supertrim($this,$this->options['icon-size']);
+        $iconsize = (int) UpHelper::supertrim($this, $this->options['icon-size']);
         if ($iconsize <= 16) {
             $this->options['icon-size'] = 16;
         } elseif ($iconsize >= 48) {
@@ -182,7 +184,7 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         $this->attr_style_icon_image = 'height:' . $iconsize . 'px;width:' . $iconsize . 'px;object-fit: cover;';
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$this->options['css-head']);
+        UpHelper::load_css_head($this, $this->options['css-head']);
 
         // === Recupération de la liste
         $this->result = array();
@@ -201,9 +203,9 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         // attributs du bloc principal
         if ($this->options['main-tag']) {
             $attr_main['id'] = $this->options['id'];
-            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this, $attr_main, $this->options['class'], $this->options['style']);
             // code en retour
-            $out = UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this, $this->options['main-tag'], $attr_main, $out);
         }
 
         return $out;
@@ -258,7 +260,7 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         $abs_file = JPATH_ROOT . '/' . $file; // chemin disque
-        $url_file = UpHelper::get_url_absolute($this,$file); // chemin serveur
+        $url_file = UpHelper::get_url_absolute($this, $file); // chemin serveur
         $tag = $this->options['item-tag'];
 
         if (is_file($rel_file)) {
@@ -268,8 +270,8 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
             $tmpl = str_ireplace("##basename##", $fileinfo['basename'], $tmpl);
             $tmpl = str_ireplace("##filename##", $fileinfo['filename'], $tmpl);
             $tmpl = str_ireplace("##extension##", $fileinfo['extension'], $tmpl);
-            $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this,$file, $this->options['size-decimal']), $tmpl);
-            $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this,date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
+            $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this, $file, $this->options['size-decimal']), $tmpl);
+            $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this, date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
             $tmpl = str_ireplace("##relpath##", $rel_file, $tmpl);
             $ext = strtolower($fileinfo['extension']);
             // -- ICON
@@ -302,11 +304,11 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
                         // $foo = str_replace($this->basepath, '', $fileinfo['dirname']);
                         // $attr['data-rbox-series'] = 'rbox-serie-' . str_replace($this->basepath, '', $fileinfo['dirname']);
                         $attr['data-rbox-type'] = 'image';
-                        $attr['data-rbox-image'] = UpHelper::get_url_absolute($this,$file);
+                        $attr['data-rbox-image'] = UpHelper::get_url_absolute($this, $file);
                         break;
                     case 'pdf':
                         $attr['data-rbox-type'] = "iframe";
-                        $pdfjs_path = UpHelper::get_url_absolute($this,$this->upPath . 'actions/pdf/pdfjs/web/viewer.html');
+                        $pdfjs_path = UpHelper::get_url_absolute($this, $this->upPath . 'actions/pdf/pdfjs/web/viewer.html');
                         $attr['data-rbox-iframe'] = $pdfjs_path . '?file=' . $url_file;
                         break;
                     case 'office':
@@ -344,7 +346,7 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
                     $tmpl = str_ireplace("##view##", '', $tmpl);
                     $tmpl = str_ireplace("##/view##", '', $tmpl);
                 } else {
-                    $code = UpHelper::set_attr_tag($this,'a', array_merge($this->attr_view, $attr), false);
+                    $code = UpHelper::set_attr_tag($this, 'a', array_merge($this->attr_view, $attr), false);
                     $tmpl = str_ireplace("##view-btn##", $code . $this->options['view-label'] . '</a>', $tmpl);
                     $tmpl = str_ireplace("##view##", $code, $tmpl);
                     $tmpl = str_ireplace("##/view##", '</a>', $tmpl);
@@ -359,7 +361,7 @@ class file_explorer extends Lomart\Plugin\Content\Up\Extension\Up
                     $attr['href'] = $url_file;
                     $attr['class'] = $this->options['download-style'];
                     // $attr['title'] = 'Download ' . $fileinfo['basename'];
-                    $code = UpHelper::set_attr_tag($this,'a', $attr, $this->options['download-label']);
+                    $code = UpHelper::set_attr_tag($this, 'a', $attr, $this->options['download-label']);
                 }
                 $tmpl = str_ireplace("##download##", $code, $tmpl);
             }

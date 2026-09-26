@@ -37,6 +37,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Component\Content\Site\Model\ArticleModel;
+use Joomla\Component\Users\Administrator\Model\LevelsModel;
 use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
@@ -111,19 +113,19 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             }
         }
         // ======> fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // === Filtrage
-        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
+        if (UpHelper::filter_ok($this, $options['filter']) !== true) {
             return '';
         }
 
         $app = Factory::getApplication();
         $appParams = $app->getParams();
 
-        $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
-        $options['new-html'] = UpHelper::get_bbcode($this,$options['new-html'], false);
-        $options['no-content-html'] = UpHelper::get_bbcode($this,$options['no-content-html'], false);
+        $options['template'] = UpHelper::get_bbcode($this, $options['template'], false);
+        $options['new-html'] = UpHelper::get_bbcode($this, $options['new-html'], false);
+        $options['no-content-html'] = UpHelper::get_bbcode($this, $options['no-content-html'], false);
         // les niveaux d'accés autorisés. 0=tous
         $nivaccess = array();
         if (! empty($options['nivaccess'])) {
@@ -139,7 +141,7 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             $tmpl = $options['template'];
         }
         if (! $tmpl) {
-            UpHelper::msg_error($this,Text::_('Aucun contenu ni template'));
+            UpHelper::msg_error($this, Text::_('Aucun contenu ni template'));
             return false;
         }
 
@@ -168,17 +170,13 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ======> controle clé de tri
         $list_sortkey = 'title, ordering, created, modified, publish_up, id, hits, random';
-        $options['sort-by'] = UpHelper::ctrl_argument($this,$options['sort-by'], $list_sortkey);
+        $options['sort-by'] = UpHelper::ctrl_argument($this, $options['sort-by'], $list_sortkey);
 
         // === RECUP NIVEAU ACCES
         if (stripos($tmpl, '##nivaccess##') !== false) {
-            $db = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = $db->createQuery();
-            $query->select('*');
-            $query->from($db->quoteName('#__viewlevels'));
-            $db->setQuery($query);
-            $results = $db->loadObjectList();
-            foreach ($results as $res) {
+            $modelLevels = new LevelsModel();
+            $viewLevels = $modelLevels->getItems();
+            foreach ($viewLevels as $res) {
                 $nivacces[$res->id] = $res->title;
             }
         }
@@ -199,11 +197,12 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 $view = $app->getInput()->get('view', 0);
                 switch ($view) {
                     case 'article':
-                        $database = Factory::getContainer()->get(DatabaseInterface::class);
-                        $query = "SELECT catid FROM #__content WHERE id=" . $artid;
-                        $database->setQuery($query);
-                        $row = $database->loadObject();
-                        $catid = ($row != null) ? $row->catid : '';
+                        $model     = new ArticleModel(array('ignore_request' => true));
+                        $app       = Factory::getApplication();
+                        $appParams = $app->getParams();
+                        $model->setState('params', $appParams);
+                        $item = $model->getItem($this->artid);
+                        $catid = ($item != null) ? $item->catid : '';
                         break;
                     case 'categories':
                     case 'category':
@@ -294,18 +293,18 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ======> Style général et par article
         $main_attr['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$main_attr, $options['main-class'], $options['main-style']);
-        UpHelper::get_attr_style($this,$sItem_attr, $options['item-class'], $options['item-style']);
-        UpHelper::get_attr_style($this,$tags_list_attr, $options['tags-list-style']);
+        UpHelper::get_attr_style($this, $main_attr, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this, $sItem_attr, $options['item-class'], $options['item-style']);
+        UpHelper::get_attr_style($this, $tags_list_attr, $options['tags-list-style']);
 
         // css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // ======> mise en forme résultat
         $html = array();
         $nblign = 0;
         if ($options['main-tag'] != '0') {
-            $html[] = UpHelper::set_attr_tag($this,$options['main-tag'], $main_attr);
+            $html[] = UpHelper::set_attr_tag($this, $options['main-tag'], $main_attr);
         }
         foreach ($items as $item) {
             if (! empty($nivaccess) && ! in_array($item->access, $nivaccess)) {
@@ -314,7 +313,7 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             $nblign++;
             // --- Bloc article
             if ($options['item-tag'] != '0') {
-                $html[] = UpHelper::set_attr_tag($this,$options['item-tag'], $sItem_attr);
+                $html[] = UpHelper::set_attr_tag($this, $options['item-tag'], $sItem_attr);
             }
             $sItem = $tmpl; // reinit pour nouvel article
             // --- lien vers l'article
@@ -340,51 +339,51 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
             }
             // prise en charge plugins contenu v31
             if ($options['content-plugin']) {
-                $item->introtext = UpHelper::import_content($this,$item->introtext); // v31
-                $item->fulltext = UpHelper::import_content($this,$item->fulltext);
+                $item->introtext = UpHelper::import_content($this, $item->introtext); // v31
+                $item->fulltext = UpHelper::import_content($this, $item->fulltext);
             }
             // ==== les remplacements
             // {id} : ID de l'article
-            UpHelper::kw_replace($this,$sItem, 'id', $item->id);
+            UpHelper::kw_replace($this, $sItem, 'id', $item->id);
             // {link} : lien vers l'article - a mettre dans balise a
-            UpHelper::kw_replace($this,$sItem, 'link', $url);
+            UpHelper::kw_replace($this, $sItem, 'link', $url);
             // {title-link} : titre de l'article
-            UpHelper::kw_replace($this,$sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
+            UpHelper::kw_replace($this, $sItem, 'title-link', '<a href="' . $url . '">' . $title . '</a>');
             // {title} : titre de l'article
-            UpHelper::kw_replace($this,$sItem, 'title', $title);
+            UpHelper::kw_replace($this, $sItem, 'title', $title);
             // {subtitle} : sous-titre de l'article (partie aprés tilde du titre)
-            UpHelper::kw_replace($this,$sItem, 'subtitle', $subtitle);
+            UpHelper::kw_replace($this, $sItem, 'subtitle', $subtitle);
             // {maintitle} : titre principal de l'article (avant tilde) v3.0
-            UpHelper::kw_replace($this,$sItem, 'maintitle', $maintitle);
+            UpHelper::kw_replace($this, $sItem, 'maintitle', $maintitle);
             // {alias} : alias de l'article v1.8
-            UpHelper::kw_replace($this,$sItem, 'alias', $item->alias);
+            UpHelper::kw_replace($this, $sItem, 'alias', $item->alias);
             // {date-crea} : date de création
-            UpHelper::kw_replace($this,$sItem, 'date-crea', UpHelper::up_date_format($this,$item->created, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this, $sItem, 'date-crea', UpHelper::up_date_format($this, $item->created, $options['date-format'], $options['date-locale']));
             // {date-modif} : date de création
-            UpHelper::kw_replace($this,$sItem, 'date-modif', UpHelper::up_date_format($this,$item->modified, $options['date-format'], $options['date-locale']));
+            UpHelper::kw_replace($this, $sItem, 'date-modif', UpHelper::up_date_format($this, $item->modified, $options['date-format'], $options['date-locale']));
             // {date-publish} : date de création
-            $tmp = ($item->publish_up) ? UpHelper::up_date_format($this,$item->publish_up, $options['date-format'], $options['date-locale']) : '';
+            $tmp = ($item->publish_up) ? UpHelper::up_date_format($this, $item->publish_up, $options['date-format'], $options['date-locale']) : '';
             $tmp = ($item->publish_up > $now) ? '<span class="t-rouge">' . $tmp . '</span>' : $tmp;
-            UpHelper::kw_replace($this,$sItem, 'date-publish', $tmp);
-            $tmp = ($item->publish_down) ? UpHelper::up_date_format($this,$item->publish_down, $options['date-format'], $options['date-locale']) : '';
+            UpHelper::kw_replace($this, $sItem, 'date-publish', $tmp);
+            $tmp = ($item->publish_down) ? UpHelper::up_date_format($this, $item->publish_down, $options['date-format'], $options['date-locale']) : '';
             $tmp = ($item->publish_down < $now) ? '<span class="t-rouge">' . $tmp . '</span>' : $tmp;
-            UpHelper::kw_replace($this,$sItem, 'date-publish-end', $tmp);
+            UpHelper::kw_replace($this, $sItem, 'date-publish-end', $tmp);
             // {author} : auteur
-            UpHelper::kw_replace($this,$sItem, 'author', $item->author);
+            UpHelper::kw_replace($this, $sItem, 'author', $item->author);
             // {intro} : texte d'introduction en HTML
-            UpHelper::kw_replace($this,$sItem, 'intro', $item->introtext);
-            UpHelper::kw_replace($this,$sItem, 'content', $item->fulltext);
+            UpHelper::kw_replace($this, $sItem, 'intro', $item->introtext);
+            UpHelper::kw_replace($this, $sItem, 'content', $item->fulltext);
 
             $lib_nivaccess = (isset($nivacces[$item->access]) ? $nivacces[$item->access] : 'N.A.');
-            UpHelper::kw_replace($this,$sItem, 'nivaccess', $lib_nivaccess);
+            UpHelper::kw_replace($this, $sItem, 'nivaccess', $lib_nivaccess);
 
             // période de mise en vedette
-            $tmp = ($item->featured_up) ? UpHelper::up_date_format($this,$item->featured_up, $options['date-format'], $options['date-locale']) : '';
+            $tmp = ($item->featured_up) ? UpHelper::up_date_format($this, $item->featured_up, $options['date-format'], $options['date-locale']) : '';
             $tmp = ($item->featured_up > $now) ? '<span class="t-rouge">' . $tmp . '</span>' : $tmp;
-            UpHelper::kw_replace($this,$sItem, 'date-featured', $tmp);
-            $tmp = ($item->featured_down) ? UpHelper::up_date_format($this,$item->featured_down, $options['date-format'], $options['date-locale']) : '';
+            UpHelper::kw_replace($this, $sItem, 'date-featured', $tmp);
+            $tmp = ($item->featured_down) ? UpHelper::up_date_format($this, $item->featured_down, $options['date-format'], $options['date-locale']) : '';
             $tmp = ($item->featured_down < $now) ? '<span class="t-rouge">' . $tmp . '</span>' : $tmp;
-            UpHelper::kw_replace($this,$sItem, 'date-featured-end', $tmp);
+            UpHelper::kw_replace($this, $sItem, 'date-featured-end', $tmp);
 
             // --- robots
 
@@ -398,24 +397,24 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 } // à défaut, ceux de configuration.php
 
                 $tmp = (stripos($robots, 'noindex') !== false) ? '<span class="t-rouge">no-index</span>' : '<span class="t-vertFonce">index</span>';
-                UpHelper::kw_replace($this,$sItem, 'meta-index', $tmp);
+                UpHelper::kw_replace($this, $sItem, 'meta-index', $tmp);
                 $tmp = (stripos($robots, 'nofollow') !== false) ? '<span class="t-rouge">no-follow</span>' : '<span class="t-vertFonce">follow</span>';
-                UpHelper::kw_replace($this,$sItem, 'meta-follow', $tmp);
+                UpHelper::kw_replace($this, $sItem, 'meta-follow', $tmp);
             }
 
             if (stripos($sItem, '##robots') !== false) {
                 $metadata = json_decode($item->metadata);
 
-                UpHelper::kw_replace($this,$sItem, 'robots-cfg', $robots_default[0]);
-                UpHelper::kw_replace($this,$sItem, 'robots-cat', $robots_default[$item->catid]);
-                UpHelper::kw_replace($this,$sItem, 'robots-art', ($metadata->robots ?? ''));
+                UpHelper::kw_replace($this, $sItem, 'robots-cfg', $robots_default[0]);
+                UpHelper::kw_replace($this, $sItem, 'robots-cat', $robots_default[$item->catid]);
+                UpHelper::kw_replace($this, $sItem, 'robots-art', ($metadata->robots ?? ''));
             }
             // Ctrl taille du titre
             if (stripos($sItem, '##meta-title##') !== false) {
                 $size = strlen($item->title) + $nomSiteSize;
                 $style = ($size < $options['meta-title-min'] || $size > $options['meta-title-max']) ? ' class="b t-orange"' : '';
                 $tmp = '<span' . $style . '>' . $size . '</span><span class="t-gris">/' . $options['meta-title-max'] . '</span>';
-                UpHelper::kw_replace($this,$sItem, 'meta-title', $tmp);
+                UpHelper::kw_replace($this, $sItem, 'meta-title', $tmp);
             }
 
             // Ctrl taille description
@@ -423,12 +422,12 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 $size = strlen($item->metadesc);
                 $style = ($size < $options['meta-desc-min'] || $size > $options['meta-desc-max']) ? ' class="b t-orange"' : '';
                 $tmp = '<span' . $style . '>' . $size . '</span><span class="t-gris">/' . $options['meta-desc-max'] . '</span>';
-                UpHelper::kw_replace($this,$sItem, 'meta-desc', '<span title="' . $item->metadesc . '">' . $tmp . '</span>');
+                UpHelper::kw_replace($this, $sItem, 'meta-desc', '<span title="' . $item->metadesc . '">' . $tmp . '</span>');
             }
 
             // Ctrl taille métakey
             if (stripos($sItem, '##meta-keys##') !== false) {
-                UpHelper::kw_replace($this,$sItem, 'meta-keys', $item->metakey);
+                UpHelper::kw_replace($this, $sItem, 'meta-keys', $item->metakey);
             }
             // {note} : note sur l'article
             if (stripos($sItem, '##note##') !== false) {
@@ -436,17 +435,18 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 $query = $db->createQuery();
                 $query->select('note')
                     ->from('#__content')
-                    ->where('id = ' . $item->id);
+                    ->where('id = :id ');
+                $query->bind(':id', $item->id, \Joomla\Database\ParameterType::INTEGER);
                 $db->setQuery($query);
                 $result = $db->loadResult();
-                UpHelper::kw_replace($this,$sItem, 'note', $result);
+                UpHelper::kw_replace($this, $sItem, 'note', $result);
             }
             // {cat} : nom catégorie
-            UpHelper::kw_replace($this,$sItem, 'cat', $item->category_title);
+            UpHelper::kw_replace($this, $sItem, 'cat', $item->category_title);
             //
             if (strpos($sItem, '##cat-link##')) {
                 $caturl = Route::_(RouteHelper::getCategoryRoute($catslug));
-                UpHelper::kw_replace($this,$sItem, 'cat-link', '<a href="' . $caturl . '">' . $item->category_title . '</a>');
+                UpHelper::kw_replace($this, $sItem, 'cat-link', '<a href="' . $caturl . '">' . $item->category_title . '</a>');
             }
             // {tags-list} : liste des tags
             if (stripos($sItem, '##tags-list##') !== false) {
@@ -455,33 +455,36 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')
-                    ->where('m.content_item_id = ' . $item->id . ' AND m.type_alias like "%article%"');
+                    ->where('m.content_item_id = :id AND m.type_alias = :articlestr');
+                $query->bind(':id', $item->id, \Joomla\Database\ParameterType::INTEGER);
+                $str = "article";
+                $query->bind(':articlestr', $str, \Joomla\Database\ParameterType::STRING);
                 $db->setQuery($query);
                 $listTags = $db->loadObjectList();
                 $tmpTags = (empty($listTags)) ? '' : $options['tags-list-prefix'];
                 $tmpTag = array();
                 foreach ($listTags as $tag) {
                     if ($options['tags-list-style'] != '') {
-                        $tmpTag[] = UpHelper::set_attr_tag($this,'span', $tags_list_attr, $tag->title);
+                        $tmpTag[] = UpHelper::set_attr_tag($this, 'span', $tags_list_attr, $tag->title);
                     } else {
                         $tmpTag[] = $tag->title;
                     }
                 }
-                UpHelper::kw_replace($this,$sItem, 'tags-list', implode($options['tags-list-separator'], $tmpTag));
+                UpHelper::kw_replace($this, $sItem, 'tags-list', implode($options['tags-list-separator'], $tmpTag));
             }
             // {featured} : en vedette
             if (stripos($sItem, '##featured##') !== false) {
                 $tmp = ($item->featured == '1') ? $options['featured-html'] : '';
-                UpHelper::kw_replace($this,$sItem, 'featured', $tmp);
+                UpHelper::kw_replace($this, $sItem, 'featured', $tmp);
             }
             // {new} : badge
             if (stripos($sItem, '##new##') !== false) {
                 $max = date('Y-m-d H:i:s', mktime(date("H"), date("i"), 0, date("m"), date("d") - intval($options['new-days']), date("Y")));
                 $new = ($item->publish_up > $max) ? $options['new-html'] : '';
-                UpHelper::kw_replace($this,$sItem, 'new', $new);
+                UpHelper::kw_replace($this, $sItem, 'new', $new);
             }
             // {hits}
-            UpHelper::kw_replace($this,$sItem, 'hits', $item->hits);
+            UpHelper::kw_replace($this, $sItem, 'hits', $item->hits);
             // {image-xxx} : l'image d'intro, sinon celle dans l'introtext
             // {image} : la balise img complete
             // {image-src} et {image-alt} : uniquement src et alt d'une balise img existante
@@ -493,17 +496,17 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                     $img_src = $images->image_intro;
                     $img_alt = $images->image_intro_alt;
                 } else {
-                    $imgTag = UpHelper::preg_string($this,'#(\<img .*\>)#Ui', $item->introtext);
+                    $imgTag = UpHelper::preg_string($this, '#(\<img .*\>)#Ui', $item->introtext);
                     if ($imgTag) {
-                        $imgAttr = UpHelper::get_attr_tag($this,$imgTag, 'alt');
+                        $imgAttr = UpHelper::get_attr_tag($this, $imgTag, 'alt');
                         $img_src = $imgAttr['src'];
                         $img_alt = $imgAttr['alt'];
                     }
                 }
                 $img_tag = '<img src="' . $img_src . '" alt="' . $img_alt . '">';
-                UpHelper::kw_replace($this,$sItem, 'image', $img_tag);
-                UpHelper::kw_replace($this,$sItem, 'image-src', $img_src);
-                UpHelper::kw_replace($this,$sItem, 'image-alt', $img_alt);
+                UpHelper::kw_replace($this, $sItem, 'image', $img_tag);
+                UpHelper::kw_replace($this, $sItem, 'image-src', $img_src);
+                UpHelper::kw_replace($this, $sItem, 'image-alt', $img_alt);
             }
 
             // --- tags avec param
@@ -518,12 +521,12 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                         $intro = mb_substr($intro, 0, $len) . '...';
                     }
                 }
-                UpHelper::kw_replace($this,$sItem, $tag[1], $intro);
+                UpHelper::kw_replace($this, $sItem, $tag[1], $intro);
             }
 
             // {upnb} : nombre d'actions UP utilisées dans article
             $fulltext = (empty($item->fulltext)) ? $item->introtext : $item->fulltext;
-            UpHelper::kw_replace($this,$sItem, 'upnb', substr_count($fulltext, '{up '));
+            UpHelper::kw_replace($this, $sItem, 'upnb', substr_count($fulltext, '{up '));
             // {uplist} : nombre d'occurence de chaque action
             $fulltext = (empty($item->fulltext)) ? $item->introtext : $item->fulltext;
             if (stripos($sItem, '##uplist##') !== false) {
@@ -534,7 +537,7 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                         $tmp .= $k . '&nbsp;(' . $v . ') ';
                     }
                 }
-                UpHelper::kw_replace($this,$sItem, 'uplist', $tmp);
+                UpHelper::kw_replace($this, $sItem, 'uplist', $tmp);
             }
 
             // des mots-clés JSON
@@ -561,7 +564,7 @@ class jcontent_metadata extends Lomart\Plugin\Content\Up\Extension\Up
                         $res = array();
                 }
                 $val = $res[$key] ?? 'error';
-                UpHelper::kw_replace($this,$sItem, $matches[1][0] . '.' . $matches[2][0], $val);
+                UpHelper::kw_replace($this, $sItem, $matches[1][0] . '.' . $matches[2][0], $val);
             }
 
             // --- fin article

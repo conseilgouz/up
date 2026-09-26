@@ -16,7 +16,7 @@ use Joomla\CMS\Factory;
  * get_data
  * ----------------------------------------------------------------------
  * $src : option principale de l'action
- * $cache_delay : $options['cache-delay']
+ * $options : toutes les options de l'action
  *
  * récupération des données brutes dans :
  * - un fichier sur le serveur
@@ -24,23 +24,49 @@ use Joomla\CMS\Factory;
  * - copie dans le cache
  *
  */
-function get_data($src, $cache_delay)
+function get_data($src, $options)
 {
     $src = strip_tags($src); // suppr mise en hyperlien par editeur
     if (! empty(preg_match('#^((https?\:)?\/\/)(?:[\da-z])*\.#i', $src, $match))) {
         // c'est une URL
-        if ($cache_delay > 0) {
+        if ($options['cache-delay'] > 0) {
             $filecache = 'tmp/up-data-' . filename_secure(substr($src, strlen($match[1])));
-            if (file_exists($filecache) && (filemtime($filecache) < strtotime('-' . ($cache_delay * 60) . 'second')) === false) {
-                $src = $filecache;
+            $types = ['json','csv','xml'];
+            $ext = false;
+            foreach ($types as $one) {
+                if (file_exists($filecache.'.'.$one)) {
+                    $ext = '.'.$one;
+                    break;
+                }
+            }
+            if ($ext && (filemtime($filecache.$ext) < strtotime('-' . ($options['cache-delay'] * 60) . 'second')) === false) {
+                $src = $filecache.$ext;
             } else {
                 // et ecrire le fichier cache
+                // identification par contenu
+                $datatype = '.json'; // assume json file
                 $data = file_get_contents($src);
-                file_put_contents($filecache, $data);
+                if (strpos($data, '<?xml') !== false) {
+                    $datatype = '.xml';
+                } elseif (preg_match('#(?:.*)\b(;{1})#U', $data, $matches)) {
+                    // si 1er caractère après le 1er mot est le séparateur
+                    if ($matches[1] == $options['csv-separator']) {
+                        $datatype = '.csv';
+                    }
+                }
+                file_put_contents($filecache.$datatype, $data);
             }
         }
     }
     if (empty($data)) {
+        if (strpos($src, '..') !== false) {
+            return '';
+        }
+        $ext = pathinfo($src, PATHINFO_EXTENSION);
+        if (!in_array($ext, explode(',', 'json,xml,csv,txt,gpx'))) {
+            return '';
+        }
+
         $data = file_get_contents($src);
     }
 
@@ -609,14 +635,17 @@ function up_date_format($date, $format = null, $locale = '', $http = true)
         //if ($http) {
         //    $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
         //} else {
-            $locale = Factory::getApplication()->getLanguage()->getTag();
-            $locale .= ',' . str_replace('-', '_', $locale);
+        $locale = Factory::getApplication()->getLanguage()->getTag();
+        $locale .= ',' . str_replace('-', '_', $locale);
         //}
     }
 
     // le formatteur et retour
-    $fmt = datefmt_create($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, null, IntlDateFormatter::GREGORIAN, $format);
-    return datefmt_format($fmt, $date);
+    // $fmt = datefmt_create($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::FULL, null, \IntlDateFormatter::GREGORIAN, $format);
+    //return datefmt_format($fmt, $date);
+    $tz = Factory::getApplication()->getIdentity()->getTimezone();
+    return Factory::getDate()->setTimezone($tz)->setTimeStamp($date)->format($format, true);
+
 }
 
 /*

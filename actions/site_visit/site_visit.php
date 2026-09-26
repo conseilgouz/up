@@ -3,7 +3,7 @@
 /**
  * comptabilise le nombre d'appel de cette action et affiche le nombre de visite
  *
- * syntaxe : 
+ * syntaxe :
  * {up site-visit} : incrémente le fichier log-path/alias_article.stat
  * {up site-visit=nom} : incrémente le fichier log-path/nom.stat
  * {up site-visit | info} : liste le contenu de tous les fichiers .stat dans log-path
@@ -15,8 +15,8 @@
  * ##id##, ##alias##, ##title##, ##created##, ##updated## : données de l'article
  * ##catid##, ##catalias## : id et alias de la catégorie de l'article
  * ##detail## : affiche le détail des visites par année, mois, langue
- * 
- *  
+ *
+ *
  * @version  UP-2.9
  * @author lomart
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
@@ -27,19 +27,19 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\Database\DatabaseInterface;
+use Joomla\Component\Content\Site\Model\ArticleModel;
+use Joomla\Utilities\IpHelper;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // lien vers la page de demo
@@ -51,7 +51,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
             'catid-include' => '', // liste des id catégories à inclure, séparateur virgule
             'catid-exclude' => '', // liste des id catégories à exclure, séparateur virgule
             'usergroup-list' => '', // liste des groupes d'utilisateurs à exclure, séparateur virgule
-            'ip-list' => '127.0.0.0, localhost', // liste des IP à ignorer. les botnets sont ignorés, séparateur virgule
+            'ip-list' => '::1,127.0.0.0, localhost', // liste des IP à ignorer. les botnets sont ignorés, séparateur virgule
             'bots-list' => 'bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter', // liste de bots exclus
             /* [ST-RESULT] Options pour affichage résultats */
             'info' => '', // masque des fichiers stat et log dont le contenu est listé. vide = article courant, * = tous ou masque fichier
@@ -60,7 +60,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
             'info-sort' => '', // tri de la liste. Par défaut ##alias##. Tous les mots sont utilisables
             'info-sort-order' => 'asc', // sens de tri sur l'ensemble des mots-clé de info-sort
             'detail-period-style' => '', // style ajouté pour la période de la liste détaillée
-            'use-bbcode' => 0, // utilise le format bbcode dans le résultat. A utiliser pour un export en CSV 
+            'use-bbcode' => 0, // utilise le format bbcode dans le résultat. A utiliser pour un export en CSV
             'date-format' => 'lang[en=%B %se, %Y;fr=%e %B %Y]', // format pour la date
             'no-content-html' => "lang[en=No statistical data;fr=Aucune donnée statistique]", // message affiché si aucun résultat pour la sélection
             /* [ST-CSS-LIGN] Gestion style d'une ligne */
@@ -79,7 +79,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
 
         // === actualiser ou compte-rendu ?
         if (empty($this->options['info'])) {
@@ -92,16 +92,16 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
             $content = $this->report(! empty($this->options['info-detailXXXXXXXXXXXXXXXXX']));
 
             // CSS-HEAD
-            UpHelper::load_css_head($this,$this->options['css-head']);
+            UpHelper::load_css_head($this, $this->options['css-head']);
 
             // attributs du bloc principal
             $attr_main = array();
             $attr_main['id'] = $this->options['id'];
-            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this, $attr_main, $this->options['class'], $this->options['style']);
 
             // code en retour
 
-            return UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $content);
+            return UpHelper::set_attr_tag($this, $this->options['main-tag'], $attr_main, $content);
         }
     }
 
@@ -113,7 +113,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
      * met à jour les fichiers stat et log
      * --------------------------------------------------------------------------
      */
-    function incremente()
+    public function incremente()
     {
         // --- uniquement pour les articles
         if (isset($this->article->alias)) {
@@ -128,30 +128,31 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         } elseif (Factory::getApplication()->getInput()->get('view', 0) == 'article') {
             // le shortcode UP est dans un module et le contenu est un article
             $id = (int) Factory::getApplication()->getInput()->get('id', 0);
-            $database = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = " SELECT a.alias, a.title,a.catid, c.alias AS category_alias, a.created, a.modified";
-            $query .= " FROM #__content AS a";
-            $query .= " INNER JOIN #__categories AS c";
-            $query .= " WHERE a.id=" . $id;
-            $query .= " AND c.id=a.catid";
-            $database->setQuery($query);
-            $row = $database->loadAssoc();
+            $model     = new ArticleModel(array('ignore_request' => true));
+            $app       = Factory::getApplication();
+            $appParams = $app->getParams();
+            $model->setState('params', $appParams);
+            $obj = $model->getItem($id);
+            $row = json_decode(json_encode($obj), true);
         }
 
         // ce n'est pas un article
-        if (empty($row))
+        if (empty($row)) {
             return;
+        }
 
         // --- Exclure des catégories
         if (! empty($this->options['catid-exclude'])) {
-            if (in_array($row['catid'], explode(',', $this->options['catid-exclude'])))
+            if (in_array($row['catid'], explode(',', $this->options['catid-exclude']))) {
                 return;
+            }
         }
 
         // --- uniquement certaines catégories
         if (! empty($this->options['catid-include'])) {
-            if (! in_array($row['catid'], explode(',', $this->options['catid-include'])))
+            if (! in_array($row['catid'], explode(',', $this->options['catid-include']))) {
                 return;
+            }
         }
 
         // --- Exclure les robots
@@ -168,13 +169,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // --- Exclure des IP client
-        if (! empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
+        $ip = IpHelper::getIp();
         // Filtrage sur IP
         if (! empty($this->options['ip-list'])) {
             $ipList = array_map('trim', explode(',', $this->options['ip-list']));
@@ -195,19 +190,24 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         // ============================
         // ===== ON AJOUTE AUX FICHIERS
         // ============================
+        $dir_Logs = trim($this->options['dir-logs'], '/') . '/';
+        if ((strpos($dir_Logs, '//') !== false) || (strpos($dir_Logs, '..') !== false)) { // not on your server
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid folder : ;fr=Répertoire invalide : ') . $dir_logs));
+        }
 
-        $dirLogs = JPATH_ROOT . '/' . trim($this->options['dir-logs'], '/') . '/';
-        if (! is_dir($dirLogs))
+        $dirLogs = JPATH_ROOT . '/' . $dir_Logs . '/';
+        if (! is_dir($dirLogs)) {
             mkdir($dirLogs, 0777, true);
+        }
 
         // ===> fichier stat : cumul, date derniere vue et id, alias, title, catid, category_alias, created, modified
         $fileStat = $dirLogs . $row['alias'] . '.stat';
         $nb = 0;
         if (file_exists($fileStat)) {
-            list ($nb, $time) = explode('||', file_get_contents($fileStat));
+            list($nb, $time) = explode('||', file_get_contents($fileStat));
             $nb = intval($nb);
         }
-        $nb ++;
+        $nb++;
         file_put_contents($fileStat, $nb . '||' . date('Y-m-d H:i') . '||' . $id . '||' . implode('||', $row) . PHP_EOL, LOCK_EX);
 
         // ===> log : liste des visites avec date, ip, lang
@@ -229,12 +229,12 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
      * affiche la liste des fichiers stat avec nombre et date dernière visite
      * --------------------------------------------------------------------------
      */
-    function report()
+    public function report()
     {
         $dirLogs = JPATH_ROOT . '/' . trim($this->options['dir-logs'], '/') . '/';
-        $stat_tmpl = UpHelper::get_bbcode($this,$this->options['info-template']);
+        $stat_tmpl = UpHelper::get_bbcode($this, $this->options['info-template']);
         // le style
-        UpHelper::get_attr_style($this,$attr_item, $this->options['item-class'], $this->options['item-style']);
+        UpHelper::get_attr_style($this, $attr_item, $this->options['item-class'], $this->options['item-style']);
         // on consolide les critères de tri. Il faut obligatoirement l'alias
         if (strpos($this->options['info-sort'], '##') !== false) {
             $sort_tmpl = $this->options['info-sort'];
@@ -242,7 +242,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         }
         // le masque de sélection : vide = article courant
         $mask = $this->options['info'];
-        if ($mask==1) {
+        if ($mask == 1) {
             // l'article courant
             if (isset($this->article->alias)) {
                 // le shortcode UP est dans un article
@@ -250,32 +250,34 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
             } elseif (Factory::getApplication()->getInput()->get('view', 0) == 'article') {
                 // le shortcode UP est dans un module et le contenu est un article
                 $id = (int) Factory::getApplication()->getInput()->get('id', 0);
-                $database = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = " SELECT alias FROM #__content";
-                $query .= " WHERE id=" . $id;
-                $database->setQuery($query);
-                $mask = $database->loadResult();
+                $model     = new ArticleModel(array('ignore_request' => true));
+                $app       = Factory::getApplication();
+                $appParams = $app->getParams();
+                $model->setState('params', $appParams);
+                $obj = $model->getItem($id);
+                $mask = $obj->alias;
             }
-        } 
+        }
 
         $html = array();
-        
+
         foreach (glob($dirLogs . $mask . '.stat') as $file) {
             $row = explode('||', file_get_contents($file));
             if ($this->options['info-catid-include']) {
-                if (! in_array($row[5], explode(',', $this->options['info-catid-include'])))
+                if (! in_array($row[5], explode(',', $this->options['info-catid-include']))) {
                     continue;
+                }
             }
             $str = $stat_tmpl;
             $str = str_replace('##counter##', $row[0], $str);
-            $str = str_replace('##lastdate##', UpHelper::up_date_format($this,$row[1], $this->options['date-format']), $str);
+            $str = str_replace('##lastdate##', UpHelper::up_date_format($this, $row[1], $this->options['date-format']), $str);
             $str = str_replace('##id##', $row[2], $str);
             $str = str_replace('##alias##', $row[3], $str);
             $str = str_replace('##title##', $row[4], $str);
             $str = str_replace('##catid##', $row[5], $str);
             $str = str_replace('##catalias##', $row[6], $str);
-            $str = str_replace('##created##', UpHelper::up_date_format($this,$row[7], $this->options['date-format']), $str);
-            $str = str_replace('##modified##', UpHelper::up_date_format($this,$row[8], $this->options['date-format']), $str);
+            $str = str_replace('##created##', UpHelper::up_date_format($this, $row[7], $this->options['date-format']), $str);
+            $str = str_replace('##modified##', UpHelper::up_date_format($this, $row[8], $this->options['date-format']), $str);
             if (strpos($str, '##detail##') != false) {
                 $str = str_replace('##detail##', $this->synthese($dirLogs . $row[3] . '.log'), $str);
             }
@@ -291,17 +293,19 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
                 $sort = str_replace('##catalias##', $row[6], $sort);
                 $sort = str_replace('##created##', $row[7], $sort);
                 $sort = str_replace('##modified##', $row[8], $sort);
-                if (strpos($sort, '##') !== false)
-                    $sort = $row[3]; // alias
+                if (strpos($sort, '##') !== false) {
+                    $sort = $row[3];
+                } // alias
 
-                $html[$sort] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_item, $str);
+                $html[$sort] = UpHelper::set_attr_tag($this, $this->options['item-tag'], $attr_item, $str);
             } else {
-                $html[] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_item, $str);
+                $html[] = UpHelper::set_attr_tag($this, $this->options['item-tag'], $attr_item, $str);
             }
         }
 
-        if (empty($html))
+        if (empty($html)) {
             return  $this->options['no-content-html'];
+        }
 
         if ($this->options['info-sort-order'] == 'desc') {
             krsort($html);
@@ -323,12 +327,13 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
      * log d'un jour non consolidé : AAAA-MM-JJ HH:MM#LN#121.0.0.1
      * ---------------------------------------------------------------------------
      */
-    function synthese($logfile)
+    public function synthese($logfile)
     {
         // récupération données
         $logs = explode(PHP_EOL, trim(file_get_contents($logfile)));
-        if (empty($logs))
+        if (empty($logs)) {
             return '';
+        }
 
         $thisday = date('Y-m-d');
         $thisyear = date('Y');
@@ -347,7 +352,7 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
                 // AAAA-MM-JJ HH:MM#LN#121.0.0.1 devient AAAA-MM-JJ#LN#121.0.0.1
                 $key = substr($key, 0, 10) . substr($key, 16);
                 if (isset($stats[$key])) {
-                    $stats[$key]['total'] ++;
+                    $stats[$key]['total']++;
                 } else {
                     $stats[$key]['total'] = 1;
                     $stats[$key]['unique'] = 1;
@@ -401,14 +406,14 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         $curr_period = '';
         $today = array();
         $attr_period = array();
-        UpHelper::get_attr_style($this,$attr_period, $this->options['detail-period-style']);
+        UpHelper::get_attr_style($this, $attr_period, $this->options['detail-period-style']);
         foreach ($stats as $key => $val) {
-            list ($period, $lang) = explode('#', $key);
+            list($period, $lang) = explode('#', $key);
             if (strlen($key) > 10) {
                 // cumul des valeurs du jour
                 if (isset($today[$lang])) {
                     $today[$lang]['total'] += $val['total'];
-                    $today[$lang]['unique'] ++;
+                    $today[$lang]['unique']++;
                 } else {
                     $today[$lang]['total'] = $val['total'];
                     $today[$lang]['unique'] = 1;
@@ -416,20 +421,22 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
             } else {
                 // périodes antérieures
                 if ($period != $curr_period) {
-                    if ($out)
+                    if ($out) {
                         $out .= ') ';
-                        $out .= UpHelper::set_attr_tag($this,'span', $attr_period, $period, true, $this->options['use-bbcode']) . ' (' . $lang . ':' . $val['total'] . '/' . $val['unique'];
+                    }
+                    $out .= UpHelper::set_attr_tag($this, 'span', $attr_period, $period, true, $this->options['use-bbcode']) . ' (' . $lang . ':' . $val['total'] . '/' . $val['unique'];
                     $curr_period = $period;
                 } else {
                     $out .= ' ' . $lang . ':' . $val['total'] . '/' . $val['unique'];
                 }
             }
         }
-        if ($out)
+        if ($out) {
             $out .= ') ';
+        }
         // Ajout visites du jour
         if (! empty($today)) {
-            $out .= UpHelper::set_attr_tag($this,'span', $attr_period, date('Y-m-d'), true, $this->options['use-bbcode']) . ' (';
+            $out .= UpHelper::set_attr_tag($this, 'span', $attr_period, date('Y-m-d'), true, $this->options['use-bbcode']) . ' (';
             foreach ($today as $lang => $val) {
                 $out .= $lang . ':' . $val['total'] . '/' . $val['unique'];
             }
@@ -439,5 +446,5 @@ class site_visit extends Lomart\Plugin\Content\Up\Extension\Up
         return $out;
     }
 }
-        
+
 // end class

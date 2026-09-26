@@ -28,6 +28,7 @@
  *          ajout de route-format : calcul du lien vers un article
  *          suppression du cache si pagination
  * v6.0.19 : plusieurs innerjoin/outerjoin/leftjoin/rightjoin séparés par virgule
+ * v6.1.0 : cacher password et token values
  */
 defined('_JEXEC') or die();
 
@@ -113,7 +114,6 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             'list',
             'date'
         );
-
         // =============================================
         // ==== DEMANDE D'INFOS explicite dans shortcode
         // =============================================
@@ -139,6 +139,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 }
                 UpHelper::msg_info($this, $out, UpHelper::trad_keyword($this, 'TITLE_COLUMNS', $options[__class__]));
                 unset($rows);
+                return '';
             }
         }
 
@@ -149,6 +150,9 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         $regex = '/##(variable-\d+)##/i';
         $matches = array();
         foreach ($cdelist as $cde) {
+            if (strpos($options[$cde], 'password') !== false) {
+                return UpHelper::msg_error($this, UpHelper::lang($this, 'en=Can not show the password field;fr=Impossible de montrer le mot de passe'));
+            }
             preg_match_all($regex, $options[$cde], $matches);
             if (! empty($matches[1])) {
                 foreach ($matches[1] as $match) {
@@ -156,11 +160,9 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 }
             }
         }
-
         // ================
         // ==== REQUETE SQL
         // ================
-
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->createQuery();
         $query->select($options['select']);
@@ -193,16 +195,33 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             $query->where(html_entity_decode($options['where']));
         }
         if ($options['order']) {
-            $query->order($options['order']);
+            if ($options['order'] == 'RAND()') {
+                $query->order($options['order']);
+            } else {
+                $order = explode(' ', $options['order']);
+                $list_orderby = array('asc' => 'asc', 'desc' => 'desc', 'random' => 'RAND()');
+                $order_by =  (isset($list_orderby[$order[1]])) ? $list_orderby[$order[1]] : '';
+                $order_field = (isset($list_orderby[$order[0]])) ? $list_orderby[$order[0]] : '';
+                if ($order_field) {
+                    $query->order($order_field.' '.$order_by);
+                }
+            }
         }
         if ($options['setlimit']) {
             if (is_numeric($options['setlimit'])) { // numerique
                 $query->setLimit($options['setlimit']);
             } else { // une requête sql
                 $querycnt = $db->createQuery();
+
                 $db->setQuery($options['setlimit']);
                 $limit = $db->loadResult();
-                $options['setlimit'] = $limit;
+                if (is_numeric($limit)) {
+                    $options['setlimit'] = (int)$limit;
+                } else { // wrong answer : assume 1
+                    UpHelper::msg_error($this, UpHelper::lang($this, 'en=Wrong limit - asssume 1;fr=Limite incorrecte - on assume 1'));
+                    $options['setlimit'] = 1;
+                }
+                $query->setLimit($options['setlimit']);
             }
         }
         $lapagination = "";
@@ -210,7 +229,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
             $nb = 0;
             $input = Factory::getApplication()->getInput();
             if ($input->get('upstart')) {
-                $nb = $input->get('upstart');
+                $nb = (int)$input->get('upstart');
             }
             $query->setLimit($options['perpage'], $nb);
             $pagination = new Joomla\CMS\Pagination\Pagination($options['setlimit'], $nb, $options['perpage']);
@@ -240,7 +259,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         try {
             $row_tmp = $db->loadAssocList();
         } catch (RuntimeException $e) {
-            UpHelper::msg_error($this, reset(explode('Stack', $e)));
+            UpHelper::msg_error($this, explode('Stack', $e));
         }
         // si pas de résultat
         if (empty($row_tmp)) {
@@ -413,22 +432,33 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         foreach ($rows as $row) {
             $out = ($is_table) ? '' : $options['template'];
             $attr_row = array();
+            $previous = "";
             foreach ($tags as $key => $tag) {
                 $attr_col = array();
-
-                // == RECUP JSON
-                if (strpos($key, '.') !== false) {
-                    list($key1, $key2) = explode('.', $key);
-                    $tmp = (array) json_decode($row[$key1]);
-                    $val = (isset($tmp[$key2])) ? $tmp[$key2] : '';
+                $val = $row[strtolower($key)];
+                if ($key == "password" || strpos($key, "token") !== false) {
+                    $val = '***';
+                } elseif (strpos($val, 'token') !== false) { // profile key ?
+                    $previous = 'token';
+                    $val = "****";
+                } elseif ($previous == 'token') { // profile value ?
+                    $val = '***';
+                    $previous = '';
                 } else {
-                    if (array_key_exists(strtolower($key), $row)) { // v311
-                        $val = $row[strtolower($key)];
+                    $previous = '';
+                    // == RECUP JSON
+                    if (strpos($key, '.') !== false) {
+                        list($key1, $key2) = explode('.', $key);
+                        $tmp = (array) json_decode($row[$key1]);
+                        $val = (isset($tmp[$key2])) ? $tmp[$key2] : '';
                     } else {
-                        $val = '---';
+                        if (array_key_exists(strtolower($key), $row)) { // v311
+                            $val = $row[strtolower($key)];
+                        } else {
+                            $val = '---';
+                        }
                     }
                 }
-
                 // == STYLE LIGNE
                 if (isset($tag['rowclass'])) {
                     $attr_row['class'] = $this->set_type($tag['rowclass'], $val);

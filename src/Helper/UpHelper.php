@@ -257,6 +257,13 @@ class UpHelper
      */
     public static function get_html_contents($up, $url, $timeout = 10, $url2 = '')
     {
+        if (strpos($url, '..') !== false ) {
+            return "Erreur : le fichier ".$url." contient des caractères interdits";
+        }
+        if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
+            return "Erreur : le fichier ".$url." n'est pas sur votre serveur";
+        }
+
         $ctx = stream_context_create(array(
             'http' => array(
                 'timeout' => $timeout
@@ -282,7 +289,15 @@ class UpHelper
             return $out;
         }
     }
-
+    // from https://d-mueller.de/blog/why-url-validation-with-filter_var-might-not-be-a-good-idea/
+    public static function validate_url($up, String $url)
+    {
+        $url = trim($url);
+        return (
+            (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0) &&
+            filter_var($url, FILTER_VALIDATE_URL) !== false
+        );
+    }
     /*
      * ==== get_url_relative (ancien nom 2.3 : get_url)
      * retourne l'url sous forme relative
@@ -294,6 +309,12 @@ class UpHelper
     public static function get_url_relative($up, $url, $urlencode = false)
     {
         $url = trim($url);
+        if (strpos($url, '..') !== false ) {
+            return "Erreur : le fichier ".$url." contient des caractères interdits";
+        }
+        if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
+            return "Erreur : le fichier ".$url." n'est pas sur votre serveur";
+        }
         $url = str_replace('\\', '/', $url);
         if (strpos($url, '//') === false) {
             $root = Uri::root(true);
@@ -318,6 +339,12 @@ class UpHelper
     public static function get_url_absolute($up, $url, $urlencode = false)
     {
         $url = trim($url);
+        if (strpos($url, '..') !== false ) {
+            return "Erreur : le fichier ".$url." contient des caractères interdits";
+        }
+      if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
+            return "Erreur : le fichier ".$url." n'est pas sur votre serveur";
+        }
         $url = str_replace('\\', '/', $url);
         if (strpos($url, '//') === false) { // 5.4.10
             $url = Uri::root() . $url;
@@ -3496,8 +3523,8 @@ class UpHelper
             curl_setopt($curl, CURLOPT_NOBODY, 0);
             curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
             curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
             $header = ["User-Agent: PHP"];
             if ($up->githubapikey) {
                 $header[] =  "Authorization: token ".$up->githubapikey;

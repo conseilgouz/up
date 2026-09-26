@@ -14,6 +14,7 @@
  * @version  UP-1.6
  * @license   <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags    File
+ *
  */
 defined('_JEXEC') or die;
 
@@ -22,6 +23,7 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 /*
  * v2.9 : l'option block est renomée main-tag
  * v3.1 : pas de bloc pour main-tag=0
+ * v6.1.0 : check file type : allow only csv, txt, html 
  */
 
 class file_view extends Lomart\Plugin\Content\Up\Extension\Up
@@ -53,13 +55,22 @@ class file_view extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
+
+        // Security : accept txt, html, csv files only
+        $file = $options[__CLASS__];
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        if (in_array($ext, explode(',', 'txt,html,csv'))) {
+            $type = 'text';
+        } else {
+            return UpHelper::msg_inline($this, UpHelper::lang($this, 'unauthorized_file: '.$file));
+        }
 
         // === lecture et nettoyage fichier
-        $content = UpHelper::get_html_contents($this,$options['file_view']);
-        $content = UpHelper::clean_HTML($this,$content, $options['HTML'], $options['EOL']);
+        $content = UpHelper::get_html_contents($this, $options['file_view']);
+        $content = UpHelper::clean_HTML($this, $content, $options['HTML'], $options['EOL']);
         // === css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // contenu brut
         if (empty($options['main-tag'])) {
@@ -73,7 +84,7 @@ class file_view extends Lomart\Plugin\Content\Up\Extension\Up
         $attr_main['style'] = $options['style'];
 
         // code en retour
-        return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, $content);
+        return UpHelper::set_attr_tag($this, $options['main-tag'], $attr_main, $content);
     }
 
     // run

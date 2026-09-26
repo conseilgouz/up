@@ -123,24 +123,11 @@ class plgContentUpInstallerScript
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             } else {
-                if ($previous_version && $previous_version < '6.0.13') { // 6.0.13 : mise à jour de l'action pdf
-                    $actionsList[] = "pdf";
-                } 
-                if ($previous_version && $previous_version < '6.0.20') { // 6.0.20 
-                    $actionsList[] = "table_sort";
-                    $actionsList[] = "faq";
-                    $actionsList[] = "sql";
-                }
-                if ($previous_version && $previous_version < '6.0.21') { // 6.0.21
-                    $actionsList[] = "slider_tiny"; // 6.0.21
-                }
-                if ($previous_version && $previous_version < '6.0.24') { // 6.0.24
-                    $actionsList[] = "ajax_view"; // 6.0.24
-                }
-                if ($previous_version && $previous_version < '6.0.25') { // 6.0.25
-                    $actionsList[] = "upscsscompiler"; // 6.0.25
-                }
-                $actionsList[] = "pdf"; // 6.0.28
+                // 6.1.0 : remove updated actions
+                $actionsList = ['ajax_view','chart','csv_info','csv2def','csv2list','file_download','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
+                                'get','html','image_compare','image_random','image_secure','jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat',
+                                'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
+                                'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
@@ -356,7 +343,7 @@ class plgContentUpInstallerScript
             }
             if (count($sizes)) {
                 // on a saisi des paramètres breakpoints : regénération du fichier up.css
-                $val = '';
+                $val = 'upscsscompiler';
                 try {
                     $up = new Lomart\Plugin\Content\Up\Extension\Up($val);
                     $up->store_scss($sizes);  // mise à jour du fichier assets/custom/_variables.scss

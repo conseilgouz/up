@@ -20,6 +20,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Version;
+use Joomla\Utilities\IpHelper;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class get extends Lomart\Plugin\Content\Up\Extension\Up
@@ -54,13 +55,7 @@ class get extends Lomart\Plugin\Content\Up\Extension\Up
                 $info = phpversion();
                 break;
             case 'user-ip':
-                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                    $info = $_SERVER['HTTP_CLIENT_IP'];
-                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                    $info = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                } else {
-                    $info = $_SERVER['REMOTE_ADDR'];
-                }
+                $info = IpHelper::getIp();
                 break;
             case 'user-id':
                 $user = Factory::getApplication()->getIdentity();
@@ -99,6 +94,9 @@ class get extends Lomart\Plugin\Content\Up\Extension\Up
 
         // fonction perso dans le sous-dossier lib
         if (!isset($info)) {
+            if ((strpos($request, '//') !== false) || (strpos($request, '..') !== false)) { // not on your server
+                return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid folder : ;fr=Répertoire invalide : ') . $request));
+            }
             $request = str_replace('-', '_', $request);
             $perso_lib = $this->actionPath.'lib/'.$request.'.php';
             if (file_exists($perso_lib)) {

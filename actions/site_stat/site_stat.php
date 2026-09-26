@@ -30,6 +30,7 @@
  * @tags    Expert
  *
  * v6.0.30 : handle  locale_accept_from_http error
+ * v6.1.0 : use IpHelper
  */
 
 /*
@@ -39,13 +40,27 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\Database\DatabaseInterface;
+use Joomla\Component\Content\Site\Model\ArticleModel;
+use Joomla\Utilities\IpHelper;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public $dirLogs;
-    
+    public $compact_min_days;
+    public $compact_min_months;
+    public $today ;
+    public $logs_today;
+    public $report_datemin;
+    public $tmpl_lign;
+    public $tmpl_detail_period;
+    public $tmpl_detail_period_lang;
+    public $tmpl_total_detail_period;
+    public $tmpl_total_detail_PV;
+    public $pv_days = array();
+    public $total_pages = 0;
+    public $attr_item = array();
+
     public function init()
     {
         return true;
@@ -63,7 +78,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
             'catid-include' => '', // liste des id catégories à inclure, séparateur virgule
             'catid-exclude' => '', // liste des id catégories à exclure, séparateur virgule
             'usergroup-list' => '', // liste des groupes d'utilisateurs à exclure, séparateur virgule
-            'ip-list' => '127.0.0.8, localhost', // liste des IP à ignorer. les botnets sont ignorés, séparateur virgule
+            'ip-list' => '::1, 127.0.0.0, localhost', // liste des IP à ignorer. les botnets sont ignorés, séparateur virgule
             'bots-list' => 'bot,spider,crawler,libwww,search,archive,slurp,teoma,facebook,twitter', // liste de bots exclus
 
             /* [ST-RESULT] Options pour affichage résultats */
@@ -100,9 +115,14 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
 
-        $this->dirLogs = JPATH_ROOT . '/' . trim($this->options['dir-logs'], '/') . '/';
+        $dir_logs = trim($this->options['dir-logs'], '/') . '/';
+        if ((strpos($dir_logs, '//') !== false) || (strpos($dir_logs, '..') !== false)) { // not on your server
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid folder : ;fr=Répertoire invalide : ') . $dir_logs));
+        }
+
+        $this->dirLogs = JPATH_ROOT . '/' . $dir_logs;
         if (! is_dir($this->dirLogs)) {
             mkdir($this->dirLogs, 0777, true);
         }
@@ -131,17 +151,17 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
                 $this->report_datemin = date('Y-m', strtotime('-' . ($this->options['detail-max-month'] - 1) . ' month'));
             }
             // les templates
-            $this->tmpl_lign = UpHelper::get_bbcode($this,$this->options['tmpl-lign']);
-            $this->tmpl_detail_period = UpHelper::get_bbcode($this,$this->options['tmpl-detail-period']);
-            $this->tmpl_detail_period_lang = UpHelper::get_bbcode($this,$this->options['tmpl-detail-period-lang']);
-            $this->tmpl_total_detail_period = UpHelper::get_bbcode($this,$this->options['tmpl-total-detail-period']);
-            $this->tmpl_total_detail_PV = UpHelper::get_bbcode($this,$this->options['tmpl-total-detail-PV']);
+            $this->tmpl_lign = UpHelper::get_bbcode($this, $this->options['tmpl-lign']);
+            $this->tmpl_detail_period = UpHelper::get_bbcode($this, $this->options['tmpl-detail-period']);
+            $this->tmpl_detail_period_lang = UpHelper::get_bbcode($this, $this->options['tmpl-detail-period-lang']);
+            $this->tmpl_total_detail_period = UpHelper::get_bbcode($this, $this->options['tmpl-total-detail-period']);
+            $this->tmpl_total_detail_PV = UpHelper::get_bbcode($this, $this->options['tmpl-total-detail-PV']);
             // les cumuls
             $this->pv_days = array();
             $this->total_pages = 0;
             // attributs d'une ligne
             $this->attr_item = array();
-            UpHelper::get_attr_style($this,$this->attr_item, $this->options['item-class'], $this->options['item-style']);
+            UpHelper::get_attr_style($this, $this->attr_item, $this->options['item-class'], $this->options['item-style']);
 
             /* === liste des fichiers log pour les pages demandées */
             $filelist = $this->log_filelist();
@@ -181,22 +201,22 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
 
             // === La ligne total en fin avec nbpages-visitors
             if (count($filelist) > 1) {
-                UpHelper::get_attr_style($this,$attr_total, $this->options['total-style']);
+                UpHelper::get_attr_style($this, $attr_total, $this->options['total-style']);
                 $out = $this->stats_report_total();
-                $html[] = UpHelper::set_attr_tag($this,$this->options['item-tag'], $attr_total, $out);
+                $html[] = UpHelper::set_attr_tag($this, $this->options['item-tag'], $attr_total, $out);
             }
         }
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$this->options['css-head']);
+        UpHelper::load_css_head($this, $this->options['css-head']);
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $this->options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $this->options['class'], $this->options['style']);
 
         // code en retour
         $out = implode(PHP_EOL, $html);
-        return UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
+        return UpHelper::set_attr_tag($this, $this->options['main-tag'], $attr_main, $out);
     }
 
     // run
@@ -218,12 +238,12 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         } elseif (Factory::getApplication()->getInput()->get('view', 0) == 'article') {
             // le shortcode UP est dans un module et le contenu est un article
             $id = (int) Factory::getApplication()->getInput()->get('id', 0);
-            $database = Factory::getContainer()->get(DatabaseInterface::class);
-            $query = " SELECT a.alias, a.catid";
-            $query .= " FROM #__content AS a";
-            $query .= " WHERE a.id=" . $id;
-            $database->setQuery($query);
-            $row = $database->loadAssoc();
+            $model     = new ArticleModel(array('ignore_request' => true));
+            $app       = Factory::getApplication();
+            $appParams = $app->getParams();
+            $model->setState('params', $appParams);
+            $obj = $model->getItem($id);
+            $row = json_decode(json_encode($obj), true);
         }
 
         // ce n'est pas un article
@@ -259,13 +279,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // --- Exclure des IP client
-        if (! empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (! empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
+        $ip = IpHelper::getIp();
         // Filtrage sur IP
         if (! empty($this->options['ip-list'])) {
             $ipList = array_map('trim', explode(',', $this->options['ip-list']));
@@ -292,7 +306,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         try {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             $lang = locale_accept_from_http($lang);
-        } catch( catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             $lang = false;
         }
         $lang = ($lang) ? $lang : 'xx';
@@ -320,11 +334,12 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
             } elseif (Factory::getApplication()->getInput()->get('view', 0) == 'article') {
                 // le shortcode UP est dans un module et le contenu est un article
                 $id = (int) Factory::getApplication()->getInput()->get('id', 0);
-                $database = Factory::getContainer()->get(DatabaseInterface::class);
-                $query = " SELECT alias FROM #__content";
-                $query .= " WHERE id=" . $id;
-                $database->setQuery($query);
-                $mask = $id . '-' . $database->loadResult();
+                $model     = new ArticleModel(array('ignore_request' => true));
+                $app       = Factory::getApplication();
+                $appParams = $app->getParams();
+                $model->setState('params', $appParams);
+                $row = $model->getItem($id);
+                $mask = $id . '-' . $row->alias;
             }
         } else {
             // plusieurs cas
@@ -349,14 +364,13 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
     {
         list($id) = explode('-', basename($filename), 2);
         $catid_list = explode(',', $this->options['view-catid-include']);
-        $database = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = " SELECT a.id, a.alias, a.title, a.catid, c.alias AS catalias, a.created, a.modified";
-        $query .= " FROM #__content AS a";
-        $query .= " INNER JOIN #__categories AS c";
-        $query .= " WHERE a.id=" . $id;
-        $query .= " AND c.id=a.catid";
-        $database->setQuery($query);
-        $row = $database->loadAssoc();
+
+        $model     = new ArticleModel(array('ignore_request' => true));
+        $app       = Factory::getApplication();
+        $appParams = $app->getParams();
+        $model->setState('params', $appParams);
+        $obj = $model->getItem($id);
+        $row = json_decode(json_encode($obj), true);
         // Ajout dans le tableau des fichiers
         if (empty($catid_list[0]) || in_array($row['catid'], $catid_list)) {
             return $row;
@@ -454,8 +468,8 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         $out_lign = str_ireplace('##title##', $data['title'], $out_lign);
         $out_lign = str_ireplace('##catid##', $data['catid'], $out_lign);
         $out_lign = str_ireplace('##catalias##', $data['catalias'], $out_lign);
-        $out_lign = str_ireplace('##created##', UpHelper::up_date_format($this,$data['created'], $this->options['date-format']), $out_lign);
-        $out_lign = str_ireplace('##modified##', UpHelper::up_date_format($this,$data['modified'], $this->options['date-format']), $out_lign);
+        $out_lign = str_ireplace('##created##', UpHelper::up_date_format($this, $data['created'], $this->options['date-format']), $out_lign);
+        $out_lign = str_ireplace('##modified##', UpHelper::up_date_format($this, $data['modified'], $this->options['date-format']), $out_lign);
 
         // --- totaux pour une ligne
         $curr_period = '';
@@ -512,7 +526,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
         $out_lign = str_ireplace('##detail##', $out_period_all, $out_lign);
 
         $this->total_pages += $cumul_item;
-        return UpHelper::set_attr_tag($this,$this->options['item-tag'], $this->attr_item, $out_lign);
+        return UpHelper::set_attr_tag($this, $this->options['item-tag'], $this->attr_item, $out_lign);
     }
 
     // fin stats_report
@@ -537,7 +551,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
             if ($this->options[__CLASS__] == '*') {
                 $out_lign = str_ireplace('##detail##', $this->detail_pages_visitors(), $out_lign);
             } else {
-                $out_lign = str_ireplace('##detail##', UpHelper::trad_keyword($this,'NO_STAT_VISITORS'), $out_lign);
+                $out_lign = str_ireplace('##detail##', UpHelper::trad_keyword($this, 'NO_STAT_VISITORS'), $out_lign);
             }
         }
         return $out_lign;
@@ -681,7 +695,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
             if (preg_match('#([0-9]*)(.*).log#', basename($file), $match)) {
                 if (empty($match[1])) {
                     $alias = $match[2];
-                    $id = $this->get_db_value('id', 'content', 'alias=' . $alias);
+                    $id = UpHelper::get_db_value($this, 'id', 'content', 'alias=' . $alias);
                     // $database = Factory::getContainer()->get(DatabaseInterface::class);
                     // $query = " SELECT id";
                     // $query .= " FROM #__content";
@@ -689,7 +703,7 @@ class site_stat extends Lomart\Plugin\Content\Up\Extension\Up
                     // $database->setQuery($query);
                     // $id = $database->loadResult();
                     if (empty($id)) {
-                        UpHelper::msg_error($this,'consolidation: alias fichier non trouvé. renommé en .error');
+                        UpHelper::msg_error($this, 'consolidation: alias fichier non trouvé. renommé en .error');
                         $newfile = $this->dirLogs . $alias . '.error';
                         rename($file, $newfile);
                     } else {

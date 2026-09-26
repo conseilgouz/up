@@ -104,7 +104,7 @@ class jcategories_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
             $query = $db->createQuery();
             $query->select('t.id')
                 ->from('#__tags as t')
-                ->where('t.title like "' . $options[__class__] . '"');
+                ->where('t.title = ' . $db->quote(trim($options[__class__])));
             $db->setQuery($query);
             $id = (int) $db->loadResult();
             if ($id === 0) {
@@ -131,6 +131,8 @@ class jcategories_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
             return false;
         }
         $sort_by = (isset($list_sortkey[$options['sort-by']])) ? $list_sortkey[$options['sort-by']] : 'title';
+        $list_orderby = array('asc' => 'asc', 'desc' => 'desc', 'random' => 'RAND()');
+        $order_by =  (isset($list_orderby[$options['sort-order']])) ? $list_orderby[$options['sort-order']] : '';
 
         // ---> creation requete
 
@@ -139,13 +141,24 @@ class jcategories_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
         $query->select('c.title, c.id, c.alias, c.description, c.path, c.params, c.created_time, c.modified_time, c.hits')
             ->from('#__contentitem_tag_map as m ')
             ->innerJoin('#__categories as c on c.id = m.content_item_id')
-            ->innerJoin('#__tags as t on t.id = m.tag_id')
-            ->order($db->quoteName('c.' . $sort_by) . ' ' . $options['sort-order']);
+            ->innerJoin('#__tags as t on t.id = m.tag_id');
+            
+        if ($order_by) {
+            if ($order_by == 'RAND()') {
+                $query->order($order_by);
+            } else {
+                $query->order($db->quoteName('c.' . $sort_by) . ' ' . $order_by);
+            }
+        }
 
         if ($options['maxi'])
-            $query->setLimit($options['maxi']);
+            $query->setLimit((int)$options['maxi']);
 
-        $query->where('t.id = ' . $id . ' AND m.type_alias like "%category%"');
+        $query->where('t.id = :id AND m.type_alias like :catstr');
+        $query->bind(':id', $id, \Joomla\Database\ParameterType::INTEGER);
+        $str = "%category%";
+        $query->bind(':catstr', $str, \Joomla\Database\ParameterType::STRING);
+        
         if ($options['no-published'] != '1') {
             $query->where('c.published=1');
         }
@@ -234,9 +247,16 @@ class jcategories_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
                     ->from('#__contentitem_tag_map as m ')
                     ->innerJoin('#__categories as c on c.id = m.content_item_id')
                     ->innerJoin('#__tags as t on t.id = m.tag_id')
-                    ->where('c.id = ' . $item->id . ' AND m.type_alias like "%category%"')
-                    ->where('t.id <>' . $id);
+                    ->where('c.id = :itemid' )
+                    ->where('t.id <> :id AND m.type_alias like :catstr');
+                
+                $query->bind(':itemid', $item->id, \Joomla\Database\ParameterType::INTEGER);
+                $query->bind(':id', $id, \Joomla\Database\ParameterType::INTEGER);
+                $str = "%category%";
+                $query->bind(':catstr', $str, \Joomla\Database\ParameterType::STRING);
+                    
                 $db->setQuery($query);
+                
                 $listTags = $db->loadObjectList();
                 $tmpTags = (empty($listTags)) ? '' : $options['tags-list-prefix'];
                 foreach ($listTags as $tag) {

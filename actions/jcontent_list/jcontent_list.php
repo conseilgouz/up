@@ -23,9 +23,9 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
+use Joomla\Component\Content\Site\Model\ArticleModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Access\Access;
-use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
@@ -91,11 +91,11 @@ class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // ======> fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // ======> contrôle clé de tri
         $list_sortkey = 'title, ordering, created, modified, publish_up, id, hits';
-        $options['sort-by'] = UpHelper::ctrl_argument($this,$options['sort-by'], $list_sortkey);
+        $options['sort-by'] = UpHelper::ctrl_argument($this, $options['sort-by'], $list_sortkey);
 
         $catid = $options[__class__];
         if ($catid == '') {
@@ -110,11 +110,13 @@ class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
                 $view = $app->getInput()->get('view', 0);
                 switch ($view) {
                     case 'article':
-                        $database = Factory::getContainer()->get(DatabaseInterface::class);
-                        $query = "SELECT catid FROM #__content WHERE id=" . $artid_current;
-                        $database->setQuery($query);
-                        $row = $database->loadObject();
-                        $catid = ($row != null) ? $row->catid : '';
+                        $model     = new ArticleModel(array('ignore_request' => true));
+                        $app       = Factory::getApplication();
+                        $appParams = $app->getParams();
+                        $params = $appParams;
+                        $model->setState('params', $appParams);
+                        $item = $model->getItem((int)$artid_current);
+                        $catid = ($item != null) ? $item->catid : '';
                         break;
                     case 'categories':
                     case 'category':
@@ -201,7 +203,7 @@ class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // ======> mise en forme résultat
         $artlist = array();
@@ -218,22 +220,22 @@ class jcontent_list extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // attributs du bloc principal
-        UpHelper::get_attr_style($this,$attr_main, $options['main-class'], $options['main-style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['main-class'], $options['main-style']);
         // pour compatibilité v1.6
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
 
         // attributs du bloc titre
-        UpHelper::get_attr_style($this,$attr_title, $options['title-class'], $options['title-style']);
+        UpHelper::get_attr_style($this, $attr_title, $options['title-class'], $options['title-style']);
 
         // attributs du bloc list
-        UpHelper::get_attr_style($this,$attr_list, $options['list-class'], $options['list-style']);
+        UpHelper::get_attr_style($this, $attr_list, $options['list-class'], $options['list-style']);
 
         // ======> code en retour
-        $out = UpHelper::set_attr_tag($this,'div', $attr_main);
+        $out = UpHelper::set_attr_tag($this, 'div', $attr_main);
         if ($options['title']) {
-            $out .= UpHelper::set_attr_tag($this,$options['title-tag'], $attr_title, $options['title']);
+            $out .= UpHelper::set_attr_tag($this, $options['title-tag'], $attr_title, $options['title']);
         }
-        $out .= UpHelper::set_attr_tag($this,'ul', $attr_list);
+        $out .= UpHelper::set_attr_tag($this, 'ul', $attr_list);
         foreach ($artlist as $lign) {
             $out .= '<li>' . $lign . '</li>';
         }

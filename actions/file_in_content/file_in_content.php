@@ -79,6 +79,9 @@ class file_in_content extends Lomart\Plugin\Content\Up\Extension\Up
         UpHelper::get_attr_style($this,$attr_item, $options['item-style']);
 
         // === lecture et nettoyage fichier
+        if (strpos($options[__class__], '..') !== false) {
+                return UpHelper::lang($this, 'en=Error : folder error '.$options[__class__].';fr=Erreur : répertoire incorrect '.$options[__class__]);
+        }
         if (strpos($options[__class__], '//') === false) {
             // sur le serveur du site : tous les fichiers du dossier
             $filepath = rtrim($options[__class__], '/\\');
@@ -106,6 +109,10 @@ class file_in_content extends Lomart\Plugin\Content\Up\Extension\Up
                 }
             } else {
                 // sur site distant : un seul fichier
+                $ficext = strtolower(pathinfo($options[__class__], PATHINFO_EXTENSION));
+                if (!in_array($ficext, array('txt','ini','csv'))) {
+                    return UpHelper::lang($this, 'en=Error : extension error '.$fixext.';fr=Erreur : extension incorrecte '.$ficext);
+                }
                 $files[] = $options[__class__];
             }
         }

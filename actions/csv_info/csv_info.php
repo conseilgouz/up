@@ -37,21 +37,31 @@ class csv_info extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // retour si cellule non trouvée
-        $out = UpHelper::get_bbcode($this,$options['default']);
+        $out = UpHelper::get_bbcode($this, $options['default']);
 
         // === Recuperation du contenu fichier CSV
         $filename = $options[__class__];
+        if ($filename != '' && !UpHelper::on_server($this, $filename)) {
+            return "Erreur : le fichier ".$filename." n'est pas sur votre serveur";
+        }
         if (! file_exists($filename)) {
-            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-file-not-found') . $filename);
+            UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'error-file-not-found') . $filename);
             return $out;
+        }
+        if (strpos($filename, '..') !== false) {
+            return "Erreur : le fichier ".$filename." contient des caractères interdits";
+        }
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, explode(',', 'csv,txt,ini'))) {
+            return 'unauthorized_file: '.$filename;
         }
 
         $lines = file($filename);
         if (empty($lines)) {
-            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'error-file-empty') . $filename);
+            UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'error-file-empty') . $filename);
             return $out;
         }
 

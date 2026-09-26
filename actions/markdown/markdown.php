@@ -19,7 +19,8 @@
  * v1.3 - suppression commentaires YAML et gestion chemin images
  * v2.7 - fix lecture fichier
  * v5.2 - update parsedown 1.6->1.8
- */
+ * v6.1.0 : check file type : allow only md, txt 
+*/
 defined('_JEXEC') or die();
 
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
@@ -59,7 +60,12 @@ class markdown extends Lomart\Plugin\Content\Up\Extension\Up
         }
         // 2 - le contenu d'un fichier
         $filename = $options[__class__];
+        
         if ($content == '' and $filename != '') {
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if (!in_array($ext, explode(',', 'md,txt'))) {
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'unauthorized_file: '.$filename));
+            }
             $content = UpHelper::get_html_contents($this,$filename);
         }
         if ($content == '') {

@@ -85,10 +85,14 @@ class image_random extends Lomart\Plugin\Content\Up\Extension\Up
             }
         } else {
             // === Récupération images d'un dossier
-            if (strpos($this->options[__class__], '.') === false) {
-                $pattern = $this->options[__class__] . '/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}';
+            $path = $this->options[__class__];
+            if ((strpos($path, '//') !== false) || (strpos($path, '..') !== false)) { // not on your server
+                return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid folder : ;fr=Répertoire invalide : ') . $path));
+            }
+            if (strpos($path, '.') === false) {
+                $pattern = $path . '/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}';
             } else {
-                $pattern = $this->options[__class__];
+                $pattern = $path;
             }
             $imgList = glob($pattern, GLOB_BRACE | GLOB_NOSORT);
             if (empty($imgList)) {

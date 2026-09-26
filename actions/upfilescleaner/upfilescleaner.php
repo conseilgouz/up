@@ -16,7 +16,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Session\Session;
 use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
@@ -24,9 +24,9 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        UpHelper::load_file($this,'ajax_upfilescleaner.js');
-        UpHelper::load_file($this,'tooltip.js');
-        UpHelper::load_file($this,'tooltip.css');
+        UpHelper::load_file($this, 'ajax_upfilescleaner.js');
+        UpHelper::load_file($this, 'tooltip.js');
+        UpHelper::load_file($this, 'tooltip.css');
         return true;
     }
 
@@ -37,7 +37,7 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         UpHelper::set_demopage($this);
 
         $options_def = array(
-            __class__ => '', // chemin du dossier à analyser
+            __class__ => 'images', // chemin du dossier à analyser
             'extensions' => 'jpg,jpeg,png,gif,pdf', // extensions
             'bd-tables' => '', // content:introtext,fulltext,images ; categories:description,params ; modules:params ; menus:params
             'folder-backup' => 'tmp/up-files-cleaner', // si vide, on affiche la liste
@@ -54,19 +54,28 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
             'btn-style' => 'btn btn-primary', // style du bouton action
             'css-head' => '' // style ajouté dans le HEAD de la page
         );
+        $user = Factory::getApplication()->getIdentity();
+        if (!$user->authorise('core.manage')) {
+            return '<img src="'.$this->upPath.'assets/img/ico-danger.png"/>&nbsp;Not for your eyes';
+        }
 
         // ==== FUSION ET CONTROLE DES OPTIONS ====
         // ========================================
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         $source = trim($options[__class__], ' \//');
         if (empty($source || file_exists($source) === false || is_dir($source) === false)) {
-            return UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_SOURCE'));
+            return UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'NO_SOURCE'));
         }
+        // store parameters in session
+        $session = Factory::getApplication()->getSession();
+        $session->set($options['id'], 'upfilescleaner');
+        $session->set($options['id'].'upfilescleaner.source', $source);
+        $session->set($options['id'].'upfilescleaner.extensions', $options['extensions']);
 
         $folder_backup = trim($options['folder-backup'], ' /');
         if (empty($folder_backup)) {
-            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'NO_BACKUP_PATH'));
+            UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'NO_BACKUP_PATH'));
         }
         $folder_backup = JPATH_BASE .'/'. $folder_backup;
         if (! file_exists($folder_backup)) {
@@ -84,7 +93,7 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         // === CSS-HEAD
         $css = '.tooltip-size[width:100%;min-width:260px;margin:0;padding:10px]';
         $css .= $options['css-head'];
-        UpHelper::load_css_head($this,$css);
+        UpHelper::load_css_head($this, $css);
 
         // ==== RECUPERATION DU CONTENU DE LA BD ====
         // ==========================================
@@ -112,6 +121,7 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         $list_file_used = array(); // les fichiers à conserver
         $list_file_orange = array(); // utilisé directement dans un dossier utilisé pour affichage compte-rendu uniquement
 
+        $list_subfolder_used = array();
         // ==== 1 - LES DOSSIERS ET FICHIERS A EXCLURE ====
         // ================================================
         // en sortie, les dossiers et fihiers exclus par l'utilisateur sont dans :
@@ -149,7 +159,6 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         $list_folder_used = $list_folder_exclude_by_user;
         $list_file_used = $list_file_exclude_by_user;
         unset($tmp);
-
 
         // ==== 2 - LISTE DES DOSSIERS À ANALYSER ====
         // ===========================================
@@ -190,7 +199,7 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
             $list_folder_move = array_diff($list_folder_move, $list_folder_used);
         }
         if (empty($list_folder_move)) {
-            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NO_FOLDER_MOVE'));
+            return UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'NO_FOLDER_MOVE'));
         }
 
         // ==== 3 - RECHERCHE DES FICHIERS À DÉPLACER ====
@@ -266,22 +275,22 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
 
         // commentaires dans liste
-        $comment_folder_exclude_by_user = UpHelper::trad_keyword($this,'FOLDER_EXCLUDE_BY_USER');
-        $comment_subfolder_used = UpHelper::trad_keyword($this,'SUBFOLDER_USED');
-        $comment_folder_used = UpHelper::trad_keyword($this,'FOLDER_USED');
-        $comment_file_exclude_by_user = UpHelper::trad_keyword($this,'FILE_EXCLUDE_BY_USER');
-        $comment_file_orange = UpHelper::trad_keyword($this,'FILE_ORANGE');
+        $comment_folder_exclude_by_user = UpHelper::trad_keyword($this, 'FOLDER_EXCLUDE_BY_USER');
+        $comment_subfolder_used = UpHelper::trad_keyword($this, 'SUBFOLDER_USED');
+        $comment_folder_used = UpHelper::trad_keyword($this, 'FOLDER_USED');
+        $comment_file_exclude_by_user = UpHelper::trad_keyword($this, 'FILE_EXCLUDE_BY_USER');
+        $comment_file_orange = UpHelper::trad_keyword($this, 'FILE_ORANGE');
 
         // code en retour
-        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
+        $html[] = UpHelper::set_attr_tag($this, 'div', $attr_main);
 
         $list_folder_used = array_diff($list_folder_used, $list_folder_exclude_by_user);
         $jnl = array_unique($jnl);
-        $out[] = UpHelper::trad_keyword($this,'LOG_TITLE', $source);
-        $out[] = UpHelper::trad_keyword($this,'LOG_COLOR');
+        $out[] = UpHelper::trad_keyword($this, 'LOG_TITLE', $source);
+        $out[] = UpHelper::trad_keyword($this, 'LOG_COLOR');
         $out[] = '<ul>';
         $nivBak = substr_count($jnl[0], '/');
         foreach ($jnl as $f) {
@@ -316,6 +325,8 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
                 $out[] = "<li>".$this->tooltip($f, 't-rougeFonce')."</li>";
             }
         }
+        unlink($folder_backup.'/data-source.txt'); // not needed anymore
+
         $out[] = str_repeat('</ul>', ($niv - 1));
         $html[] = implode(PHP_EOL, $out);
 
@@ -323,11 +334,20 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         // ============================================
         if (empty($files_a_deplacer)) {
             $html[] = '<div class="mt2 tc p1 bg-jauneClair bd-gris">';
-            $html[] = UpHelper::trad_keyword($this,'ACTION_NONE', $source);
+            $html[] = UpHelper::trad_keyword($this, 'ACTION_NONE', $source);
             $html[] = '</div>';
+            // remove unnecessary files/session values
+            unlink($folder_backup.'/upfilescleaner-folder-purge.txt');
+            unlink($folder_backup.'/upfilescleaner-files.txt');
+            $session->clear($options['id']);
+            $session->clear($options['id'].'upfilescleaner.source');
+            $session->clear($options['id'].'upfilescleaner.extensions', '');
             return implode(PHP_EOL, $html);
         }
-
+        $session->set($options['id'].'upfilescleaner.folderbackup', $options['folder-backup']);
+        if (!empty($options['folder-purge'])) {
+            $session->set($options['id'].'upfilescleaner.folderpurge', 1);
+        }
         // ==== POUR APPEL JAVASCRIPT ====
         // ===============================
         // === attributs du bouton
@@ -336,22 +356,19 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         $attr_btn['id'] = "upfilescleaner-btn";
         $attr_btn['disabled'] = "true";
         $attr_btn['data-id'] = $options['id'];
-        $attr_btn['data-backup'] = htmlentities($options['folder-backup']);
-        if (!empty($options['folder-purge'])) {
-            $attr_btn['data-folder-purge'] = '1';
-        }
-        UpHelper::get_attr_style($this,$attr_btn, $options['btn-style'], 'upfilescleaner-btn', $options['id']);
+
+        UpHelper::get_attr_style($this, $attr_btn, $options['btn-style'], 'upfilescleaner-btn', $options['id']);
 
         // bouton appel javascript et résultat
-        $btn_label = UpHelper::trad_keyword($this,'ACTION_BTN_LABEL', $options['folder-backup']);
-        $warning = UpHelper::trad_keyword($this,'ACTION_WARNING');
+        $btn_label = UpHelper::trad_keyword($this, 'ACTION_BTN_LABEL', $options['folder-backup']);
+        $warning = UpHelper::trad_keyword($this, 'ACTION_WARNING');
         $html[] = '<div class="mt2 tc bg-jauneClair p1 bd-gris">';
         $html[] = '<label class="upfilescleaner-warning mb1">  <input id="upfilescleaner-cb" type="checkbox">'.$warning.'</label>';
         $html[] = '<div class="tc">';
-        $html[] = UpHelper::set_attr_tag($this,'button', $attr_btn, $btn_label);
+        $html[] = UpHelper::set_attr_tag($this, 'button', $attr_btn, $btn_label);
         $html[] = '</div>';
         $html[] = '<div class="upfilescleaner-result" style="display:none">';
-        $html[] = UpHelper::trad_keyword($this,'ACTION_RESULT', $options['folder-backup']);
+        $html[] = UpHelper::trad_keyword($this, 'ACTION_RESULT', $options['folder-backup']);
         $html[] = '</div>';
 
         $html[] = '</div>';
@@ -369,7 +386,6 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
 
         // tooltip
         $html[] = '<div id="thumbnail-preview"></div>';
-
         return implode(PHP_EOL, $html);
     }
 
@@ -457,7 +473,7 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         $app = Factory::getApplication('site');
 
         $out = '';
-        $tables = UpHelper::params_decode($this,$bd_tables, ';');
+        $tables = UpHelper::params_decode($this, $bd_tables, ';');
         // Récupérer l'objet base de données
         $db = Factory::getContainer()->get(DatabaseInterface::class);
 

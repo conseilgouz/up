@@ -13,18 +13,22 @@
  */
 /*
  * v3.1 : fix resize sur toutes les instances
+ * v6.1.0 : ajout du code langue
  */
 defined('_JEXEC') or die();
-
+use Joomla\CMS\Factory;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class chart extends Lomart\Plugin\Content\Up\Extension\Up
 {
     public function init()
     {
-        UpHelper::load_file($this,'https://www.gstatic.com/charts/loader.js');
+        UpHelper::load_file($this, 'https://www.gstatic.com/charts/loader.js');
         // Load Charts and the corechart package.
-        UpHelper::load_js_code($this,'google.charts.load(\'current\', {\'packages\':[\'corechart\']});');
+        // 6.1.0 : add language
+        $lang = Factory::getApplication()->getLanguage()->getTag();
+        $lang = explode('-', $lang);
+        UpHelper::load_js_code($this, 'google.charts.load(\'current\', {\'packages\':[\'corechart\'],\'language\': \''.$lang[0].'\'});');
         return true;
     }
 
@@ -68,16 +72,16 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // controle existence et case
-        $typeChart = UpHelper::ctrl_argument($this,$options[__class__], 'Area,Bar,Bubble,Column,Combo,Line,Pie,Scatter,SteppedArea');
+        $typeChart = UpHelper::ctrl_argument($this, $options[__class__], 'Area,Bar,Bubble,Column,Combo,Line,Pie,Scatter,SteppedArea');
 
         // ==
         // ==== MISE EN FORME DONNEES
         // ==
         // === Recuperation du contenu CSV
-        $content = UpHelper::get_content_csv($this,$this->content);
+        $content = UpHelper::get_content_csv($this, $this->content);
 
         // === analyse et nombre de colonnes du tableau
         $nbCol = 0;
@@ -90,21 +94,21 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
                     $nbCol = count($tmp);
                 } else {
                     if (count($tmp) != $nbCol) {
-                        $msgError .= UpHelper::trad_keyword($this,'ERR_NB_COL', ($key + 1), count($tmp), $nbCol);
+                        $msgError .= UpHelper::trad_keyword($this, 'ERR_NB_COL', ($key + 1), count($tmp), $nbCol);
                     }
                 }
                 $rows[] = $tmp;
             }
         }
         if ($msgError) {
-            return UpHelper::info_debug($this,$msgError);
+            return UpHelper::info_debug($this, $msgError);
         }
         $isNum = [];
         // === Analyse entete données pour structure données
         foreach ($rows as $key => $val) {
             unset($tmp);
             foreach ($val as $k1 => $v1) {
-                $v1 = UpHelper::supertrim($this,$v1);
+                $v1 = UpHelper::supertrim($this, $v1);
                 if ($key == 0) {
                     // entete
                     if ($k1 == 0) {
@@ -139,13 +143,13 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
         $js .= ']);';
         $js .= 'var options = {';
         // --- Ctrl titre
-        $js .= UpHelper::set_options($this,'title', $options['title']);
-        $js .= UpHelper::set_options($this,'titlePosition', $options['title-position']);
-        $js .= UpHelper::set_options($this,'titleTextStyle', $options['title-style']);
+        $js .= UpHelper::set_options($this, 'title', $options['title']);
+        $js .= UpHelper::set_options($this, 'titlePosition', $options['title-position']);
+        $js .= UpHelper::set_options($this, 'titleTextStyle', $options['title-style']);
         // --- Ctrl legend
-        $legend['position'] = UpHelper::ctrl_argument($this,$options['legend-position'], ',bottom,left,top,right,in,none', false);
+        $legend['position'] = UpHelper::ctrl_argument($this, $options['legend-position'], ',bottom,left,top,right,in,none', false);
         $legend['textStyle'] = $options['legend-style'];
-        $js .= UpHelper::set_options($this,'legend', $legend);
+        $js .= UpHelper::set_options($this, 'legend', $legend);
 
         // $js .= 'chartArea:{left:20,top:0,width:\'70%\',height:\'85%\'},';
         if ($options['area']) {
@@ -156,10 +160,10 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
                 '80'
             );
             $js .= 'chartArea:{';
-            $js .= 'left:\'' . UpHelper::supertrim($this,$tmp[0], "%'") . '%\',';
-            $js .= 'top:\'' . UpHelper::supertrim($this,$tmp[1], "%'") . '%\',';
-            $js .= 'width:\'' . UpHelper::supertrim($this,$tmp[2], "%'") . '%\',';
-            $js .= 'height:\'' . UpHelper::supertrim($this,$tmp[3], "%'") . '%\',';
+            $js .= 'left:\'' . UpHelper::supertrim($this, $tmp[0], "%'") . '%\',';
+            $js .= 'top:\'' . UpHelper::supertrim($this, $tmp[1], "%'") . '%\',';
+            $js .= 'width:\'' . UpHelper::supertrim($this, $tmp[2], "%'") . '%\',';
+            $js .= 'height:\'' . UpHelper::supertrim($this, $tmp[3], "%'") . '%\',';
             $js .= '},';
         }
         if ($options['colors']) {
@@ -217,21 +221,21 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
         $js .= '    chart.draw(data, options);';
         $js .= '}';
         $js .= '}';
-        UpHelper::load_js_code($this,$js);
+        UpHelper::load_js_code($this, $js);
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $id;
         if ($options['height']) {
-            $attr_main['style'] = 'min-height:' . UpHelper::ctrl_unit($this,$options['height']);
+            $attr_main['style'] = 'min-height:' . UpHelper::ctrl_unit($this, $options['height']);
         }
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, '');
+        $html[] = UpHelper::set_attr_tag($this, 'div', $attr_main, '');
         return implode(PHP_EOL, $html);
     }
 

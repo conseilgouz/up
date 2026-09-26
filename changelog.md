@@ -1,14 +1,61 @@
-## 23/08/2026 - version 6.0.30
+## 21/09/2026 - version 6.1.0
 
+#### Sécurité : merci à Phyl Taylor de mysites.guru d'avoir signalé les failles et proposé des corrections
+
+- nouveau paramétre : liste des actions réservées aux administrateurs (admin/super admin) 
+- UP : contrôle de session sur les commandes AJAX, contrôle des actions réservées
+- chargement des actions depuis github : ajout du contrôle SSL dans les commandes curl
+- action ajax_view (admin): contrôle des types de fichier, blocage accès transversal
+- action csv_info : accepte uniquement les fichiers csv/txt/ini, blocage accès transversal
+- action csv2def : accepte uniquement les fichiers csv/txt/ini, blocage accès transversal
+- action csv2list : accepte uniquement les fichiers csv/txt/ini, blocage accès transversal
+- action file_download : paramètres dans la session, blocage accès transversal, vérification du répertoire de base
+- action file_explorer : blocage accès transversal, vérification du répertoire de base
+- action file_in_content : blocage accès transversal, vérification du répertoire de base,accepte uniquement fichier csv ou txt en entrée
+- action file_office_view : blocage accès transversal, vérification du répertoire de base
+- action file_view : blocage accès transversal, vérification du répertoire de base, uniquement type txt, csv, html
+- action folder_list : blocage accès transversal, vérification du répertoire de base
+- action form_select : contrôle du fichier sur le serveur, accepte uniquement fichier csv ou txt en entrée
+- action get (admin): utilisation de IPHelper
+- action image_compare : contrôle des fichiers images sur le serveur
+- action image_random :  contrôle des fichiers images sur le serveur
+- action image_secure (admin) : contrôle de l'image sur le serveur, devient une action admin (à cause du paramètre suppression)
+- action jcat_image : remplacement requête SQL par model, utilisation des prepared_statements
+- action jcategories_by_tags : sécurisation des requêtes SQL
+- action jcategories_list : remplacement requête SQL par model, utilisation des prepared_statements
+- action jcontent_by_tags : sécurisation des requêtes SQL, utilisation des prepared_statements
+- action jcontent_by_categories : sécurisation des requêtes SQL
+- action jcontent_by_subcat : remplacement requête SQL par model,  utilisation des prepared_statements
+- action jcontent_list : remplacement requête SQL par model, utilisation des prepared_statements
+- action jcontent_meta : remplacement requête SQL par model, utilisation des prepared_statements
+- action jextensions_list (admin) : vérification du type d'extensions, utilisation des prepared_statements
+- action jmenus_list (admin) : remplacement requête SQL par model, utilisation des prepared_statements
+- action jmenus_metadata (admin) : remplacement requête SQL par model, utilisation des prepared_statements
+- action jmodules_list (admin) : utilisation des prepared_statements
+- action markdown : blocage accès transversal, vérification du répertoire de base, accepte seulement fichier md ou txt
+- action php (admin): ajout de variables dans la liste des commandes interdites
+- action random : blocage accès transversal, vérification du répertoire de base, vérification des extensions autorisées
+- action sitemap (admin) : utilisation des prepared_statements
+- action site_stat (admin): sécurisation du répertoire dir-logs, ajout ::1 dans ip-list, utilisation de IPHelper, remplacement requête SQL par model
+- action site_visit (admin): sécurisation du répertoire dir-logs, ajout ::1 dans ip-list, utilisation de IPHelper
+- action upfilecleaner (admin): contrôle des extensions, blocage accès transversal, nettoyage des fichiers en fin de traitement
+
+Les actions réservées aux administrateurs sont : 
+addclass,addcsshead,addcodehead,addfilehead, addhtml, addscript, cache_cleaner, get, html, image_secure, jextensions_list, jmenus_list, jmenus_metadata, jmodules_list, php, php_error, site_stat, site_visit, sitemap, snippet, sql, upactionslist, upbtn_makefile, upclass2style, upfilescleaner, upscsscompiler, upprefset
+  
 #### Modifications actions
 
 - lang : replace locale_accept_from_http
-- site_stats : handle  locale_accept_from_http error
-- site_visits : handle  locale_accept_from_http error
+- snippet : la création/suppression de snippet est réservée aux admins
+- sql (admin) : cacher les champs password/token
+- toc : suppression d'un lien caché (accessibilité)
+- chart : ajout du code langue au chargement de google.charts.load
 
 #### Modifications internes
 
-- assets/lib/data.php : handle  locale_accept_from_http error
+- assets/lib/data.php : handle  locale_accept_from_http error, get_data : json/xml/csv/txt
+- up : scsscompiler : add missing classes
+- admin : fix CSS when load UP css is ON
 
 ## 18/07/2026 - version 6.0.29
 

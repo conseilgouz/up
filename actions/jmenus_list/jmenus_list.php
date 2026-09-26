@@ -20,7 +20,7 @@
 /*
  * v31 : fix route pour component
  * v51 : add ##level## ##image##
- *       fix main-tag, ajout classe level_x aux items de menus 
+ *       fix main-tag, ajout classe level_x aux items de menus
  * v53 : new parameter nohidden : ignore hidden menus, add ##hidden##
  */
 defined('_JEXEC') or die();
@@ -30,19 +30,19 @@ use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Menu\MenuFactoryInterface;
 use Joomla\CMS\Router\Route;
+use Joomla\Component\Users\Administrator\Model\LevelsModel;
 use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         UpHelper::set_demopage($this);
@@ -64,29 +64,24 @@ class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // ======> fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
-        $options['template-menutype'] = UpHelper::get_bbcode($this,$options['template-menutype'], false);
-        $options['template-menu'] = UpHelper::get_bbcode($this,$options['template-menu'], false);
-        $options['model-note'] = UpHelper::get_bbcode($this,$options['model-note'], false);
+        $options = UpHelper::ctrl_options($this, $options_def);
+        $options['template-menutype'] = UpHelper::get_bbcode($this, $options['template-menutype'], false);
+        $options['template-menu'] = UpHelper::get_bbcode($this, $options['template-menu'], false);
+        $options['model-note'] = UpHelper::get_bbcode($this, $options['model-note'], false);
         $isList = ($options['main-tag'] == 'ul');
-//         if (!$isList) {
-//             $options['template-menu'] = '<'.$options['main-tag'] .' class="level_##level##">'.$options['template-menu'].'</'.$options['main-tag'].'>';
-//         }
+        //         if (!$isList) {
+        //             $options['template-menu'] = '<'.$options['main-tag'] .' class="level_##level##">'.$options['template-menu'].'</'.$options['main-tag'].'>';
+        //         }
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // === RECUP NIVEAU ACCES
-        $db = Factory::getContainer()->get(DatabaseInterface::class);
-        $query = $db->createQuery();
-        $query->select('*');
-        $query->from($db->quoteName('#__viewlevels'));
-        $db->setQuery($query);
-        $results = $db->loadObjectList();
-        foreach ($results as $res) {
+        $modelLevels = new LevelsModel();
+        $viewLevels = $modelLevels->getItems();
+        foreach ($viewLevels as $res) {
             $nivacces[$res->id] = $res->title;
         }
-        
         // === liste des menutypes
         $db = Factory::getContainer()->get(DatabaseInterface::class);
         $query = $db->createQuery();
@@ -114,7 +109,7 @@ class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
         $level = 0;
         $toplevel = 0;
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['style']);
 
         $menu = Factory::getContainer()->get(MenuFactoryInterface::class)->createMenu('site'); // Joomla 6.0
         $allMenuItems = $menu->getItems($attributes = array(), $values = array());
@@ -182,44 +177,44 @@ class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
             $out[] = 'No menu items.';
         }
 
-        return UpHelper::set_attr_tag($this,'div', $attr_main, implode(PHP_EOL, $out));
+        return UpHelper::set_attr_tag($this, 'div', $attr_main, implode(PHP_EOL, $out));
     }
 
     // run
     //
     // Retourne une ligne formatée pour le menutype
-    function get_lign_menutype($data, $options)
+    public function get_lign_menutype($data, $options)
     {
         $out = $options['template-menutype'];
-        UpHelper::kw_replace($this,$out, 'id', $data['id']);
-        UpHelper::kw_replace($this,$out, 'menutype', $data['menutype']);
-        UpHelper::kw_replace($this,$out, 'title', $data['title']);
-        UpHelper::kw_replace($this,$out, 'description', $data['description']);
+        UpHelper::kw_replace($this, $out, 'id', $data['id']);
+        UpHelper::kw_replace($this, $out, 'menutype', $data['menutype']);
+        UpHelper::kw_replace($this, $out, 'title', $data['title']);
+        UpHelper::kw_replace($this, $out, 'description', $data['description']);
         return $out;
     }
 
     // Retourne une ligne formatée pour un item menu
-    function get_lign_menu($data, $options, $nivacces, $params)
+    public function get_lign_menu($data, $options, $nivacces, $params)
     {
         $out = $options['template-menu'];
         if (strpos($out, '##image') !== false) {
             $image = $this->get_image($params);
-            UpHelper::kw_replace($this,$out, 'image', $image);
+            UpHelper::kw_replace($this, $out, 'image', $image);
         }
-        UpHelper::kw_replace($this,$out, 'level', $data->level); // v5.1
-        UpHelper::kw_replace($this,$out, 'id', $data->id);
-        UpHelper::kw_replace($this,$out, 'title', $data->title);
+        UpHelper::kw_replace($this, $out, 'level', $data->level); // v5.1
+        UpHelper::kw_replace($this, $out, 'id', $data->id);
+        UpHelper::kw_replace($this, $out, 'title', $data->title);
         // note
         $str = ($data->note == '') ? '' : sprintf($options['model-note'], $data->note);
-        UpHelper::kw_replace($this,$out, 'note', $str);
+        UpHelper::kw_replace($this, $out, 'note', $str);
         // niveau accés
-        UpHelper::kw_replace($this,$out, 'access', $nivacces[$data->access]);
+        UpHelper::kw_replace($this, $out, 'access', $nivacces[$data->access]);
         // language
         $str = ($data->language == '*') ? '' : $data->language;
-        UpHelper::kw_replace($this,$out, 'language', $str);
+        UpHelper::kw_replace($this, $out, 'language', $str);
         // component
         $str = (isset($data->query['view'])) ? '/' . $data->query['view'] : '';
-        UpHelper::kw_replace($this,$out, 'component', str_replace('com_', '', ($data->component ?? '')) . $str);
+        UpHelper::kw_replace($this, $out, 'component', str_replace('com_', '', ($data->component ?? '')) . $str);
         // lien
         if (strpos($out, '##link') !== false || strpos($out, '##title-link') !== false) { // v31
             $itemParams = $data->getParams();
@@ -263,19 +258,19 @@ class jmenus_list extends Lomart\Plugin\Content\Up\Extension\Up
             } else {
                 $data->flink = Route::_($data->flink);
             }
-            UpHelper::kw_replace($this,$out, 'link', $data->flink);
-            UpHelper::kw_replace($this,$out, 'title-link', '<a href="' . $data->flink . '">' . $data->title . '</a>');
+            UpHelper::kw_replace($this, $out, 'link', $data->flink);
+            UpHelper::kw_replace($this, $out, 'title-link', '<a href="' . $data->flink . '">' . $data->title . '</a>');
             $text = "";
             if (!is_null($params->get('menu_show')) && ($params->get('menu_show') == 0)) {
-                $text = UpHelper::kw_replace($this,$out, 'hidden', Text::_('MENUS_HIDDEN'));
+                $text = UpHelper::kw_replace($this, $out, 'hidden', Text::_('MENUS_HIDDEN'));
             }
-            UpHelper::kw_replace($this,$out, 'hidden', $text);
+            UpHelper::kw_replace($this, $out, 'hidden', $text);
         }
 
         return $out;
     }
 
-    function get_image($data)
+    public function get_image($data)
     {
         $params = json_decode($data);
         if (! empty($params->menu_icon_css)) {

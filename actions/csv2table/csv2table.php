@@ -36,7 +36,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
     public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'csv2table.css');
+        UpHelper::load_file($this, 'csv2table.css');
         // UpHelper::load_file($this,'xxxxx.js');
         return true;
     }
@@ -78,7 +78,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         $id = '#' . $options['id'];
 
@@ -88,7 +88,20 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         // 2 - le contenu d'un fichier
         $filename = $options[__class__];
         if ($content == '' and $filename != '') {
-            $content = UpHelper::get_html_contents($this,$filename);
+            if ($filename != '' && !UpHelper::on_server($this, $filename)) {
+                return "Erreur : le fichier ".$filename." n'est pas sur votre serveur";
+            }
+            if (! file_exists($filename)) {
+                return 'Erreur : fichier '.$filename.' non trouvé';
+            }
+            if (strpos($filename, '..') !== false) {
+                return "Erreur : le fichier ".$filename." contient des caractères interdits";
+            }
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if (!in_array($ext, explode(',', 'csv,txt,ini'))) {
+                return 'unauthorized_file: '.$filename;
+            }
+            $content = UpHelper::get_html_contents($this, $filename);
         }
 
         // retour sans prévenir, le contenu peut être envoyé par une autre action
@@ -100,7 +113,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         // === Analyse et nettoyage du contenu
         // ===================================
         // $content = UpHelper::get_content_csv($this,$content, 'br,code'); // v2.9
-        $content = UpHelper::get_content_csv($this,$content, false); // v2.9.1 retour 2.8
+        $content = UpHelper::get_content_csv($this, $content, false); // v2.9.1 retour 2.8
 
         // === analyse et nombre de colonnes du tableau
         $nbcol = 0;
@@ -135,7 +148,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
                 $csvHead = array_shift($csv);
                 break;
             default: // la valeur est le titre au format csv
-                $csvHead = str_getcsv(UpHelper::get_bbcode($this,$options['header']), $options['separator'], '"', '\\');
+                $csvHead = str_getcsv(UpHelper::get_bbcode($this, $options['header']), $options['separator'], '"', '\\');
         }
 
         // === Recuperation des pieds de table (footer)
@@ -221,7 +234,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ---------- Ajout CSS dans le head avec substitution de #id par le vrai
         if (isset($css)) {
-            UpHelper::load_css_head($this,implode(PHP_EOL, $css));
+            UpHelper::load_css_head($this, implode(PHP_EOL, $css));
         }
 
         // MISE EN FORME (ajouté dans les balise du code HTML)
@@ -229,8 +242,8 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         // -- balise TABLE
         $attr_table['id'] = $options['id'];
         $attr_table['class'] = 'csv2table';
-        UpHelper::add_class($this,$attr_table['class'], $options['model']);
-        UpHelper::add_class($this,$attr_table['class'], $options['class']);
+        UpHelper::add_class($this, $attr_table['class'], $options['model']);
+        UpHelper::add_class($this, $attr_table['class'], $options['class']);
         $attr_table['style'] = $options['style'];
 
         // -- balise THEAD TR
@@ -244,11 +257,11 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         // CREATION DU CODE HTML en retour
         // ===============================
         // -- TABLE
-        $html[] = UpHelper::set_attr_tag($this,'table', $attr_table);
+        $html[] = UpHelper::set_attr_tag($this, 'table', $attr_table);
         // -- THEAD
         if (isset($csvHead)) {
             $html[] = '<thead>';
-            $html[] = UpHelper::set_attr_tag($this,'tr', $attr_thead);
+            $html[] = UpHelper::set_attr_tag($this, 'tr', $attr_thead);
 
             $max = $nbcol;
             for ($i = 0; $i < $max; $i++) {
@@ -280,7 +293,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
                 $html[] = '<tr>';
                 $max = $nbcol;
                 for ($i = 0; $i < $max; $i++) {
-                    $txt = (isset($lign[$i])) ? UpHelper::supertrim($this,$lign[$i]) : '';
+                    $txt = (isset($lign[$i])) ? UpHelper::supertrim($this, $lign[$i]) : '';
                     if ($txt && $txt[0] == '[') {
                         list($arg, $txt) = array_map('trim', explode(']', substr($txt, 1)));
                         $out = '';
@@ -305,7 +318,7 @@ class csv2table extends Lomart\Plugin\Content\Up\Extension\Up
         // -- TFOOT
         if (isset($csvFoot)) {
             $html[] = '<tfoot>';
-            $html[] = UpHelper::set_attr_tag($this,'tr', $attr_tfoot);
+            $html[] = UpHelper::set_attr_tag($this, 'tr', $attr_tfoot);
 
             $max = $nbcol;
             for ($i = 0; $i < $max; $i++) {

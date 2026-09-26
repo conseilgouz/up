@@ -13,6 +13,7 @@
 
 /*
  * v3.0 - ajout option size pour nombre de lignes affichées
+ * v6.1.0 : only csv/txt files
  */
 defined('_JEXEC') or die();
 
@@ -51,10 +52,10 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // ======> fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // === Filtrage
-        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
+        if (UpHelper::filter_ok($this, $options['filter']) !== true) {
             return '';
         }
 
@@ -64,18 +65,18 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
         // === ID et Style
         // ========================
         // --- CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
         // --- Attributs
         $attr_select['id'] = $id;
         // --- size en nombre de lignes ou en height
-        $size = UpHelper::ctrl_unit($this,$options['size'], ',vh,px,rem');
+        $size = UpHelper::ctrl_unit($this, $options['size'], ',vh,px,rem');
         if ((int) $size == $size) {
             $attr_select['size'] = strval($options['size']);
         } else {
             $attr_select['size'] = '99';
             $attr_select['style'] = 'height:' . $size;
         }
-        UpHelper::get_attr_style($this,$attr_select, $options['style']);
+        UpHelper::get_attr_style($this, $attr_select, $options['style']);
 
         // ========================
         // === recup du contenu CSV
@@ -84,8 +85,22 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
         $content = $this->content;
         // 2 - le contenu d'un fichier
         $filename = $options['file'];
+
+        if ($filename != '' && !UpHelper::on_server($this, $filename)) {
+            return "Erreur : le fichier ".$filename." n'est pas sur votre serveur";
+        }
+        if (!is_file($filename) && $filename != '') {
+            return "Erreur : fichier ".$filename." non trouvé";
+        }
         if ($content == '' and $filename != '') {
-            $filename = UpHelper::get_url_absolute($this,$filename);
+            if (strpos($filename, '..') !== false) {
+                return "Erreur : le fichier ".$filename." contient des caractères interdits";
+            }
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if (!in_array($ext, explode(',', 'csv,txt'))) {
+                return 'unauthorized_file: '.$filename;
+            }
+            $filename = UpHelper::get_url_absolute($this, $filename);
             $content = file_get_contents($filename);
         }
 
@@ -101,7 +116,7 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
         // 5.3 : if content has been created by another action, remove divs
         $content = preg_replace("/(<div[^>]*>|<\/div>)/i", PHP_EOL, $content);
 
-        $content = UpHelper::get_content_csv($this,$content, false);
+        $content = UpHelper::get_content_csv($this, $content, false);
         // === analyse et nombre de colonnes du tableau
 
         foreach ($content as $key => $val) {
@@ -145,7 +160,7 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
             $js .= 'document.getElementById("' . $id . '").addEventListener("dblclick", () => {';
             $js .= 'document.getElementById("btn' . $id . '").click();';
             $js .= '});';
-            $js = UpHelper::load_js_code($this,$js, false);
+            $js = UpHelper::load_js_code($this, $js, false);
         }
 
         // ============================
@@ -157,12 +172,12 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
             $attr_select['name'] = $options['id'];
             // $attr_select['autofocus'] = '1';
             $attr_label['for'] = $id;
-            UpHelper::get_attr_style($this,$attr_label, $options['label-style']);
-            $html[] = UpHelper::set_attr_tag($this,'label', $attr_label, UpHelper::get_bbcode($this,$options['label']));
+            UpHelper::get_attr_style($this, $attr_label, $options['label-style']);
+            $html[] = UpHelper::set_attr_tag($this, 'label', $attr_label, UpHelper::get_bbcode($this, $options['label']));
         }
 
         // --- le select
-        $html[] = UpHelper::set_attr_tag($this,'select', $attr_select, false);
+        $html[] = UpHelper::set_attr_tag($this, 'select', $attr_select, false);
         $selected = ' selected';
         foreach ($csv as $val) {
             $html[] = sprintf('<option value="%s"' . $selected . '>%s</option>', $val[1], $val[0]);
@@ -176,8 +191,8 @@ class form_select extends Lomart\Plugin\Content\Up\Extension\Up
             $attr_btn['type'] = 'button';
             $attr_btn['accesskey'] = 'enter';
             $attr_btn['value'] = $options['btn'];
-            UpHelper::get_attr_style($this,$attr_btn, $options['btn-style']);
-            $html[] = UpHelper::set_attr_tag($this,'input', $attr_btn);
+            UpHelper::get_attr_style($this, $attr_btn, $options['btn-style']);
+            $html[] = UpHelper::set_attr_tag($this, 'input', $attr_btn);
         }
 
         $html[] = $js;

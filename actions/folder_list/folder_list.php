@@ -1,4 +1,5 @@
 <?php
+
 use Joomla\Component\Media\Administrator\Exception\FileExistsException;
 
 /**
@@ -36,13 +37,12 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // lien vers la page de demo
@@ -91,14 +91,17 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
          * }
          */
         // === fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
-        $this->options['template'] = UpHelper::get_bbcode($this,$this->options['template']);
-        $this->options['template-folder'] = UpHelper::get_bbcode($this,$this->options['template-folder']);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
+        $this->options['template'] = UpHelper::get_bbcode($this, $this->options['template']);
+        $this->options['template-folder'] = UpHelper::get_bbcode($this, $this->options['template-folder']);
 
         // extraction des composantes de la recherche
         $path = $this->options[__class__];
         $mask = $this->options['mask'];
-
+        if ((strpos($path, '//') !== false) || (strpos($path, '..') !== false)) { // not on your server
+            return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid folder : ;fr=Répertoire invalide : ') . $path));
+        }
+        $path = ltrim($path, '/');
         // annuler les echappements du shortcode UP
         $mask = str_replace('\[', '§{', $mask);
         $mask = str_replace('\]', '§}', $mask);
@@ -114,7 +117,7 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$this->options['css-head']);
+        UpHelper::load_css_head($this, $this->options['css-head']);
 
         // === Recupération de la liste
         $this->result = array();
@@ -130,9 +133,9 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
         // attributs du bloc principal
         if ($this->options['main-tag']) {
             $attr_main['id'] = $this->options['id'];
-            UpHelper::get_attr_style($this,$attr_main, $this->options['class'], $this->options['style']);
+            UpHelper::get_attr_style($this, $attr_main, $this->options['class'], $this->options['style']);
             // code en retour
-            $out = UpHelper::set_attr_tag($this,$this->options['main-tag'], $attr_main, $out);
+            $out = UpHelper::set_attr_tag($this, $this->options['main-tag'], $attr_main, $out);
         }
 
         return $out;
@@ -144,11 +147,11 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
      * retourne les fichiers correspondants au masque
      * $max est le niveau d'exploration des sous-dossiers
      */
-    function glob_recursive($path, $mask, $max = 0, $flags = 0, $treeview = false)
+    public function glob_recursive($path, $mask, $max = 0, $flags = 0, $treeview = false)
     {
         $files = glob($path . '/' . $mask, $flags);
         if ($max > 0) {
-            $max --;
+            $max--;
             foreach (glob($path . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
                 if ($treeview) {
                     $tmpl = $this->options['template-folder'];
@@ -158,13 +161,15 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
                     $this->result[] = '<li>' . $tmpl . '<ul>';
                 }
                 $this->glob_recursive($dir, $mask, $max, $flags, $treeview);
-                if ($treeview)
+                if ($treeview) {
                     $this->result[] = '</ul></li>';
+                }
             }
         }
         foreach ($files as $file) {
-            if (! is_dir($file)) // 5.1
+            if (! is_dir($file)) { // 5.1
                 $this->make_item($file);
+            }
         }
     }
 
@@ -173,7 +178,7 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
      * ---------
      * construit une ligne pour un fichier
      */
-    function make_item($file)
+    public function make_item($file)
     {
         $file = str_replace('\\', '/', $file);
         $abs_file = JPATH_ROOT . '/' . $file;
@@ -182,13 +187,13 @@ class folder_list extends Lomart\Plugin\Content\Up\Extension\Up
             $tmpl = $this->options['template'];
             $tmpl = str_ireplace("##file##", $file, $tmpl);
             if (strpos($tmpl, '##') !== false) { // v2.8.2
-                $info = pathinfo(UpHelper::get_url_absolute($this,$file));
+                $info = pathinfo(UpHelper::get_url_absolute($this, $file));
                 $tmpl = str_ireplace("##dirname##", $info['dirname'], $tmpl);
                 $tmpl = str_ireplace("##basename##", $info['basename'], $tmpl);
                 $tmpl = str_ireplace("##filename##", $info['filename'], $tmpl);
                 $tmpl = str_ireplace("##extension##", $info['extension'], $tmpl);
-                $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this,$file, $this->options['decimal']), $tmpl);
-                $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this,date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
+                $tmpl = str_ireplace("##size##", UpHelper::human_filesize($this, $file, $this->options['decimal']), $tmpl);
+                $tmpl = str_ireplace("##date##", UpHelper::up_date_format($this, date('Y-m-d H:i:s', filemtime($abs_file)), $this->options['date-format']), $tmpl);
 
                 $relpath = trim(substr($info['dirname'], strlen($this->options[__class__])), "/");
                 $relpath .= ($relpath) ? '/' : '';

@@ -14,15 +14,17 @@ defined('_JEXEC') or die;
 
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
-
-    function init() {
+class image_secure extends Lomart\Plugin\Content\Up\Extension\Up
+{
+    public function init()
+    {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'image_secure.css');
+        UpHelper::load_file($this, 'image_secure.css');
         return true;
     }
 
-    function run() {
+    public function run()
+    {
 
         // lien vers la page de demo
         UpHelper::set_demopage($this);
@@ -46,7 +48,7 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
         // ==============================
         // fusion et controle des options
         // ==============================
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
         // -- les dossiers racines
         $folder_source = rtrim($options['folder-source'], '\/');
         $folder_strip = rtrim($options['folder-strip'], '\/');
@@ -61,28 +63,31 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
 
         $img_path = $imgSrc['dirname'];
         // suppression dossier folder_source du chemin fichier
-        if (strpos($img_path, $folder_source) === 0)
+        if (strpos($img_path, $folder_source) === 0) {
             $img_path = substr($img_path, strlen($folder_source) + 1);
+        }
+        $img_path = ($img_path) ? $img_path. '/' : '';
         $img_name = $imgSrc['filename'];
         // -- extensions autorisées
         $img_type = $imgSrc['extension'];
         // -- chemin complet vers image source
-        $img_source = $folder_source . '/' . $img_path . '/' . $img_name . '.' . $img_type;
+        $img_source = $folder_source . '/' . $img_path . $img_name . '.' . $img_type;
 
         // liste des images fractionnées
-        $pattern = $folder_strip . '/' . $img_path . '/' . $img_name . '-up??.' . $img_type;
+        $pattern = $folder_strip . '/' . $img_path . $img_name . '-up??.' . $img_type;
         $img_list = glob($pattern);
 
         // si le nombre de strip est différent de l'option, on reset
-        if (count($img_list) != $options['nb-strip'])
+        if (count($img_list) != $options['nb-strip']) {
             $options['reset'] = 1;
+        }
 
         // ===========================
         // Reset des images partielles
         // ===========================
         // uniquement si l'image source existe
         if ($options['reset'] && file_exists($img_source)) {
-            foreach ($img_list AS $k => $v) {
+            foreach ($img_list as $k => $v) {
                 unlink($v);
             }
             unset($img_list);
@@ -94,13 +99,15 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
         if (empty($img_list)) {
             // si image originale manquante -> c'est fini
             if (!file_exists($img_source)) {
-                return(UpHelper::msg_inline($this,lang('en=NOT FOUND : ;fr=NON TROUVE : ') . $img_source));
+                return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=NOT FOUND : ;fr=NON TROUVE : ') . $img_source));
             }
             // on découpe
             $this->create_subdir($folder_strip . '/' . $img_path);
             $img_base = $folder_strip . '/' . $img_path . '/' . $img_name;
             $img_list = $this->make_strip($img_source, $img_base, $img_type, $options['nb-strip'], $options['quality']);
-
+            if ($img_list == $img_source) {
+                return(UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Invalid image : ;fr=Image invalide : ') . $img_source));
+            }
             // on supprime original ?
             // uniquement lors de la phase de création
             if ($options['delete-source'] && !empty($img_list)) {
@@ -112,13 +119,14 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
         // copie de l'image leurre
         // ===========================
         $img_leurre = $folder_strip . '/no-copy.png';
-        if (!file_exists($img_leurre))
+        if (!file_exists($img_leurre)) {
             $ok = copy($this->actionPath . 'no-copy.png', $img_leurre);
+        }
 
         // ===========================
         // Code pour les strip-images
         // ===========================
-        $alt = ($options['alt']) ? $options['alt'] : UpHelper::link_humanize($this,$img_name);
+        $alt = ($options['alt']) ? $options['alt'] : UpHelper::link_humanize($this, $img_name);
         $strip_code = '<div class="overlay"><img src="' . $img_leurre . '"></div>';
         foreach ($img_list as $k => $v) {
             $strip_code .= '<img src="' . $v . '" alt="' . $alt . '">';
@@ -126,28 +134,29 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
 
         // === CSS-HEAD
         $options['css-head'] .= '#id> img [width:' . (100 / count($img_list)) . '%]';
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'up-secure';
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $html = UpHelper::set_attr_tag($this,'div', $attr_main, $strip_code);
+        $html = UpHelper::set_attr_tag($this, 'div', $attr_main, $strip_code);
 
         return $html;
     }
 
-// run
+    // run
 
     /*
      * make_strip :  decoupe l'image source en bandes
      * retourne la listes des images partielles classées de gauche à droite
      */
 
-    function make_strip($imgSrc, $img_base, $img_type, $nb_strip, $quality = 90) {
+    public function make_strip($imgSrc, $img_base, $img_type, $nb_strip, $quality = 90)
+    {
         list($w, $h) = getimagesize($imgSrc);
         $wstrip = intval($w / $nb_strip);
         $img_type = strtolower($img_type);
@@ -184,7 +193,8 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
      * creation d'un sous-dossier si inexistant dans le chemin image
      */
 
-    function create_subdir($path) {
+    public function create_subdir($path)
+    {
 
         if (!is_dir(JPATH_ROOT . '/' . $path)) {
             if (!@mkdir(JPATH_ROOT . '/' . $path, 0755, true) && !is_dir(JPATH_ROOT . '/' . $path)) {
@@ -197,10 +207,3 @@ class image_secure extends Lomart\Plugin\Content\Up\Extension\Up {
 }
 
 // class
-
-
-
-
-
-
-

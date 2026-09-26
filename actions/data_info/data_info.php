@@ -85,7 +85,7 @@ class data_info extends Lomart\Plugin\Content\Up\Extension\Up
         // ========================
         // === recup des données
         // ========================
-        $data = get_data($options[__class__], $options['cache-delay']);
+        $data = get_data($options[__class__],$options);
         if ($data == '') {
             return UpHelper::msg_inline($this,'data-info - data source not found or empty' . $options[__class__]);
         }

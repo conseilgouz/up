@@ -23,16 +23,16 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\Database\DatabaseInterface;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
+
 class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         return true;
     }
 
-    function run()
+    public function run()
     {
         // lien vers la page de demo (vide=page sur le site de UP)
         UpHelper::set_demopage($this);
@@ -63,24 +63,31 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // ======> fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
-        $options['template'] = UpHelper::get_bbcode($this,$options['template'], false);
-        $options['model-note'] = UpHelper::get_bbcode($this,$options['model-note'], false);
+        $options = UpHelper::ctrl_options($this, $options_def);
+        $options['template'] = UpHelper::get_bbcode($this, $options['template'], false);
+        $options['model-note'] = UpHelper::get_bbcode($this, $options['model-note'], false);
         // === Consolidation des options
         // balise HTML
         $options['main-tag'] = ($options['main-tag'] == '0') ? '' : $options['main-tag'];
         $options['item-tag'] = ($options['item-tag'] == '0') ? '' : $options['item-tag'];
-        $state = explode(',', UpHelper::get_bbcode($this,$options['state-list']) . ',,'); // v31
+        $state = explode(',', UpHelper::get_bbcode($this, $options['state-list']) . ',,'); // v31
 
         // SQL : type pour list
+        $validtypes = ['component','module','plugin'];
+        $typelist = [];
         foreach (explode(',', $options[__class__]) as $type) {
-            if (trim($type) != '')
-                $typelist[] = '\'' . trim($type) . '\'';
+            if (!in_array($type, $validtypes)) {
+                return UpHelper::msg_inline($this, 'invalid extension found with your options : '.$type);
+            }
+            if (trim($type) != '') {
+                $typelist[] = trim($type);
+            }
         }
         $type = trim(implode(',', $typelist));
+
         $exclude = ($options['type-exclude'] == '0') ? '' : 'NOT';
         // SQL : where sur client_id
-        $client = UpHelper::ctrl_argument($this,$options['client'], ',0,1', false);
+        $client = UpHelper::ctrl_argument($this, $options['client'], ',0,1', false);
         // Critères de tri
         $sort_keys = explode(',', $options['sort']);
 
@@ -90,23 +97,27 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
         $query->select('*');
         $query->from($db->quoteName('#__extensions'));
         if ($type) {
-            $query->where($db->quoteName('type') . $exclude . ' IN (' . $type . ')');
+            $types = $query->bindArray($typelist,\Joomla\Database\ParameterType::STRING);
+            $query->where($db->quoteName('type') . $exclude . ' IN ('.implode(',', $types).')');
         }
-        if ($client != '')
-            $query->where($db->quoteName('client_id') . '=' . $db->quote($client));
-        $query->where($db->quoteName('extension_id') . '>' . $options['minimal-id']);
+        if ($client != '') {
+            $query->where($db->quoteName('client_id') . '= :client');
+            $query->bind(':client', $client, \Joomla\Database\ParameterType::INTEGER);
+        }
+        $query->where($db->quoteName('extension_id') . '> :mini');
+        $query->bind(':mini', $options['minimal-id'], \Joomla\Database\ParameterType::INTEGER);
         $db->setQuery($query);
         if (isset($this->options_user['debug'])) {
             $debug = $query->__toString();
             // $debug .= '<br' . var_export($db->loadAssocList());
-            UpHelper::msg_info($this,htmlentities($debug), 'Requete SQL');
+            UpHelper::msg_info($this, htmlentities($debug), 'Requete SQL');
         }
         $resbrut = $db->loadAssocList();
 
         // === Lecture des notes webmaster
         $notes_file = $this->actionPath . 'custom/info.ini';
         if (file_exists($notes_file)) {
-            $notes = UpHelper::load_inifile($this,$notes_file, true);
+            $notes = UpHelper::load_inifile($this, $notes_file, true);
             $notes = ($notes === false) ? array() : $notes;
         }
         // ces caractéres sont a supprimer du nom des extensions
@@ -130,13 +141,15 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
 
         // == Consolider et trier le résultat
         foreach ($resbrut as $res) {
-            if ($options['actif-only'] && $res['enabled'] == '0')
+            if ($options['actif-only'] && $res['enabled'] == '0') {
                 continue;
+            }
             $res['client'] = ($res['client_id'] == '0') ? 'site' : 'admin';
             $res['id'] = $res['extension_id'];
             $infos = json_decode($res['manifest_cache']);
-            if ($infos->author == $options['author-exclude'])
+            if ($infos->author == $options['author-exclude']) {
                 continue;
+            }
             $res['author'] = (isset($infos->author)) ? $infos->author : '';
             $res['version'] = (isset($infos->version)) ? $infos->version : '';
             if (isset($infos->name)) {
@@ -162,36 +175,37 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
             }
         }
         if (empty($results)) {
-            return UpHelper::msg_inline($this,'no extension found with this options');
+            return UpHelper::msg_inline($this, 'no extension found with this options');
         }
         ksort($results);
 
         // === MISE EN FORME
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['style']);
 
         foreach ($results as $res) {
             $out = $options['template'];
-            UpHelper::kw_replace($this,$out, 'id', $res['id']);
-            UpHelper::kw_replace($this,$out,'state', $state[$res['enabled']]);
-            UpHelper::kw_replace($this,$out,'type', $res['type']);
+            UpHelper::kw_replace($this, $out, 'id', $res['id']);
+            UpHelper::kw_replace($this, $out, 'state', $state[$res['enabled']]);
+            UpHelper::kw_replace($this, $out, 'type', $res['type']);
             $str = ($res['folder'] == '') ? '' : sprintf($options['model-folder'], $res['folder']);
-            UpHelper::kw_replace($this,$out, 'folder', $str);
-            UpHelper::kw_replace($this,$out,'client', $res['client']);
-            UpHelper::kw_replace($this,$out,'name', $res['name']);
-            UpHelper::kw_replace($this,$out,'author', $res['author']);
+            UpHelper::kw_replace($this, $out, 'folder', $str);
+            UpHelper::kw_replace($this, $out, 'client', $res['client']);
+            UpHelper::kw_replace($this, $out, 'name', $res['name']);
+            UpHelper::kw_replace($this, $out, 'author', $res['author']);
             $str = ($res['version'] == '') ? '' : sprintf($options['model-version'], $res['version']);
-            UpHelper::kw_replace($this,$out,'version', $str);
+            UpHelper::kw_replace($this, $out, 'version', $str);
             $str = ($res['note'] == '') ? '' : sprintf($options['model-note'], $res['note']);
-            UpHelper::kw_replace($this,$out,'note', $str);
+            UpHelper::kw_replace($this, $out, 'note', $str);
             // ajout tag si demande
-            if ($options['item-tag'])
-                $out = UpHelper::set_attr_tag($this,$options['item-tag'], array(), $out);
+            if ($options['item-tag']) {
+                $out = UpHelper::set_attr_tag($this, $options['item-tag'], array(), $out);
+            }
 
             $html[] = $out;
         }
         if ($options['main-tag']) {
-            return UpHelper::set_attr_tag($this,$options['main-tag'], $attr_main, implode(PHP_EOL, $html));
+            return UpHelper::set_attr_tag($this, $options['main-tag'], $attr_main, implode(PHP_EOL, $html));
         } else {
             return implode(PHP_EOL, $html);
         }
@@ -207,8 +221,9 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
             foreach ($args as $n => $field) {
                 if (is_string($field)) {
                     $tmp = array();
-                    foreach ($data as $key => $row)
+                    foreach ($data as $key => $row) {
                         $tmp[$key] = $row[$field];
+                    }
                     $args[$n] = $tmp;
                 }
             }
@@ -222,8 +237,9 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
             foreach ($args as $n => $field) {
                 if (is_string($field)) {
                     $tmp = array();
-                    foreach ($data as $key => $row)
+                    foreach ($data as $key => $row) {
                         $tmp[$key] = $row[$field];
+                    }
                     $args[$n] = $tmp;
                 }
             }
@@ -235,7 +251,3 @@ class jextensions_list extends Lomart\Plugin\Content\Up\Extension\Up
 }
 
 // class
-
-
-
-

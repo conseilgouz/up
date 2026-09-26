@@ -5,7 +5,7 @@
  *
  * syntaxe {up data2table=data_source}
  *
- * @version  UP-3.0  
+ * @version  UP-3.0
  * @author   lomart
  * @license  <a href="http://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPLv3</a>
  * @tags    Expert
@@ -17,14 +17,13 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class data2table extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
-        UpHelper::load_file($this,'data2table.css');
+        UpHelper::load_file($this, 'data2table.css');
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // lien vers la page de demo
@@ -73,55 +72,61 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
             'cache-delay' => 30 // durée du cache en minutes. 0 pas de cache
         );
 
-        include_once ($this->upPath . '/assets/lib/data.php');
+        include_once($this->upPath . '/assets/lib/data.php');
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
-        $data = get_data($options[__class__], $options['cache-delay']);
+        $data = get_data($options[__class__],$options);
         if ($data == '') {
-            return UpHelper::msg_inline($this,'data-info - data source not found or empty' . $options[__class__]);
+            return UpHelper::msg_inline($this, 'data-info - data source not found or empty' . $options[__class__]);
         }
 
         // Conversion des données en array
         $data = convert_data_to_array($data, $options, true);
         if ($data == '') {
-            return UpHelper::msg_inline($this,'data2table - format data source invalid : ' . $options[__class__]);
+            return UpHelper::msg_inline($this, 'data2table - format data source invalid : ' . $options[__class__]);
         }
 
         // consolidation des options de formattage
-        $options['boolean-out'] = UpHelper::get_bbcode($this,$options['boolean-out']);
-        $options['col-type'] = UpHelper::get_bbcode($this,$options['col-type']);
-        $options['col-empty'] = UpHelper::get_bbcode($this,$options['col-empty']);
+        $options['boolean-out'] = UpHelper::get_bbcode($this, $options['boolean-out']);
+        $options['col-type'] = UpHelper::get_bbcode($this, $options['col-type']);
+        $options['col-empty'] = UpHelper::get_bbcode($this, $options['col-empty']);
         fix_options($options);
-        if ($options['datatype'] = 'json')
+        if ($options['datatype'] == 'json') {
             $options['xml-attributes'] = 1;
+        }
 
         // selection de la racine options['root']
-        if ($options['lign-root'] != '')
-            if (get_root($data, $options) === false)
-                return UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ITEM_NOT_FOUND', $options['lign-root']));
+        if ($options['lign-root'] != '') {
+            if (get_root($data, $options) === false) {
+                return UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'ITEM_NOT_FOUND', $options['lign-root']));
+            }
+        }
 
         // --- tri des données v5.1
-        $msg = sort_data($data, UpHelper::strtoarray($this,$options['lign-sort'], ',', ':', false));
-        if ($msg)
-            UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
+        $msg = sort_data($data, UpHelper::strtoarray($this, $options['lign-sort'], ',', ':', false));
+        if ($msg) {
+            UpHelper::msg_error($this, $msg . ' for ' . $options[__class__]);
+        }
 
         // selection options['select']
         if ($options['lign-select'] != '') {
             $msg = get_select($data, $options);
-            if ($msg)
-                UpHelper::msg_error($this,$msg . ' for ' . $options[__class__]);
+            if ($msg) {
+                UpHelper::msg_error($this, $msg . ' for ' . $options[__class__]);
+            }
         }
 
         // --- filtrage des données v5.1
         // nomcol:condition(<=,>=,==,<>,><)valeur
         $msg = get_filter($data, $options['lign-filter']);
-        if ($msg)
-            UpHelper::msg_error($this,$msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
+        if ($msg) {
+            UpHelper::msg_error($this, $msg . ' ' . $options['lign-filter'] . ' for ' . $options[__class__]);
+        }
 
         // --- lign-max v5.1
         if ((int) $options['lign-max'] > 0) {
@@ -129,7 +134,7 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // === les sous-titres des colonnes (THEAD)
-        $title = UpHelper::get_title($this,$data, $options);
+        $title = UpHelper::get_title($this, $data, $options);
         if ($options['col-list']) { // v31
             $title2 = array_map('trim', explode(',', $options['col-list']));
             foreach ($title2 as $col2) {
@@ -142,19 +147,19 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
             if (empty($col_novalid)) {
                 $title = $title3;
             } else {
-                UpHelper::msg_error($this,UpHelper::trad_keyword($this,'ERROR_COL_LIST', implode(',', $col_novalid)));
+                UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'ERROR_COL_LIST', implode(',', $col_novalid)));
             }
         }
-        $out = UpHelper::make_table($this,$data, $title, $options);
+        $out = UpHelper::make_table($this, $data, $title, $options);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
         $attr_main['class'] = 'data2table ' . $options['model'];
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style']);
 
         // code en retour
-        $out = UpHelper::set_attr_tag($this,'table', $attr_main, implode(PHP_EOL, $out));
+        $out = UpHelper::set_attr_tag($this, 'table', $attr_main, implode(PHP_EOL, $out));
 
         return $out;
     }

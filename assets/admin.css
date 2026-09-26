@@ -8,23 +8,24 @@
  */
  
 #general .col-lg-9 {
-    .control-group:nth-of-type(9){ /* mobile */
+    .control-group:nth-of-type(10){ /* mobile */
         float:left;width:45%;
     }
-    .control-group:nth-of-type(10){ /* Mobile Paysage */
+    .control-group:nth-of-type(11){ /* Mobile Paysage */
         float:right;width:45%;
     }
-    .control-group:nth-of-type(11){ /* Tablette */
+    .control-group:nth-of-type(12){ /* Tablette */
         clear:both;float:left;width:45%;
     }
-    .control-group:nth-of-type(12){ /* large */
+    .control-group:nth-of-type(13){ /* large */
         float:right;width:45%;
     }
-    .control-group:nth-of-type(13){ /* x-large */
+    .control-group:nth-of-type(14){ /* x-large */
         clear:both;float:left;width:45%;
     }
-    .control-group:nth-of-type(15){ /**/
-        clear:both;
+    .control-group:nth-of-type(16){ /**/
+        float:none;clear:both;
+    }
 }
 .switching {
     width: 12px;

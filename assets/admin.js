@@ -55,13 +55,12 @@ function compil_scss() {
     let systemmsg = document.querySelector('#compile_message');
     box.innerHTML = '<joomla-alert type="warning" role="alert" style="animation-name: joomla-alert-fade-in;"><div class="alert-heading"><span class="visually-hidden">info</span></div><div class="alert-wrapper"><div class="alert-message"><p>Compilation SCSS....</p><p style="text-align: center;margin-left: 10em;"><span class="switching"></span></div></div></joomla-alert>';
     systemmsg.appendChild(box);
-	var csrf = Joomla.getOptions("csrf.token", "");
     var vals = s.value;
     var valsl = sl.value;
     var valm = m.value;
     var vall = l.value;
     var valxl= xl.value;
-	var url = "?"+csrf+"=1&option=com_ajax&group=content&plugin=up&data=compil&s="+vals+"&sl="+valsl+"&m="+valm+"&l="+vall+"&xl="+valxl+"&format=raw";
+	var url = "?option=com_ajax&group=content&plugin=up&data=compil&s="+vals+"&sl="+valsl+"&m="+valm+"&l="+vall+"&xl="+valxl+"&format=raw";
 	Joomla.request({
 		method : 'POST',
 		url : url,
@@ -84,4 +83,14 @@ function compil_scss() {
             systemmsg.removeChild(box);
         }
 	}) 
+}
+// on fancy select listbox, if "" element selected, clear the list
+function check_none() {
+    var elChoice = document.querySelector('joomla-field-fancy-select');
+	var choicesInstance = elChoice.choicesInstance;
+    var count = choicesInstance.getValue().length;
+    if (choicesInstance.getValue()[count - 1].value == "") { // none selected : clear all
+        choicesInstance.removeActiveItems();
+        choicesInstance.setChoiceByValue("");
+    }
 }

@@ -17,7 +17,7 @@
  *
  */
 defined('_JEXEC') or die();
-
+use Joomla\CMS\Factory;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class snippet extends Lomart\Plugin\Content\Up\Extension\Up
@@ -42,7 +42,7 @@ class snippet extends Lomart\Plugin\Content\Up\Extension\Up
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         $dirbase = JPATH_ROOT . '/' .  $options['dir-base'];
         if (! file_exists($dirbase)) {
@@ -60,15 +60,19 @@ class snippet extends Lomart\Plugin\Content\Up\Extension\Up
 
         // === demande de suppression
         if ($options['delete']) {
+            $user = Factory::getApplication()->getIdentity();
+            if (!$user->authorise('core.manage')) {
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Snippet deletion is reserved to admins;fr=La suppression de snippet est réservée aux admins'));
+            }
             if ($snippet_name == '*' && $this->options_user[__CLASS__] != '*') {
-                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'DELETE_ALL_SECURITY'));
+                return UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'DELETE_ALL_SECURITY'));
             }
             $files = glob($snippet_file);
             if (empty($files)) {
-                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NO_FILE_TO_DELETE', $snippet_file));
+                return UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'NO_FILE_TO_DELETE', $snippet_file));
             } else {
                 $msg = '<div class="bd-gris p1">';
-                $msg .= UpHelper::trad_keyword($this,'DELETE_TITLE');
+                $msg .= UpHelper::trad_keyword($this, 'DELETE_TITLE');
                 $msg .= '<ul>';
                 foreach ($files as $file) {
                     unlink($file);
@@ -76,7 +80,7 @@ class snippet extends Lomart\Plugin\Content\Up\Extension\Up
                 }
                 $msg .= '</ul>';
                 $msg .= '</div>';
-                return UpHelper::msg_inline($this,$msg);
+                return UpHelper::msg_inline($this, $msg);
             }
         }
 
@@ -84,17 +88,22 @@ class snippet extends Lomart\Plugin\Content\Up\Extension\Up
         if (strpos($snippet_name, '*') !== false || strpos($snippet_name, '?') !== false) {
             $list = glob($snippet_file);
             $msg = '<div class="bd-gris p1">';
-            $msg .= UpHelper::trad_keyword($this,'LIST_TITLE', $snippet_name);
+            $msg .= UpHelper::trad_keyword($this, 'LIST_TITLE', $snippet_name);
             foreach ($list as $file) {
                 $msg .= '<div><b>' . pathinfo($file, PATHINFO_FILENAME) . '</b></div>';
                 $msg .= '<code class="ml2 mb2">' . htmlentities(file_get_contents($file)) . '</code>';
             }
             $msg .= '</div>';
-            return UpHelper::msg_inline($this,$msg);
+            return UpHelper::msg_inline($this, $msg);
         }
 
         // === creation snippet
         if ($this->content) {
+            $user = Factory::getApplication()->getIdentity();
+            if (!$user->authorise('core.manage')) {
+                return UpHelper::msg_inline($this, UpHelper::lang($this, 'en=Snippet creation is reserved to admins;fr=La création de snippet est réservée aux admins'));
+            }
+
             $out = $this->content;
             if ($options['strip-tags']) {
                 $out = strip_tags($out);
@@ -104,17 +113,17 @@ class snippet extends Lomart\Plugin\Content\Up\Extension\Up
             $out = str_replace('&gt;', '>', $out);
             file_put_contents($snippet_file, $out);
             $msg = '<div class="bd-green p1">';
-            $msg .= UpHelper::trad_keyword($this,'SAVE_OK', $snippet_file);
+            $msg .= UpHelper::trad_keyword($this, 'SAVE_OK', $snippet_file);
             $msg .= '<br><code>' . htmlentities($out).'</code>';
             $msg .= '</div>';
-            return UpHelper::msg_inline($this,$msg);
+            return UpHelper::msg_inline($this, $msg);
         }
 
         // === lecture snippet
         if (file_exists($snippet_file)) {
-            $out = UpHelper::get_bbcode($this,file_get_contents($snippet_file));
+            $out = UpHelper::get_bbcode($this, file_get_contents($snippet_file));
         } else {
-            $out = UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'NOT_FOUND', $snippet_file));
+            $out = UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'NOT_FOUND', $snippet_file));
         }
         return $out;
     }

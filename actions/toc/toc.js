@@ -192,11 +192,11 @@
                         $a = $('<a/>').html(text).attr('href', '#' + id).attr('title',title);
 
                 // Add anchor icon to heading
-                $('<a/>').addClass('toc-anchor')
+                /*$('<a/>').addClass('toc-anchor')
                         .html('') // LM retirer # inutile et visible à la fin du titre
                          .attr('href', '#' + id)
                          .hide()
-                         .appendTo(headings[i]);
+                         .appendTo(headings[i]);*/
                 $(headings[i]).on('mouseover', function() {
                     $(this).find('.toc-anchor').show();
                 }).on('mouseout', function() {

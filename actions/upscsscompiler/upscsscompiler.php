@@ -71,17 +71,17 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         // fusion et controle des options
-        $this->options = UpHelper::ctrl_options($this,$options_def);
+        $this->options = UpHelper::ctrl_options($this, $options_def);
         // v2.5 - inactif si = 0 - permet de conserver le shortcode dans un article
         if ($this->options[__class__] === '0') {
             return '';
         }
 
-        UpHelper::msg_info($this,"Your version is ".phpversion());
+        UpHelper::msg_info($this, "Your version is ".phpversion());
         if (phpversion() < '8.1.30') {
             $msg = "UpScssCompiler - PHP minimal version required is 8.1.30. ";
             $msg .= "Your version is ".phpversion();
-            return UpHelper::msg_inline($this,$msg);
+            return UpHelper::msg_inline($this, $msg);
         }
 
         // Retirer les notices du rapport d'erreur
@@ -89,11 +89,11 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         error_reporting($bak_error_reporting ^ E_NOTICE);
 
         // vérfie et corrige le mode si erreur
-        $this->options['mode'] = UpHelper::ctrl_argument($this,$this->options['mode'], 'Compressed, Expanded');
+        $this->options['mode'] = UpHelper::ctrl_argument($this, $this->options['mode'], 'Compressed, Expanded');
         $this->options['mode'] = trim(strtoupper($this->options['mode']));
         //
         // ==== Vérif filtrage
-        $this->options['force'] = ($this->options['force'] || $this->options['without-custom'] || UpHelper::filter_ok($this,$this->options['force-filter'], false) === true);
+        $this->options['force'] = ($this->options['force'] || $this->options['without-custom'] || UpHelper::filter_ok($this, $this->options['force-filter'], false) === true);
         //
         // ==== Liste des actions
         if ($this->options[__class__] == '') {
@@ -150,7 +150,7 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         }
 
         if (!empty($this->options['without-custom'])) {
-            UpHelper::msg_info($this,UpHelper::trad_keyword($this,'SAVE_COPY_OK', $bakRootPath));
+            UpHelper::msg_info($this, UpHelper::trad_keyword($this, 'SAVE_COPY_OK', $bakRootPath));
         }
         // === CODE HTML EN RETOUR ===
         error_reporting($bak_error_reporting);
@@ -171,7 +171,7 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         }
         $ok = $ok && copy($source, $dest);
         if (! $ok) {
-            UpHelper::msg_error($this,UpHelper::trad_keyword($this,'EXPORT_ERR', $dest));
+            UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'EXPORT_ERR', $dest));
         }
     }
 
@@ -184,8 +184,13 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         $fileCss = str_replace('.scss', '.css', $fileScss);
         $pathAbsolute = pathinfo($fileCss, PATHINFO_DIRNAME) . DS;
         $pathRelative = str_replace(JPATH_ROOT, '', $pathAbsolute);
+
+        if (! class_exists('ScssPhp\ScssPhp\Compiler')) {
+            require_once('vendor/autoload.php');
+        }
+
         if ($this->options['force'] || ! file_exists($fileCss) || filemtime($fileScss) > filemtime($fileCss)) {
-            $scss_compiler = new Compiler();
+            $scss_compiler = new ScssPhp\ScssPhp\Compiler();
             // ==== FORMAT
             if ($this->options['mode'] == 'EXPANDED') {
                 $scss_compiler->setOutputStyle(ScssPhp\ScssPhp\OutputStyle::EXPANDED);
@@ -222,12 +227,12 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
                     $msg = str_replace($this->basePath, '', $fileScss);
                     $msg .= ' -> ';
                     $msg .= str_replace($this->basePath, '', $fileCss);
-                    UpHelper::msg_info($this,$msg, UpHelper::trad_keyword($this,'COMPIL_OK'));
+                    UpHelper::msg_info($this, $msg, UpHelper::trad_keyword($this, 'COMPIL_OK'));
                 }
             } catch (Exception $e) {
-                $msg = UpHelper::trad_keyword($this,'COMPIL_ERR');
+                $msg = UpHelper::trad_keyword($this, 'COMPIL_ERR');
                 $msg .= str_replace($this->basePath, '', $fileScss);
-                UpHelper::msg_error($this,$msg . '<br>' . $e->getmessage());
+                UpHelper::msg_error($this, $msg . '<br>' . $e->getmessage());
             }
         }
     }
@@ -260,7 +265,7 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
         $base = $this->upPath . 'assets/';
         $filecss = $base . 'up.css';
         if (file_exists($filecss) === false) {
-            UpHelper::msg_error($this,$filecss . ' not found');
+            UpHelper::msg_error($this, $filecss . ' not found');
         }
         $css = file_get_contents($filecss);
 
@@ -279,7 +284,7 @@ class upscsscompiler extends Lomart\Plugin\Content\Up\Extension\Up
             }
             file_put_contents($base . 'colorname.ini', implode(PHP_EOL, $ini));
             file_put_contents($base . 'colorname-ref.ini', implode(PHP_EOL, $iniRef));
-            UpHelper::msg_info($this,UpHelper::trad_keyword($this,'COLORNAME_INI_OK'));
+            UpHelper::msg_info($this, UpHelper::trad_keyword($this, 'COLORNAME_INI_OK'));
         }
     }
 }

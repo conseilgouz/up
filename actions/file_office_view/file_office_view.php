@@ -16,13 +16,15 @@ defined('_JEXEC') or die;
 
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
-class file_office_view extends Lomart\Plugin\Content\Up\Extension\Up {
-
-    function init() {
+class file_office_view extends Lomart\Plugin\Content\Up\Extension\Up
+{
+    public function init()
+    {
         return true;
     }
 
-    function run() {
+    public function run()
+    {
 
 
         // lien vers la page de demo
@@ -41,49 +43,51 @@ class file_office_view extends Lomart\Plugin\Content\Up\Extension\Up {
         );
 
         // fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def);
+        $options = UpHelper::ctrl_options($this, $options_def);
 
         // === CSS-HEAD
-        UpHelper::load_css_head($this,$options['css-head']);
-        
-        // === le lien
-        $file_url = UpHelper::get_url_absolute($this,$options[__class__], true);
+        UpHelper::load_css_head($this, $options['css-head']);
 
-		$mainclass= '';
-		switch ($options['mode']){
-			case 'google-drive' :
-				$url = 'https://drive.google.com/viewer?embedded=true&url='.$file_url;
-				break;
-			case 'google-docs' :
-				$url = 'https://docs.google.com/viewer?embedded=true&url='.$file_url;
-				break;
-			case 'office-view' :
-				$url = 'https://view.officeapps.live.com/op/view.aspx?src='.$file_url;
-				break;
-			default :
-				$url = 'https://view.officeapps.live.com/op/embed.aspx?src='.$file_url;
-				$mainclass= 'embedoffice';
-		}
-        
+        // === le lien
+        $file_url = $options[__class__];
+        if (!UpHelper::validate_url($this, $file_url)) {
+            return "Erreur : le fichier ".$file_url." contient des caractères interdits";
+        }
+        $mainclass = '';
+        switch ($options['mode']) {
+            case 'google-drive':
+                $url = 'https://drive.google.com/viewer?embedded=true&url='.$file_url;
+                break;
+            case 'google-docs':
+                $url = 'https://docs.google.com/viewer?embedded=true&url='.$file_url;
+                break;
+            case 'office-view':
+                $url = 'https://view.officeapps.live.com/op/view.aspx?src='.$file_url;
+                break;
+            default:
+                $url = 'https://view.officeapps.live.com/op/embed.aspx?src='.$file_url;
+                $mainclass = 'embedoffice';
+        }
+
         // ---
         $attr_iframe = array();
-        $attr_iframe['src'] =$url;
+        $attr_iframe['src'] = $url;
         $attr_iframe['style'] = 'width:'.$options['width'].';height:'.$options['height'];
-        $attr_iframe['frameborder'] ='0';
-        $iframe = UpHelper::set_attr_tag($this,'iframe', $attr_iframe, true);
+        $attr_iframe['frameborder'] = '0';
+        $iframe = UpHelper::set_attr_tag($this, 'iframe', $attr_iframe, true);
 
         // attributs du bloc principal
         $attr_main = array();
         $attr_main['id'] = $options['id'];
-        UpHelper::get_attr_style($this,$attr_main, $options['class'], $options['style'], $mainclass);
+        UpHelper::get_attr_style($this, $attr_main, $options['class'], $options['style'], $mainclass);
 
         // code en retour
-        $html[] = UpHelper::set_attr_tag($this,'div', $attr_main, $iframe);
+        $html[] = UpHelper::set_attr_tag($this, 'div', $attr_main, $iframe);
 
         return implode(PHP_EOL, $html);
     }
 
-// run
+    // run
 }
 
 // class

@@ -9,14 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		['click', 'touchstart'].forEach(type => {
             ajax_buttons[t].addEventListener(type,function(e) {
                 $up_id = this.getAttribute('data-id');
-                var requete = 'action%3Dajax_view';
-                requete += '%26content%3D' + this.getAttribute('data-content');
-                requete += '%26type%3D' + this.getAttribute('data-type');
-                requete += '%26html%3D' + this.getAttribute('data-html');
-                requete += '%26eol%3D' + this.getAttribute('data-eol');
+                var requete = 'upid%3D' + this.getAttribute('data-id');
                 if (this.getAttribute('data-md5')) {
                     requete += '%26pwd%3D' + prompt('mot de passe');
-                    requete += '%26md5%3D' + this.getAttribute('data-md5');
                 }
                 url = '?option=com_ajax&group=content&plugin=up&format=raw&data='+requete;
 
