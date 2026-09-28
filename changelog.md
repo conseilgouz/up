@@ -12,7 +12,9 @@
 #### Modifications internes
 
 - data.php : fonction up_date_format : format incorrect
-- UpHelper : appel à msg_info incorrect sur debug
+- UpHelper : 
+    appel à msg_info incorrect sur debug
+    warning sur UpHelper lignes 3113/3122 si aucune ligne sur les actions csv2table et data2table
 
 
 ## 26/09/2026 - version 6.1.0

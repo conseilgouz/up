@@ -3110,6 +3110,9 @@ class UpHelper
         // == thead
         // profondeur sous-titres
         $rowspan = '';
+        if (is_string($title)) { // 
+            return $title;
+        }
         foreach ($title as $k => $v) {
             if (is_array($v)) {
                 $rowspan = ' rowspan="2"';
