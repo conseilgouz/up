@@ -1,8 +1,12 @@
-## 28/09/2026 : version 6.1.4
+## 28/09/2026 : version 6.1.5
 
 #### Modifications actions
 
-- sql : suppression de warning ligne 441 + order en majuscule + erreur sur gestion de order
+- sql : 
+    suppression de warning ligne 441 
+    order en majuscule
+    erreur sur gestion de order
+    gestion order multiples
 - file_download : nom de la zone hits/times incorrect
 
 #### Modifications internes

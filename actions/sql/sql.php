@@ -197,13 +197,16 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
         if ($options['order']) {
             if ($options['order'] == 'RAND()') {
                 $query->order($options['order']);
-            } else {
-                $order = explode(' ', $options['order']);
-                $list_orderby = array('asc' => 'asc', 'ASC' => 'ASC','desc' => 'desc','DESC' => 'DESC','random' => 'RAND()');
-                $order_by =  (isset($list_orderby[$order[1]])) ? $list_orderby[$order[1]] : '';
-                $order_field = (isset($order[0])) ? $order[0] : '';
-                if ($order_field) {
-                    $query->order($order_field.' '.$order_by);
+            } else {// multiple orders in a single order command
+                $orders = explode(',', $options['order']);
+                foreach ($orders as $oneorder) {
+                    $order = explode(' ', trim($oneorder));
+                    $list_orderby = array('asc' => 'asc', 'ASC' => 'ASC','desc' => 'desc','DESC' => 'DESC','random' => 'RAND()');
+                    $order_by =  (isset($list_orderby[$order[1]])) ? $list_orderby[$order[1]] : '';
+                    $order_field = (isset($order[0])) ? $order[0] : '';
+                    if ($order_field) {
+                        $query->order($db->quoteName($order_field).' '.$order_by);
+                    }
                 }
             }
         }
