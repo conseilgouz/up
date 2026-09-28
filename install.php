@@ -124,11 +124,12 @@ class plgContentUpInstallerScript
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             } else if ($previous_version && $previous_version < '6.1.0') {
                 // 6.1.0 : remove updated actions
-                $actionsList = ['ajax_view','chart','csv_info','csv2def','csv2list','file_download','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
+                $actionsList = ['ajax_view','chart','csv_info','csv2def','csv2list','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
                                 'get','html','image_compare','image_random','image_secure','jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat',
                                 'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
                                 'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
             }
+            $aactionsList[] = 'file_download'; // 6.1.2 : js update
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $ignore = ['.','..','custom']; // ignore custom folder
