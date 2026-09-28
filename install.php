@@ -129,7 +129,8 @@ class plgContentUpInstallerScript
                                 'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
                                 'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
             }
-            $aactionsList[] = 'file_download'; // 6.1.2 : js update
+            $actionsList[] = 'file_download'; // 6.1.4 : js update
+            $actionsList[] = 'sql'; // 6.1.4 : js update
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $ignore = ['.','..','custom']; // ignore custom folder

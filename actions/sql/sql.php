@@ -201,7 +201,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 $order = explode(' ', $options['order']);
                 $list_orderby = array('asc' => 'asc', 'ASC' => 'ASC','desc' => 'desc','DESC' => 'DESC','random' => 'RAND()');
                 $order_by =  (isset($list_orderby[$order[1]])) ? $list_orderby[$order[1]] : '';
-                $order_field = (isset($list_orderby[$order[0]])) ? $list_orderby[$order[0]] : '';
+                $order_field = (isset($order[0])) ? $order[0] : '';
                 if ($order_field) {
                     $query->order($order_field.' '.$order_by);
                 }

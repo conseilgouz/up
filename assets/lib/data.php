@@ -624,10 +624,6 @@ function up_date_format($date, $format = null, $locale = '', $http = true)
             'a'     // %p
         );
         $format = str_replace($fmt_old, $fmt_new, $format, $nbtag);
-        if ($nbtag) {
-            $format = '\'' . $format . '\'';
-            $format = str_replace('\'\'', '', $format);
-        }
     }
     // la locale de Joomla par defaut
     if (empty($locale)) {
