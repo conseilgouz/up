@@ -33,7 +33,8 @@ var $file, $up_id;
                         link.click();
                         document.body.removeChild(link);   // clean up
                         filestr = res[3].split('/').pop();
-                        filestr = 'up-cls-' + filestr.replace('.', '-');
+                        filestr = 'up-cls-' + filestr.replaceAll('.', '-');
+                        filestr = filestr.replaceAll('_', '-');
                 // update hit and latest date
                         document.querySelector('#'+$up_id+' .up-tmpl-hits.'+filestr).innerHTML = res[4];
                         document.querySelector('#'+$up_id+' .up-tmpl-time.'+filestr).innerHTML = res[5];

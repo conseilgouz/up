@@ -1,4 +1,17 @@
-## 21/09/2026 - version 6.1.0
+## 28/09/2026 : version 6.1.1
+
+#### Modifications actions
+
+- sql : suppression de warning ligne 441 + order en majuscule
+- file_download : nom de la zone hits/times incorrect
+
+#### Modifications actions
+
+-  data.php : fonction up_date_format : format incorrect
+- UpHelper : appel à msg_info incorrect sur debug
+
+
+## 26/09/2026 - version 6.1.0
 
 #### Sécurité : merci à Phyl Taylor de mysites.guru d'avoir signalé les failles et proposé des corrections
 

@@ -199,7 +199,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 $query->order($options['order']);
             } else {
                 $order = explode(' ', $options['order']);
-                $list_orderby = array('asc' => 'asc', 'desc' => 'desc', 'random' => 'RAND()');
+                $list_orderby = array('asc' => 'asc', 'ASC' => 'ASC','desc' => 'desc','DESC' => 'DESC','random' => 'RAND()');
                 $order_by =  (isset($list_orderby[$order[1]])) ? $list_orderby[$order[1]] : '';
                 $order_field = (isset($list_orderby[$order[0]])) ? $list_orderby[$order[0]] : '';
                 if ($order_field) {
@@ -438,7 +438,7 @@ class sql extends Lomart\Plugin\Content\Up\Extension\Up
                 $val = $row[strtolower($key)];
                 if ($key == "password" || strpos($key, "token") !== false) {
                     $val = '***';
-                } elseif (strpos($val, 'token') !== false) { // profile key ?
+                } elseif ($val && strpos($val, 'token') !== false) { // profile key ?
                     $previous = 'token';
                     $val = "****";
                 } elseif ($previous == 'token') { // profile value ?

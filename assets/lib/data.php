@@ -591,6 +591,7 @@ function up_date_format($date, $format = null, $locale = '', $http = true)
             '%B',
             '%d',
             '%e',
+            '%j',
             '%a',
             '%A',
             '%U',
@@ -603,27 +604,25 @@ function up_date_format($date, $format = null, $locale = '', $http = true)
             '%p'
         );
         $fmt_new = array(
-            'yy',
-            'yyyy',
-            'MM',
-            'MMM',
-            'MMMM',
-            'dd',
-            'd',
-            'EEE',
-            'EEEE',
-            'w',
-            'h',
-            'hh',
-            'H',
-            'HH',
-            'mm',
-            'a',
-            'A'
+            'y',    // %y
+            'Y',    // %Y
+            'm',    // %m
+            'M',    // %b
+            'F',    // %B
+            'd',    // %d
+            'j',    // %e
+            'z',    // %j
+            'D',    // %a
+            'l',    // %A
+            'W',    // %U
+            'g',    // %l
+            'h',    // I
+            'G',    // %k
+            'H',    // %H
+            'i',    // %M
+            'A',    // %P
+            'a'     // %p
         );
-        for ($i = 0; $i < count($fmt_new); $i++) {
-            $fmt_new[$i] = '\'' . $fmt_new[$i] . '\'';
-        }
         $format = str_replace($fmt_old, $fmt_new, $format, $nbtag);
         if ($nbtag) {
             $format = '\'' . $format . '\'';

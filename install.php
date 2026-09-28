@@ -122,7 +122,7 @@ class plgContentUpInstallerScript
                 $this->save_actions(); // sauvegarde du répertoire actions avant nettoyage
                 $actionsList = $this->up_actions(); // toutes les actions UP ont été modifiées
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
-            } else {
+            } else if ($previous_version && $previous_version < '6.1.0') {
                 // 6.1.0 : remove updated actions
                 $actionsList = ['ajax_view','chart','csv_info','csv2def','csv2list','file_download','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
                                 'get','html','image_compare','image_random','image_secure','jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat',

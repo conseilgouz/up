@@ -257,7 +257,7 @@ class UpHelper
      */
     public static function get_html_contents($up, $url, $timeout = 10, $url2 = '')
     {
-        if (strpos($url, '..') !== false ) {
+        if (strpos($url, '..') !== false) {
             return "Erreur : le fichier ".$url." contient des caractères interdits";
         }
         if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
@@ -309,7 +309,7 @@ class UpHelper
     public static function get_url_relative($up, $url, $urlencode = false)
     {
         $url = trim($url);
-        if (strpos($url, '..') !== false ) {
+        if (strpos($url, '..') !== false) {
             return "Erreur : le fichier ".$url." contient des caractères interdits";
         }
         if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
@@ -339,10 +339,10 @@ class UpHelper
     public static function get_url_absolute($up, $url, $urlencode = false)
     {
         $url = trim($url);
-        if (strpos($url, '..') !== false ) {
+        if (strpos($url, '..') !== false) {
             return "Erreur : le fichier ".$url." contient des caractères interdits";
         }
-      if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
+        if (strpos($url, '//') !== false && !self::validate_url($up, $url)) {
             return "Erreur : le fichier ".$url." n'est pas sur votre serveur";
         }
         $url = str_replace('\\', '/', $url);
@@ -1165,7 +1165,7 @@ class UpHelper
                 }
             }
             $txt .= '</div>';
-            self::msg_info($txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
+            self::msg_info($up,$txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
         }
         // demande debug
         if (array_key_exists('debug', $up->options_user)) {
@@ -1179,7 +1179,7 @@ class UpHelper
             $debug .= '</ul>';
             $debug .= self::up_help_txt($up); // v1.9.5
             $debug .= self::up_prefset_list($up);
-            self::msg_info($debug, Text::sprintf('UP_INFOS_DEBUG', $up->actionUserName));
+            self::msg_info($up, $debug, Text::sprintf('UP_INFOS_DEBUG', $up->actionUserName));
         }
 
         // -- on retourne un array avec les cles dans la case attendue par le script

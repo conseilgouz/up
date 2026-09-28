@@ -193,6 +193,7 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
         $session = Factory::getApplication()->getSession();
         $up = $options['id'];
         $session->set($up, 'file_download');
+        // echo ('session : '.$up.' ==> '. $session->get($up));
         $session->set($up.'filedownload.password', '');
         if ($options['password']) {
             $attr_link['md5'] = '1';
@@ -286,7 +287,7 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
             }
         } // foreach $file
         $html[] = ($options['main-tag'] != '0') ? '</' . $options['main-tag'] . '>' : '';
-        $html[] = '<input id="token" type="hidden" name="' . Session::getFormToken() . '" value="1" />';
+        // $html[] = '<input id="token" type="hidden" name="' . Session::getFormToken() . '" value="1" />';
         return implode(PHP_EOL, $html);
     }
 
