@@ -1,13 +1,13 @@
-## 28/09/2026 : version 6.1.2
+## 28/09/2026 : version 6.1.3
 
 #### Modifications actions
 
 - sql : suppression de warning ligne 441 + order en majuscule
 - file_download : nom de la zone hits/times incorrect
 
-#### Modifications actions
+#### Modifications internes
 
--  data.php : fonction up_date_format : format incorrect
+- data.php : fonction up_date_format : format incorrect
 - UpHelper : appel à msg_info incorrect sur debug
 
 
