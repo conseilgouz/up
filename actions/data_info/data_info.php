@@ -93,7 +93,7 @@ class data_info extends Lomart\Plugin\Content\Up\Extension\Up
         // Conversion des données en array
         $data = convert_data_to_array($data, $options);
         if ($data == '') {
-            return UpHelper::msg_inline($this,'data2table - format data source invalid : ' . $options[__class__]);
+            return UpHelper::msg_inline($this,'data-info - format data source invalid : ' . $options[__class__]);
         }
 
         // consolidation des options de formattage

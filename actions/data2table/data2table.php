@@ -11,6 +11,10 @@
  * @tags    Expert
  *
  * */
+/*
+ * v6.1.6 - ajout de l'option no-data-html
+ *
+ */
 defined('_JEXEC') or die();
 
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
@@ -60,6 +64,7 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
             'url-target' => '_blank', // Cible pour ouverture URL
             'image-path' => '', // chemin vers une image dans les données
             'image-max-size' => '', // coté du carré dans lequel elle sera inscrite. Exemple: 100px
+            'no-data-html' => 'en=no data for %s;fr=aucune donnée pour %s', // contenu si aucune donnée disponible. BBcode admis.
             /* [st-empty] si un champ est vide */
             'col-empty' => '', // contenu d'un champ si vide ou égal à zéro. ex: colname:none, ...
             /* [st-style] habillage du bloc retourné */
@@ -80,7 +85,7 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
         // === CSS-HEAD
         UpHelper::load_css_head($this, $options['css-head']);
 
-        $data = get_data($options[__class__],$options);
+        $data = get_data($options[__class__], $options);
         if ($data == '') {
             return UpHelper::msg_inline($this, 'data-info - data source not found or empty' . $options[__class__]);
         }
@@ -131,6 +136,9 @@ class data2table extends Lomart\Plugin\Content\Up\Extension\Up
         // --- lign-max v5.1
         if ((int) $options['lign-max'] > 0) {
             $data = array_slice($data, 0, (int) $options['lign-max']);
+        }
+        if (empty($data)) {
+            return sprintf(UpHelper::get_bbcode($this, '<span class="nodata">'.$options["no-data-html"].'</span>'), $options[__class__]);
         }
 
         // === les sous-titres des colonnes (THEAD)

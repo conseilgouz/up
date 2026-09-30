@@ -11,12 +11,13 @@
  * @credit    <a href="https://www.jqueryscript.net/table/sorting-filtering-pagination-fancytable.html" target"_blank">script jQuery fancyTable de myspace-nu</a>
  * @tags    layout-dynamic
  *
- * V 6.0.18 : 
+ * V 6.0.18 :
  *  col-type : ajout l lien,
  *  force la colonne date e numérique pour le tri,
  *  fancyTable version 1.0.36,
  *  JCE: tous les th sur une ligne
  * V 6.0.19 : col-type lien : vérifie qu'il y a bien un lien
+ * V 6.1.6 : entrée = message d'erreur de l'étape précédente
  */
 defined('_JEXEC') or die();
 
@@ -149,7 +150,11 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         $this->content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
         if (strpos($this->content, '<thead') === false) {
-            $this->content = UpHelper::msg_inline($this, 'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
+            if (strpos($this->content, 'class="nodata"')) { // message d'erreur ?
+                return $this->content;
+            } else { // fichier mal formatté
+                $this->content = UpHelper::msg_inline($this, 'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
+            }
         }
 
         // ==== Mode de tri selon données
@@ -165,7 +170,7 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
             for ($i = 0; $i < count($col_type); $i++) {
                 if ($col_type[$i][0] == 'd') { // date
                     $sort = ' data-sortas="numeric"';  // 6.0.18 : force as numeric
-                    if (isset($headers[0][$i])) { 
+                    if (isset($headers[0][$i])) {
                         $this->content = str_replace($headers[0][$i], '<th ' . $headers[1][$i] . $sort . '>' . $headers[2][$i] . '</th>', $this->content);
                     }
                     $col_date[] = $i;

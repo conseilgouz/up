@@ -1,3 +1,14 @@
+## 28/09/2026 : version 6.1.6
+
+#### Modifications actions
+
+- data2table : nouveau paramétre no-data-html
+- data_info : correction du libellé d'un message d'erreur
+- table-by-rows : gestion du message d'info en provenance de l'étape précédente (ex data2table)
+- table_fixe : gestion du message d'info en provenance de l'étape précédente (ex data2table)
+- table_sort : gestion du message d'info en provenance de l'étape précédente (ex data2table)
+
+
 ## 28/09/2026 : version 6.1.5
 
 #### Modifications actions

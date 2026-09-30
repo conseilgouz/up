@@ -19,6 +19,7 @@
 
 /*
  * - v2.8 : ajout option css-head
+ * - v6.1.6 : message venant de l'étape précédente
  */
 defined('_JEXEC') or die();
 
@@ -65,7 +66,11 @@ class table_fixe extends Lomart\Plugin\Content\Up\Extension\Up
 
         // ==== ctrl thead
         if (stripos($this->content, '</thead>') === false) {
-            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'THEAD_MISSING'));
+            if (strpos($this->content, 'class="nodata"')) { // message d'erreur ?
+                return $this->content;
+            } else { // fichier mal formatté
+                return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'THEAD_MISSING'));
+            }
         }
 
         // ===== Analyse et MAJ de la table

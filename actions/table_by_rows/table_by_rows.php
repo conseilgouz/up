@@ -20,6 +20,7 @@
 
 /*
  * - v2.8 : ajout option css-head
+ * - v6.1.6 : message d'info provenance de l'étape précédente
  */
 defined('_JEXEC') or die();
 
@@ -27,15 +28,14 @@ use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class table_by_rows extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
-        UpHelper::load_file($this,'restables.min.js');
+        UpHelper::load_file($this, 'restables.min.js');
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // cette action a obligatoirement du contenu
@@ -55,7 +55,7 @@ class table_by_rows extends Lomart\Plugin\Content\Up\Extension\Up
             'id' => '', // identifiant
             'style' => '', // style inline pour balise table
             'class' => '', // classe(s) pour balise table (obsolète)
-			'css-head' => '',  // permet d'ajouter des style à la table incluse
+            'css-head' => '',  // permet d'ajouter des style à la table incluse
         );
 
         // ===== paramétres attendus par le script JS
@@ -77,64 +77,69 @@ class table_by_rows extends Lomart\Plugin\Content\Up\Extension\Up
          */
 
         // on fusionne avec celles dans shortcode
-        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this, $options_def, $js_options_def);
 
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // ==== ctrl thead
-        if (strpos($this->content,'</thead>')===false) {
-            return UpHelper::msg_inline($this,UpHelper::trad_keyword($this,'THEAD_MISSING'));
+        if (strpos($this->content, '</thead>') === false) {
+            if (strpos($this->content, 'class="nodata"')) { // message d'info de l'étape précédente ?
+                return $this->content;
+            } else { // fichier mal formatté
+                return UpHelper::msg_inline($this, UpHelper::trad_keyword($this, 'THEAD_MISSING'));
+            }
         }
-        
+
         $id = $options['id']; // l'id qui identifie le bloc action
-                              // balise table originale et array des attributs
+        // balise table originale et array des attributs
         preg_match('#<table.*>#U', $this->content, $table_opentag_old);
         $table_opentag_old = (! empty($table_opentag_old)) ? $table_opentag_old[0] : '';
-        $table_attr = UpHelper::get_attr_tag($this,$table_opentag_old);
+        $table_attr = UpHelper::get_attr_tag($this, $table_opentag_old);
 
         // si l'user force l'id de la table, on la conserve
-        if ($table_attr['id'] > '')
+        if ($table_attr['id'] > '') {
             $id = $table_attr['id'];
+        }
         $table_attr['id'] = $id;
 
         // preparer un array vide pour la div outer
-        $outer_attr = UpHelper::get_attr_tag($this,null);
+        $outer_attr = UpHelper::get_attr_tag($this, null);
         if ($options['max-height']) {
-            UpHelper::get_attr_style($this,$outer_attr, 'max-height:' . $options['max-height']);
-            UpHelper::get_attr_style($this,$outer_attr, 'overflow:auto');
+            UpHelper::get_attr_style($this, $outer_attr, 'max-height:' . $options['max-height']);
+            UpHelper::get_attr_style($this, $outer_attr, 'overflow:auto');
         }
         // ajout paramétres user
-        UpHelper::get_attr_style($this,$table_attr, $options['class'], $options['style']);
+        UpHelper::get_attr_style($this, $table_attr, $options['class'], $options['style']);
 
         // =========== le code JS
         // les options saisis par l'utilisateur concernant le script JS
-        $js_options = UpHelper::only_using_options($this,$js_options_def);
+        $js_options = UpHelper::only_using_options($this, $js_options_def);
         // -- conversion en chaine Json
-        $js_params = UpHelper::json_arrtostr($this,$js_options, 2);
+        $js_params = UpHelper::json_arrtostr($this, $js_options, 2);
 
         $code = '$("#' . $id . '").resTables(';
         $code .= $js_params;
         $code .= ');';
-        UpHelper::load_jquery_code($this,$code);
+        UpHelper::load_jquery_code($this, $code);
 
         // ==== code CSS dans head
         $prefix = 'table#' . $id . '.restables-';
         $css = $prefix . 'clone { display: none; }';
         $css .= $prefix . 'clone tr:first-child td { ';
         $css .= 'background: #eee; font-weight:bold; font-size:120% }';
-        $css .= '@media (max-width:' . UpHelper::ctrl_unit($this,$options['breakpoint']) . ') {';
+        $css .= '@media (max-width:' . UpHelper::ctrl_unit($this, $options['breakpoint']) . ') {';
         $css .= $prefix . 'origin { display: none; }';
         $css .= $prefix . 'clone { display: table; }';
         $css .= '}';
-        UpHelper::load_css_head($this,$css);
+        UpHelper::load_css_head($this, $css);
 
         // === mise à jour attributs de la table dans $content
-        $table_opentag_new = UpHelper::set_attr_tag($this,'table', $table_attr);
+        $table_opentag_new = UpHelper::set_attr_tag($this, 'table', $table_attr);
         $this->content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
         // ==== code pour retour
         $out = '';
-        $out .= UpHelper::set_attr_tag($this,'div', $outer_attr);
+        $out .= UpHelper::set_attr_tag($this, 'div', $outer_attr);
         $out .= $this->content;
         $out .= '</div>';
 
