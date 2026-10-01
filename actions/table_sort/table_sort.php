@@ -84,6 +84,9 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         // fusion et controle des options
         $options = UpHelper::ctrl_options($this, $options_def, $js_options_def);
 
+        if (strpos($this->content, 'class="nodata"')) { // message d'erreur ?
+           return $this->content;
+        } 
         // ===== Analyse et MAJ de la table
         // ============================================================
         // balise ouvrante de la table originale et array des attributs
@@ -150,13 +153,8 @@ class table_sort extends Lomart\Plugin\Content\Up\Extension\Up
         $this->content = str_replace($table_opentag_old, $table_opentag_new, $this->content);
 
         if (strpos($this->content, '<thead') === false) {
-            if (strpos($this->content, 'class="nodata"')) { // message d'erreur ?
-                return $this->content;
-            } else { // fichier mal formatté
-                $this->content = UpHelper::msg_inline($this, 'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
-            }
+            $this->content = UpHelper::msg_inline($this, 'la table doit avoir un entête THEAD / the table must have a THEAD header') . '<br>' . $this->content;
         }
-
         // ==== Mode de tri selon données
         // ============================================================
         // n=numerique, a=alpha (defaut), i=alpha insensitive, d = date, l = link case insensitive

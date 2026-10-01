@@ -1,3 +1,9 @@
+## 01/10/2026 : version 6.1.7
+
+#### Modifications actions
+
+- table_sort : suppression du warning undefined array key id si message d'info en provenance de l'étape précédente
+
 ## 28/09/2026 : version 6.1.6
 
 #### Modifications actions
@@ -7,7 +13,6 @@
 - table-by-rows : gestion du message d'info en provenance de l'étape précédente (ex data2table)
 - table_fixe : gestion du message d'info en provenance de l'étape précédente (ex data2table)
 - table_sort : gestion du message d'info en provenance de l'étape précédente (ex data2table)
-
 
 ## 28/09/2026 : version 6.1.5
 
@@ -26,7 +31,6 @@
 - UpHelper : 
     appel à msg_info incorrect sur debug
     warning sur UpHelper lignes 3113/3122 si aucune ligne sur les actions csv2table et data2table
-
 
 ## 26/09/2026 - version 6.1.0
 
