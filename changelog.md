@@ -1,3 +1,9 @@
+## 03/10/2026 : version 6.1.8
+
+#### Modifications internes
+
+Utilisation d'un serveur de backup pour les fichiers zip des actions si github en erreur
+
 ## 01/10/2026 : version 6.1.7
 
 #### Modifications actions

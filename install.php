@@ -128,9 +128,10 @@ class plgContentUpInstallerScript
                                 'get','html','image_compare','image_random','image_secure','jcat_image','jcategories_by_tags','jcategories_list','jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat',
                                 'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
                                 'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
+            } else if ($previous_version && $previous_version < '6.1.6') { // version 6.1.5
+                $actionsList[] = 'file_download'; // 6.1.5 : js update
+                $actionsList[] = 'sql'; // 6.1.5 : js update
             }
-            $actionsList[] = 'file_download'; // 6.1.5 : js update
-            $actionsList[] = 'sql'; // 6.1.5 : js update
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $ignore = ['.','..','custom']; // ignore custom folder

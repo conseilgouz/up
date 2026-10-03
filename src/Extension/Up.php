@@ -18,6 +18,7 @@ v6.0.21 : suppression de l'appel à upAction.php
           set github key if defined
 v6.1.0 : add admin actions list
          secure ajax calls
+v6.1.8 : serveur de backup pour les actions en zip
 */
 
 namespace Lomart\Plugin\Content\Up\Extension;
@@ -114,6 +115,7 @@ class UP extends CMSPlugin implements SubscriberInterface
     public $githubapikey = null;
     public $githuburl = 'https://api.github.com/repos/conseilgouz/up/contents/';
     public $githuburlzip = 'https://api.github.com/repos/conseilgouz/up6-actionszip/contents/';
+    public $backupurlzip = 'https://up.lomart.fr/files/actionszip/';
     public $actionsha256 = [];
     // liste des actions disponibles dans le répertoire zip de Github
     public $actionsZip = ['box', 'image_gallery','mapael','marquee','meteo_concept','pdf','slider_tiny','upscsscompiler'];

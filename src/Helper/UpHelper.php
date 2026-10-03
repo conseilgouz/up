@@ -13,6 +13,7 @@ v5.4.10 : modif get_url_absolute : garder le nom du host s'il est fourni
 v6.0.21 : action get : ne pas supprimer le répertoire lib en mise à jour auto
           set github key if defined
 v6.0.25 : up_date_format : lib/intl non installé : gérer l'erreur
+v6.1.8 : serveur de backup pour les actions en zip
 */
 
 namespace Lomart\Plugin\Content\Up\Helper;
@@ -1165,7 +1166,7 @@ class UpHelper
                 }
             }
             $txt .= '</div>';
-            self::msg_info($up,$txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
+            self::msg_info($up, $txt, Text::sprintf('UP_ACTION_OPTIONS', $title));
         }
         // demande debug
         if (array_key_exists('debug', $up->options_user)) {
@@ -3110,7 +3111,7 @@ class UpHelper
         // == thead
         // profondeur sous-titres
         $rowspan = '';
-        if (is_string($title)) { // 
+        if (is_string($title)) { //
             return $title;
         }
         foreach ($title as $k => $v) {
@@ -3476,29 +3477,32 @@ class UpHelper
     */
     public static function getGithubActionZip($up, $dir)
     {
-        if (!$response = self::getGithubAction($up, $dir.'.zip')) {
-            $msg = 'Action '.$dir.' -> Erreur appel Github';
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
+        if ($response = self::getGithubAction($up, $dir.'.zip')) {
+            $action = json_decode($response);
+            if (isset($action->message)) { // message d'erreur de github
+                $msg = 'Action '.$dir.' -> '.$action->message;
+                Factory::getApplication()->enqueueMessage($msg);
+                return false;
+            }
+            $info = pathinfo($dir);
+            $name = $info['filename'];
+            $download_url = $action->download_url;
+            $actionName = $action->name;
+        } else { // github error : try backup url
+            $name = $dir;
+            $download_url = $up->backupurlzip.$dir.'.zip';
+            $actionName = $dir.'/'.$dir.'.zip';
         }
-        $action = json_decode($response);
-        if (isset($action->message)) { // message d'erreur de github
-            $msg = 'Action '.$dir.' -> '.$action->message;
-            Factory::getApplication()->enqueueMessage($msg);
-            return false;
-        }
-        $info = pathinfo($dir);
-        $name = $info['filename'];
         $actionDir = JPATH_SITE.'/'.$up->upPath.'actions/'.$name;
         if (!is_dir($actionDir)) {
             mkdir($actionDir);
         }
         $actionsPath = JPATH_SITE.'/'.$up->upPath.'actions';
-        copy($action->download_url, $actionsPath.'/'.$action->name);
+        copy($download_url, $actionsPath.'/'.$actionName);
         $zip = (new Archive())->getAdapter('zip');
-        $ret = $zip->extract($actionsPath.'/'.$action->name, $actionsPath);
+        $ret = $zip->extract($actionsPath.'/'.$actionName, $actionsPath);
         if ($ret) {
-            unlink($actionsPath.'/'.$action->name);
+            unlink($actionsPath.'/'.$actionName);
         } else {
             echo 'failed';
         }
@@ -3596,7 +3600,7 @@ class UpHelper
         }
         // recherche sur github de la nouvelle version du fichier
         if (!$response = self::getGithubAction($up, $file)) {
-            $msg = 'Fichier '.$file.' -> Erreur appel Github';
+            $msg = 'Fichier '.$file.' -> Erreur appel Github (versions.txt)';
             Factory::getApplication()->enqueueMessage($msg);
             return false;
         }
