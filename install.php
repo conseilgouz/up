@@ -134,7 +134,7 @@ class plgContentUpInstallerScript
             } // update 6.1.10 
             $actionsList[] = 'jcontent_by_tags';
             $actionsList[] = 'jcontent_by_categories';
-            $actionsList[] = 'jcontent_by_subcat'
+            $actionsList[] = 'jcontent_by_subcat';
             $actionsList[] = 'jcontent_info';
             $actionsList[] = 'jcontent_metadata';
             $actionsList[] = 'chart';
