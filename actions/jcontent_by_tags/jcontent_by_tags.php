@@ -269,9 +269,9 @@ class jcontent_by_tags extends Lomart\Plugin\Content\Up\Extension\Up
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')
-                    ->where('m.content_item_id = :id AND m.type_alias = :articlestr');
+                    ->where('m.content_item_id = :id AND m.type_alias like :articlestr');
                 $query->bind(':id', $item->id, \Joomla\Database\ParameterType::INTEGER);
-                $str = "article";
+                $str = "%article%";
                 $query->bind(':articlestr', $str, \Joomla\Database\ParameterType::STRING);
                 $db->setQuery($query);
                 // $debug = $query->__toString();

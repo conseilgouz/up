@@ -1,3 +1,14 @@
+## 06/10/2026 : version 6.1.9
+
+#### Modifications actions
+
+- chart : nouveau paramètre pieorder : tri des données asc/desc, suivi des couleurs définies
+- jcontent_by_categories : prepared statments : récupération des tags dans contentitem_tag_map incorrecte
+- jcontent_by_subcat : prepared statments : récupération des tags dans contentitem_tag_map incorrecte
+- jcontent_by_tags : prepared statments : récupération des tags dans contentitem_tag_map incorrecte
+- jcontent_info : prepared statments : récupération des tags dans contentitem_tag_map incorrecte
+- jcontent_metadata : prepared statments : récupération des tags dans contentitem_tag_map incorrecte
+
 ## 03/10/2026 : version 6.1.8
 
 #### Modifications internes

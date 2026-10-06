@@ -63,6 +63,7 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
             '3D' => 0, // camembert en relief. Tous sauf pie
             'donut' => '0', // part du trou central. ex: 0.5 pour la moitié. uniquement pour pie
             'isstacked' => '', // 0, true (absolute) ou relative. Tous sauf bubble, line, pie & scatter
+            'pieorder' => '', // vide : rien, asc : valeur ordre ascendant; desc : valeur ordre descendant
             'options' => '', // les autres options proposées par google.chart (remplacer {} par [] dans la chaine JSON )
             /* [st-annexe]style et options secondaires */
             'id' => '', // identifiant
@@ -86,6 +87,7 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
         // === analyse et nombre de colonnes du tableau
         $nbCol = 0;
         $msgError = '';
+        $rows = [];
         foreach ($content as $key => $val) {
             if (strpos($val, $options['separator']) !== false) {
                 $tmp = str_getcsv($val, $options['separator'], '"', '\\');
@@ -102,6 +104,35 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
         }
         if ($msgError) {
             return UpHelper::info_debug($this, $msgError);
+        }
+        $orderedcolors = false;
+        if (($typeChart == 'Pie') && ($options['pieorder'])) { // ordre des valeurs sur Pie ?
+            $tmprows = $rows;
+            unset($tmprows[0]);
+            $tmpvalues = [];
+            $colors = array_map('trim', explode(',', $options['colors']));
+            $tmpcolors = [];
+            $ixcolor = 0;
+            foreach ($tmprows as $key => $one) {
+                $tmpvalues[$one[0]] = $one[1];
+                $tmpcolors[$one[0]] = $colors[$ixcolor++];
+            }
+            if ($options['pieorder'] == 'asc') {
+                asort($tmpvalues);
+            } elseif ($options['pieorder'] == 'desc') {
+                arsort($tmpvalues);
+            }
+            $orderedrows = [];
+            $orderedrows[] = $rows[0];
+            $orderedcolors = [];
+            foreach ($tmpvalues as $key => $one) {
+                $value = [];
+                $value[] = $key;
+                $value[] = $one;
+                $orderedrows[] = $value;
+                $orderedcolors[] = $tmpcolors[$key];
+            }
+            $rows = $orderedrows;
         }
         $isNum = [];
         // === Analyse entete données pour structure données
@@ -167,7 +198,11 @@ class chart extends Lomart\Plugin\Content\Up\Extension\Up
             $js .= '},';
         }
         if ($options['colors']) {
-            $tmp = array_map('trim', explode(',', $options['colors']));
+            if ($orderedcolors) {
+                $tmp = $orderedcolors;
+            } else {
+                $tmp = array_map('trim', explode(',', $options['colors']));
+            }
             $tmp = '\'' . implode('\',\'', $tmp) . '\'';
             $js .= 'colors:[' . $tmp . '],';
         }

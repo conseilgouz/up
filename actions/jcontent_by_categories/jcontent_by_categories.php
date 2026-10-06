@@ -38,6 +38,8 @@
  * v5.2 - ajout motclé ##date-max## et options new-date
  * v5.3.3 - Joomla 6 : remplacement de getInstance
  * v5.4.5 : caché l'article en cours et article en cours indéterminé : essayer de le récupérer par getInput
+ * v6.1.0 : utilisation des prepared statments sur les requête sql
+ * v6.1.9 : requête sur les tags incorrecte
  */
 defined('_JEXEC') or die();
 
@@ -389,9 +391,9 @@ class jcontent_by_categories extends Lomart\Plugin\Content\Up\Extension\Up
                 $query->select('t.title')
                     ->from('#__tags as t')
                     ->innerJoin('#__contentitem_tag_map as m on t.id = m.tag_id')
-                    ->where('m.content_item_id = :id AND m.type_alias = :articlestr');
+                    ->where('m.content_item_id = :id AND m.type_alias like :articlestr');
                 $query->bind(':id', $item->id, \Joomla\Database\ParameterType::INTEGER);
-                $str = "article";
+                $str = "%article%";
                 $query->bind(':articlestr', $str, \Joomla\Database\ParameterType::STRING);
                 $db->setQuery($query);
                 $listTags = $db->loadObjectList();
