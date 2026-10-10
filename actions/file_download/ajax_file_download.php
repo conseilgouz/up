@@ -53,7 +53,7 @@ class File_Download extends Lomart\Plugin\Content\Up\Extension\Up
         if (strpos($file, '../') !== false) {
             return  'Error :  file error';
         }
-        $url = JPATH_ROOT . '/' . rtrim($cfg['root'], '/') . '/' . htmlentities($file, ENT_QUOTES);
+        $url = JPATH_ROOT . '/' . rtrim($cfg['root'], '/') . '/' . $file;
         if (!is_file($url)) {
             return  'Error :  file not found';
         }
