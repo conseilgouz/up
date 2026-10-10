@@ -3,7 +3,7 @@
 #### Modifications actions
 
 - ajax_view : : clear com_content cache to avoid session conflict
-- file_download : clear com_content cache to avoid session conflict
+- file_download : clear com_content cache to avoid session conflict, handle file names with accent
 - upfilescleaner : clear com_content cache to avoid session conflict
 
 ## 06/10/2026 : version 6.1.11
