@@ -1,4 +1,12 @@
-## 06/10/2026 : version 6.1.10
+## 10/10/2026 : version 6.1.12
+
+#### Modifications actions
+
+- ajax_view : : clear com_content cache to avoid session conflict
+- file_download : clear com_content cache to avoid session conflict
+- upfilescleaner : clear com_content cache to avoid session conflict
+
+## 06/10/2026 : version 6.1.11
 
 #### Modifications actions
 

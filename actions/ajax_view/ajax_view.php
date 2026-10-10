@@ -56,6 +56,25 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
             'style' => '', // style inline pour bloc
             'css-head' => '' // règles CSS définies par le webmaster (ajout dans le head)
         );
+        // Cache/Session conflict : clear com_content cache
+        $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+        $cache = $cacheModel->getCache() ?? null;
+        if ($cache) {
+            if ($cache->options['storage'] == "file") { // cache = files : delete com_content cached files
+                $base = $cache->options['cachebase'];
+                foreach (scandir($base.'/com_content') as $item) {
+                    if (!file_exists($base.'/com_content/'.$item)) {
+                        continue;
+                    }
+                    if ($item == '.' || $item == '..' || $item == 'index.html') {
+                        continue;
+                    }
+                    unlink($base.'/com_content/'.$item);
+                }
+            } else { //
+                $cache->clean('com_content');
+            }
+        }
 
         // fusion et controle des options
         $options = UpHelper::ctrl_options($this, $options_def);

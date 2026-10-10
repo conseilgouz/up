@@ -17,10 +17,8 @@ var $file, $up_id;
                 requete += '%26md5%3D' + this.getAttribute('md5');
             }
             url = '?option=com_ajax&group=content&plugin=up&format=raw&data='+requete;
-            const token = Joomla.getOptions('csrf.token', '');
             var req = Joomla.request({
-                type: 'POST',
-                headers: { 'X-CSRF-Token': token },
+                method: 'POST',
                 url: url,
                 onSuccess: function(data, xhr) {
                     if (data.slice(0, 2) == 'ok') {
@@ -39,6 +37,7 @@ var $file, $up_id;
                         document.querySelector('#'+$up_id+' .up-tmpl-hits.'+filestr).innerHTML = res[4];
                         document.querySelector('#'+$up_id+' .up-tmpl-time.'+filestr).innerHTML = res[5];
                     } else {
+                        console.log('file_download error : '+data);
                         alert('UP file-download : internal error');
                     }
                 },

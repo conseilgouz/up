@@ -67,6 +67,27 @@ class upfilescleaner extends Lomart\Plugin\Content\Up\Extension\Up
         if (empty($source || file_exists($source) === false || is_dir($source) === false)) {
             return UpHelper::msg_error($this, UpHelper::trad_keyword($this, 'NO_SOURCE'));
         }
+        
+        // Cache/Session conflict : clear com_content cache
+        $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+        $cache = $cacheModel->getCache() ?? null;
+        if ($cache) {
+            if ($cache->options['storage'] == "file") { // cache = files : delete com_content cached files
+                $base = $cache->options['cachebase'];
+                foreach (scandir($base.'/com_content') as $item) {
+                    if (!file_exists($base.'/com_content/'.$item)) {
+                        continue;
+                    }
+                    if ($item == '.' || $item == '..' || $item == 'index.html') {
+                        continue;
+                    }
+                    unlink($base.'/com_content/'.$item);
+                }
+            } else { //
+                $cache->clean('com_content');
+            }
+        }
+
         // store parameters in session
         $session = Factory::getApplication()->getSession();
         $session->set($options['id'], 'upfilescleaner');

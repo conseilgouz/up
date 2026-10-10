@@ -76,6 +76,25 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
             'css-head' => '', // règles CSS définies par le webmaster (ajout dans le head)
             'filter' => '' // condition pour exécuter l'action
         );
+        // Cache/Session conflict : clear com_content cache
+        $cacheModel = Factory::getApplication()->bootComponent('com_cache')->getMVCFactory()->createModel('Cache', 'Administrator', ['ignore_request' => true]);
+        $cache = $cacheModel->getCache() ?? null;
+        if ($cache) {
+            if ($cache->options['storage'] == "file") { // cache = files : delete com_content cached files
+                $base = $cache->options['cachebase'];
+                foreach (scandir($base.'/com_content') as $item) {
+                    if (!file_exists($base.'/com_content/'.$item)) {
+                        continue;
+                    }
+                    if ($item == '.' || $item == '..' || $item == 'index.html') {
+                        continue;
+                    }
+                    unlink($base.'/com_content/'.$item);
+                }
+            } else { //
+                $cache->clean('com_content');
+            }
+        }
         // si contenu, c'est le template
         if ($this->content && ! isset($this->options_user['template'])) {
             $this->options_user['template'] = $this->content;
@@ -139,7 +158,8 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
                     $fileListDate[$k]['name'] = $file;
                     $fileListDate[$k]['size'] = filemtime($file);
                 }
-                array_multisort(array_column($fileListDate, 'size'), array_column($fileListDate, 'name'), $fileListDate);
+                $arraycol = array_column($fileListDate, 'size');
+                array_multisort($arraycol, array_column($fileListDate, 'name'), $fileListDate);
                 $fileList = array(); // reset
                 foreach ($fileListDate as $k => $v) {
                     $fileList[] = $v['name'];
@@ -192,9 +212,13 @@ class file_download extends Lomart\Plugin\Content\Up\Extension\Up
         $attr_link['href'] = '#dontmove';
         $session = Factory::getApplication()->getSession();
         $up = $options['id'];
+        $session->clear($up);
+        $session->clear($up.'filedownload');
         $session->set($up, 'file_download');
-        // echo ('session : '.$up.' ==> '. $session->get($up));
-        $session->set($up.'filedownload.password', '');
+        // $session->set($up.'.type', 'file_download');
+        // echo 'session : up => '.$up.',session : '.$session->get($up).',res : '.$res;
+        //  echo ('session : '.$up.' ==> '. $session->get($up));
+        // $session->set($up.'filedownload.password', '');
         if ($options['password']) {
             $attr_link['md5'] = '1';
             $session->set($up.'filedownload.password', password_hash($options['password'], PASSWORD_DEFAULT));
