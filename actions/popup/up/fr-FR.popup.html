@@ -13,7 +13,7 @@
 <p>syntaxe <code><b>{</b>up popup=5s<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup 5 secondes après le chargement de la page<br />syntaxe <code><b>{</b>up popup=50%<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup à la moitié de la page<br />syntaxe <code><b>{</b>up popup=#bloc<b>}</b></code>contenu popup<code><b>{</b>/up popup<b>}</b></code> Ouvre le popup quand le haut du bloc #bloc est en haut de la zone visible du navigateur</p>
 </div >
 <h4>Mode et conditions d'exécution</h4>
-<p><label for="popup" title="D&eacute;lai en sec (15s), position dans la page (50%) ou s&eacute;lecteur de bloc (#bloc)">popup</label>
+<p><label for="popup" title="D&eacute;lai en sec (15s), position dans la page (50%) ou s&eacute;lecteur de bloc (#bloc) ou exit">popup</label>
 <input type = "text" id="popup"class="w10 important"  placeholder="5s"></p>
 <p><label for="scroll-offset" title="x = tol&eacute;rance avant-apr&egrave;s pour le scroll. x1-x2 = avant et apr&egrave;s">scroll-offset</label>
 <input type = "text" name="scroll-offset"class="w5"  placeholder="3"></p>
@@ -57,6 +57,8 @@
 <option value="1" selected>Oui</option>
 <option value="0">Non</option>
 </select></p>
+<p><label for="close-delay" title="d&eacute;lai en s avant la fermeture automatique de a fenetre popup">close-delay</label>
+<input type = "text" name="close-delay" placeholder="0"></p>
 <p><label for="close-style" title="classe ou style pour la fenetre popup">close-style</label>
 <input type = "text" name="close-style" title="" placeholder="" list="combo_close-style"><span class="combo-indicator">&#x25bc;</span>
 <datalist id="combo_close-style">

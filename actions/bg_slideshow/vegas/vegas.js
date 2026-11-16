@@ -1,360 +1,690 @@
 /*!-----------------------------------------------------------------------------
  * Vegas - Fullscreen Backgrounds and Slideshows.
- * v2.4.3 - built 2018-09-18
+ * v3.0.0 - built 2026-02-19
  * Licensed under the MIT License.
  * http://vegas.jaysalvat.com/
  * ----------------------------------------------------------------------------
- * Copyright (C) 2010-2018 Jay Salvat
+ * Copyright (C) 2010-2026 Jay Salvat
  * http://jaysalvat.com/
  * --------------------------------------------------------------------------*/
-!(function (b) {
-    "use strict";
-    var e = {
-            slide: 0,
-            delay: 5e3,
-            loop: !0,
-            preload: !1,
-            preloadImage: !1,
-            preloadVideo: !1,
-            timer: !0,
-            overlay: !1,
-            autoplay: !0,
-            shuffle: !1,
-            cover: !0,
-            color: null,
-            align: "center",
-            valign: "center",
-            firstTransition: null,
-            firstTransitionDuration: null,
-            transition: "fade",
-            transitionDuration: 1e3,
-            transitionRegister: [],
-            animation: null,
-            animationDuration: "auto",
-            animationRegister: [],
-            slidesToKeep: 1,
-            init: function () {},
-            play: function () {},
-            pause: function () {},
-            walk: function () {},
-            slides: [],
-        },
-        n = {},
-        t = function (t, s) {
-            (this.elmt = t),
-                (this.settings = b.extend({}, e, b.vegas.defaults, s)),
-                (this.slide = this.settings.slide),
-                (this.total = this.settings.slides.length),
-                (this.noshow = this.total < 2),
-                (this.paused = !this.settings.autoplay || this.noshow),
-                (this.ended = !1),
-                (this.$elmt = b(t)),
-                (this.$timer = null),
-                (this.$overlay = null),
-                (this.$slide = null),
-                (this.timeout = null),
-                (this.first = !0),
-                (this.transitions = [
-                    "fade",
-                    "fade2",
-                    "blur",
-                    "blur2",
-                    "flash",
-                    "flash2",
-                    "negative",
-                    "negative2",
-                    "burn",
-                    "burn2",
-                    "slideLeft",
-                    "slideLeft2",
-                    "slideRight",
-                    "slideRight2",
-                    "slideUp",
-                    "slideUp2",
-                    "slideDown",
-                    "slideDown2",
-                    "zoomIn",
-                    "zoomIn2",
-                    "zoomOut",
-                    "zoomOut2",
-                    "swirlLeft",
-                    "swirlLeft2",
-                    "swirlRight",
-                    "swirlRight2",
-                ]),
-                (this.animations = ["kenburns", "kenburnsLeft", "kenburnsRight", "kenburnsUp", "kenburnsUpLeft", "kenburnsUpRight", "kenburnsDown", "kenburnsDownLeft", "kenburnsDownRight"]),
-                this.settings.transitionRegister instanceof Array == !1 && (this.settings.transitionRegister = [this.settings.transitionRegister]),
-                this.settings.animationRegister instanceof Array == !1 && (this.settings.animationRegister = [this.settings.animationRegister]),
-                (this.transitions = this.transitions.concat(this.settings.transitionRegister)),
-                (this.animations = this.animations.concat(this.settings.animationRegister)),
-                (this.support = { objectFit: "objectFit" in document.body.style, transition: "transition" in document.body.style || "WebkitTransition" in document.body.style, video: b.vegas.isVideoCompatible() }),
-                !0 === this.settings.shuffle && this.shuffle(),
-                this._init();
-        };
-    (t.prototype = {
-        _init: function () {
-            var t,
-                s,
-                i,
-                e = "BODY" === this.elmt.tagName,
-                n = this.settings.timer,
-                o = this.settings.overlay,
-                a = this;
-            this._preload(),
-                e ||
-                    (this.$elmt.css("height", this.$elmt.css("height")),
-                    (t = b('<div class="vegas-wrapper">').css("overflow", this.$elmt.css("overflow")).css("padding", this.$elmt.css("padding"))),
-                    this.$elmt.css("padding") ||
-                        t.css("padding-top", this.$elmt.css("padding-top")).css("padding-bottom", this.$elmt.css("padding-bottom")).css("padding-left", this.$elmt.css("padding-left")).css("padding-right", this.$elmt.css("padding-right")),
-                    this.$elmt.clone(!0).children().appendTo(t),
-                    (this.elmt.innerHTML = "")),
-                n && this.support.transition && ((i = b('<div class="vegas-timer"><div class="vegas-timer-progress">')), (this.$timer = i), this.$elmt.prepend(i)),
-                o && ((s = b('<div class="vegas-overlay">')), "string" == typeof o && s.css("background-image", "url(" + o + ")"), (this.$overlay = s), this.$elmt.prepend(s)),
-                this.$elmt.addClass("vegas-container"),
-                e || this.$elmt.append(t),
-                setTimeout(function () {
-                    a.trigger("init"), a._goto(a.slide), a.settings.autoplay && a.trigger("play");
-                }, 1);
-        },
-        _preload: function () {
-            var t;
-            for (t = 0; t < this.settings.slides.length; t++)
-                (this.settings.preload || this.settings.preloadImages) && this.settings.slides[t].src && (new Image().src = this.settings.slides[t].src),
-                    (this.settings.preload || this.settings.preloadVideos) &&
-                        this.support.video &&
-                        this.settings.slides[t].video &&
-                        (this.settings.slides[t].video instanceof Array ? this._video(this.settings.slides[t].video) : this._video(this.settings.slides[t].video.src));
-        },
-        _random: function (t) {
-            return t[Math.floor(Math.random() * t.length)];
-        },
-        _slideShow: function () {
-            var t = this;
-            1 < this.total &&
-                !this.ended &&
-                !this.paused &&
-                !this.noshow &&
-                (this.timeout = setTimeout(function () {
-                    t.next();
-                }, this._options("delay")));
-        },
-        _timer: function (t) {
-            var s = this;
-            clearTimeout(this.timeout),
-                this.$timer &&
-                    (this.$timer.removeClass("vegas-timer-running").find("div").css("transition-duration", "0ms"),
-                    this.ended ||
-                        this.paused ||
-                        this.noshow ||
-                        (t &&
-                            setTimeout(function () {
-                                s.$timer
-                                    .addClass("vegas-timer-running")
-                                    .find("div")
-                                    .css("transition-duration", s._options("delay") - 100 + "ms");
-                            }, 100)));
-        },
-        _video: function (t) {
-            var s,
-                i,
-                e = t.toString();
-            return n[e]
-                ? n[e]
-                : (t instanceof Array == !1 && (t = [t]),
-                  ((s = document.createElement("video")).preload = !0),
-                  t.forEach(function (t) {
-                      ((i = document.createElement("source")).src = t), s.appendChild(i);
-                  }),
-                  (n[e] = s));
-        },
-        _fadeOutSound: function (t, s) {
-            var i = this,
-                e = s / 10,
-                n = t.volume - 0.09;
-            0 < n
-                ? ((t.volume = n),
-                  setTimeout(function () {
-                      i._fadeOutSound(t, s);
-                  }, e))
-                : t.pause();
-        },
-        _fadeInSound: function (t, s) {
-            var i = this,
-                e = s / 10,
-                n = t.volume + 0.09;
-            n < 1 &&
-                ((t.volume = n),
-                setTimeout(function () {
-                    i._fadeInSound(t, s);
-                }, e));
-        },
-        _options: function (t, s) {
-            return void 0 === s && (s = this.slide), void 0 !== this.settings.slides[s][t] ? this.settings.slides[s][t] : this.settings[t];
-        },
-        _goto: function (t) {
-            void 0 === this.settings.slides[t] && (t = 0), (this.slide = t);
-            var s,
-                i,
-                e,
-                n,
-                o,
-                a = this.$elmt.children(".vegas-slide"),
-                r = this.settings.slides[t].src,
-                h = this.settings.slides[t].video,
-                d = this._options("delay"),
-                l = this._options("align"),
-                g = this._options("valign"),
-                u = this._options("cover"),
-                c = this._options("color") || this.$elmt.css("background-color"),
-                p = this,
-                m = a.length,
-                f = this._options("transition"),
-                v = this._options("transitionDuration"),
-                y = this._options("animation"),
-                _ = this._options("animationDuration");
-            function w() {
-                p._timer(!0),
-                    setTimeout(function () {
-                        f &&
-                            (p.support.transition
-                                ? (a.css("transition", "all " + v + "ms").addClass("vegas-transition-" + f + "-out"),
-                                  a.each(function () {
-                                      var t = a.find("video").get(0);
-                                      t && ((t.volume = 1), p._fadeOutSound(t, v));
-                                  }),
-                                  s.css("transition", "all " + v + "ms").addClass("vegas-transition-" + f + "-in"))
-                                : s.fadeIn(v));
-                        for (var t = 0; t < a.length - p.settings.slidesToKeep; t++) a.eq(t).remove();
-                        p.trigger("walk"), p._slideShow();
-                    }, 100);
-            }
-            this.settings.firstTransition && this.first && (f = this.settings.firstTransition || f),
-                this.settings.firstTransitionDuration && this.first && (v = this.settings.firstTransitionDuration || v),
-                this.first && (this.first = !1),
-                "repeat" !== u && (!0 === u ? (u = "cover") : !1 === u && (u = "contain")),
-                ("random" === f || f instanceof Array) && (f = f instanceof Array ? this._random(f) : this._random(this.transitions)),
-                ("random" === y || y instanceof Array) && (y = y instanceof Array ? this._random(y) : this._random(this.animations)),
-                ("auto" === v || d < v) && (v = d),
-                "auto" === _ && (_ = d),
-                (s = b('<div class="vegas-slide"></div>')),
-                this.support.transition && f && s.addClass("vegas-transition-" + f),
-                this.support.video && h
-                    ? (((n = h instanceof Array ? this._video(h) : this._video(h.src)).loop = void 0 === h.loop || h.loop),
-                      (n.muted = void 0 === h.mute || h.mute),
-                      !1 === n.muted ? ((n.volume = 0), this._fadeInSound(n, v)) : n.pause(),
-                      (e = b(n).addClass("vegas-video").css("background-color", c)),
-                      this.support.objectFit
-                          ? e
-                                .css("object-position", l + " " + g)
-                                .css("object-fit", u)
-                                .css("width", "100%")
-                                .css("height", "100%")
-                          : "contain" === u && e.css("width", "100%").css("height", "100%"),
-                      s.append(e))
-                    : ((o = new Image()),
-                      (i = b('<div class="vegas-slide-inner"></div>')
-                          .css("background-image", 'url("' + r + '")')
-                          .css("background-color", c)
-                          .css("background-position", l + " " + g)),
-                      "repeat" === u ? i.css("background-repeat", "repeat") : i.css("background-size", u),
-                      this.support.transition && y && i.addClass("vegas-animation-" + y).css("animation-duration", _ + "ms"),
-                      s.append(i)),
-                this.support.transition || s.css("display", "none"),
-                m ? a.eq(m - 1).after(s) : this.$elmt.prepend(s),
-                a.css("transition", "all 0ms").each(function () {
-                    (this.className = "vegas-slide"), "VIDEO" === this.tagName && (this.className += " vegas-video"), f && ((this.className += " vegas-transition-" + f), (this.className += " vegas-transition-" + f + "-in"));
-                }),
-                p._timer(!1),
-                n ? (4 === n.readyState && (n.currentTime = 0), n.play(), w()) : ((o.src = r), o.complete ? w() : (o.onload = w));
-        },
-        _end: function () {
-            this.settings.autoplay ? (this.ended = !1) : (this.ended = !0), this._timer(!1), this.trigger("end");
-        },
-        shuffle: function () {
-            for (var t, s, i = this.total - 1; 0 < i; i--) (s = Math.floor(Math.random() * (i + 1))), (t = this.settings.slides[i]), (this.settings.slides[i] = this.settings.slides[s]), (this.settings.slides[s] = t);
-        },
-        play: function () {
-            this.paused && ((this.paused = !1), this.next(), this.trigger("play"));
-        },
-        pause: function () {
-            this._timer(!1), (this.paused = !0), this.trigger("pause");
-        },
-        toggle: function () {
-            this.paused ? this.play() : this.pause();
-        },
-        playing: function () {
-            return !this.paused && !this.noshow;
-        },
-        current: function (t) {
-            return t ? { slide: this.slide, data: this.settings.slides[this.slide] } : this.slide;
-        },
-        jump: function (t) {
-            t < 0 || t > this.total - 1 || t === this.slide || ((this.slide = t), this._goto(this.slide));
-        },
-        next: function () {
-            if ((this.slide++, this.slide >= this.total)) {
-                if (!this.settings.loop) return this._end();
-                this.slide = 0;
-            }
-            this._goto(this.slide);
-        },
-        previous: function () {
-            if ((this.slide--, this.slide < 0)) {
-                if (!this.settings.loop) return void this.slide++;
-                this.slide = this.total - 1;
-            }
-            this._goto(this.slide);
-        },
-        trigger: function (t) {
-            var s = [];
-            (s = "init" === t ? [this.settings] : [this.slide, this.settings.slides[this.slide]]), this.$elmt.trigger("vegas" + t, s), "function" == typeof this.settings[t] && this.settings[t].apply(this.$elmt, s);
-        },
-        options: function (t, s) {
-            var i = this.settings.slides.slice();
-            if ("object" == typeof t) this.settings = b.extend({}, e, b.vegas.defaults, t);
-            else {
-                if ("string" != typeof t) return this.settings;
-                if (void 0 === s) return this.settings[t];
-                this.settings[t] = s;
-            }
-            this.settings.slides !== i && ((this.total = this.settings.slides.length), (this.noshow = this.total < 2), this._preload());
-        },
-        destroy: function () {
-            clearTimeout(this.timeout),
-                this.$elmt.removeClass("vegas-container"),
-                this.$elmt.find("> .vegas-slide").remove(),
-                this.$elmt.find("> .vegas-wrapper").clone(!0).children().appendTo(this.$elmt),
-                this.$elmt.find("> .vegas-wrapper").remove(),
-                this.settings.timer && this.$timer.remove(),
-                this.settings.overlay && this.$overlay.remove(),
-                (this.elmt._vegas = null);
-        },
-    }),
-        (b.fn.vegas = function (s) {
-            var i,
-                e = arguments,
-                n = !1;
-            if (void 0 === s || "object" == typeof s)
-                return this.each(function () {
-                    this._vegas || (this._vegas = new t(this, s));
-                });
-            if ("string" == typeof s) {
-                if (
-                    (this.each(function () {
-                        var t = this._vegas;
-                        if (!t) throw new Error("No Vegas applied to this element.");
-                        "function" == typeof t[s] && "_" !== s[0] ? (i = t[s].apply(t, [].slice.call(e, 1))) : (n = !0);
-                    }),
-                    n)
-                )
-                    throw new Error('No method "' + s + '" in Vegas.');
-                return void 0 !== i ? i : this;
-            }
-        }),
-        (b.vegas = {}),
-        (b.vegas.defaults = e),
-        (b.vegas.isVideoCompatible = function () {
-            return !/(Android|webOS|Phone|iPad|iPod|BlackBerry|Windows Phone)/i.test(navigator.userAgent);
-        });
-})(window.jQuery || window.Zepto);
-//# sourceMappingURL=vegas.min.js.map
+const defaults = {
+  slide: 0,
+  delay: 5000,
+  loop: true,
+  preload: false,
+  preloadImage: false,
+  preloadVideo: false,
+  timer: true,
+  overlay: false,
+  autoplay: true,
+  shuffle: false,
+  cover: true,
+  color: null,
+  align: 'center',
+  valign: 'center',
+  firstTransition: null,
+  firstTransitionDuration: null,
+  transition: 'fade',
+  transitionDuration: 1000,
+  transitionRegister: [],
+  animation: null,
+  animationDuration: 'auto',
+  animationRegister: [],
+  slidesToKeep: 1,
+  init: () => {},
+  play: () => {},
+  pause: () => {},
+  walk: () => {},
+  slides: [
+    // {
+    //  src:                null,
+    //  color:              null,
+    //  delay:              null,
+    //  align:              null,
+    //  valign:             null,
+    //  transition:         null,
+    //  transitionDuration: null,
+    //  animation:          null,
+    //  animationDuration:  null,
+    //  cover:              true,
+    //  video: {
+    //      src: [],
+    //      muted: true,
+    //      loop: true
+    // }
+    // ...
+  ]
+};
+
+const videoCache = {};
+let instances = 0;
+
+class Vegas {
+  constructor(elmt, options) {
+    this.elmt = elmt;
+    this.settings = Object.assign({}, defaults, vegas.defaults, options);
+    this.slide = this.settings.slide;
+    this.total = this.settings.slides.length;
+    this.noshow = this.total < 2;
+    this.paused = !this.settings.autoplay || this.noshow;
+    this.ended = false;
+    this.timer = null;
+    this.overlay = null;
+    this.timeout = null;
+    this.first = true;
+
+    this.instance = instances++;
+
+    this.transitions = [
+      'fade', 'fade2',
+      'blur', 'blur2',
+      'flash', 'flash2',
+      'negative', 'negative2',
+      'burn', 'burn2',
+      'slideLeft', 'slideLeft2',
+      'slideRight', 'slideRight2',
+      'slideUp', 'slideUp2',
+      'slideDown', 'slideDown2',
+      'zoomIn', 'zoomIn2',
+      'zoomOut', 'zoomOut2',
+      'swirlLeft', 'swirlLeft2',
+      'swirlRight', 'swirlRight2'
+    ];
+
+    this.animations = [
+      'kenburns',
+      'kenburnsLeft', 'kenburnsRight',
+      'kenburnsUp', 'kenburnsUpLeft', 'kenburnsUpRight',
+      'kenburnsDown', 'kenburnsDownLeft', 'kenburnsDownRight'
+    ];
+
+    if (!(this.settings.transitionRegister instanceof Array)) {
+      this.settings.transitionRegister = [ this.settings.transitionRegister ];
+    }
+
+    if (!(this.settings.animationRegister instanceof Array)) {
+      this.settings.animationRegister = [ this.settings.animationRegister ];
+    }
+
+    this.transitions = this.transitions.concat(this.settings.transitionRegister);
+    this.animations = this.animations.concat(this.settings.animationRegister);
+
+    this.support = {
+      objectFit: 'objectFit' in document.body.style,
+      transition: 'transition' in document.body.style || 'WebkitTransition' in document.body.style
+    };
+
+    if (this.settings.shuffle === true) {
+      this.shuffle();
+    }
+    this._init();
+  }
+
+  _init() {
+    const isBody = this.elmt.tagName === 'BODY';
+    const timer = this.settings.timer;
+    const overlay = this.settings.overlay;
+
+    this._preload();
+
+    let content, contentScroll;
+
+    // Div with scrollable content
+    if (!isBody) {
+      contentScroll = document.createElement('div');
+      contentScroll.className = 'vegas-content-scrollable';
+
+      content = document.createElement('div');
+      content.className = 'vegas-content';
+
+      const cs = getComputedStyle(this.elmt);
+      content.style.overflow = cs.overflow;
+      content.style.padding = cs.padding;
+
+      // Some browsers don't compute padding shorthand
+      if (!cs.padding) {
+        content.style.paddingTop = cs.paddingTop;
+        content.style.paddingBottom = cs.paddingBottom;
+        content.style.paddingLeft = cs.paddingLeft;
+        content.style.paddingRight = cs.paddingRight;
+      }
+
+      this.elmt.style.padding = '0';
+
+      Array.from(this.elmt.children).forEach((child) => {
+        content.appendChild(child.cloneNode(true));
+      });
+      this.elmt.innerHTML = '';
+    }
+
+    // Timer
+    if (timer && this.support.transition) {
+      const timerEl = document.createElement('div');
+      timerEl.className = 'vegas-timer';
+      const timerProgress = document.createElement('div');
+      timerProgress.className = 'vegas-timer-progress';
+      timerEl.appendChild(timerProgress);
+      this.timer = timerEl;
+      this.elmt.prepend(timerEl);
+    }
+
+    // Overlay
+    if (overlay) {
+      const overlayEl = document.createElement('div');
+      overlayEl.className = 'vegas-overlay';
+
+      if (typeof overlay === 'string') {
+        overlayEl.style.backgroundImage = `url(${overlay})`;
+      }
+
+      this.overlay = overlayEl;
+      this.elmt.prepend(overlayEl);
+    }
+
+    // Container
+    this.elmt.classList.add('vegas-container');
+
+    if (!isBody) {
+      contentScroll.append(content);
+      this.elmt.append(contentScroll);
+    }
+
+    setTimeout(() => {
+      this.trigger('init');
+      this._goto(this.slide);
+
+      if (this.settings.autoplay) {
+        this.trigger('play');
+      }
+    }, 1);
+  }
+
+  _preload() {
+    for (let i = 0; i < this.settings.slides.length; i++) {
+      if (this.settings.preload || this.settings.preloadImages) {
+        if (this.settings.slides[i].src) {
+          const img = new Image();
+          img.src = this.settings.slides[i].src;
+        }
+      }
+
+      if (this.settings.preload || this.settings.preloadVideos) {
+        if (this.settings.slides[i].video) {
+          if (this.settings.slides[i].video instanceof Array) {
+            this._video(this.settings.slides[i].video);
+          } else {
+            this._video(this.settings.slides[i].video.src);
+          }
+        }
+      }
+    }
+  }
+
+  _random(array) {
+    return array[Math.floor(Math.random() * array.length)]
+  }
+
+  _slideShow() {
+    if (this.total > 1 && !this.ended && !this.paused && !this.noshow) {
+      this.timeout = setTimeout(() => this.next(), this._options('delay'));
+    }
+  }
+
+  _timer(state) {
+    clearTimeout(this.timeout);
+
+    if (!this.timer) {
+      return
+    }
+
+    this.timer.classList.remove('vegas-timer-running');
+    this.timer.querySelector('div').style.transitionDuration = '0ms';
+
+    if (this.ended || this.paused || this.noshow) {
+      return
+    }
+
+    if (state) {
+      setTimeout(() => {
+        this.timer.classList.add('vegas-timer-running');
+        this.timer.querySelector('div').style.transitionDuration = `${this._options('delay') - 100}ms`;
+      }, 100);
+    }
+  }
+
+  _video(srcs) {
+    const cacheKey = this.instance + srcs.toString();
+
+    if (videoCache[cacheKey]) {
+      return videoCache[cacheKey]
+    }
+
+    if (!(srcs instanceof Array)) {
+      srcs = [ srcs ];
+    }
+
+    const video = document.createElement('video');
+    video.preload = true;
+    video.playsInline = true;
+    video.controls = false;
+
+    srcs.forEach((src) => {
+      const source = document.createElement('source');
+      source.src = src;
+      video.appendChild(source);
+    });
+
+    videoCache[cacheKey] = video;
+    return video
+  }
+
+  _fadeOutSound(video, duration) {
+    const delay = duration / 10;
+    const volume = video.volume - 0.09;
+
+    if (volume > 0) {
+      video.volume = volume;
+      setTimeout(() => this._fadeOutSound(video, duration), delay);
+    } else {
+      video.pause();
+    }
+  }
+
+  _fadeInSound(video, duration) {
+    const delay = duration / 10;
+    const volume = video.volume + 0.09;
+
+    if (volume < 1) {
+      video.volume = volume;
+      setTimeout(() => this._fadeInSound(video, duration), delay);
+    }
+  }
+
+  _options(key, i = this.slide) {
+    if (key in this.settings.slides[i]) {
+      return this.settings.slides[i][key]
+    }
+    return this.settings[key]
+  }
+
+  _goto(nb) {
+    if (typeof this.settings.slides[nb] === 'undefined') {
+      nb = 0;
+    }
+
+    this.slide = nb;
+
+    const slides = Array.from(this.elmt.querySelectorAll(':scope > .vegas-slide'));
+    const src = this.settings.slides[nb].src;
+    const videoSettings = this.settings.slides[nb].video;
+    const delay = this._options('delay');
+    const align = this._options('align');
+    const valign = this._options('valign');
+    const color = this._options('color') || getComputedStyle(this.elmt).backgroundColor;
+    const total = slides.length;
+
+    let cover = this._options('cover');
+    let transition = this._options('transition');
+    let transitionDuration = this._options('transitionDuration');
+    let animation = this._options('animation');
+    let animationDuration = this._options('animationDuration');
+
+    if (this.settings.firstTransition && this.first) {
+      transition = this.settings.firstTransition || transition;
+    }
+
+    if (this.settings.firstTransitionDuration && this.first) {
+      transitionDuration = this.settings.firstTransitionDuration || transitionDuration;
+    }
+
+    if (this.first) {
+      this.first = false;
+    }
+
+    if (cover !== 'repeat') {
+      if (cover === true) {
+        cover = 'cover';
+      } else if (cover === false) {
+        cover = 'contain';
+      }
+    }
+
+    if (transition === 'random' || transition instanceof Array) {
+      transition = transition instanceof Array
+        ? this._random(transition)
+        : this._random(this.transitions);
+    }
+
+    if (animation === 'random' || animation instanceof Array) {
+      animation = animation instanceof Array
+        ? this._random(animation)
+        : this._random(this.animations);
+    }
+
+    if (transitionDuration === 'auto' || transitionDuration > delay) {
+      transitionDuration = delay;
+    }
+
+    if (animationDuration === 'auto') {
+      animationDuration = delay;
+    }
+
+    const slideEl = document.createElement('div');
+    slideEl.className = 'vegas-slide';
+
+    if (this.support.transition && transition) {
+      slideEl.classList.add(`vegas-transition-${transition}`);
+    }
+
+    let video, img;
+
+    // Video
+    if (videoSettings) {
+      video = videoSettings instanceof Array
+        ? this._video(videoSettings)
+        : this._video(videoSettings.src);
+
+      video.loop = 'loop' in videoSettings ? videoSettings.loop : true;
+      video.muted = 'muted' in videoSettings ? videoSettings.muted : true;
+
+      if (video.muted === false) {
+        video.volume = 0;
+        this._fadeInSound(video, transitionDuration);
+      } else {
+        video.pause();
+      }
+
+      video.classList.add('vegas-video');
+      video.style.backgroundColor = color;
+
+      if (this.support.objectFit) {
+        video.style.objectPosition = `${align} ${valign}`;
+        video.style.objectFit = cover;
+        video.style.width = '100%';
+        video.style.height = '100%';
+      } else if (cover === 'contain') {
+        video.style.width = '100%';
+        video.style.height = '100%';
+      }
+
+      slideEl.append(video);
+
+    // Image
+    } else {
+      img = new Image();
+
+      const inner = document.createElement('div');
+      inner.className = 'vegas-slide-inner';
+      inner.style.backgroundImage = `url("${src}")`;
+      inner.style.backgroundColor = color;
+      inner.style.backgroundPosition = `${align} ${valign}`;
+
+      if (cover === 'repeat') {
+        inner.style.backgroundRepeat = 'repeat';
+      } else {
+        inner.style.backgroundSize = cover;
+      }
+
+      if (this.support.transition && animation) {
+        inner.classList.add(`vegas-animation-${animation}`);
+        inner.style.animationDuration = `${animationDuration}ms`;
+      }
+
+      slideEl.append(inner);
+    }
+
+    if (!this.support.transition) {
+      slideEl.style.display = 'none';
+    }
+
+    if (total) {
+      slides[total - 1].insertAdjacentElement('afterend', slideEl);
+    } else {
+      this.elmt.prepend(slideEl);
+    }
+
+    slides.forEach((el) => {
+      el.style.transition = 'all 0ms';
+      el.className = 'vegas-slide';
+
+      if (el.tagName === 'VIDEO') {
+        el.className += ' vegas-video';
+      }
+
+      if (transition) {
+        el.className += ` vegas-transition-${transition}`;
+        el.className += ` vegas-transition-${transition}-in`;
+      }
+    });
+
+    this._timer(false);
+
+    const go = () => {
+      this._timer(true);
+
+      setTimeout(() => {
+        if (transition) {
+          if (this.support.transition) {
+            slides.forEach((el) => {
+              el.style.transition = `all ${transitionDuration}ms`;
+              el.classList.add(`vegas-transition-${transition}-out`);
+
+              const vid = el.querySelector('video');
+              if (vid) {
+                vid.volume = 1;
+                this._fadeOutSound(vid, transitionDuration);
+              }
+            });
+
+            slideEl.style.transition = `all ${transitionDuration}ms`;
+            slideEl.classList.add(`vegas-transition-${transition}-in`);
+          } else {
+            // Fallback fade for browsers without CSS transitions
+            slideEl.style.opacity = '0';
+            slideEl.style.display = '';
+            setTimeout(() => {
+              slideEl.style.transition = `opacity ${transitionDuration}ms`;
+              slideEl.style.opacity = '1';
+            }, 10);
+          }
+        }
+
+        for (let i = 0; i < slides.length - this.settings.slidesToKeep; i++) {
+          slides[i].remove();
+        }
+
+        this.trigger('walk');
+        this._slideShow();
+      }, 100);
+    };
+
+    if (video) {
+      if (video.readyState === 4) {
+        video.currentTime = 0;
+      }
+
+      video.play();
+      go();
+    } else {
+      img.src = src;
+
+      if (img.complete) {
+        go();
+      } else {
+        img.onload = go;
+      }
+    }
+  }
+
+  _end() {
+    this.ended = !this.settings.autoplay;
+    this._timer(false);
+    this.trigger('end');
+  }
+
+  shuffle() {
+    for (let i = this.total - 1; i > 0; i--) {
+      const rand = Math.floor(Math.random() * (i + 1));
+      [ this.settings.slides[i], this.settings.slides[rand] ] = [ this.settings.slides[rand], this.settings.slides[i] ];
+    }
+  }
+
+  play() {
+    if (this.paused) {
+      this.paused = false;
+      this.next();
+      this.trigger('play');
+    }
+  }
+
+  pause() {
+    this._timer(false);
+    this.paused = true;
+    this.trigger('pause');
+  }
+
+  toggle() {
+    if (this.paused) {
+      this.play();
+    } else {
+      this.pause();
+    }
+  }
+
+  playing() {
+    return !this.paused && !this.noshow
+  }
+
+  current(advanced) {
+    if (advanced) {
+      return {
+        slide: this.slide,
+        data: this.settings.slides[this.slide]
+      }
+    }
+    return this.slide
+  }
+
+  jump(nb) {
+    if (nb < 0 || nb > this.total - 1 || nb === this.slide) {
+      return
+    }
+
+    this.slide = nb;
+    this._goto(this.slide);
+  }
+
+  next() {
+    this.slide++;
+
+    if (this.slide >= this.total) {
+      if (!this.settings.loop) {
+        this._end();
+        return
+      }
+      this.slide = 0;
+    }
+
+    this._goto(this.slide);
+  }
+
+  previous() {
+    this.slide--;
+
+    if (this.slide < 0) {
+      if (!this.settings.loop) {
+        this.slide++;
+        return
+      }
+      this.slide = this.total - 1;
+    }
+
+    this._goto(this.slide);
+  }
+
+  trigger(fn) {
+    const params = fn === 'init'
+      ? [ this.settings ]
+      : [ this.slide, this.settings.slides[this.slide] ];
+
+    this.elmt.dispatchEvent(new CustomEvent(`vegas${fn}`, { detail: params, bubbles: true }));
+
+    if (typeof this.settings[fn] === 'function') {
+      this.settings[fn].apply(this.elmt, params);
+    }
+  }
+
+  options(key, value) {
+    // Getter cases — early return
+    if (typeof key !== 'object' && typeof key !== 'string') {
+      return this.settings
+    }
+    if (typeof key === 'string' && typeof value === 'undefined') {
+      return this.settings[key]
+    }
+
+    // Setter cases
+    const oldSlides = this.settings.slides.slice();
+
+    if (typeof key === 'object') {
+      this.settings = Object.assign({}, defaults, vegas.defaults, key);
+    } else {
+      this.settings[key] = value;
+    }
+
+    // In case slides have changed
+    if (this.settings.slides !== oldSlides) {
+      this.total = this.settings.slides.length;
+      this.noshow = this.total < 2;
+      this._preload();
+    }
+
+    return this.settings
+  }
+
+  destroy() {
+    clearTimeout(this.timeout);
+
+    this.elmt.classList.remove('vegas-container');
+
+    this.elmt.querySelectorAll(':scope > .vegas-slide').forEach((el) => el.remove());
+
+    // Restore original content
+    const scrollable = this.elmt.querySelector(':scope > .vegas-content-scrollable');
+    if (scrollable) {
+      scrollable.querySelectorAll(':scope > .vegas-content > *').forEach((child) => {
+        this.elmt.appendChild(child.cloneNode(true));
+      });
+      scrollable.remove();
+    }
+
+    if (this.settings.timer && this.timer) {
+      this.timer.remove();
+    }
+    if (this.settings.overlay && this.overlay) {
+      this.overlay.remove();
+    }
+
+    this.elmt._vegas = null;
+  }
+}
+
+function vegas(target, options) {
+  const el = typeof target === 'string' ? document.querySelector(target) : target;
+
+  if (!el) {
+    throw new Error('Vegas: element not found')
+  }
+  if (el._vegas) {
+    return el._vegas
+  }
+
+  el._vegas = new Vegas(el, options);
+  return el._vegas
+}
+
+vegas.defaults = {};
+
+vegas.isVideoCompatible = () => true;
+
+export { vegas as default };

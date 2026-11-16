@@ -13,6 +13,7 @@
  */
 
 /*
+ * v6.1.14 : facebook sdk 27.0
  * v6.0.10 : erreur sur l'adresse facebook (manque :)
  * v5.3 : facebook.js : update sdk de la version 13.0 vers 23.0. 
  *        bug sur data-tabs : https://developers.facebook.com/support/bugs/584988619248795/

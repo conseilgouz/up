@@ -1,3 +1,14 @@
+## 02/11/2026 : version 6.1.14
+
+#### Modifications actions
+
+- bg_slideshow : Vegas 3.0.0 (sans jQuery)
+- facebook_timeline : facebook sdk version 27.0
+- image_gallery : infinite-scroll en version 5.0.0
+- image_pannelum : mise à jour pannelum.js en version 2.5.7
+- pdf : pdfjs version 6.5.438
+- popup : modification cookie, nouvelle option closeDelay, ajout de exit sur le mode d'activation
+
 ## 10/10/2026 : version 6.1.13
 
 #### Modifications actions

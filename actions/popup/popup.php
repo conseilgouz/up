@@ -49,7 +49,7 @@ class popup extends Lomart\Plugin\Content\Up\Extension\Up
         // ===== valeur paramétres par défaut (sauf JS)
         $options_def = array(
             /*[st-main] Mode et conditions d'exécution*/
-            __class__ => '5s', // Délai en sec (15s), position dans la page (50%) ou sélecteur de bloc (#bloc)
+            __class__ => '5s', // Délai en sec (15s), position dans la page (50%) ou sélecteur de bloc (#bloc) ou exit 
             'scroll-offset' => '3', // x = tolérance avant-après pour le scroll. x1-x2 = avant et après
             'filter' => '', // condition pour exécuter l'action
             'cookie-duration' => 0, // nombre de jours de conservation des cookies. 0 pour la session ou -1 pour ignorer
@@ -64,6 +64,7 @@ class popup extends Lomart\Plugin\Content\Up\Extension\Up
 
             /* [st-btn] Bouton fermeture popup */
             'close-only-button' => 1, // 1: fermeture uniquement par le bouton, 0: en cliquant hors du popup
+            'close-delay' => '0', // délai en s avant la fermeture automatique de a fenetre popup
             'close-style' => '', // classe ou style pour la fenetre popup
             'close-label' => '&times;', // texte ou symbole pour le bouton. BBCode et action UP admis
 
@@ -90,7 +91,10 @@ class popup extends Lomart\Plugin\Content\Up\Extension\Up
         // =========== le code JS
         // =============================
 
-        if (substr($options[__class__], - 1) == '%') {
+        if ($options[__class__] == 'exit') {
+            $js_options['activationValue'] = 'exit';
+            $js_options['activationMode'] = 'exit';
+        } elseif (substr($options[__class__], - 1) == '%') {
             $js_options['activationValue'] = (int) $options[__class__];
             $js_options['activationMode'] = 'scroll';
         } elseif (strtolower(substr($options[__class__], - 1)) == 's' && (int) $options[__class__] > 0) {
@@ -114,6 +118,7 @@ class popup extends Lomart\Plugin\Content\Up\Extension\Up
         $js_options['animTarget'] = $options['animation-target'];
 
         $js_options['closeOnlyButton'] = $options['close-only-button'];
+        $js_options['closeDelay'] = ((int) $options['close-delay'] * 1000);
 
         // -- conversion en chaine Json
         // il existe 2 modes: mode1=normal, mode2=sans guillemets

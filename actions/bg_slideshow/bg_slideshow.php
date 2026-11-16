@@ -39,22 +39,20 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Uri\Uri;
 use Lomart\Plugin\Content\Up\Helper\UpHelper;
 
 class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
 {
-
-    function init()
+    public function init()
     {
         // charger les ressources communes à toutes les instances de l'action
         UpHelper::load_upcss($this);
-        UpHelper::load_file($this,'vegas/vegas.min.css');
-        UpHelper::load_file($this,'vegas/vegas.min.js');
+        UpHelper::load_file($this, 'vegas/vegas.min.css');
+        UpHelper::load_file($this, 'vegas/vegas.iife.min.js');
         return true;
     }
 
-    function run()
+    public function run()
     {
 
         // ---- lien vers la page de demo
@@ -99,52 +97,51 @@ class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
         $animation_list = 'kenburns,kenburnsLeft,kenburnsUp,kenburnsDown,kenburnsUpLeft,kenburnsUpRight,kenburnsDownLeft,kenburnsDownRight,random';
 
         // --- fusion et controle des options
-        $options = UpHelper::ctrl_options($this,$options_def, $js_options_def);
+        $options = UpHelper::ctrl_options($this, $options_def, $js_options_def);
 
         // === Filtrage
-        if (UpHelper::filter_ok($this,$options['filter']) !== true) {
+        if (UpHelper::filter_ok($this, $options['filter']) !== true) {
             return '';
         }
 
-        $options['transition'] = UpHelper::ctrl_argument($this,$options['transition'], $transition_list);
+        $options['transition'] = UpHelper::ctrl_argument($this, $options['transition'], $transition_list);
         if ($options['animation'] != null) {
-            $options['animation'] = UpHelper::ctrl_argument($this,$options['animation'], $animation_list);
+            $options['animation'] = UpHelper::ctrl_argument($this, $options['animation'], $animation_list);
         }
         // === Init variables
         $on_mobile = false;
 
         // === css-head
-        UpHelper::load_css_head($this,$options['css-head']);
+        UpHelper::load_css_head($this, $options['css-head']);
 
         // ========== localisation du fond
         $selector = ($this->content) ? '#' . $options['id'] : $options['bg-selector'];
-
         // ===== Alternative si mobile
         if ($options['mobile'] > '1') {
             $client = Factory::getApplication()->client;
             if ($client->mobile) {
                 $on_mobile = true;
-                $css_mobile = UpHelper::get_bg_mobile($this,$options);
-                UpHelper::load_css_head($this,$selector . '{' . $css_mobile . '}');
+                $css_mobile = UpHelper::get_bg_mobile($this, $options);
+                UpHelper::load_css_head($this, $selector . '{' . $css_mobile . '}');
             }
         }
 
         // =========== overlay sur slideshow
         if ($options['bg-overlay'] && ! $on_mobile) {
-            UpHelper::add_str($this,$options['js-options'], 'overlay:true', ',');
-            $val = UpHelper::get_overlay($this,$options['bg-overlay']);
-            UpHelper::load_css_head($this,$selector . ' .vegas-overlay{background:' . $val . '}');
+            UpHelper::add_str($this, $options['js-options'], 'overlay:true', ',');
+            $val = UpHelper::get_overlay($this, $options['bg-overlay']);
+            UpHelper::load_css_head($this, $selector . ' .vegas-overlay{background:' . $val . '}');
         }
         // =========== overlay sur page
         if ($options['page-overlay'] && $options['page-selector']) {
-            $val = UpHelper::get_overlay($this,$options['page-overlay']);
-            UpHelper::load_css_head($this,$options['page-selector'] . '{background:' . $val . '}');
+            $val = UpHelper::get_overlay($this, $options['page-overlay']);
+            UpHelper::load_css_head($this, $options['page-selector'] . '{background:' . $val . '}');
         }
 
         // ====== Récupération de la liste des images
         if (! $on_mobile) {
             $option_images = $options[__class__];
-
+            $imgsrc = [];
             if (is_dir($options['path'] . $option_images)) {
                 $is_dir = true;
                 $folder = $options['path'] . $option_images;
@@ -155,31 +152,32 @@ class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
                 $imgList = array_map('trim', explode(';', $option_images));
             }
             foreach ($imgList as $img) {
-                $imgsrc[] = UpHelper::get_slide_info($this,$img, $is_dir, $options['path']);
+                $imgsrc[] = UpHelper::get_slide_info($this, $img, $is_dir, $options['path']);
             }
             if ($options['shuffle']) { // v5.1 forcé car non pris en charge par le JS
                 shuffle($imgsrc);
-                if ($options['shuffle'] > 1 && $options['shuffle'] < sizeof($imgsrc))
+                if ($options['shuffle'] > 1 && $options['shuffle'] < sizeof($imgsrc)) {
                     $imgsrc = array_slice($imgsrc, 0, $options['shuffle']);
+                }
             }
             $slides = implode(',', $imgsrc);
-        }
-
-        // =========== le code JS
-        // les options saisies par l'utilisateur concernant le script JS
-        // cela évite de toutes les renvoyer au script JS
-        if (! $on_mobile) {
-            $js_options = UpHelper::only_using_options($this,$js_options_def);
+            // =========== le code JS
+            // les options saisies par l'utilisateur concernant le script JS
+            // cela évite de toutes les renvoyer au script JS
+            $js_options = UpHelper::only_using_options($this, $js_options_def);
             // -- conversion en chaine Json
-            $js_params = UpHelper::json_arrtostr($this,$js_options, 2, false);
+            $js_params = UpHelper::json_arrtostr($this, $js_options, 2, false);
             // -- initialisation
-            $js_code = '$("' . $selector . '").vegas({';
+            $js_code = 'document.addEventListener("DOMContentLoaded", function() {';
+            $js_code .= 'vegas("' . $selector . '",{';
             $js_code .= 'slides: [' . $slides . ']';
-            UpHelper::add_str($this,$js_code, $js_params, ',');
-            if ($options['js-options'])
-                UpHelper::add_str($this,$js_code, $options['js-options'], ',');
+            UpHelper::add_str($this, $js_code, $js_params, ',');
+            if ($options['js-options']) {
+                UpHelper::add_str($this, $js_code, $options['js-options'], ',');
+            }
             $js_code .= '});';
-            UpHelper::load_jquery_code($this,$js_code);
+            $js_code .= '});';
+            UpHelper::load_js_code($this, $js_code);
         }
 
         // ====== si contenu, on crée un bloc à la position du shortcode
@@ -193,11 +191,11 @@ class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
             if ($options['center']) {
                 $attr_center['class'] = 'up-center';
             }
-            UpHelper::get_attr_style($this,$attr_center, $options['style']);
+            UpHelper::get_attr_style($this, $attr_center, $options['style']);
 
             // -- code retour
-            $html[] = UpHelper::set_attr_tag($this,'div', $attr_main);
-            $html[] = UpHelper::set_attr_tag($this,'div', $attr_center);
+            $html[] = UpHelper::set_attr_tag($this, 'div', $attr_main);
+            $html[] = UpHelper::set_attr_tag($this, 'div', $attr_center);
             $html[] = '<div>';
             $html[] = $this->content;
             $html[] = '</div>';
@@ -216,10 +214,3 @@ class bg_slideshow extends Lomart\Plugin\Content\Up\Extension\Up
 }
 
 // class
-
-
-
-
-
-
-

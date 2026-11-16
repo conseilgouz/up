@@ -130,19 +130,25 @@ class plgContentUpInstallerScript
                                 'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upscsscompiler']; // 6.1.0
             } else if ($previous_version && $previous_version < '6.1.6') { // version 6.1.5
                 $actionsList[] = 'sql'; // 6.1.5 : js update
-            } else if ($previous_version && $previous_version < '6.1.11') { // version 6.1.112
+            } else if ($previous_version && $previous_version < '6.1.11') { // version 6.1.12
                 $actionsList[] = 'jcontent_by_tags';
                 $actionsList[] = 'jcontent_by_categories';
                 $actionsList[] = 'jcontent_by_subcat';
                 $actionsList[] = 'jcontent_info';
                 $actionsList[] = 'jcontent_metadata';
                 $actionsList[] = 'chart';
-            } 
-            // update 6.1.13
-            $actionsList[] = 'ajax_view';
-            $actionsList[] = 'file_download';
-            $actionsList[] = 'upfilescleaner';
-
+            } else if ($previous_version && $previous_version < '6.1.13') { // version 6.1.13
+                $actionsList[] = 'ajax_view';
+                $actionsList[] = 'file_download';
+                $actionsList[] = 'upfilescleaner';
+            }
+            // version 6.1.14
+            $actionsList[] = 'bg_slideshow'; // vegas 3.0.0 hors jQuery
+            $actionsList[] = 'image_pannelum'; // pannelum.js version 2.5.7
+            $actionsList[] = 'image_gallery'; // infinite-scroll.js en 5.0.0
+            $actionsList[] = 'facebook_timeline'; // facebook sdk version 27.0
+            $actionsList[] = 'pdf'; // pdfjs version 6.5.438
+            $actionsList[] = 'popup'; // new options
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $ignore = ['.','..','custom']; // ignore custom folder

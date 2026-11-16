@@ -30,6 +30,7 @@
  * v 5.4.2 - minificiation des fichiers .mjs 
  * v 5.4.12 - update pdfjs 5.4.449 (Pascal)
  * v 6.0.26 - update pdfjs 6.1.200 (Pascal)
+ * v 6.1.14 : pdfjs version 6.5.438
  */
 defined('_JEXEC') or die();
 

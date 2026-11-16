@@ -31,6 +31,7 @@
  * v3.1 - ajout option grid-ratio pour layout=grid
  * v5.2 - ajout option sort-by-date
  * v6.0.16 : shuffle : sort-desc
+ * v6.1.14 : infinite-scroll en version 5.0.0
  */
 defined('_JEXEC') or die();
 

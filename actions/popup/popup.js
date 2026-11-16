@@ -1,4 +1,8 @@
 /* 05-2023 by LOMART */
+/* 01-11-2026 : Pascal 
+   - ajout samesite=lax; secure dans le cookie 
+   - nouvelles options : closeDelay, activationMode = exit
+*/
 "use strict";
 
 function popup(selector, options) {
@@ -23,6 +27,7 @@ function popup(selector, options) {
 
 		const main = document.querySelector(selector);
 		let anim;
+        let popupshown = false;
 		if (defaults.animtarget == 'popup') {
 			anim = document.querySelector(selector + ' .popup-content');
 		} else {
@@ -42,7 +47,9 @@ function popup(selector, options) {
 				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 				expires = "; expires=" + date.toGMTString();
 			}
-			document.cookie = name + "=" + value + expires + "; path=/";
+            let secure = "";
+            if (window.location.protocol == "https:") secure="secure;";
+            document.cookie = name + "=" + value + expires + "; path=/;samesite=lax;"+secure;
 		}
 
 		function readCookie(name) {
@@ -75,10 +82,12 @@ function popup(selector, options) {
 		}
 
 		let showPopup = function() {
-			console.log('showPopup');
+			// console.log('showPopup');
 			// la classe animIn doit être ajouté par le php
 			main.style.display = null;
 			if (defaults.bodyBlocked) document.body.style.overflow = 'hidden';
+            if (defaults.closeDelay)
+            	setTimeout(hidePopup, defaults.closeDelay); // en ms
 		}
 
 		// ============== controle activation
@@ -93,9 +102,9 @@ function popup(selector, options) {
 					if (pos >= posMin && pos <= posMax) {
 						showPopup();
 						document.removeEventListener('scroll', checkScroll);
-					};
+					}
 				}, 50);
-			};
+			} 
 		};
 
 		// --- teste la position d'un bloc
@@ -108,13 +117,24 @@ function popup(selector, options) {
 				|| (posTop > 0 && window.scrollY + window.innerHeight == document.body.offsetHeight)) {
 				showPopup();
 				document.removeEventListener('scroll', checkPosition);
-			}
+			} 
 		}
 
 		// ============== INITIALISATION
 
 		function initActivation() {
-			if (defaults.activationValue === 0) {
+            if (defaults.activationMode === 'exit') {
+                setTimeout(() => {
+                    document.addEventListener('mouseout', mouseEvent);
+                }, 1000);  // spent more than 1 seconds on this page : activate show on exit
+                const mouseEvent = e => {
+                    const shouldShowExitIntent = !e.toElement && !e.relatedTarget && e.clientY < 10;
+                    if (shouldShowExitIntent) {
+                        document.removeEventListener('mouseout', mouseEvent);
+                        showPopup();
+                    }
+                };
+            } else if (defaults.activationValue === 0) {
 				showPopup();
 			} else if (defaults.activationMode === 'time') {
 				setTimeout(showPopup, defaults.activationValue); // en ms
