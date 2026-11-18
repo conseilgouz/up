@@ -1,3 +1,11 @@
+## 18/10/2026 : version 6.1.15
+
+#### Modifications actions
+
+- ajax_view : : suppression notice scandir si cache/com_content absent
+- file_download : suppression notice scandir si cache/com_content absent
+- upfilescleaner : suppression notice scandir si cache/com_content absent
+
 ## 16/11/2026 : version 6.1.14
 
 #### Modifications actions

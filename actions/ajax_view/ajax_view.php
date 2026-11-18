@@ -62,14 +62,16 @@ class ajax_view extends Lomart\Plugin\Content\Up\Extension\Up
         if ($cache) {
             if ($cache->options['storage'] == "file") { // cache = files : delete com_content cached files
                 $base = $cache->options['cachebase'];
-                foreach (scandir($base.'/com_content') as $item) {
-                    if (!file_exists($base.'/com_content/'.$item)) {
-                        continue;
+                if (is_dir($base.'/com_content')) {
+                    foreach (scandir($base.'/com_content') as $item) {
+                        if (!file_exists($base.'/com_content/'.$item)) {
+                            continue;
+                        }
+                        if ($item == '.' || $item == '..' || $item == 'index.html') {
+                            continue;
+                        }
+                        unlink($base.'/com_content/'.$item);
                     }
-                    if ($item == '.' || $item == '..' || $item == 'index.html') {
-                        continue;
-                    }
-                    unlink($base.'/com_content/'.$item);
                 }
             } else { //
                 $cache->clean('com_content');
