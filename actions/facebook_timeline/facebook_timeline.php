@@ -71,11 +71,7 @@ class facebook_timeline extends Lomart\Plugin\Content\Up\Extension\Up
         $attr_in['data-href'] = 'https://www.facebook.com/' . $options[__class__];
         $attr_in['data-small-header'] = $options['smallheader'];
         // ne fonctionne pas : bug facebook https://developers.facebook.com/support/bugs/584988619248795/
-        if ($options['tabs'] == 'timeline') {
-            $attr_in['data-show-posts'] = 'true';
-        } else { // on laisse quand même au cas où...
-            $attr_in['data-tabs'] = $options['tabs'];
-        }
+        $attr_in['data-tabs'] = $options['tabs'];
         $attr_in['data-adapt-container-width'] = $options['adaptwidth'];
         $attr_in['data-hide-cover'] = $options['hidecover'];
         $attr_in['data-show-facepile'] = $options['facepile'];

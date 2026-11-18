@@ -141,12 +141,12 @@ class plgContentUpInstallerScript
                 $actionsList[] = 'bg_slideshow'; // vegas 3.0.0 hors jQuery
                 $actionsList[] = 'image_pannelum'; // pannelum.js version 2.5.7
                 $actionsList[] = 'image_gallery'; // infinite-scroll.js en 5.0.0
-                $actionsList[] = 'facebook_timeline'; // facebook sdk version 27.0
                 $actionsList[] = 'pdf'; // pdfjs version 6.5.438
                 $actionsList[] = 'popup'; // new options
             }
             // 6.1.15
             $actionsList[] = 'ajax_view';
+            $actionsList[] = 'facebook_timeline'; // facebook sdk version 27.0
             $actionsList[] = 'file_download';
             $actionsList[] = 'upfilescleaner';
             foreach ($actionsList as $action) {

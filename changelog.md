@@ -5,6 +5,7 @@
 - ajax_view : : suppression notice scandir si cache/com_content absent
 - file_download : suppression notice scandir si cache/com_content absent
 - upfilescleaner : suppression notice scandir si cache/com_content absent
+- facebook_timeline : facebook sdk version 27.0
 
 ## 16/11/2026 : version 6.1.14
 
