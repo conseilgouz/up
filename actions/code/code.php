@@ -35,7 +35,7 @@ class code extends Lomart\Plugin\Content\Up\Extension\Up
             'copy'       => '1', // montrer ou non le bouton copy
             'normalize'  => '1', // "Normaliser les retours à la ligne et les balises de mise en forme ajoutés par un éditeur WYSIWYG 
             'background' => '#eeeeee', // Couleur de fond du bloc
-            'color'      => '#333333' // Couleur du texte
+            'color'      => '#333333', // Couleur du texte
             'style'      => '' ,// style associé à l'action
             'class'      => '' // classe associée à l'action
             
