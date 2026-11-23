@@ -124,31 +124,39 @@ class plgContentUpInstallerScript
                 $actionsList = $this->up_actions_obsoletes($actionsList); // liste des actions obsolètes en 6.0.0
             } else if ($previous_version && $previous_version < '6.1.0') {
                 // 6.1.0 : remove updated actions
-                $actionsList = ['chart','csv_info','csv2def','csv2list','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
-                                'get','html','image_compare','image_random','image_secure','jcat_image','jcategories_by_tags','jcategories_list',
+                $actionsList = ['ajax_view','bg_slideshow','chart','csv_info','csv2def','csv2list',
+                                'facebook_timeline','file_download','file_explorer','file_in_content','file_office_view','file_view','folder_list','form_select',
+                                'get','html','image_compare','image_gallery','image_pannelum','image_random','image_secure',
+                                'jcat_image','jcategories_by_tags','jcategories_list',
+                                'jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat','jcontent_info','jcontent_metadata',
                                 'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
-                                'php','pdf','random','sitemap','site_stat','site_visit','snippet','sql','toc','upscsscompiler']; // 6.1.0
-            } else if ($previous_version && $previous_version < '6.1.6') { // version 6.1.5
-                $actionsList[] = 'sql'; // 6.1.5 : js update
-            } else if ($previous_version && $previous_version < '6.1.11') { // version 6.1.12
-                $actionsList[] = 'jcontent_by_tags';
-                $actionsList[] = 'jcontent_by_categories';
-                $actionsList[] = 'jcontent_by_subcat';
-                $actionsList[] = 'jcontent_info';
-                $actionsList[] = 'jcontent_metadata';
-                $actionsList[] = 'chart';
-            } else if ($previous_version && $previous_version < '6.1.14') { // version 6.1.14
-                $actionsList[] = 'bg_slideshow'; // vegas 3.0.0 hors jQuery
-                $actionsList[] = 'image_pannelum'; // pannelum.js version 2.5.7
-                $actionsList[] = 'image_gallery'; // infinite-scroll.js en 5.0.0
-                $actionsList[] = 'pdf'; // pdfjs version 6.5.438
-                $actionsList[] = 'popup'; // new options
+                                'php','pdf','popup','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
+            } else {
+                if ($previous_version && $previous_version < '6.1.6') { // version 6.1.5
+                    $actionsList[] = 'sql'; // 6.1.5 : js update
+                } 
+                if ($previous_version && $previous_version < '6.1.11') { // version 6.1.12
+                    $actionsList[] = 'jcontent_by_tags';
+                    $actionsList[] = 'jcontent_by_categories';
+                    $actionsList[] = 'jcontent_by_subcat';
+                    $actionsList[] = 'jcontent_info';
+                    $actionsList[] = 'jcontent_metadata';
+                    $actionsList[] = 'chart';
+                } 
+                if ($previous_version && $previous_version < '6.1.14') { // version 6.1.14
+                    $actionsList[] = 'bg_slideshow'; // vegas 3.0.0 hors jQuery
+                    $actionsList[] = 'image_pannelum'; // pannelum.js version 2.5.7
+                    $actionsList[] = 'image_gallery'; // infinite-scroll.js en 5.0.0
+                    $actionsList[] = 'pdf'; // pdfjs version 6.5.438
+                    $actionsList[] = 'popup'; // new options
+                }
+                if ($previous_version && $previous_version < '6.1.15') { // version 6.1.15
+                    $actionsList[] = 'ajax_view';
+                    $actionsList[] = 'facebook_timeline'; // facebook sdk version 27.0
+                    $actionsList[] = 'file_download';
+                    $actionsList[] = 'upfilescleaner';
+                }
             }
-            // 6.1.15
-            $actionsList[] = 'ajax_view';
-            $actionsList[] = 'facebook_timeline'; // facebook sdk version 27.0
-            $actionsList[] = 'file_download';
-            $actionsList[] = 'upfilescleaner';
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
                 $ignore = ['.','..','custom']; // ignore custom folder
