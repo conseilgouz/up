@@ -129,7 +129,8 @@ class plgContentUpInstallerScript
                                 'get','html','image_compare','image_gallery','image_pannelum','image_random','image_secure',
                                 'jcat_image','jcategories_by_tags','jcategories_list',
                                 'jcontent_by_tags','jcontent_by_categories','jcontent_by_subcat','jcontent_info','jcontent_metadata',
-                                'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang','markdown',
+                                'jcontent_list','jcontent_meta','jextensions_list','jmenus_list','jmenus_metadata','jmodules_list','lang',
+                                'markdown','meteo_france',
                                 'php','pdf','popup','random','sitemap','site_stat','site_visit','snippet','sql','toc','upfilescleaner','upscsscompiler']; // 6.1.0
             } else {
                 if ($previous_version && $previous_version < '6.1.6') { // version 6.1.5
@@ -156,6 +157,7 @@ class plgContentUpInstallerScript
                     $actionsList[] = 'file_download';
                     $actionsList[] = 'upfilescleaner';
                 }
+                $actionsList[] = 'meteo_france'; // 6.1.16
             }
             foreach ($actionsList as $action) {
                 $dir = $path.'actions/' . $action;
