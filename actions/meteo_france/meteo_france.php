@@ -98,7 +98,6 @@ class meteo_france extends Lomart\Plugin\Content\Up\Extension\Up {
         $out .= '</script>';
         $out .= '</' . $options['block'] . '>';
 
-        $out = '<iframe id="widget_autocomplete_preview"  width="150" height="300" frameborder="0" src="http://meteofrance.com/widget/prevision/770140##2C9E30CC"> </iframe>';
         return $out;
     }
 

@@ -1,8 +1,18 @@
+## 23/10/2026 : version 6.1.16
+
+### Nouvelle action
+
+- code : nouvelle action permettant d'afficher du code sans l'exécuter dans un article
+
+#### Modifications actions
+
+- meteo_france : suppression des lignes de test en fin d'action
+
 ## 18/10/2026 : version 6.1.15
 
 #### Modifications actions
 
-- ajax_view : : suppression notice scandir si cache/com_content absent
+- ajax_view : suppression notice scandir si cache/com_content absent
 - file_download : suppression notice scandir si cache/com_content absent
 - upfilescleaner : suppression notice scandir si cache/com_content absent
 - facebook_timeline : facebook sdk version 27.0

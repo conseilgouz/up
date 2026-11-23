@@ -1,0 +1,101 @@
+/* Action UP : code - presentation du bloc de code */
+.up-code {
+    position: relative;
+    margin: 1em 0;
+    padding: 0.75em;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-clip: padding-box;
+}
+
+.up-code__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75em;
+    min-height: 1.8em;
+    margin: 0 0 0.45em;
+    color: inherit;
+    font-size: 0.78em;
+    opacity: 0.8;
+}
+
+.up-code__title {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.up-code__copy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    flex: 0 0 auto;
+    padding: 0.25em 0.4em;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.up-code__copy:hover,
+.up-code__copy:focus-visible {
+    background: rgba(127, 127, 127, 0.18);
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+}
+
+.up-code__copy svg {
+    display: block;
+    width: 1.25em;
+    height: 1.25em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.up-code__copy-label {
+    font-size: 0.9em;
+}
+
+.up-code__pre {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    tab-size: 4;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 0.92em;
+    line-height: 1.5;
+}
+
+.up-code__pre code {
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    white-space: inherit;
+}
+
+.up-code__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
