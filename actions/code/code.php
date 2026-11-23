@@ -8,7 +8,7 @@
  * {up code}...code a afficher...{/up code}
  * {up code | title="Exemple" | lang=html | copy=1 | normalize=1}...{/up code}
  *
- * @author  Proposition d'action pour LOMART / UP
+ * @author  Sergio pour LOMART / UP
  * @version 1.1.0
  * @license GNU/GPLv3
  * @tags    Editor, HTML, Code
